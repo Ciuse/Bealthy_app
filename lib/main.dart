@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'homePageWidget.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:provider/provider.dart';
+import 'Models/date_model.dart';
 
 void main() {
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+  initializeDateFormatting().then((_) => runApp(
+      MultiProvider(providers: [
+        Provider<DateModel>(
+          create: (_) => DateModel(),
+        )
+      ], child:MyApp())));
 }
 
 class MyApp extends StatelessWidget {

@@ -8,11 +8,16 @@ class DateModel = _DateModel with _$DateModel;
 
 // The store-class
 abstract class _DateModel with Store {
-  _DateModel({this.date});
+
   @observable
-  DateTime date = DateTime(0, 0, 0000) ;
+  DateTime date = DateTime.now() ;
 
   @computed
   int get weekDay => date.weekday;
+
+  @action
+  void changeCurrentDate(DateTime date) {
+    this.date = date;
+  }
 }
 

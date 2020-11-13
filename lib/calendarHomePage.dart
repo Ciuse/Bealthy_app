@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'Models/date_model.dart';
+import 'package:provider/provider.dart';
+
+
 final Map<DateTime, List> _holidays = {
   DateTime(2019, 1, 1): ['New Year\'s Day'],
   DateTime(2019, 1, 6): ['Epiphany'],
@@ -10,9 +13,8 @@ final Map<DateTime, List> _holidays = {
 };
 
 class CalendarHomePage extends StatefulWidget {
-  final DateModel calendar_date ;
 
-  CalendarHomePage({@required this.calendar_date}) : super();
+  CalendarHomePage() : super();
 
   @override
   _CalendarHomePageState createState() => _CalendarHomePageState();
@@ -65,7 +67,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
-    widget.calendar_date.date=day;
+    context.read<DateModel>().changeCurrentDate(day);
     setState(() {
     });
   }

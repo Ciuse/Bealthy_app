@@ -2,10 +2,11 @@ import 'package:Bealthy_app/Models/date_model.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'calendarHomePage.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+
 class HomePageWidget extends StatelessWidget {
   final Color color;
-  final DateModel calendar_date= DateModel(date:DateTime.now());
   HomePageWidget(this.color);
 
   @override
@@ -13,10 +14,11 @@ class HomePageWidget extends StatelessWidget {
 
     return Scaffold(
       body: Column(children: [
-        CalendarHomePage(calendar_date: calendar_date),
+        CalendarHomePage(),
         Observer(
             builder: (_) => Text(
-                calendar_date.date.toString()+calendar_date.weekDay.toString()
+                context.read<DateModel>().date.toString()+context.read<DateModel>().weekDay.toString()
+
             )
         ),]),
       floatingActionButton: FloatingActionButton(
