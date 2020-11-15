@@ -3,12 +3,19 @@ import 'homePageWidget.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'Models/date_model.dart';
+import 'Models/foodStore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   initializeDateFormatting().then((_) => runApp(
       MultiProvider(providers: [
         Provider<DateModel>(
           create: (_) => DateModel(),
+        ),
+        Provider<FoodStore>(
+          create: (_) => FoodStore(),
         )
       ], child:MyApp())));
 }

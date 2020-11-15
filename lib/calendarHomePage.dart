@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'Models/date_model.dart';
@@ -67,6 +68,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
+    context.read<FoodStore>().getDishes();
+
     context.read<DateModel>().changeCurrentDate(day);
     setState(() {
     });

@@ -31,6 +31,19 @@ mixin _$DateModel on _DateModel, Store {
     });
   }
 
+  final _$_DateModelActionController = ActionController(name: '_DateModel');
+
+  @override
+  void changeCurrentDate(DateTime date) {
+    final _$actionInfo = _$_DateModelActionController.startAction(
+        name: '_DateModel.changeCurrentDate');
+    try {
+      return super.changeCurrentDate(date);
+    } finally {
+      _$_DateModelActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

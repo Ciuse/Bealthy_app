@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "626133541739",
+    "firebase_url": "https://bealthy-b406c.firebaseio.com",
+    "project_id": "bealthy-b406c",
+    "storage_bucket": "bealthy-b406c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626133541739:android:fa902bc6f2ae532350622e",
+        "android_client_info": {
+          "package_name": "com.example.Bealthy_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "626133541739-4p5kehmthi8bv0ciai11ou658srqoiao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk4ZB04JmvMXtfa2E91RUr_UmKJXR8k6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "626133541739-4p5kehmthi8bv0ciai11ou658srqoiao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
