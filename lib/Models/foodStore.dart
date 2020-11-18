@@ -1,6 +1,5 @@
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'IngredientEnum.dart';
 
 // Include generated file
 part 'foodStore.g.dart';
