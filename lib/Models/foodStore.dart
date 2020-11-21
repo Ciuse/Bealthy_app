@@ -1,8 +1,11 @@
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import '../Database/Dish.dart';
 // Include generated file
 part 'foodStore.g.dart';
+
+FirebaseAuth auth = FirebaseAuth.instance;
 
 // This is the class used by rest of your codebase
 class FoodStore = _FoodStoreBase with _$FoodStore;
@@ -11,41 +14,25 @@ class FoodStore = _FoodStoreBase with _$FoodStore;
 abstract class _FoodStoreBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
 
-@action
-  void addDish() {
-    firestoreInstance.collection("dishes").add(
-        {
-          "name" : "Pasta alla carbonara",
-          "day" : DateTime.now(),
-        }).then((value){
-      firestoreInstance
-          .collection("dishes")
-          .doc(value.id)
-          .collection("ingredients")
-          .add({"name": "egg"});
-    });
+  @action
+  void addCategoryDish(Dish dish) {
+    firestoreInstance.collection("DishesCategory").doc(dish.category).collection("Dishes").add(
+        dish.toMap()
+    );
   }
 
   @action
-  void getDishes() {
-    firestoreInstance.collection("dishes").get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        print(result.data());
-        firestoreInstance
-            .collection("dishes")
-            .doc(result.id)
-            .collection("ingredients")
-            .get()
-            .then((querySnapshot) {
-          querySnapshot.docs.forEach((result) {
-            print(result.data());
-          });
-      });
+  void getDishes(Dish dish) {
+    FirebaseFirestore.instance
+        .collection('UserDishes')
+        .doc(auth.currentUser.uid).get().
+    then((DocumentSnapshot documentSnapshot) =>
+    {
+      if (documentSnapshot.exists) {
+        print('Document exists on the database')
+      }
     });
-  });
+    print("id:" + auth.currentUser.uid);
   }
-
-
 }
-
 

@@ -13,22 +13,22 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       ActionController(name: '_FoodStoreBase');
 
   @override
-  void addDish() {
+  void addCategoryDish(Dish dish) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
-        name: '_FoodStoreBase.addDish');
+        name: '_FoodStoreBase.addCategoryDish');
     try {
-      return super.addDish();
+      return super.addCategoryDish(dish);
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void getDishes() {
+  void getDishes(Dish dish) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.getDishes');
     try {
-      return super.getDishes();
+      return super.getDishes(dish);
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'createNewDishWidget.dart';
 
+
 class HomePageWidget extends StatelessWidget {
   final Color color;
 
@@ -19,6 +20,7 @@ class HomePageWidget extends StatelessWidget {
         Observer(
             builder: (_) => Text(context.read<DateModel>().date.toString() +
                 context.read<DateModel>().weekDay.toString())),
+
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
