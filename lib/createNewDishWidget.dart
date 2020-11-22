@@ -3,6 +3,7 @@ import 'Models/foodStore.dart';
 import 'Database/Dish.dart';
 import 'dart:math';
 import 'package:provider/provider.dart';
+import 'Database/Ingredient.dart';
 
 class AddDishForm extends StatefulWidget {
   @override
@@ -10,21 +11,29 @@ class AddDishForm extends StatefulWidget {
 }
 
 class _AddDishFormState extends State<AddDishForm>{
-  final categoryCt = TextEditingController();
   final nameCt = TextEditingController();
-  String id;
-  final qtyCt = TextEditingController();
+  final categoryCt = TextEditingController();
+  final ingredientsCt = TextEditingController();
+  final ingredientsQty = TextEditingController();
+
+  String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
   void addDish(){
+
     Random random = new Random();
     int randomNumber = random.nextInt(100);
     Dish dish = new Dish(
-      id:randomNumber.toString(),
+      id:"Dish_"+randomNumber.toString(),
       name:nameCt.text,
-      qty: int.parse(qtyCt.text)
+      category: categoryCt.text
     );
 
-    context.read<FoodStore>().addDishWithCategory(dish, categoryCt.text);
+    List<Ingredient> ingredients = new List<Ingredient>();
+    ingredients.add(new Ingredient(id:"Ingr_1",name: ingredientsCt.text, qty: ingredientsQty.text));
+    ingredients.add(new Ingredient(id:"Ingr_2",name: "cacao", qty: "3"));
+
+    context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
+
 
   }
 
@@ -40,14 +49,8 @@ class _AddDishFormState extends State<AddDishForm>{
                 padding: const EdgeInsets.symmetric(horizontal:10,vertical: 16.0),
                 child:
                 Column(
+
                     children: <Widget>[
-                      TextField(
-                        controller: categoryCt,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Category',
-                        ),
-                      ),
                       TextField(
                         controller: nameCt,
                         decoration: InputDecoration(
@@ -56,10 +59,24 @@ class _AddDishFormState extends State<AddDishForm>{
                         ),
                       ),
                       TextField(
-                        controller: qtyCt,
+                        controller: categoryCt,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'Qty',
+                          labelText: 'Category',
+                        ),
+                      ),
+                      TextField(
+                        controller: ingredientsCt,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Ingredients',
+                        ),
+                      ),
+                      TextField(
+                        controller: ingredientsQty,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'IngredientsQty',
                         ),
                       ),
                     ]
@@ -77,14 +94,7 @@ class _AddDishFormState extends State<AddDishForm>{
               ),
             ),
 
-            ElevatedButton(
-              onPressed: () {
-                // Navigate back to first route when tapped.
-                Navigator.pop(context);
-              },
-              child: Text('Go back!'),
-            ),
-          ],
+        ],
         )
     );
   }
