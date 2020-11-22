@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
+import 'Models/foodStore.dart';
+import 'Database/Dish.dart';
+import 'dart:math';
+import 'package:provider/provider.dart';
 
-class AddDishForm extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+class AddDishForm extends StatefulWidget {
+  @override
+  _AddDishFormState createState() => _AddDishFormState();
+}
+
+class _AddDishFormState extends State<AddDishForm>{
+  final categoryCt = TextEditingController();
+  final nameCt = TextEditingController();
+  String id;
+  final qtyCt = TextEditingController();
+
+  void addDish(){
+    Random random = new Random();
+    int randomNumber = random.nextInt(100);
+    Dish dish = new Dish(
+      id:randomNumber.toString(),
+      name:nameCt.text,
+      qty: int.parse(qtyCt.text)
+    );
+
+    context.read<FoodStore>().addDishWithCategory(dish, categoryCt.text);
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,23 +42,26 @@ class AddDishForm extends StatelessWidget {
                 Column(
                     children: <Widget>[
                       TextField(
+                        controller: categoryCt,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'name',
+                          labelText: 'Category',
                         ),
                       ),
                       TextField(
+                        controller: nameCt,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Name',
+                        ),
+                      ),
+                      TextField(
+                        controller: qtyCt,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Qty',
                         ),
                       ),
-                      TextField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Ingredients',
-                        ),
-                      )
                     ]
                 )
             ),
@@ -41,10 +69,11 @@ class AddDishForm extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () {
+                  addDish();
                   // Validate returns true if the form is valid, or false
                   // otherwise.
                 },
-                child: Text('Submit'),
+                child: Text('Add Dish'),
               ),
             ),
 

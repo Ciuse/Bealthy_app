@@ -15,14 +15,16 @@ abstract class _FoodStoreBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
 
   @action
-  void addCategoryDish(Dish dish) {
-    firestoreInstance.collection("DishesCategory").doc(dish.category).collection("Dishes").add(
-        dish.toMap()
-    );
+  void addDishWithCategory(Dish dish, String category) {
+    firestoreInstance
+        .collection("DishesCategory")
+        .doc(category)
+        .collection("Dishes")
+        .add(dish.toMap());
   }
 
   @action
-  void getDishes(Dish dish) {
+  void getDishes() {
     FirebaseFirestore.instance
         .collection('UserDishes')
         .doc(auth.currentUser.uid).get().

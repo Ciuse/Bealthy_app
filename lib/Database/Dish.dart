@@ -19,20 +19,17 @@ class Dish {
     this.id,
     this.name,
     this.qty,
-    this.category,
   });
 
-  int id;
+  String id;
   String name;
   int qty;
-  String category;
 
   factory Dish.fromMap(Map<String, dynamic> json) =>
       Dish(
         id: json["id"],
         name: json["name"],
         qty: json["qty"],
-        category: json["category"],
       );
 
   Map<String, dynamic> toMap() =>
