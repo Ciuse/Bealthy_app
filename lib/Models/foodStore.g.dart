@@ -57,6 +57,17 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
+  List<Dish> getFavouritesDishes() {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.getFavouritesDishes');
+    try {
+      return super.getFavouritesDishes();
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 
