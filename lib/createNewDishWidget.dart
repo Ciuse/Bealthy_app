@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'Database/Ingredient.dart';
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 
 class AddDishForm extends StatefulWidget {
   @override
@@ -20,11 +21,14 @@ class _AddDishFormState extends State<AddDishForm>{
   final categoryCt = TextEditingController();
   final ingredientsCt = TextEditingController();
   final ingredientsQty = TextEditingController();
-  final citySelected = TextEditingController();
+  final ingredSelected = TextEditingController();
+  final quantitySelected = TextEditingController();
 
+
+  final _formKey = GlobalKey<FormState>();
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
-
+  List<String> quantity = ["poco", "medio", "abbondante"];
 
   List listOfIngredient(){
     return context.read<IngredientStore>().getIngredients();
@@ -36,9 +40,9 @@ class _AddDishFormState extends State<AddDishForm>{
     Random random = new Random();
     int randomNumber = random.nextInt(100);
     Dish dish = new Dish(
-      id:"Dish_"+randomNumber.toString(),
-      name:nameCt.text,
-      category: categoryCt.text
+        id:"Dish_"+randomNumber.toString(),
+        name:nameCt.text,
+        category: categoryCt.text
     );
 
     List<Ingredient> ingredients = new List<Ingredient>();
@@ -54,7 +58,7 @@ class _AddDishFormState extends State<AddDishForm>{
 
 
   String selectIngredient = "";  //by default we are not providing any of the cities
-
+  String selectQuantity = "";
 
   @override
   Widget build(BuildContext context) {
@@ -67,45 +71,90 @@ class _AddDishFormState extends State<AddDishForm>{
             Container(
                 padding: const EdgeInsets.symmetric(horizontal:10,vertical: 16.0),
                 child: Observer(builder: (_) =>
-                Column(
+                    Column(
 
-                    children: <Widget>[
-                      TextField(
-                        controller: nameCt,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Name',
-                        ),
-                      ),
-                      TextField(
-                        controller: categoryCt,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Category',
-                        ),
-                      ),
+                        children: <Widget>[
+                          TextField(
+                            controller: nameCt,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Name',
+                            ),
+                          ),
+                          TextField(
+                            controller: categoryCt,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Category',
+                            ),
+                          ),
+                          DropDownField(
+                            controller: ingredSelected,
+                            hintText: "Select an ingredient",
+                            enabled: true,
+                            itemsVisibleInDropdown: 3,
+                            items: listOfIngredient(),
+                            strict: false,
+                            onValueChanged: (value){
+                              setState(() {
+                                selectIngredient = value;
+                              });
+                            } ,
 
-                      DropDownField(
-                        controller: citySelected,
-                        hintText: "Select an ingredient",
-                        enabled: true,
-                        itemsVisibleInDropdown: 1,
-                        items: listOfIngredient(),
-                        strict: false,
-                        onValueChanged: (value){
-                          setState(() {
-                            selectIngredient = value;
-                          });
-                        } ,
-                      ),
+                          ),
 
-                      SizedBox(height: 20.0,),
-                      Text(selectIngredient,
-                        style: TextStyle(fontSize: 20.0),
-                        textAlign: TextAlign.center,
-                      )
-                    ]
-                ),
+                          RaisedButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(selectIngredient,
+                                          style: TextStyle(fontSize: 20.0),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        actions: [
+                                          //la quantità selezionata dovrà essere salvata
+                                          FlatButton(onPressed: null, child:Text("ok")),
+                                        ],
+                                        content: Stack(
+                                          overflow: Overflow.visible,
+                                          children: <Widget>[
+                                            Positioned(
+                                              right: -40.0,
+                                              top: -40.0,
+                                              child: InkResponse(
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: CircleAvatar(
+                                                  child: Icon(Icons.close),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+                                            DropDownField(
+                                              controller: ingredientsQty,
+                                              hintText: "Select quantity",
+                                              enabled: true,
+                                              itemsVisibleInDropdown: 3,
+                                              items: quantity,
+                                              strict: false,
+                                              onValueChanged: (value){
+                                                setState(() {
+                                                  selectQuantity = value;
+                                                });
+                                              } ,
+
+                                            ),
+
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              })
+                        ]
+                    ),
                 )
             ),
             Padding(
@@ -121,7 +170,7 @@ class _AddDishFormState extends State<AddDishForm>{
               ),
             ),
 
-        ],
+          ],
         )
     );
   }
