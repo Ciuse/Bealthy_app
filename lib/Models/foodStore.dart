@@ -6,6 +6,12 @@ import '../Database/Ingredient.dart';
 // Include generated file
 part 'foodStore.g.dart';
 
+enum Category {
+  Primo,
+  Secondo,
+  Contorno,
+  Dolce
+}
 //flutter packages pub run build_runner build
 //flutter packages pub run build_runner watch
 //flutter packages pub run build_runner watch --delete-conflicting-outputs
@@ -70,6 +76,23 @@ abstract class _FoodStoreBase with Store {
       }
     });
     print("id:" + auth.currentUser.uid);
+  }
+
+  @action
+  List<Dish> getFavouritesDishes() {
+    List<Dish> dishList = new List<Dish>();
+    dishList.add(Dish(id:"1",name:"pasta",category: "Primo",ingredients: null));
+    dishList.add(Dish(id:"2",name:"gnocchi",category: "Primo",ingredients: null));
+    dishList.add(Dish(id:"3",name:"riso",category: "Primo",ingredients: null));
+    return dishList;
+  }
+
+  List<Dish> getYourDishes() {
+    List<Dish> dishList = new List<Dish>();
+    dishList.add(Dish(id:"1",name:"pasta",category: "Primo",ingredients: null));
+    dishList.add(Dish(id:"2",name:"gnocchi",category: "Primo",ingredients: null));
+    dishList.add(Dish(id:"3",name:"riso",category: "Primo",ingredients: null));
+    return dishList;
   }
 }
 
