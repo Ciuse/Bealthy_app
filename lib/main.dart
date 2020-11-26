@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'Models/date_model.dart';
 import 'Models/foodStore.dart';
+import 'Models/ingredientStore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -42,6 +43,9 @@ void main() async {
         ),
         Provider<FoodStore>(
           create: (_) => FoodStore(),
+        ),
+        Provider<IngredientStore>(
+          create: (_) => IngredientStore(),
         )
       ], child:MyApp())));
 }

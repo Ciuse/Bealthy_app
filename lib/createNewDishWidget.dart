@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'Models/foodStore.dart';
+import 'Models/ingredientStore.dart';
 import 'Database/Dish.dart';
 import 'dart:math';
 import 'package:provider/provider.dart';
 import 'Database/Ingredient.dart';
+import 'package:dropdownfield/dropdownfield.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class AddDishForm extends StatefulWidget {
   @override
@@ -15,8 +20,16 @@ class _AddDishFormState extends State<AddDishForm>{
   final categoryCt = TextEditingController();
   final ingredientsCt = TextEditingController();
   final ingredientsQty = TextEditingController();
+  final citySelected = TextEditingController();
 
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
+
+
+
+  List listOfIngredient(){
+    return context.read<IngredientStore>().getIngredients();
+  }
+
 
   void addDish(){
 
@@ -37,6 +50,12 @@ class _AddDishFormState extends State<AddDishForm>{
 
   }
 
+  Map<String, dynamic> formData;
+
+
+  String selectIngredient = "";  //by default we are not providing any of the cities
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +66,7 @@ class _AddDishFormState extends State<AddDishForm>{
           children: [
             Container(
                 padding: const EdgeInsets.symmetric(horizontal:10,vertical: 16.0),
-                child:
+                child: Observer(builder: (_) =>
                 Column(
 
                     children: <Widget>[
@@ -65,28 +84,36 @@ class _AddDishFormState extends State<AddDishForm>{
                           labelText: 'Category',
                         ),
                       ),
-                      TextField(
-                        controller: ingredientsCt,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Ingredients',
-                        ),
+
+                      DropDownField(
+                        controller: citySelected,
+                        hintText: "Select an ingredient",
+                        enabled: true,
+                        itemsVisibleInDropdown: 1,
+                        items: listOfIngredient(),
+                        strict: false,
+                        onValueChanged: (value){
+                          setState(() {
+                            selectIngredient = value;
+                          });
+                        } ,
                       ),
-                      TextField(
-                        controller: ingredientsQty,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'IngredientsQty',
-                        ),
-                      ),
+
+                      SizedBox(height: 20.0,),
+                      Text(selectIngredient,
+                        style: TextStyle(fontSize: 20.0),
+                        textAlign: TextAlign.center,
+                      )
                     ]
+                ),
                 )
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  addDish();
+                  //addDish();
+
                   // Validate returns true if the form is valid, or false
                   // otherwise.
                 },
