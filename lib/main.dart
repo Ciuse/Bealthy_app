@@ -313,20 +313,6 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /// This is the stateful widget that the main application instantiates.
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);

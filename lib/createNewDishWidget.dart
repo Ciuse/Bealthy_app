@@ -25,15 +25,17 @@ class _AddDishFormState extends State<AddDishForm>{
   final quantitySelected = TextEditingController();
 
 
-  final _formKey = GlobalKey<FormState>();
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
   List<String> quantity = ["poco", "medio", "abbondante"];
 
+  final List<String> ingredientsSelectedList = new List<String>();
   List listOfIngredient(){
     return context.read<IngredientStore>().getIngredients();
   }
-
+  void addIngredientsToListView(String value){
+    ingredientsSelectedList.add(value);
+  }
 
   void addDish(){
 
@@ -66,12 +68,7 @@ class _AddDishFormState extends State<AddDishForm>{
         appBar: AppBar(
           title: Text("Create New Dish"),
         ),
-        body: Column(
-          children: [
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal:10,vertical: 16.0),
-                child: Observer(builder: (_) =>
-                    Column(
+        body: Observer(builder: (_) =>Column(
 
                         children: <Widget>[
                           TextField(
@@ -98,11 +95,29 @@ class _AddDishFormState extends State<AddDishForm>{
                             onValueChanged: (value){
                               setState(() {
                                 selectIngredient = value;
+                                addIngredientsToListView(value);
                               });
                             } ,
 
                           ),
-
+                          Expanded(
+                              child: ListView.builder(
+                                  padding: const EdgeInsets.all(8),
+                                  itemCount: ingredientsSelectedList.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Container(
+                                      height: 50,
+                                      margin: EdgeInsets.all(2),
+                                      color: Colors.blue[400],
+                                      child: Center(
+                                          child: Text('${ingredientsSelectedList[index]}',
+                                            style: TextStyle(fontSize: 18),
+                                          )
+                                      ),
+                                    );
+                                  }
+                              )
+                          ),
                           RaisedButton(
                               onPressed: () {
                                 showDialog(
@@ -149,14 +164,15 @@ class _AddDishFormState extends State<AddDishForm>{
                                             ),
 
                                           ],
+
                                         ),
                                       );
                                     });
-                              })
-                        ]
-                    ),
-                )
-            ),
+                              }),
+
+
+
+
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
@@ -171,6 +187,7 @@ class _AddDishFormState extends State<AddDishForm>{
             ),
 
           ],
+        )
         )
     );
   }
