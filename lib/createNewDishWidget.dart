@@ -28,12 +28,14 @@ class _AddDishFormState extends State<AddDishForm>{
 
   List<String> quantityList = ["poco", "medio", "abbondante"];
 
-
+@override
+  void initState() {
+    super.initState();
+    var store = Provider.of<IngredientStore>(context, listen: false);
+    store.initStore();
+  }
 
   final List<String> ingredientsSelectedList = new List<String>();
-  List listOfIngredient(){
-    return context.read<IngredientStore>().getIngredients();
-  }
 
   void addIngredientsToListView(String value){
     ingredientsSelectedList.add(value);
@@ -69,6 +71,8 @@ class _AddDishFormState extends State<AddDishForm>{
 
   @override
   Widget build(BuildContext context) {
+    final ingredientStore = Provider.of<IngredientStore>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Create New Dish"),
@@ -95,7 +99,7 @@ class _AddDishFormState extends State<AddDishForm>{
               hintText: "Select an ingredient",
               enabled: true,
               itemsVisibleInDropdown: 3,
-              items: listOfIngredient(),
+              items: ingredientStore.ingredients,
               strict: false,
               onValueChanged: (value){
                 setState(() {

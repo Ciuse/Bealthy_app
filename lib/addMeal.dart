@@ -194,10 +194,19 @@ class _CategoryDishListState extends State<CategoryDishList> {
 class YourDishList extends StatefulWidget {
   @override
   _YourDishListState createState() => _YourDishListState();
+
+
+
 }
 
 class _YourDishListState extends State<YourDishList> {
 
+  @override
+  void initState() {
+    super.initState();
+    var store = Provider.of<FoodStore>(context, listen: false);
+    store.initStore();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +220,7 @@ class _YourDishListState extends State<YourDishList> {
                 builder: (_) =>
                     Column(
                         children: [
-                          for(Dish item in store.dishList) FlatButton(
+                          for(Dish item in store.yourCreatedDishList) FlatButton(
                             onPressed: () =>
                             {
                               Navigator.push(

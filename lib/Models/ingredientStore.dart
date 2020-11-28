@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Bealthy_app/Database/Ingredient.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,27 +18,46 @@ class IngredientStore = _IngredientStoreBase with _$IngredientStore;
 abstract class _IngredientStoreBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
 
+  bool storeInitialized = false;
+
   @observable
-  ObservableList ingredientList = new ObservableList();
+  var ingredientList = new ObservableList<Ingredient>();
+
+  @observable
+  var ingredients = new ObservableList<String>();
+
+  @observable
+  ObservableFuture loadInitIngredientList;
+
+  @action
+  Future<void> loadInitialBho() {
+    return loadInitIngredientList = ObservableFuture(initStore());
+  }
+
+  @action
+  Future<void> initStore() async {
+    if(!storeInitialized) {
+      await getIngredients();
+      storeInitialized=true;
+    }
+  }
 
 
   @action
-  List<String> getIngredients() {
-    List<String> ingredientsFromDB = new List<String>();
-    FirebaseFirestore.instance
+  Future<void> getIngredients() async {
+    await (FirebaseFirestore.instance
         .collection('ingredients')
         .get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
-
-        ingredientsFromDB.add(result.get("Name"));
-
-      });
-      //print(ingredientsFromDB);
-
-    });
-    return ingredientsFromDB;
-
+        Ingredient i = new Ingredient(id:"",name:result.get("Name"),qty: "" );
+        ingredientList.add(i);
+        ingredients.add(result.get("Name"));
+      }
+      );
+        }));
   }
+
+
 
 }
 
