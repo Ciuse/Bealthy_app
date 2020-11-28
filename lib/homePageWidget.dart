@@ -5,6 +5,7 @@ import 'calendarWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'addMeal.dart';
+import 'addDishToADay.dart';
 
 
 class HomePageWidget extends StatelessWidget {
@@ -20,8 +21,27 @@ class HomePageWidget extends StatelessWidget {
         Observer(
             builder: (_) => Text(context.read<DateModel>().date.toString() +
                 context.read<DateModel>().weekDay.toString())),
+        FlatButton(
+          onPressed: () {
+            // Add your onPressed code here!
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => addDishToADay()),
+            );
+          },
+          color: Colors.orange,
+          padding: EdgeInsets.all(10.0),
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.add),
+              Text("Add dish")
+            ],
+          ),
+        )
+
 
       ]),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add your onPressed code here!
