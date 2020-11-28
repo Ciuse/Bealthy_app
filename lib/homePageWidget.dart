@@ -1,4 +1,5 @@
 import 'package:Bealthy_app/Models/date_model.dart';
+import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'calendarWidget.dart';
@@ -9,19 +10,34 @@ import 'addMeal.dart';
 
 class HomePageWidget extends StatelessWidget {
   final Color color;
-
+  Future a;
   HomePageWidget(this.color);
 
   @override
   Widget build(BuildContext context) {
+    final foodStore = Provider.of<FoodStore>(context);
     return Scaffold(
-      body: Column(children: [
-        CalendarHomePage(),
-        Observer(
-            builder: (_) => Text(context.read<DateModel>().date.toString() +
-                context.read<DateModel>().weekDay.toString())),
+      body: Center (
+          child: FutureBuilder(
+              future: foodStore.getYourDishes(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  print("ENTRATO");
+                  return CircularProgressIndicator();
+                } else {
+                  return Column(children: [
+                    CalendarHomePage(),
+                    Observer(
+                        builder: (_) => Text(context.read<DateModel>().date.toString() +
+                            context.read<DateModel>().weekDay.toString())),
 
-      ]),
+                  ]);
+                }
+              })
+      ),
+
+
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add your onPressed code here!

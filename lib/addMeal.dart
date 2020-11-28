@@ -199,22 +199,19 @@ class YourDishList extends StatefulWidget {
 class _YourDishListState extends State<YourDishList> {
 
 
-  List<Dish> yourDishes() {
-    return context.read<FoodStore>().getYourDishes();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<FoodStore>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text("Your Dish"),
         ),
-        body: Column(children:[
+        body: ListView(children:[
           Observer(
                 builder: (_) =>
                     Column(
                         children: [
-                          for(Dish item in yourDishes() ) FlatButton(
+                          for(Dish item in store.dishList) FlatButton(
                             onPressed: () =>
                             {
                               Navigator.push(

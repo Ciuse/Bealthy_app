@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Database/Dish.dart';
 import '../Database/Ingredient.dart';
+
 // Include generated file
 part 'foodStore.g.dart';
 
@@ -22,7 +23,13 @@ class FoodStore = _FoodStoreBase with _$FoodStore;
 
 // The store-class
 abstract class _FoodStoreBase with Store {
+  List<Dish> tempFlashCardList;
+  _FoodStoreBase();
+
   final firestoreInstance = FirebaseFirestore.instance;
+
+  @observable
+  var dishList = new ObservableList<Dish>();
 
   @action
   void addDishWithCategory(Dish dish) {
@@ -33,6 +40,14 @@ abstract class _FoodStoreBase with Store {
         .add(dish.toMapDishesCategory());
   }
 
+  Future initializeStore() async{
+    getYourDishes();
+    tempFlashCardList=dishList;
+    print("dishlen : ${dishList.length}");
+
+    print("templengh : ${tempFlashCardList.length}");
+    return tempFlashCardList;
+  }
   @action
   void addNewDish(Dish dish) {
     firestoreInstance
@@ -62,7 +77,7 @@ abstract class _FoodStoreBase with Store {
           .doc(dish.id)
           .collection("Ingredients").doc(element.id).set(element.toMap());
     });
-   
+
   }
   @action
   void getDishes() {
@@ -77,7 +92,7 @@ abstract class _FoodStoreBase with Store {
     });
     print("id:" + auth.currentUser.uid);
   }
-
+  Future<bool> end;
   @action
   List<Dish> getFavouritesDishes() {
     List<Dish> dishList = new List<Dish>();
@@ -86,13 +101,31 @@ abstract class _FoodStoreBase with Store {
     dishList.add(Dish(id:"3",name:"riso",category: "Primo",ingredients: null));
     return dishList;
   }
+  @action
+  Future<bool> getYourDishes() async {
 
-  List<Dish> getYourDishes() {
-    List<Dish> dishList = new List<Dish>();
-    dishList.add(Dish(id:"1",name:"pasta",category: "Primo",ingredients: null));
-    dishList.add(Dish(id:"2",name:"gnocchi",category: "Primo",ingredients: null));
-    dishList.add(Dish(id:"3",name:"riso",category: "Primo",ingredients: null));
-    return dishList;
+   await(FirebaseFirestore.instance
+        .collection('DishesCreatedByUsers')
+        .doc(auth.currentUser.uid).collection("DishesCategory").get()
+
+        .then((querySnapshot){
+          querySnapshot.docs.forEach((category) {
+            for(int i=0;i<2000;i++){
+              print("a");
+            }
+            category.reference.collection("Dishes").get().then((querySnapshot2) {
+              querySnapshot2.docs.forEach((dish) {
+                Dish toAdd = new Dish(id: dish.id,name: dish.get("name"), category: category.id,qty: null,ingredients: null);
+                dishList.add(toAdd);
+
+              });
+            });
+            });
+          end = Future.value(true); })
+   );
+
+    return end;
+
   }
 }
 
