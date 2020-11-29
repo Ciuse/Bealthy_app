@@ -46,12 +46,13 @@ abstract class _IngredientStoreBase with Store {
   @action
   Future<void> getIngredients() async {
     await (FirebaseFirestore.instance
-        .collection('ingredients')
+        .collection('Ingredients')
         .get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
-        Ingredient i = new Ingredient(id:"",name:result.get("Name"),qty: "" );
+        Ingredient i = new Ingredient(id:result.id,name:result.get("name"),qty: "" );
         ingredientList.add(i);
-        ingredients.add(result.get("Name"));
+        print(i);
+        ingredients.add(result.get("name"));
       }
       );
         }));

@@ -27,6 +27,7 @@ class _AddDishFormState extends State<AddDishForm>{
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
   List<String> quantityList = ["poco", "medio", "abbondante"];
+  List<String> categoryList = ["Primo", "Secondo", "Contorno","Dolce"];
 
 @override
   void initState() {
@@ -35,10 +36,13 @@ class _AddDishFormState extends State<AddDishForm>{
     store.initStore();
   }
 
+  String quantityDishCreated = "";
+  String categoryDishCreated = "";
   final List<String> ingredientsSelectedList = new List<String>();
 
   void addIngredientsToListView(String value){
     ingredientsSelectedList.add(value);
+    ingredientsQuantityList.add("");
   }
 
   void addDishToUser(){
@@ -47,14 +51,15 @@ class _AddDishFormState extends State<AddDishForm>{
     Dish dish = new Dish(
         id:"Dish_"+randomNumber.toString(),
         name:nameCt.text,
-        category: categoryCt.text
+        category: categoryDishCreated,
+        qty: quantityDishCreated
     );
     List<Ingredient> ingredients = new List<Ingredient>();
 
     for(int i=0;i< ingredientsSelectedList.length;i++){
       Random random = new Random();
       int randomNumber = random.nextInt(100);
-      Ingredient ingredient = new Ingredient(id:"Ingredient_"+randomNumber.toString(),name:ingredientsSelectedList[i], qty:selectQuantity[i]);
+      Ingredient ingredient = new Ingredient(id:"Ingredient_"+randomNumber.toString(),name:ingredientsSelectedList[i], qty:ingredientsQuantityList[i]);
       ingredients.add(ingredient);
     }
 
@@ -66,8 +71,8 @@ class _AddDishFormState extends State<AddDishForm>{
     context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
   }
 
-  String selectIngredient = "";  //by default we are not providing any of the cities
-  List<String> selectQuantity = new List<String>();
+  String selectIngredient = "";  //by default we are not providing any of the ingredients
+  List<String> ingredientsQuantityList = new List<String>();
 
   @override
   Widget build(BuildContext context) {
@@ -87,12 +92,33 @@ class _AddDishFormState extends State<AddDishForm>{
                 labelText: 'Name',
               ),
             ),
-            TextField(
+            DropDownField(
               controller: categoryCt,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Category',
-              ),
+              hintText: "Select Category",
+              enabled: true,
+              itemsVisibleInDropdown: 3,
+              items: categoryList,
+              strict: false,
+              onValueChanged: (value){
+                setState(() {
+                  categoryDishCreated = value;
+                });
+              } ,
+
+            ),
+            DropDownField(
+              controller: quantitySelected,
+              hintText: "Select quantity",
+              enabled: true,
+              itemsVisibleInDropdown: 3,
+              items: quantityList,
+              strict: false,
+              onValueChanged: (value){
+                setState(() {
+                  quantityDishCreated = value;
+                });
+              } ,
+
             ),
             DropDownField(
               controller: ingredSelected,
@@ -109,6 +135,7 @@ class _AddDishFormState extends State<AddDishForm>{
               } ,
 
             ),
+
             Expanded(
                 child: ListView.builder(
                     padding: const EdgeInsets.all(8),
@@ -124,6 +151,8 @@ class _AddDishFormState extends State<AddDishForm>{
                         onDismissed: (direction){
                           setState(() {
                             ingredientsSelectedList.removeAt(index);
+                            ingredientsQuantityList.removeAt(index);
+                            print(ingredientsQuantityList);
                           });
                         },
                         child: new Column(
@@ -138,8 +167,8 @@ class _AddDishFormState extends State<AddDishForm>{
                               strict: false,
                               onValueChanged: (value){
                                 setState(() {
-                                  selectQuantity.add(value);
-                                  print(index);
+                                  ingredientsQuantityList[index]=value;
+                                  print(ingredientsQuantityList);
                                 });
                               } ,
 

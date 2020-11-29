@@ -85,8 +85,6 @@ abstract class _FoodStoreBase with Store {
     firestoreInstance
         .collection("DishesCreatedByUsers")
         .doc(auth.currentUser.uid)
-        .collection("DishesCategory")
-        .doc(dish.category)
         .collection("Dishes")
         .doc(dish.id)
         .set(dish.toMapDishesCreatedByUser());
@@ -95,8 +93,6 @@ abstract class _FoodStoreBase with Store {
       firestoreInstance
           .collection("DishesCreatedByUsers")
           .doc(auth.currentUser.uid)
-          .collection("DishesCategory")
-          .doc(dish.category)
           .collection("Dishes")
           .doc(dish.id)
           .collection("Ingredients").doc(element.id).set(element.toMap());
@@ -118,15 +114,11 @@ abstract class _FoodStoreBase with Store {
   Future<void> getYourDishes() async {
    await (FirebaseFirestore.instance
         .collection('DishesCreatedByUsers')
-        .doc(auth.currentUser.uid).collection("DishesCategory").get()
+        .doc(auth.currentUser.uid).collection("Dishes").get()
         .then((querySnapshot){
-          querySnapshot.docs.forEach((category) {
-            category.reference.collection("Dishes").get().then((querySnapshot2) {
-              querySnapshot2.docs.forEach((dish) {
-                Dish toAdd = new Dish(id: dish.id,name: dish.get("name"), category: category.id,qty: null,ingredients: null);
-                yourCreatedDishList.add(toAdd);
-              });
-            });
+          querySnapshot.docs.forEach((dish) {
+            Dish toAdd = new Dish(id: dish.id,name: dish.get("name"), category: dish.get("category"),qty: dish.get("qty"),ingredients: null);
+            yourCreatedDishList.add(toAdd);
             });
           })
    );
