@@ -43,7 +43,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                   title: Text(foodStore.yourDishesDayList[index].name,style: TextStyle(fontSize: 22.0)),
                   subtitle: Text(foodStore.yourDishesDayList[index].category,style: TextStyle(fontSize: 18.0)),
                   leading: FlutterLogo(),
-                  trailing: Icon(Icons.more_vert),
+                  trailing: Row (
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Icon(Icons.auto_fix_high),
+                        Icon(Icons.more_vert),
+                      ]),
                 ),
               );
             }
