@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:intl/intl.dart';
 
 // Include generated file
 part 'date_model.g.dart';
@@ -18,6 +19,13 @@ abstract class _DateModel with Store {
   @action
   void changeCurrentDate(DateTime date) {
     this.date = date;
+    fixDate(date);
+  }
+
+  @action
+  void fixDate(DateTime date){
+    String dateSlug ="${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
+    print(dateSlug);
   }
 }
 

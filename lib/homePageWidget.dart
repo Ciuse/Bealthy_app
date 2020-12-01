@@ -6,11 +6,12 @@ import 'calendarWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'addMeal.dart';
-import 'dishPageAddToDay.dart';
+import 'ListDishesOfDay.dart';
 
 
 class HomePageWidget extends StatelessWidget {
   final Color color;
+  List<String> dishesOfDay = new List<String>();
   Future a;
   HomePageWidget(this.color);
 
@@ -19,13 +20,13 @@ class HomePageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foodStore = Provider.of<FoodStore>(context);
+    final dateModel = Provider.of<DateModel>(context);
     return Scaffold(
       body: Column(children: [
         CalendarHomePage(),
         Observer(
-            builder: (_) => Text(context.read<DateModel>().date.toString() +
-                context.read<DateModel>().weekDay.toString())),
+            builder: (_) => ListDishesOfDay(day: dateModel.date.toString()),
+        ),
 
        ]),
       floatingActionButton: FloatingActionButton(

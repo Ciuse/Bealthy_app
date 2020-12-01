@@ -41,6 +41,9 @@ abstract class _FoodStoreBase with Store {
   var yourCreatedDishList = new ObservableList<Dish>();
 
   @observable
+  var yourDishesDayList = new ObservableList<Dish>();
+
+  @observable
   var firstDishList = new ObservableList<Dish>();
 
   @observable
@@ -148,6 +151,33 @@ abstract class _FoodStoreBase with Store {
   void isFoodFavourite(Dish dish) {
     isFavourite = yourFavouriteDishList.contains(dish);
   }
+
+  String fixDate(DateTime date){
+    String dateSlug ="${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
+    return dateSlug;
+  }
+
+  @action
+  Future<void> getYourDishesOfSpecifiDay(DateTime date) async {
+    String day = fixDate(date);
+    yourDishesDayList.clear();
+    await (FirebaseFirestore.instance
+        .collection('UserDishes')
+        .doc(auth.currentUser.uid).collection("DayDishes").doc(day).collection("Dishes").get()
+        .then((querySnapshot){
+      querySnapshot.docs.forEach((dish) {
+        Dish toAdd = new Dish(id: dish.id, name: dish.get("name"), category: dish.get("category"), qty: null, ingredients: null);
+        yourDishesDayList.add(toAdd);
+      }
+
+      );
+      yourDishesDayList.forEach((element) {
+        print(element.name);
+      });
+    })
+    );
+  }
+}
 
   @action
   Future<void> removeFavouriteDish(Dish dish) async {
