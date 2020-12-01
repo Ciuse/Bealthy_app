@@ -4,6 +4,7 @@ import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'createNewDishWidget.dart';
+import 'package:Bealthy_app/dishPageAddToDay.dart';
 class AddMeal extends StatefulWidget {
   @override
   _AddMealState createState() => _AddMealState();
@@ -104,7 +105,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                         onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DishPage(dish: item,)),
+                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: item,)),
                           )
                         },
                         color: Colors.orange,
@@ -226,7 +227,7 @@ class _YourDishListState extends State<YourDishList> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
-                                    DishPage(dish: item,)),
+                                    DishPageAddToDay(dish: item,)),
                               )
                             },
                             color: Colors.orange,
@@ -254,29 +255,6 @@ class _YourDishListState extends State<YourDishList> {
           child: Icon(Icons.add),
             ),
 
-    );
-  }
-}
-
-
-class DishPage extends StatefulWidget {
-  final Dish dish;
-
-  // In the constructor, require a Category.
-  DishPage({@required this.dish});
-
-  @override
-  _DishPageState createState() => _DishPageState();
-}
-
-class _DishPageState extends State<DishPage>{
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-        title: Text(widget.dish.name),
-    ),
     );
   }
 }

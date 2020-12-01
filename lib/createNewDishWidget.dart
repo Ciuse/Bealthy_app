@@ -20,23 +20,32 @@ class _AddDishFormState extends State<AddDishForm>{
   final categoryCt = TextEditingController();
   final ingredientsCt = TextEditingController();
   final ingredientsQty = TextEditingController();
-  final ingredSelected = TextEditingController();
+  final ingredientSelected = TextEditingController();
   final quantitySelected = TextEditingController();
 
 
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
   List<String> quantityList = ["poco", "medio", "abbondante"];
-  List<String> categoryList = ["Primo", "Secondo", "Contorno","Dolce"];
+  List<String> categoryList = [];
 
-@override
+  @override
   void initState() {
+    categoryList= getCategoryName();
     super.initState();
     var store = Provider.of<IngredientStore>(context, listen: false);
     store.initStore();
   }
 
-  String quantityDishCreated = "";
+  List<String> getCategoryName(){
+
+    List<String> listToReturn = new List<String>();
+    Category.values.forEach((element) {
+      listToReturn.add(element.toString().split('.').last);
+    });
+    return listToReturn;
+  }
+
   String categoryDishCreated = "";
   final List<String> ingredientsSelectedList = new List<String>();
 
@@ -51,8 +60,7 @@ class _AddDishFormState extends State<AddDishForm>{
     Dish dish = new Dish(
         id:"Dish_"+randomNumber.toString(),
         name:nameCt.text,
-        category: categoryDishCreated,
-        qty: quantityDishCreated
+        category: categoryDishCreated
     );
     List<Ingredient> ingredients = new List<Ingredient>();
 
@@ -106,26 +114,13 @@ class _AddDishFormState extends State<AddDishForm>{
               } ,
 
             ),
-            DropDownField(
-              controller: quantitySelected,
-              hintText: "Select quantity",
-              enabled: true,
-              itemsVisibleInDropdown: 3,
-              items: quantityList,
-              strict: false,
-              onValueChanged: (value){
-                setState(() {
-                  quantityDishCreated = value;
-                });
-              } ,
 
-            ),
             DropDownField(
-              controller: ingredSelected,
+              controller: ingredientSelected,
               hintText: "Select an ingredient",
               enabled: true,
               itemsVisibleInDropdown: 3,
-              items: ingredientStore.ingredients,
+              items: ingredientStore.ingredientsName,
               strict: false,
               onValueChanged: (value){
                 setState(() {
@@ -148,13 +143,7 @@ class _AddDishFormState extends State<AddDishForm>{
                           color: Colors.red,
                           child: Icon(Icons.delete, color: Colors.white),
                         ),
-                        onDismissed: (direction){
-                          setState(() {
-                            ingredientsSelectedList.removeAt(index);
-                            ingredientsQuantityList.removeAt(index);
-                            print(ingredientsQuantityList);
-                          });
-                        },
+
                         child: new Column(
                           children: <Widget>[
                             new Text('${ingredientsSelectedList[index]}',
@@ -174,7 +163,13 @@ class _AddDishFormState extends State<AddDishForm>{
 
                             ),
                           ],),
-
+                        onDismissed: (direction){
+                          setState(() {
+                            ingredientsSelectedList.removeAt(index);
+                            ingredientsQuantityList.removeAt(index);
+                            print(ingredientsQuantityList);
+                          });
+                        },
                       );
                     }
                 )

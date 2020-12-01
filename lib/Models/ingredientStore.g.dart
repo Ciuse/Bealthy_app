@@ -28,15 +28,15 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   final _$ingredientsAtom = Atom(name: '_IngredientStoreBase.ingredients');
 
   @override
-  ObservableList<String> get ingredients {
+  ObservableList<String> get ingredientsName {
     _$ingredientsAtom.reportRead();
-    return super.ingredients;
+    return super.ingredientsName;
   }
 
   @override
-  set ingredients(ObservableList<String> value) {
-    _$ingredientsAtom.reportWrite(value, super.ingredients, () {
-      super.ingredients = value;
+  set ingredientsName(ObservableList<String> value) {
+    _$ingredientsAtom.reportWrite(value, super.ingredientsName, () {
+      super.ingredientsName = value;
     });
   }
 
@@ -90,7 +90,7 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   String toString() {
     return '''
 ingredientList: ${ingredientList},
-ingredients: ${ingredients},
+ingredients: ${ingredientsName},
 loadInitIngredientList: ${loadInitIngredientList}
     ''';
   }

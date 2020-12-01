@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,11 +9,14 @@ import '../Database/Ingredient.dart';
 part 'foodStore.g.dart';
 
 enum Category {
-  Primo,
-  Secondo,
-  Contorno,
-  Dolce
+  First_Course, //ANTIPASTI
+  Main_Course, //PRIMI
+  Second_Course, //SECONDI
+  Side, //CONTORNI
+  Desserts, //DOLCE
+  Drinks, //BEVANDE
 }
+
 //flutter packages pub run build_runner build
 //flutter packages pub run build_runner watch
 //flutter packages pub run build_runner watch --delete-conflicting-outputs
@@ -117,7 +121,7 @@ abstract class _FoodStoreBase with Store {
         .doc(auth.currentUser.uid).collection("Dishes").get()
         .then((querySnapshot){
           querySnapshot.docs.forEach((dish) {
-            Dish toAdd = new Dish(id: dish.id,name: dish.get("name"), category: dish.get("category"),qty: dish.get("qty"),ingredients: null);
+            Dish toAdd = new Dish(id: dish.id, name: dish.get("name"), category: dish.get("category"), qty: null, ingredients: null);
             yourCreatedDishList.add(toAdd);
             });
           })

@@ -24,7 +24,7 @@ abstract class _IngredientStoreBase with Store {
   var ingredientList = new ObservableList<Ingredient>();
 
   @observable
-  var ingredients = new ObservableList<String>();
+  var ingredientsName = new ObservableList<String>();
 
   @observable
   ObservableFuture loadInitIngredientList;
@@ -52,7 +52,6 @@ abstract class _IngredientStoreBase with Store {
         Ingredient i = new Ingredient(id:result.id,name:result.get("name"),qty: "" );
         ingredientList.add(i);
         print(i);
-        ingredients.add(result.get("name"));
       }
       );
         }));
