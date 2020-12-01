@@ -54,7 +54,7 @@ class Dish {
 
   Map<String, dynamic> toMapDishesCreatedByUser() =>
       {
-        "category": category,
         "name": name,
+        "category": category,
       };
 }

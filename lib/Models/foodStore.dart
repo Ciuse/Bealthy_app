@@ -35,6 +35,9 @@ abstract class _FoodStoreBase with Store {
   var yourFavouriteDishList = new ObservableList<Dish>();
 
   @observable
+  bool isFavourite;
+
+  @observable
   var yourCreatedDishList = new ObservableList<Dish>();
 
   @observable
@@ -59,13 +62,13 @@ abstract class _FoodStoreBase with Store {
 
   @action
   Future<void> initStore() async {
-    if(!storeInitialized) {
+    if (!storeInitialized) {
       await getYourDishes();
-      await getFavouritesDishes();
-      storeInitialized=true;
+      await getFavouriteDishes();
+      await addDishToCategory();
+      storeInitialized = true;
     }
   }
-
 
 
   @action
@@ -76,6 +79,7 @@ abstract class _FoodStoreBase with Store {
         .collection("Dishes")
         .add(dish.toMapDishesCategory());
   }
+
   @action
   void addNewDish(Dish dish) {
     firestoreInstance
@@ -104,28 +108,92 @@ abstract class _FoodStoreBase with Store {
     yourCreatedDishList.add(dish);
   }
 
-
-  @action
-  List<Dish> getFavouritesDishes() {
-    List<Dish> dishList = new List<Dish>();
-    dishList.add(Dish(id:"1",name:"pasta",category: "Primo",ingredients: null));
-    dishList.add(Dish(id:"2",name:"gnocchi",category: "Primo",ingredients: null));
-    dishList.add(Dish(id:"3",name:"riso",category: "Primo",ingredients: null));
-    return dishList;
-  }
-
   @action
   Future<void> getYourDishes() async {
-   await (FirebaseFirestore.instance
+    await (FirebaseFirestore.instance
         .collection('DishesCreatedByUsers')
         .doc(auth.currentUser.uid).collection("Dishes").get()
-        .then((querySnapshot){
-          querySnapshot.docs.forEach((dish) {
-            Dish toAdd = new Dish(id: dish.id, name: dish.get("name"), category: dish.get("category"), qty: null, ingredients: null);
-            yourCreatedDishList.add(toAdd);
-            });
-          })
-   );
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((dish) {
+        Dish toAdd = new Dish(id: dish.id,
+            name: dish.get("name"),
+            category: dish.get("category"),
+            qty: null,
+            ingredients: null);
+        yourCreatedDishList.add(toAdd);
+      });
+    })
+    );
+  }
+
+  @action
+  Future<void> getFavouriteDishes() async {
+    await (FirebaseFirestore.instance
+        .collection('DishesFavouriteByUsers')
+        .doc(auth.currentUser.uid).collection("Dishes").get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((dish) {
+        Dish toAdd = new Dish(id: dish.id,
+            name: dish.get("name"),
+            category: dish.get("category"),
+            qty: null,
+            ingredients: null);
+        yourFavouriteDishList.add(toAdd);
+      });
+    })
+    );
+  }
+
+  @action
+  void isFoodFavourite(Dish dish) {
+    isFavourite = yourFavouriteDishList.contains(dish);
+  }
+
+  @action
+  Future<void> removeFavouriteDish(Dish dish) async {
+    firestoreInstance
+        .collection("DishesFavouriteByUsers")
+        .doc(auth.currentUser.uid)
+        .collection("Dishes")
+        .doc(dish.id)
+        .delete();
+
+    yourFavouriteDishList.remove(dish);
+    isFoodFavourite(dish);
+  }
+
+  @action
+  Future<void> addFavouriteDish(Dish dish) async {
+    firestoreInstance
+        .collection("DishesFavouriteByUsers")
+        .doc(auth.currentUser.uid)
+        .collection("Dishes")
+        .doc(dish.id)
+        .set(dish.toMapDishesCreatedByUser());
+
+    yourFavouriteDishList.add(dish);
+    isFoodFavourite(dish);
+  }
+
+  //Inizializza il database online dividendo i cibi nelle varie categorie
+  //Metodo che una volta inseriti tutti i cibi si puo cancellare
+  Future<void> addDishToCategory() async {
+    await (FirebaseFirestore.instance
+        .collection('Dishes')
+        .get().then((querySnapshot) {
+      querySnapshot.docs.forEach((dish) {
+        firestoreInstance
+            .collection("DishesCategory")
+            .doc(dish.get("category"))
+            .collection("Dishes")
+            .doc(dish.id)
+            .set(Dish(id: dish.id,
+            name: dish.get("name"),
+            qty: null,
+            category: dish.get("category"),
+            ingredients: null).toMapDishesCategory());
+      });
+    })
+    );
   }
 }
-

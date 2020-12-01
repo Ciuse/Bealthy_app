@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'Database/Dish.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:io' as io;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+
+import 'Database/Dish.dart';
+import 'Models/foodStore.dart';
 class DishPageAddToDay extends StatefulWidget {
 
   final Dish dish;
@@ -17,12 +18,9 @@ class DishPageAddToDay extends StatefulWidget {
 }
 
 class _DishPageAddToDayState extends State<DishPageAddToDay>{
-  AssetImage dishImage;
-  bool isLoading = false;
-  bool clicked = false;
-  bool isLocal = false;
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
+
   void initState() {
     super.initState();
     getImage();
@@ -50,9 +48,30 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
 
   @override
   Widget build(BuildContext context) {
+    FoodStore foodStore = Provider.of<FoodStore>(context);
+    foodStore.isFoodFavourite(widget.dish);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.dish.name),
+        actions: <Widget>[
+          Observer(builder: (_) =>IconButton(
+              icon: Icon(
+                foodStore.isFavourite ? Icons.favorite : Icons.favorite_border,
+                color: foodStore.isFavourite ? Colors.pinkAccent : null,
+
+              ),
+              onPressed: () {
+
+                if (foodStore.isFavourite) {
+                  foodStore.removeFavouriteDish(widget.dish);
+                } else {
+                  foodStore.addFavouriteDish(widget.dish);
+                }
+
+                // do something
+              }
+          ))
+        ],
       ),
       body: Container(
           padding: EdgeInsets.all(10.0),

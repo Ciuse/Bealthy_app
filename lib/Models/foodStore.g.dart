@@ -26,6 +26,21 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  final _$isFavouriteAtom = Atom(name: '_FoodStoreBase.isFavourite');
+
+  @override
+  bool get isFavourite {
+    _$isFavouriteAtom.reportRead();
+    return super.isFavourite;
+  }
+
+  @override
+  set isFavourite(bool value) {
+    _$isFavouriteAtom.reportWrite(value, super.isFavourite, () {
+      super.isFavourite = value;
+    });
+  }
+
   final _$yourCreatedDishListAtom =
       Atom(name: '_FoodStoreBase.yourCreatedDishList');
 
@@ -132,6 +147,33 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     return _$getYourDishesAsyncAction.run(() => super.getYourDishes());
   }
 
+  final _$getFavouriteDishesAsyncAction =
+      AsyncAction('_FoodStoreBase.getFavouriteDishes');
+
+  @override
+  Future<void> getFavouriteDishes() {
+    return _$getFavouriteDishesAsyncAction
+        .run(() => super.getFavouriteDishes());
+  }
+
+  final _$removeFavouriteDishAsyncAction =
+      AsyncAction('_FoodStoreBase.removeFavouriteDish');
+
+  @override
+  Future<void> removeFavouriteDish(Dish dish) {
+    return _$removeFavouriteDishAsyncAction
+        .run(() => super.removeFavouriteDish(dish));
+  }
+
+  final _$addFavouriteDishAsyncAction =
+      AsyncAction('_FoodStoreBase.addFavouriteDish');
+
+  @override
+  Future<void> addFavouriteDish(Dish dish) {
+    return _$addFavouriteDishAsyncAction
+        .run(() => super.addFavouriteDish(dish));
+  }
+
   final _$_FoodStoreBaseActionController =
       ActionController(name: '_FoodStoreBase');
 
@@ -180,11 +222,11 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
-  List<Dish> getFavouritesDishes() {
+  void isFoodFavourite(Dish dish) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
-        name: '_FoodStoreBase.getFavouritesDishes');
+        name: '_FoodStoreBase.isFoodFavourite');
     try {
-      return super.getFavouritesDishes();
+      return super.isFoodFavourite(dish);
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -194,6 +236,7 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   String toString() {
     return '''
 yourFavouriteDishList: ${yourFavouriteDishList},
+isFavourite: ${isFavourite},
 yourCreatedDishList: ${yourCreatedDishList},
 firstDishList: ${firstDishList},
 secondDishList: ${secondDishList},

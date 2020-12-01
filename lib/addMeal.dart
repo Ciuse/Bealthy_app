@@ -85,13 +85,16 @@ class FavouriteDishes extends StatefulWidget {
 }
 
 class _FavouriteDishesState extends State<FavouriteDishes>{
-
-  List<Dish> favouriteDishes(){
-   return context.read<FoodStore>().getFavouritesDishes();
+  @override
+  void initState() {
+    super.initState();
+    var store = Provider.of<FoodStore>(context, listen: false);
+    store.initStore();
   }
 
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<FoodStore>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -101,7 +104,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
             child:   Observer(
                 builder: (_) => Column(
                     children: [
-                      for(Dish item in  favouriteDishes() ) FlatButton(
+                      for(Dish item in store.yourFavouriteDishList ) FlatButton(
                         onPressed: () => {
                           Navigator.push(
                             context,
