@@ -57,6 +57,22 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  final _$yourDishesDayListAtom =
+      Atom(name: '_FoodStoreBase.yourDishesDayList');
+
+  @override
+  ObservableList<Dish> get yourDishesDayList {
+    _$yourDishesDayListAtom.reportRead();
+    return super.yourDishesDayList;
+  }
+
+  @override
+  set yourDishesDayList(ObservableList<Dish> value) {
+    _$yourDishesDayListAtom.reportWrite(value, super.yourDishesDayList, () {
+      super.yourDishesDayList = value;
+    });
+  }
+
   final _$firstDishListAtom = Atom(name: '_FoodStoreBase.firstDishList');
 
   @override
@@ -156,6 +172,15 @@ mixin _$FoodStore on _FoodStoreBase, Store {
         .run(() => super.getFavouriteDishes());
   }
 
+  final _$getYourDishesOfSpecifiDayAsyncAction =
+      AsyncAction('_FoodStoreBase.getYourDishesOfSpecifiDay');
+
+  @override
+  Future<void> getYourDishesOfSpecifiDay(DateTime date) {
+    return _$getYourDishesOfSpecifiDayAsyncAction
+        .run(() => super.getYourDishesOfSpecifiDay(date));
+  }
+
   final _$removeFavouriteDishAsyncAction =
       AsyncAction('_FoodStoreBase.removeFavouriteDish');
 
@@ -238,6 +263,7 @@ mixin _$FoodStore on _FoodStoreBase, Store {
 yourFavouriteDishList: ${yourFavouriteDishList},
 isFavourite: ${isFavourite},
 yourCreatedDishList: ${yourCreatedDishList},
+yourDishesDayList: ${yourDishesDayList},
 firstDishList: ${firstDishList},
 secondDishList: ${secondDishList},
 contornDishList: ${contornDishList},

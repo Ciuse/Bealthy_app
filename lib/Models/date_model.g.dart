@@ -45,6 +45,17 @@ mixin _$DateModel on _DateModel, Store {
   }
 
   @override
+  void fixDate(DateTime date) {
+    final _$actionInfo =
+        _$_DateModelActionController.startAction(name: '_DateModel.fixDate');
+    try {
+      return super.fixDate(date);
+    } finally {
+      _$_DateModelActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 date: ${date},

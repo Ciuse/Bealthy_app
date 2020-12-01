@@ -177,7 +177,7 @@ abstract class _FoodStoreBase with Store {
     })
     );
   }
-}
+
 
   @action
   Future<void> removeFavouriteDish(Dish dish) async {
