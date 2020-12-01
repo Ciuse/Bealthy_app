@@ -21,7 +21,13 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   List<String> dishesOfDay = new List<String>();
 
+  @override
+  void initState() {
 
+    super.initState();
+    var store = Provider.of<FoodStore>(context, listen: false);
+    store.initStore();
+  }
 
   @override
   Widget build(BuildContext context) {
