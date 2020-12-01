@@ -1,9 +1,7 @@
+import 'package:Bealthy_app/dishPageAddToDay.dart';
 import 'package:flutter/material.dart';
 import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
-
-
-
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 
@@ -19,7 +17,6 @@ class ListDishesOfDay extends StatefulWidget {
 
 class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
-  List<String> dishesOfDay = new List<String>();
 
   @override
   void initState() {
@@ -40,6 +37,9 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
             itemBuilder: (BuildContext context, int index) {
               return Card(
                 child: ListTile(
+                  onTap: ()=> { Navigator.push(
+                  context, MaterialPageRoute(builder: (context) =>
+                      DishPageAddToDay(dish: foodStore.yourDishesDayList[index],))),},
                   title: Text(foodStore.yourDishesDayList[index].name,style: TextStyle(fontSize: 22.0)),
                   subtitle: Text(foodStore.yourDishesDayList[index].category,style: TextStyle(fontSize: 18.0)),
                   leading: FlutterLogo(),
@@ -50,13 +50,13 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                         Icon(Icons.more_vert),
                       ]),
                 ),
+
               );
             }
         ),
 
-
-      ),);
-
+      ),
+    );
 
   }
 }

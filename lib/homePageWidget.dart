@@ -6,7 +6,7 @@ import 'calendarWidget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'addMeal.dart';
-import 'ListDishesOfDay.dart';
+import 'listDishesOfDay.dart';
 
 
 class HomePageWidget extends StatelessWidget {

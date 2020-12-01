@@ -71,7 +71,7 @@ abstract class _FoodStoreBase with Store {
       await getYourDishes();
       await getFavouriteDishes();
       await addDishToCategory();
-      await getYourDishesOfSpecifiDay(DateTime.now());
+      await getYourDishesOfSpecificDay(DateTime.now());
       storeInitialized = true;
     }
   }
@@ -161,7 +161,7 @@ abstract class _FoodStoreBase with Store {
   }
 
   @action
-  Future<void> getYourDishesOfSpecifiDay(DateTime date) async {
+  Future<void> getYourDishesOfSpecificDay(DateTime date) async {
     String day = fixDate(date);
     yourDishesDayList.clear();
     await (FirebaseFirestore.instance
@@ -174,9 +174,6 @@ abstract class _FoodStoreBase with Store {
       }
 
       );
-      yourDishesDayList.forEach((element) {
-        print(element.name);
-      });
     })
     );
   }
