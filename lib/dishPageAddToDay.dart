@@ -11,7 +11,8 @@ import 'Models/foodStore.dart';
 class DishPageAddToDay extends StatefulWidget {
 
   final Dish dish;
-  DishPageAddToDay({@required this.dish});
+  final bool createdByUser;
+  DishPageAddToDay({@required this.dish, this.createdByUser});
 
   @override
   _DishPageAddToDayState createState() => _DishPageAddToDayState();
@@ -89,7 +90,13 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                             }
                             else {
                               print("IMAGE NET");
-                              return Image.network(remoteString.data);
+                              return Container(
+                                  width: 200,
+                                  height: 200,
+                                  child: ClipOval(
+                                    child: Image.network(remoteString.data, fit: BoxFit.fill),
+                                  ));
+
                             }
                           }
                           else {
@@ -99,8 +106,15 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                     );
                   }
                   else {
-                    return Image(
-                        image: AssetImage("images/" + widget.dish.id + ".jpg"));
+                    return Container(
+                        width: 200,
+                        height: 200,
+                        child:  ClipOval(
+                            child: Image(
+                              image: AssetImage("images/" + widget.dish.id + ".jpg"),
+                            )
+                        ));
+
                   }
                 } else{
 

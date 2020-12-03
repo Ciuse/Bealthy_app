@@ -39,6 +39,9 @@ abstract class _FoodStoreBase with Store {
   bool isFavourite;
 
   @observable
+  var daySelected = DateTime.now();
+
+  @observable
   var yourCreatedDishList = new ObservableList<Dish>();
 
   @observable
@@ -264,7 +267,8 @@ abstract class _FoodStoreBase with Store {
   }
 
   @action
-  Future<void> getYourDishesOfSpecificDay(DateTime date) async {
+  Future<void> getYourDishesOfSpecifiDay(DateTime date) async {
+    daySelected = date;
     String day = fixDate(date);
     yourDishesDayList.clear();
     await (FirebaseFirestore.instance
@@ -281,6 +285,22 @@ abstract class _FoodStoreBase with Store {
     );
   }
 
+
+  @action
+  Future<void> removeDishFromUserDishesOfSpecificDay(Dish dish) async {
+
+    String dayFix= fixDate(daySelected);
+    firestoreInstance
+        .collection("UserDishes")
+        .doc(auth.currentUser.uid)
+        .collection("DayDishes")
+        .doc(dayFix)
+        .collection("Dishes")
+        .doc(dish.id)
+        .delete();
+
+    yourDishesDayList.remove(dish);
+  }
 
   @action
   Future<void> removeFavouriteDish(Dish dish) async {
