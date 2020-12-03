@@ -73,63 +73,97 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
-  final _$firstDishListAtom = Atom(name: '_FoodStoreBase.firstDishList');
+  final _$firstCourseDishListAtom =
+      Atom(name: '_FoodStoreBase.firstCourseDishList');
 
   @override
-  ObservableList<Dish> get firstDishList {
-    _$firstDishListAtom.reportRead();
-    return super.firstDishList;
+  ObservableList<Dish> get firstCourseDishList {
+    _$firstCourseDishListAtom.reportRead();
+    return super.firstCourseDishList;
   }
 
   @override
-  set firstDishList(ObservableList<Dish> value) {
-    _$firstDishListAtom.reportWrite(value, super.firstDishList, () {
-      super.firstDishList = value;
+  set firstCourseDishList(ObservableList<Dish> value) {
+    _$firstCourseDishListAtom.reportWrite(value, super.firstCourseDishList, () {
+      super.firstCourseDishList = value;
     });
   }
 
-  final _$secondDishListAtom = Atom(name: '_FoodStoreBase.secondDishList');
+  final _$mainCourseDishListAtom =
+      Atom(name: '_FoodStoreBase.mainCourseDishList');
 
   @override
-  ObservableList<Dish> get secondDishList {
-    _$secondDishListAtom.reportRead();
-    return super.secondDishList;
+  ObservableList<Dish> get mainCourseDishList {
+    _$mainCourseDishListAtom.reportRead();
+    return super.mainCourseDishList;
   }
 
   @override
-  set secondDishList(ObservableList<Dish> value) {
-    _$secondDishListAtom.reportWrite(value, super.secondDishList, () {
-      super.secondDishList = value;
+  set mainCourseDishList(ObservableList<Dish> value) {
+    _$mainCourseDishListAtom.reportWrite(value, super.mainCourseDishList, () {
+      super.mainCourseDishList = value;
     });
   }
 
-  final _$contornDishListAtom = Atom(name: '_FoodStoreBase.contornDishList');
+  final _$secondCourseDishListAtom =
+      Atom(name: '_FoodStoreBase.secondCourseDishList');
 
   @override
-  ObservableList<Dish> get contornDishList {
-    _$contornDishListAtom.reportRead();
-    return super.contornDishList;
+  ObservableList<Dish> get secondCourseDishList {
+    _$secondCourseDishListAtom.reportRead();
+    return super.secondCourseDishList;
   }
 
   @override
-  set contornDishList(ObservableList<Dish> value) {
-    _$contornDishListAtom.reportWrite(value, super.contornDishList, () {
-      super.contornDishList = value;
+  set secondCourseDishList(ObservableList<Dish> value) {
+    _$secondCourseDishListAtom.reportWrite(value, super.secondCourseDishList,
+        () {
+      super.secondCourseDishList = value;
     });
   }
 
-  final _$dessertDishListAtom = Atom(name: '_FoodStoreBase.dessertDishList');
+  final _$sideDishListAtom = Atom(name: '_FoodStoreBase.sideDishList');
 
   @override
-  ObservableList<Dish> get dessertDishList {
-    _$dessertDishListAtom.reportRead();
-    return super.dessertDishList;
+  ObservableList<Dish> get sideDishList {
+    _$sideDishListAtom.reportRead();
+    return super.sideDishList;
   }
 
   @override
-  set dessertDishList(ObservableList<Dish> value) {
-    _$dessertDishListAtom.reportWrite(value, super.dessertDishList, () {
-      super.dessertDishList = value;
+  set sideDishList(ObservableList<Dish> value) {
+    _$sideDishListAtom.reportWrite(value, super.sideDishList, () {
+      super.sideDishList = value;
+    });
+  }
+
+  final _$dessertsDishListAtom = Atom(name: '_FoodStoreBase.dessertsDishList');
+
+  @override
+  ObservableList<Dish> get dessertsDishList {
+    _$dessertsDishListAtom.reportRead();
+    return super.dessertsDishList;
+  }
+
+  @override
+  set dessertsDishList(ObservableList<Dish> value) {
+    _$dessertsDishListAtom.reportWrite(value, super.dessertsDishList, () {
+      super.dessertsDishList = value;
+    });
+  }
+
+  final _$drinksDishListAtom = Atom(name: '_FoodStoreBase.drinksDishList');
+
+  @override
+  ObservableList<Dish> get drinksDishList {
+    _$drinksDishListAtom.reportRead();
+    return super.drinksDishList;
+  }
+
+  @override
+  set drinksDishList(ObservableList<Dish> value) {
+    _$drinksDishListAtom.reportWrite(value, super.drinksDishList, () {
+      super.drinksDishList = value;
     });
   }
 
@@ -155,30 +189,49 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     return _$initStoreAsyncAction.run(() => super.initStore());
   }
 
-  final _$getYourDishesAsyncAction =
-      AsyncAction('_FoodStoreBase.getYourDishes');
+  final _$initFoodCategoryListsAsyncAction =
+      AsyncAction('_FoodStoreBase.initFoodCategoryLists');
 
   @override
-  Future<void> getYourDishes() {
-    return _$getYourDishesAsyncAction.run(() => super.getYourDishes());
+  Future<void> initFoodCategoryLists(int categoryIndex) {
+    return _$initFoodCategoryListsAsyncAction
+        .run(() => super.initFoodCategoryLists(categoryIndex));
   }
 
-  final _$getFavouriteDishesAsyncAction =
-      AsyncAction('_FoodStoreBase.getFavouriteDishes');
+  final _$_getCategoryDishesAsyncAction =
+      AsyncAction('_FoodStoreBase._getCategoryDishes');
 
   @override
-  Future<void> getFavouriteDishes() {
-    return _$getFavouriteDishesAsyncAction
-        .run(() => super.getFavouriteDishes());
+  Future<void> _getCategoryDishes(
+      int categoryIndex, ObservableList<dynamic> list) {
+    return _$_getCategoryDishesAsyncAction
+        .run(() => super._getCategoryDishes(categoryIndex, list));
   }
 
-  final _$getYourDishesOfSpecifiDayAsyncAction =
-      AsyncAction('_FoodStoreBase.getYourDishesOfSpecifiDay');
+  final _$_getYourDishesAsyncAction =
+      AsyncAction('_FoodStoreBase._getYourDishes');
 
   @override
-  Future<void> getYourDishesOfSpecifiDay(DateTime date) {
-    return _$getYourDishesOfSpecifiDayAsyncAction
-        .run(() => super.getYourDishesOfSpecifiDay(date));
+  Future<void> _getYourDishes() {
+    return _$_getYourDishesAsyncAction.run(() => super._getYourDishes());
+  }
+
+  final _$_getFavouriteDishesAsyncAction =
+      AsyncAction('_FoodStoreBase._getFavouriteDishes');
+
+  @override
+  Future<void> _getFavouriteDishes() {
+    return _$_getFavouriteDishesAsyncAction
+        .run(() => super._getFavouriteDishes());
+  }
+
+  final _$getYourDishesOfSpecificDayAsyncAction =
+      AsyncAction('_FoodStoreBase.getYourDishesOfSpecificDay');
+
+  @override
+  Future<void> getYourDishesOfSpecificDay(DateTime date) {
+    return _$getYourDishesOfSpecificDayAsyncAction
+        .run(() => super.getYourDishesOfSpecificDay(date));
   }
 
   final _$removeFavouriteDishAsyncAction =
@@ -214,28 +267,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
-  void addDishWithCategory(Dish dish) {
-    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
-        name: '_FoodStoreBase.addDishWithCategory');
-    try {
-      return super.addDishWithCategory(dish);
-    } finally {
-      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void addNewDish(Dish dish) {
-    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
-        name: '_FoodStoreBase.addNewDish');
-    try {
-      return super.addNewDish(dish);
-    } finally {
-      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void addNewDishCreatedByUser(Dish dish, List<Ingredient> ingredients) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.addNewDishCreatedByUser');
@@ -264,10 +295,12 @@ yourFavouriteDishList: ${yourFavouriteDishList},
 isFavourite: ${isFavourite},
 yourCreatedDishList: ${yourCreatedDishList},
 yourDishesDayList: ${yourDishesDayList},
-firstDishList: ${firstDishList},
-secondDishList: ${secondDishList},
-contornDishList: ${contornDishList},
-dessertDishList: ${dessertDishList},
+firstCourseDishList: ${firstCourseDishList},
+mainCourseDishList: ${mainCourseDishList},
+secondCourseDishList: ${secondCourseDishList},
+sideDishList: ${sideDishList},
+dessertsDishList: ${dessertsDishList},
+drinksDishList: ${drinksDishList},
 loadInitDishList: ${loadInitDishList}
     ''';
   }
