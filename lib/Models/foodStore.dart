@@ -75,7 +75,6 @@ abstract class _FoodStoreBase with Store {
 
   @action
   Future<void> initStore() async {
-
     if (!storeInitialized) {
       await _getYourDishes();
       await _getFavouriteDishes();
@@ -88,52 +87,53 @@ abstract class _FoodStoreBase with Store {
   @action
   Future<void> initFoodCategoryLists(int categoryIndex) async {
     switch (categoryIndex) {
-      case 0:{
-        if(firstCourseDishList.length<=0){
-          _getCategoryDishes(categoryIndex, firstCourseDishList);
+      case 0:
+        {
+          if (firstCourseDishList.length <= 0) {
+            _getCategoryDishes(categoryIndex, firstCourseDishList);
+          }
         }
-      }
-      break;
-      case 1:{
-        if(mainCourseDishList.length<=0){
-          _getCategoryDishes(categoryIndex, mainCourseDishList);
+        break;
+      case 1:
+        {
+          if (mainCourseDishList.length <= 0) {
+            _getCategoryDishes(categoryIndex, mainCourseDishList);
+          }
         }
-      }
-      break;
-      case 2:{
-        if(secondCourseDishList.length<=0){
-          _getCategoryDishes(categoryIndex, secondCourseDishList);
-
+        break;
+      case 2:
+        {
+          if (secondCourseDishList.length <= 0) {
+            _getCategoryDishes(categoryIndex, secondCourseDishList);
+          }
         }
-      }
-      break;
-      case 3:{
-        if(sideDishList.length<=0){
-          _getCategoryDishes(categoryIndex, sideDishList);
-
+        break;
+      case 3:
+        {
+          if (sideDishList.length <= 0) {
+            _getCategoryDishes(categoryIndex, sideDishList);
+          }
         }
-      }
-      break;
-      case 4:{
-        if(dessertsDishList.length<=0){
-          _getCategoryDishes(categoryIndex, dessertsDishList);
-
+        break;
+      case 4:
+        {
+          if (dessertsDishList.length <= 0) {
+            _getCategoryDishes(categoryIndex, dessertsDishList);
+          }
         }
-      }
-      break;
-      case 5:{
-        if(drinksDishList.length<=0){
-          _getCategoryDishes(categoryIndex, drinksDishList);
-
+        break;
+      case 5:
+        {
+          if (drinksDishList.length <= 0) {
+            _getCategoryDishes(categoryIndex, drinksDishList);
+          }
         }
-      }
-      break;
-      default: {
-        print("Swtich case no category found");
-
-      }
-      break;
-
+        break;
+      default:
+        {
+          print("Swtich case no category found");
+        }
+        break;
     }
   }
 
@@ -157,13 +157,11 @@ abstract class _FoodStoreBase with Store {
       case 3:
         {
           return sideDishList;
-
         }
         break;
       case 4:
         {
           return dessertsDishList;
-
         }
         break;
       case 5:
@@ -201,16 +199,23 @@ abstract class _FoodStoreBase with Store {
   }
 
   @action
-  Future<void> _getCategoryDishes(int categoryIndex, ObservableList list) async {
+  Future<void> _getCategoryDishes(int categoryIndex,
+      ObservableList list) async {
     await (FirebaseFirestore.instance
         .collection('DishesCategory')
-        .doc(Category.values[categoryIndex].toString().split('.').last)
+        .doc(Category.values[categoryIndex]
+        .toString()
+        .split('.')
+        .last)
         .collection("Dishes").get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((dish) {
         Dish toAdd = new Dish(id: dish.id,
             name: dish.get("name"),
-            category: Category.values[categoryIndex].toString().split('.').last,
+            category: Category.values[categoryIndex]
+                .toString()
+                .split('.')
+                .last,
             qty: null,
             ingredients: null);
         list.add(toAdd);
@@ -261,22 +266,28 @@ abstract class _FoodStoreBase with Store {
     isFavourite = yourFavouriteDishList.contains(dish);
   }
 
-  String fixDate(DateTime date){
-    String dateSlug ="${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
+  String fixDate(DateTime date) {
+    String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(
+        2, '0')}-${date.day.toString().padLeft(2, '0')}";
     return dateSlug;
   }
 
   @action
-  Future<void> getYourDishesOfSpecifiDay(DateTime date) async {
+  Future<void> getYourDishesOfSpecificDay(DateTime date) async {
     daySelected = date;
     String day = fixDate(date);
     yourDishesDayList.clear();
     await (FirebaseFirestore.instance
         .collection('UserDishes')
-        .doc(auth.currentUser.uid).collection("DayDishes").doc(day).collection("Dishes").get()
-        .then((querySnapshot){
+        .doc(auth.currentUser.uid).collection("DayDishes").doc(day).collection(
+        "Dishes").get()
+        .then((querySnapshot) {
       querySnapshot.docs.forEach((dish) {
-        Dish toAdd = new Dish(id: dish.id, name: dish.get("name"), category: dish.get("category"), qty: null, ingredients: null);
+        Dish toAdd = new Dish(id: dish.id,
+            name: dish.get("name"),
+            category: dish.get("category"),
+            qty: null,
+            ingredients: null);
         yourDishesDayList.add(toAdd);
       }
 
@@ -288,8 +299,7 @@ abstract class _FoodStoreBase with Store {
 
   @action
   Future<void> removeDishFromUserDishesOfSpecificDay(Dish dish) async {
-
-    String dayFix= fixDate(daySelected);
+    String dayFix = fixDate(daySelected);
     firestoreInstance
         .collection("UserDishes")
         .doc(auth.currentUser.uid)
@@ -349,4 +359,28 @@ abstract class _FoodStoreBase with Store {
     })
     );
   }
+
+
+  bool isSubstring(String s1, String s2) {
+    int M = s1.length;
+    int N = s2.length;
+
+/* A loop to slide pat[] one by one */
+    for (int i = 0; i <= N - M; i++) {
+      int j;
+
+/* For current index i, check for
+ pattern match */
+      for (j = 0; j < M; j++)
+        if (s2[i + j] != s1[j])
+          break;
+
+      if (j == M)
+        return true; // il piatto è stato creato dall'utente
+    }
+
+    return false; //il piatto non è stato creato dall'utente
+
+  }
+
 }

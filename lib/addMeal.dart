@@ -94,7 +94,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
 
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<FoodStore>(context);
+    final foodStore = Provider.of<FoodStore>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -104,19 +104,20 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
             child:   Observer(
                 builder: (_) => Column(
                     children: [
-                      for(Dish item in store.yourFavouriteDishList ) FlatButton(
+                      for(Dish dish in foodStore.yourFavouriteDishList ) FlatButton(
                         onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: item,)),
-                          )
+                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: dish,
+                        createdByUser: foodStore.isSubstring("User", dish.id,)),
+                          ))
                         },
                         color: Colors.orange,
                         padding: EdgeInsets.all(10.0),
                         child: Row(
                           children: <Widget>[
                             Icon(Icons.fastfood),
-                            Text(item.name.toString())
+                            Text(dish.name.toString())
                           ],
                         ),
                       ),
@@ -207,7 +208,7 @@ class _CategoryDishListState extends State<CategoryDishList> {
                         onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: item,)),
+                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: item, createdByUser: false,)),
                           )
                         },
                         color: Colors.orange,
@@ -262,7 +263,8 @@ class _YourDishListState extends State<YourDishList> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
-                                    DishPageAddToDay(dish: item,)),
+                                    DishPageAddToDay(dish: item, createdByUser: true),
+                                )
                               )
                             },
                             color: Colors.orange,

@@ -12,7 +12,7 @@ class DishPageAddToDay extends StatefulWidget {
 
   final Dish dish;
   final bool createdByUser;
-  DishPageAddToDay({@required this.dish, this.createdByUser});
+  DishPageAddToDay({@required this.dish, @required this.createdByUser});
 
   @override
   _DishPageAddToDayState createState() => _DishPageAddToDayState();
@@ -74,7 +74,8 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
           ))
         ],
       ),
-      body: Container(
+      body: Column(
+    children: [Container(
           padding: EdgeInsets.all(10.0),
           child: FutureBuilder (
               future: findIfLocal(),
@@ -123,7 +124,10 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
               }
 
           )
-      ),
+    ),
+      Text(widget.createdByUser.toString())
+    ]
+      )
     );
   }
 }

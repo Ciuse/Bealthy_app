@@ -65,6 +65,15 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     return _$initStoreAsyncAction.run(() => super.initStore());
   }
 
+  final _$initIngredientNameAsyncAction =
+      AsyncAction('_IngredientStoreBase.initIngredientName');
+
+  @override
+  Future<void> initIngredientName() {
+    return _$initIngredientNameAsyncAction
+        .run(() => super.initIngredientName());
+  }
+
   final _$getIngredientsAsyncAction =
       AsyncAction('_IngredientStoreBase.getIngredients');
 

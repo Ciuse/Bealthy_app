@@ -49,8 +49,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
               child: Card(
                 child: ListTile(
                   onTap: ()=> { Navigator.push(
-                  context, MaterialPageRoute(builder: (context) =>
-                      DishPageAddToDay(dish: foodStore.yourDishesDayList[index],))),},
+                    context, MaterialPageRoute(builder: (context) =>
+                      DishPageAddToDay(dish: foodStore.yourDishesDayList[index],
+                          createdByUser: foodStore.isSubstring("User", foodStore.yourDishesDayList[index].id))
+                  ),
+                  )
+                  },
                   title: Text(foodStore.yourDishesDayList[index].name,style: TextStyle(fontSize: 22.0)),
                   subtitle: Text(foodStore.yourDishesDayList[index].category,style: TextStyle(fontSize: 18.0)),
                   leading: FlutterLogo(),
@@ -60,26 +64,22 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                         PopupMenuButton<String>(
                           onSelected: (String choice) {
 
-                            String prova = "User";
-                            bool res = isSubstring(prova, foodStore.yourDishesDayList[index].id);
-                            print(res);
-
-
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: foodStore.yourDishesDayList[index], createdByUser: res)));
+                                context,
+                                MaterialPageRoute(builder: (context) =>
+                                    DishPageAddToDay(dish: foodStore.yourDishesDayList[index],
+                                        createdByUser: foodStore.isSubstring("User", foodStore.yourDishesDayList[index].id))));
+                          },
+                          itemBuilder: (BuildContext context){
+                            return ConstantsList.choices.map((String choice) {
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Text(choice),
 
-                            },
-                            itemBuilder: (BuildContext context){
-                              return ConstantsList.choices.map((String choice) {
-                                      return PopupMenuItem<String>(
-                                        value: choice,
-                                        child: Text(choice),
 
-
-                                      );
-                                      }).toList();
-                            },
+                              );
+                            }).toList();
+                          },
                         ),
                         /*
                         IconButton(
@@ -108,27 +108,6 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 }
 
 //check if s1 is a substring of s2
-bool isSubstring(String s1, String s2)
-{
-  int M = s1.length;
-  int N = s2.length;
-
-  /* A loop to slide pat[] one by one */
-  for (int i = 0; i <= N - M; i++) {
-    int j;
-
-    /* For current index i, check for
- pattern match */
-    for (j = 0; j < M; j++)
-      if (s2[i + j] != s1[j])
-        break;
-
-    if (j == M)
-      return true; // il piatto è stato creato dall'utente
-  }
-
-  return false;//il piatto non è stato creato dall'utente
-}
 
 
 

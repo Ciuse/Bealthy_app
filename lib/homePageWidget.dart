@@ -29,14 +29,13 @@ class HomePageWidget extends StatelessWidget {
         onPressed: () {
           showDialog(
             context: context,
-            barrierColor: Colors.white10.withOpacity(1), // background color
+            barrierColor: Colors.white10.withOpacity(0.85), // background color
             barrierDismissible: false, // should dialog be dismissed when tapped outside
             child: SizedBox.expand( // makes widget fullscreen
                   child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         Navigator.pop(context);
-
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

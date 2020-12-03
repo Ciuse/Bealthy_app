@@ -42,6 +42,7 @@ abstract class _IngredientStoreBase with Store {
     }
   }
 
+  @action
   Future<void> initIngredientName() async {
     await getIngredientsName();
   }
@@ -70,12 +71,9 @@ abstract class _IngredientStoreBase with Store {
 
   @action
   String getIngredientIdFromName (String ingredientName) {
-      String id;
+    String id;
      ingredientList.forEach((element) {
       if(element.name.compareTo(ingredientName)==0){
-        print(ingredientName);
-        print(element.name);
-        print(element.id);
         id=element.id;
         return;
       }
