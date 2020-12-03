@@ -73,6 +73,15 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     return _$getIngredientsAsyncAction.run(() => super.getIngredients());
   }
 
+  final _$getIngredientsNameAsyncAction =
+      AsyncAction('_IngredientStoreBase.getIngredientsName');
+
+  @override
+  Future<void> getIngredientsName() {
+    return _$getIngredientsNameAsyncAction
+        .run(() => super.getIngredientsName());
+  }
+
   final _$_IngredientStoreBaseActionController =
       ActionController(name: '_IngredientStoreBase');
 
@@ -82,6 +91,17 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
         name: '_IngredientStoreBase.loadInitialBho');
     try {
       return super.loadInitialBho();
+    } finally {
+      _$_IngredientStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  String getIngredientIdFromName(String ingredientName) {
+    final _$actionInfo = _$_IngredientStoreBaseActionController.startAction(
+        name: '_IngredientStoreBase.getIngredientIdFromName');
+    try {
+      return super.getIngredientIdFromName(ingredientName);
     } finally {
       _$_IngredientStoreBaseActionController.endAction(_$actionInfo);
     }

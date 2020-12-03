@@ -26,7 +26,7 @@ class _AddDishFormState extends State<AddDishForm>{
 
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
-  List<String> quantityList = ["poco", "medio", "abbondante"];
+  List<String> quantityList = ["Poco", "Medio", "Abbondante"]; //TODO Va messo come enumeratore
   List<String> categoryList = [];
 
   @override
@@ -35,6 +35,7 @@ class _AddDishFormState extends State<AddDishForm>{
     super.initState();
     var store = Provider.of<IngredientStore>(context, listen: false);
     store.initStore();
+    store.initIngredientName();
   }
 
   List<String> getCategoryName(){
@@ -58,24 +59,20 @@ class _AddDishFormState extends State<AddDishForm>{
     Random random = new Random();
     int randomNumber = random.nextInt(100);
     Dish dish = new Dish(
-        id:"Dish_"+randomNumber.toString(),
+        id:"Dish_User_"+randomNumber.toString(),
         name:nameCt.text,
         category: categoryDishCreated
     );
     List<Ingredient> ingredients = new List<Ingredient>();
 
     for(int i=0;i< ingredientsSelectedList.length;i++){
-      Random random = new Random();
-      int randomNumber = random.nextInt(100);
-      Ingredient ingredient = new Ingredient(id:"Ingredient_"+randomNumber.toString(),name:ingredientsSelectedList[i], qty:ingredientsQuantityList[i]);
+      Ingredient ingredient =
+      new Ingredient(id:context.read<IngredientStore>().getIngredientIdFromName(ingredientsSelectedList[i]),
+          name:ingredientsSelectedList[i],
+          qty:ingredientsQuantityList[i]);
       ingredients.add(ingredient);
     }
 
-
-    print(dish.category);
-    print(dish.name);
-    print(dish.id);
-    print(ingredients);
     context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
   }
 

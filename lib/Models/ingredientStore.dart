@@ -42,6 +42,10 @@ abstract class _IngredientStoreBase with Store {
     }
   }
 
+  Future<void> initIngredientName() async {
+    await getIngredientsName();
+  }
+
 
   @action
   Future<void> getIngredients() async {
@@ -54,7 +58,30 @@ abstract class _IngredientStoreBase with Store {
         print(i);
       }
       );
-        }));
+    }));
+  }
+  @action
+  Future<void> getIngredientsName() async {
+    ingredientsName.clear();
+    ingredientList.forEach((element) {
+      ingredientsName.add(element.name);
+    });
+  }
+
+  @action
+  String getIngredientIdFromName (String ingredientName) {
+      String id;
+     ingredientList.forEach((element) {
+      if(element.name.compareTo(ingredientName)==0){
+        print(ingredientName);
+        print(element.name);
+        print(element.id);
+        id=element.id;
+        return;
+      }
+    });
+
+    return id;
   }
 
 
