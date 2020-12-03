@@ -58,7 +58,7 @@ class _AddDishFormState extends State<AddDishForm>{
     Random random = new Random();
     int randomNumber = random.nextInt(100);
     Dish dish = new Dish(
-        id:"Dish_"+randomNumber.toString(),
+        id:"Dish_User_"+randomNumber.toString(),
         name:nameCt.text,
         category: categoryDishCreated
     );
