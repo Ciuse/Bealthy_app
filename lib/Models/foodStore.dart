@@ -45,16 +45,22 @@ abstract class _FoodStoreBase with Store {
   var yourDishesDayList = new ObservableList<Dish>();
 
   @observable
-  var firstDishList = new ObservableList<Dish>();
+  var firstCourseDishList = new ObservableList<Dish>();
 
   @observable
-  var secondDishList = new ObservableList<Dish>();
+  var mainCourseDishList = new ObservableList<Dish>();
 
   @observable
-  var contornDishList = new ObservableList<Dish>();
+  var secondCourseDishList = new ObservableList<Dish>();
 
   @observable
-  var dessertDishList = new ObservableList<Dish>();
+  var sideDishList = new ObservableList<Dish>();
+
+  @observable
+  var dessertsDishList = new ObservableList<Dish>();
+
+  @observable
+  var drinksDishList = new ObservableList<Dish>();
 
   @observable
   ObservableFuture loadInitDishList;
@@ -68,31 +74,108 @@ abstract class _FoodStoreBase with Store {
   Future<void> initStore() async {
 
     if (!storeInitialized) {
-      await getYourDishes();
-      await getFavouriteDishes();
-      await addDishToCategory();
+      await _getYourDishes();
+      await _getFavouriteDishes();
+      await _addDishToCategory();
       await getYourDishesOfSpecificDay(DateTime.now());
       storeInitialized = true;
     }
   }
 
-
   @action
-  void addDishWithCategory(Dish dish) {
-    firestoreInstance
-        .collection("DishesCategory")
-        .doc(dish.category)
-        .collection("Dishes")
-        .add(dish.toMapDishesCategory());
+  Future<void> initFoodCategoryLists(int categoryIndex) async {
+    switch (categoryIndex) {
+      case 0:{
+        if(firstCourseDishList.length<=0){
+          _getCategoryDishes(categoryIndex, firstCourseDishList);
+        }
+      }
+      break;
+      case 1:{
+        if(mainCourseDishList.length<=0){
+          _getCategoryDishes(categoryIndex, mainCourseDishList);
+        }
+      }
+      break;
+      case 2:{
+        if(secondCourseDishList.length<=0){
+          _getCategoryDishes(categoryIndex, secondCourseDishList);
+
+        }
+      }
+      break;
+      case 3:{
+        if(sideDishList.length<=0){
+          _getCategoryDishes(categoryIndex, sideDishList);
+
+        }
+      }
+      break;
+      case 4:{
+        if(dessertsDishList.length<=0){
+          _getCategoryDishes(categoryIndex, dessertsDishList);
+
+        }
+      }
+      break;
+      case 5:{
+        if(drinksDishList.length<=0){
+          _getCategoryDishes(categoryIndex, drinksDishList);
+
+        }
+      }
+      break;
+      default: {
+        print("Swtich case no category found");
+
+      }
+      break;
+
+    }
   }
 
-  @action
-  void addNewDish(Dish dish) {
-    firestoreInstance
-        .collection("Dishes")
-        .doc(dish.id)
-        .set(dish.toMapDishes());
+  ObservableList getCategoryList(int categoryIndex) {
+    switch (categoryIndex) {
+      case 0:
+        {
+          return firstCourseDishList;
+        }
+        break;
+      case 1:
+        {
+          return mainCourseDishList;
+        }
+        break;
+      case 2:
+        {
+          return secondCourseDishList;
+        }
+        break;
+      case 3:
+        {
+          return sideDishList;
+
+        }
+        break;
+      case 4:
+        {
+          return dessertsDishList;
+
+        }
+        break;
+      case 5:
+        {
+          return drinksDishList;
+        }
+        break;
+      default:
+        {
+          print("Swtich case no category found");
+          return null;
+        }
+    }
   }
+
 
   @action
   void addNewDishCreatedByUser(Dish dish, List<Ingredient> ingredients) {
@@ -115,7 +198,27 @@ abstract class _FoodStoreBase with Store {
   }
 
   @action
-  Future<void> getYourDishes() async {
+  Future<void> _getCategoryDishes(int categoryIndex, ObservableList list) async {
+    await (FirebaseFirestore.instance
+        .collection('DishesCategory')
+        .doc(Category.values[categoryIndex].toString().split('.').last)
+        .collection("Dishes").get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((dish) {
+        Dish toAdd = new Dish(id: dish.id,
+            name: dish.get("name"),
+            category: Category.values[categoryIndex].toString().split('.').last,
+            qty: null,
+            ingredients: null);
+        list.add(toAdd);
+      });
+    })
+    );
+  }
+
+
+  @action
+  Future<void> _getYourDishes() async {
     await (FirebaseFirestore.instance
         .collection('DishesCreatedByUsers')
         .doc(auth.currentUser.uid).collection("Dishes").get()
@@ -133,7 +236,7 @@ abstract class _FoodStoreBase with Store {
   }
 
   @action
-  Future<void> getFavouriteDishes() async {
+  Future<void> _getFavouriteDishes() async {
     await (FirebaseFirestore.instance
         .collection('DishesFavouriteByUsers')
         .doc(auth.currentUser.uid).collection("Dishes").get()
@@ -207,7 +310,7 @@ abstract class _FoodStoreBase with Store {
 
   //Inizializza il database online dividendo i cibi nelle varie categorie
   //Metodo che una volta inseriti tutti i cibi si puo cancellare
-  Future<void> addDishToCategory() async {
+  Future<void> _addDishToCategory() async {
     await (FirebaseFirestore.instance
         .collection('Dishes')
         .get().then((querySnapshot) {

@@ -181,9 +181,17 @@ class CategoryDishList extends StatefulWidget {
 }
 
 class _CategoryDishListState extends State<CategoryDishList> {
-
+  
+  void initState() {
+    super.initState();
+    var store = Provider.of<FoodStore>(context, listen: false);
+    store.initFoodCategoryLists(widget.category.index);
+  }
+  
   @override
   Widget build(BuildContext context) {
+    final store = Provider.of<FoodStore>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.category
@@ -191,6 +199,30 @@ class _CategoryDishListState extends State<CategoryDishList> {
             .split('.')
             .last),
       ),
+        body: Center(
+            child:   Observer(
+                builder: (_) => Column(
+                    children: [
+                      for(Dish item in store.getCategoryList(widget.category.index) ) FlatButton(
+                        onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: item,)),
+                          )
+                        },
+                        color: Colors.orange,
+                        padding: EdgeInsets.all(10.0),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.fastfood),
+                            Text(item.name.toString())
+                          ],
+                        ),
+                      ),
+                    ]
+                )
+            )
+        )
     );
   }
 }
