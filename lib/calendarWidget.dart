@@ -68,7 +68,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
-    context.read<DateModel>().changeCurrentDate(day);
+    context.read<FoodStore>().daySelected = day;
     context.read<FoodStore>().getYourDishesOfSpecificDay(day);
   }
 

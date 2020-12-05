@@ -272,9 +272,12 @@ abstract class _FoodStoreBase with Store {
     return dateSlug;
   }
 
+
+
+
+
   @action
   Future<void> getYourDishesOfSpecificDay(DateTime date) async {
-    daySelected = date;
     String day = fixDate(date);
     yourDishesDayList.clear();
     await (FirebaseFirestore.instance
@@ -296,6 +299,26 @@ abstract class _FoodStoreBase with Store {
     );
   }
 
+  @action
+  Future<void> addDishToASpecificDay(Dish dish) async {
+    String day = fixDate(daySelected);
+    await (FirebaseFirestore.instance
+        .collection('UserDishes')
+        .doc(auth.currentUser.uid)
+        .collection("DayDishes")
+        .doc(day).set({"virtual": true}));
+
+    await (FirebaseFirestore.instance
+        .collection('UserDishes')
+        .doc(auth.currentUser.uid)
+        .collection("DayDishes")
+        .doc(day)
+        .collection("Dishes")
+        .doc(dish.id)
+        .set(dish.toMapUserDishes()));
+
+        yourDishesDayList.add(dish);
+      }
 
   @action
   Future<void> removeDishFromUserDishesOfSpecificDay(Dish dish) async {

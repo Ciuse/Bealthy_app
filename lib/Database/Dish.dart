@@ -46,9 +46,9 @@ class Dish {
 
   Map<String, dynamic> toMapUserDishes() =>
       {
-        "id": id,
+        "category": category,
         "name": name,
-        "qty": category,
+        "qty": qty,
       };
 
 

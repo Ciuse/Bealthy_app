@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Bealthy_app/Database/Dish.dart';
 import 'package:Bealthy_app/Database/Ingredient.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +23,9 @@ abstract class _IngredientStoreBase with Store {
 
   @observable
   var ingredientList = new ObservableList<Ingredient>();
+
+  @observable
+  var ingredientListOfDish = new ObservableList<Ingredient>();
 
   @observable
   var ingredientsName = new ObservableList<String>();
@@ -61,6 +65,37 @@ abstract class _IngredientStoreBase with Store {
       );
     }));
   }
+
+
+  @action
+  Future<void> getIngredientsFromDatabaseDish(Dish dish) async {
+    await (FirebaseFirestore.instance
+        .collection('Dishes').doc(dish.id).collection("Ingredients")
+        .get().then((querySnapshot) {
+      querySnapshot.docs.forEach((ingredient) {
+        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
+        ingredientListOfDish.add(i);
+      }
+      );
+    }));
+  }
+
+  @action
+  Future<void> getIngredientsFromUserDish(Dish dish) async {
+    await (FirebaseFirestore.instance
+        .collection("DishesCreatedByUsers")
+        .doc(auth.currentUser.uid)
+        .collection("Dishes").doc(dish.id).collection("Ingredients")
+        .get().then((querySnapshot) {
+      querySnapshot.docs.forEach((ingredient) {
+        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
+        ingredientListOfDish.add(i);
+
+      }
+      );
+    }));
+  }
+
   @action
   Future<void> getIngredientsName() async {
     ingredientsName.clear();
