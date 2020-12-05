@@ -178,14 +178,15 @@ class _AddDishFormState extends State<AddDishForm>{
                               itemsVisibleInDropdown: 3,
                               items: quantityList,
                               strict: false,
-
+                              value: (ingredientsQuantityList[index]!="") ? ingredientsQuantityList[index]: null,
                               onValueChanged: (value){
                                 setState(() {
-                                  FocusScopeNode currentFocus = FocusScope.of(context);
 
+                                  FocusScopeNode currentFocus = FocusScope.of(context);
                                   if (!currentFocus.hasPrimaryFocus) {
                                     currentFocus.unfocus();
                                   }
+
                                   ingredientsQuantityList[index]=value;
                                   print(ingredientsQuantityList);
                                 });
