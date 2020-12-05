@@ -26,22 +26,33 @@ class _AddDishFormState extends State<AddDishForm>{
 
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
-  List<String> quantityList = ["Poco", "Medio", "Abbondante"]; //TODO Va messo come enumeratore
+  List<String> quantityList = [];
   List<String> categoryList = [];
 
   @override
   void initState() {
     categoryList= getCategoryName();
+    quantityList= getQuantityName();
     super.initState();
     var store = Provider.of<IngredientStore>(context, listen: false);
     store.initStore();
-    store.initIngredientName();
+    store.ingredientsName.clear();
+    store.getIngredientsName();
   }
 
   List<String> getCategoryName(){
 
     List<String> listToReturn = new List<String>();
     Category.values.forEach((element) {
+      listToReturn.add(element.toString().split('.').last);
+    });
+    return listToReturn;
+  }
+
+  List<String> getQuantityName(){
+
+    List<String> listToReturn = new List<String>();
+    Quantity.values.forEach((element) {
       listToReturn.add(element.toString().split('.').last);
     });
     return listToReturn;
@@ -74,6 +85,8 @@ class _AddDishFormState extends State<AddDishForm>{
     }
 
     context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
+
+    Navigator.pop(context);
   }
 
   String selectIngredient = "";  //by default we are not providing any of the ingredients
@@ -87,7 +100,7 @@ class _AddDishFormState extends State<AddDishForm>{
         appBar: AppBar(
           title: Text("Create New Dish"),
         ),
-        body: Observer(builder: (_) =>Column(
+        body: Observer(builder: (_) => Column(
 
           children: <Widget>[
             TextField(
@@ -106,7 +119,13 @@ class _AddDishFormState extends State<AddDishForm>{
               strict: false,
               onValueChanged: (value){
                 setState(() {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
                   categoryDishCreated = value;
+
                 });
               } ,
 
@@ -121,8 +140,16 @@ class _AddDishFormState extends State<AddDishForm>{
               strict: false,
               onValueChanged: (value){
                 setState(() {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
+
                   selectIngredient = value;
                   addIngredientsToListView(value);
+                  ingredientSelected.clear();
+
                 });
               } ,
 
@@ -151,8 +178,14 @@ class _AddDishFormState extends State<AddDishForm>{
                               itemsVisibleInDropdown: 3,
                               items: quantityList,
                               strict: false,
+
                               onValueChanged: (value){
                                 setState(() {
+                                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                                  if (!currentFocus.hasPrimaryFocus) {
+                                    currentFocus.unfocus();
+                                  }
                                   ingredientsQuantityList[index]=value;
                                   print(ingredientsQuantityList);
                                 });
@@ -162,6 +195,11 @@ class _AddDishFormState extends State<AddDishForm>{
                           ],),
                         onDismissed: (direction){
                           setState(() {
+                            FocusScopeNode currentFocus = FocusScope.of(context);
+
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
                             ingredientsSelectedList.removeAt(index);
                             ingredientsQuantityList.removeAt(index);
                             print(ingredientsQuantityList);

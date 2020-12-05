@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Database/Dish.dart';
 import '../Database/Ingredient.dart';
-import 'date_model.dart';
 
 // Include generated file
 part 'foodStore.g.dart';
@@ -16,6 +14,12 @@ enum Category {
   Side, //CONTORNI
   Desserts, //DOLCE
   Drinks, //BEVANDE
+}
+
+enum Quantity {
+  Little, //Poca
+  Normal, //Media
+  Lots, //Tanta
 }
 
 //flutter packages pub run build_runner build
@@ -295,6 +299,8 @@ abstract class _FoodStoreBase with Store {
     })
     );
   }
+
+
 
 
   @action

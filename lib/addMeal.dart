@@ -242,12 +242,15 @@ class _YourDishListState extends State<YourDishList> {
   void initState() {
     super.initState();
     var store = Provider.of<FoodStore>(context, listen: false);
+
     store.initStore();
+
   }
 
   @override
   Widget build(BuildContext context) {
     final store = Provider.of<FoodStore>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Your Dish"),

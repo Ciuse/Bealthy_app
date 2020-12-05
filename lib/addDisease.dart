@@ -1,4 +1,7 @@
+import 'package:Bealthy_app/Database/Disease.dart';
+import 'package:Bealthy_app/Models/diseaseStore.dart';
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
 import 'Database/Dish.dart';
 import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
@@ -11,55 +14,73 @@ class AddDisease extends StatefulWidget {
 
 class __AddDiseaseState extends State<AddDisease>{
 
+  @override
+  void initState() {
+    super.initState();
+    var store = Provider.of<DiseaseStore>(context, listen: false);
+    store.initStore();
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    final diseaseStore = Provider.of<DiseaseStore>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Add Disease"),
         ),
         body: Center(
             child: Column(
-                children: [
-                  FlatButton(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => FavouriteDisease()),
-                      )
-                    },
-                    color: Colors.orange,
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.add),
-                        Text("Favourites")
-                      ],
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CategoriesDisease()),
-                      )
-                    },
-                    color: Colors.orange,
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.add),
-                        Text("Category")
-                      ],
-                    ),
-                  ),
-                ]
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: _buildRowList(diseaseStore.diseaseList)
             )
         )
     );
   }
 }
+List<Widget> _buildRowList(ObservableList diseaseList) {
+  int i =0;
+  List<Widget> lines = []; // this will hold Rows according to available lines.
+  List<Widget> elementOfLine = []; // this will hold the places for each line
 
+  for (Disease disease in diseaseList) {
+    if(i%3==0 && i!=0){
+      lines.add(
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:elementOfLine
+          ));
+      elementOfLine =[];
+    }
+
+    elementOfLine.add(Icon(
+      Icons.favorite,
+      color: Colors.pink,
+      size: 50.0,
+      semanticLabel: 'Text to announce in accessibility modes',
+    ),);
+    i++;
+
+  }
+  if(i%3!=0){
+    for (int j=0; j<3-(i%3); j++) {
+      elementOfLine.add(Icon(
+        Icons.add,
+        color: Colors.pink,
+        size: 50.0,
+        semanticLabel: 'Text to announce in accessibility modes',
+      ),);
+    }
+  }
+  lines.add(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly   ,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:elementOfLine));
+
+  return lines;
+}
 
 class FavouriteDisease extends StatefulWidget {
   @override

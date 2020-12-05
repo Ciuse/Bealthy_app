@@ -43,12 +43,6 @@ abstract class _IngredientStoreBase with Store {
   }
 
   @action
-  Future<void> initIngredientName() async {
-    await getIngredientsName();
-  }
-
-
-  @action
   Future<void> getIngredients() async {
     await (FirebaseFirestore.instance
         .collection('Ingredients')
@@ -63,7 +57,6 @@ abstract class _IngredientStoreBase with Store {
   }
   @action
   Future<void> getIngredientsName() async {
-    ingredientsName.clear();
     ingredientList.forEach((element) {
       ingredientsName.add(element.name);
     });

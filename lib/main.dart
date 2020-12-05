@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Models/diseaseStore.dart';
 import 'package:flutter/material.dart';
 import 'homePageWidget.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -46,6 +47,9 @@ void main() async {
         ),
         Provider<IngredientStore>(
           create: (_) => IngredientStore(),
+        ),
+        Provider<DiseaseStore>(
+          create: (_) => DiseaseStore(),
         )
       ], child:MyApp())));
 }
