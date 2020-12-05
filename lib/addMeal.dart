@@ -208,7 +208,7 @@ class _CategoryDishListState extends State<CategoryDishList> {
                         onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: item, createdByUser: false,)),
+                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: item, createdByUser: false,canBeAddToADay: true)),
                           )
                         },
                         color: Colors.orange,
@@ -266,7 +266,7 @@ class _YourDishListState extends State<YourDishList> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
-                                    DishPageAddToDay(dish: item, createdByUser: true),
+                                    DishPageAddToDay(dish: item, createdByUser: true, canBeAddToADay: true),
                                 )
                               )
                             },

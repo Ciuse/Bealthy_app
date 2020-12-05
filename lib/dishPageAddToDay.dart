@@ -1,4 +1,5 @@
 
+import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ class DishPageAddToDay extends StatefulWidget {
 
   final Dish dish;
   final bool createdByUser;
-  DishPageAddToDay({@required this.dish, @required this.createdByUser});
+  final bool canBeAddToADay;
+  DishPageAddToDay({@required this.dish, @required this.createdByUser, @required this.canBeAddToADay});
 
   @override
   _DishPageAddToDayState createState() => _DishPageAddToDayState();
@@ -21,10 +23,19 @@ class DishPageAddToDay extends StatefulWidget {
 class _DishPageAddToDayState extends State<DishPageAddToDay>{
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
+  List<String> quantityList = ["Little", "Normal", "Lots"];
+
+
 
   void initState() {
     super.initState();
-    getImage();
+    var store = Provider.of<IngredientStore>(context, listen: false);
+    store.ingredientListOfDish.clear();
+    if(widget.createdByUser){
+      store.getIngredientsFromUserDish(widget.dish);
+    }else{
+      store.getIngredientsFromDatabaseDish(widget.dish);
+    }
   }
 
 
@@ -47,9 +58,16 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
 
   }
 
+  setQuantityToDish(String qty){
+    widget.dish.qty = qty;
+    print(widget.dish.qty);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     FoodStore foodStore = Provider.of<FoodStore>(context);
+    IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
     foodStore.isFoodFavourite(widget.dish);
     return Scaffold(
       appBar: AppBar(
@@ -92,11 +110,14 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                             else {
                               print("IMAGE NET");
                               return Container(
-                                  width: 200,
-                                  height: 200,
-                                  child: ClipOval(
-                                    child: Image.network(remoteString.data, fit: BoxFit.fill),
-                                  ));
+                                width: 200,
+                                height: 200,
+                                child: ClipOval(
+                                  child: Image.network(remoteString.data, fit: BoxFit.fill),),
+                              );
+
+
+
 
                             }
                           }
@@ -125,9 +146,105 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
 
           )
     ),
-      Text(widget.createdByUser.toString())
+      Expanded(
+          child:
+          Observer(builder: (_) =>new ListView.builder
+            (
+              itemCount: ingredientStore.ingredientListOfDish.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(ingredientStore.ingredientListOfDish[index].name),
+                    subtitle: Text(ingredientStore.ingredientListOfDish[index].qty),
+                    leading: FlutterLogo(),
+
+                  ),
+                );
+              }
+          ))
+      ),
+
     ]
-      )
+
+      ),
+
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            if (widget.canBeAddToADay) {
+              return showDialog(
+                  context: context,
+                  builder: (_) =>  new AlertDialog(
+                    title: Center(child: Text(widget.dish.name)),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children : <Widget>[
+                        Expanded(
+                          child: Text(
+                            "Select the category of this DISH! ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.red,
+
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    actions: <Widget>[
+                      Row(
+                          children: [
+                            for(String qty in quantityList ) RaisedButton(
+                                onPressed: () => {
+                                  setQuantityToDish(qty),
+                                  foodStore.addDishToASpecificDay(widget.dish),
+                                  Navigator.of(context).pop()
+                                },
+                                textColor: Colors.white,
+                                padding: const EdgeInsets.all(0.0),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: <Color>[
+                                        Color(0xFF0D47A1),
+                                        Color(0xFF1976D2),
+                                        Color(0xFF42A5F5),
+                                      ],
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(qty , style: TextStyle(fontSize: 20)),)
+                            ),
+                          ]
+                      )
+                    ],
+                  ));
+            }
+
+            else {
+
+              return showDialog(
+                  context: context,
+                  builder: (_) =>  new AlertDialog(
+                    title: new Text(widget.dish.name),
+                    content: new Text("Are you sure to remove it?"),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Remove it!'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          foodStore.removeDishFromUserDishesOfSpecificDay(widget.dish);
+                        },
+                      )
+                    ],
+                  ));
+            }
+          },
+          child: Icon(widget.canBeAddToADay ? Icons.add : Icons.auto_delete,
+              color: widget.canBeAddToADay ? Colors.white : Colors.white),
+          backgroundColor: widget.canBeAddToADay ? Colors.green : Colors.redAccent
+      ),
+
     );
   }
 }

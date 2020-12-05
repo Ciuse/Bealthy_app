@@ -51,7 +51,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                   onTap: ()=> { Navigator.push(
                     context, MaterialPageRoute(builder: (context) =>
                       DishPageAddToDay(dish: foodStore.yourDishesDayList[index],
-                          createdByUser: foodStore.isSubstring("User", foodStore.yourDishesDayList[index].id))
+                          createdByUser: foodStore.isSubstring("User", foodStore.yourDishesDayList[index].id),canBeAddToADay:false)
                   ),
                   )
                   },
@@ -68,7 +68,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                 context,
                                 MaterialPageRoute(builder: (context) =>
                                     DishPageAddToDay(dish: foodStore.yourDishesDayList[index],
-                                        createdByUser: foodStore.isSubstring("User", foodStore.yourDishesDayList[index].id))));
+                                        createdByUser: foodStore.isSubstring("User", foodStore.yourDishesDayList[index].id),canBeAddToADay:false)));
                           },
                           itemBuilder: (BuildContext context){
                             return ConstantsList.choices.map((String choice) {
@@ -81,14 +81,6 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                             }).toList();
                           },
                         ),
-                        /*
-                        IconButton(
-                            icon: Icon(Icons.more_vert),
-                            tooltip: "More info",
-                            onPressed: ()=> Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: foodStore.yourDishesDayList[index])),
-                            )),*/
                       ]),
                 ),
               ),
