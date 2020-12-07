@@ -1,4 +1,5 @@
 
+import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -71,6 +72,7 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
   Widget build(BuildContext context) {
     FoodStore foodStore = Provider.of<FoodStore>(context);
     IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
+    DateStore dateStore = Provider.of<DateStore>(context);
     foodStore.isFoodFavourite(widget.dish);
     return Scaffold(
       appBar: AppBar(
@@ -196,10 +198,10 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                     ),
                     actions: <Widget> [
                             for(String qty in quantityList) RaisedButton(
-                                onPressed: () => {
-                                  setQuantityToDish(qty),
-                                  foodStore.addDishToASpecificDay(widget.dish),
-                                  Navigator.of(context).pop()
+                                onPressed: () {
+                                  setQuantityToDish(qty);
+                                  foodStore.addDishToASpecificDay(widget.dish, dateStore.selectedDate);
+                                  Navigator.of(context).pop(); //TODO mettere che va alla homepage
                                 },
                                 textColor: Colors.white,
                                 padding: const EdgeInsets.all(0.0),
@@ -232,8 +234,8 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                       FlatButton(
                         child: Text('Remove it!'),
                         onPressed: () {
-                          Navigator.of(context).pop();
-                          foodStore.removeDishFromUserDishesOfSpecificDay(widget.dish);
+                          Navigator.of(context).pop(); //TODO mettere che va alla homepage
+                          foodStore.removeDishFromUserDishesOfSpecificDay(widget.dish, dateStore.selectedDate);
                         },
                       )
                     ],

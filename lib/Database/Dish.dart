@@ -5,7 +5,7 @@ Dish clientFromMap(String str) => Dish.fromMap(json.decode(str));
 
 String clientToMap1(Dish data) => json.encode(data.toMapDishesCategory());
 String clientToMap2(Dish data) => json.encode(data.toMapDishes());
-String clientToMap3(Dish data) => json.encode(data.toMapUserDishes());
+String clientToMap3(Dish data) => json.encode(data.toMapDayDishes());
 String clientToMap4(Dish data) => json.encode(data.toMapDishesCreatedByUser());
 
 
@@ -15,21 +15,23 @@ class Dish {
     this.name,
     this.category,
     this.qty,
-    this.ingredients
+    this.mealTime,
   });
+
 
   String id;
   String name;
   String category;
   String qty;
-  List<Ingredient> ingredients;
+  String mealTime;
 
   factory Dish.fromMap(Map<String, dynamic> json) =>
       Dish(
         id: json["id"],
         name: json["name"],
         category: json["category"],
-        qty:json["qty"]
+        qty:json["qty"],
+        mealTime: json["mealTime"],
       );
 
   Map<String, dynamic> toMapDishesCategory() =>
@@ -44,11 +46,12 @@ class Dish {
         "category": category,
       };
 
-  Map<String, dynamic> toMapUserDishes() =>
+  Map<String, dynamic> toMapDayDishes() =>
       {
         "category": category,
         "name": name,
         "qty": qty,
+        "mealTime":mealTime
       };
 
 

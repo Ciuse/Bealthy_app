@@ -10,7 +10,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 class ListDishesOfDay extends StatefulWidget {
 
-  final String day;
+  final DateTime day;
   ListDishesOfDay({@required this.day});
 
 
@@ -85,7 +85,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                 ),
               ),
               onDismissed: (direction){
-                foodStore.removeDishFromUserDishesOfSpecificDay(foodStore.yourDishesDayList[index]);
+                foodStore.removeDishFromUserDishesOfSpecificDay(foodStore.yourDishesDayList[index], widget.day);
               },
             );
 

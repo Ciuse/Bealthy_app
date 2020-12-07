@@ -41,21 +41,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
-  final _$daySelectedAtom = Atom(name: '_FoodStoreBase.daySelected');
-
-  @override
-  DateTime get daySelected {
-    _$daySelectedAtom.reportRead();
-    return super.daySelected;
-  }
-
-  @override
-  set daySelected(DateTime value) {
-    _$daySelectedAtom.reportWrite(value, super.daySelected, () {
-      super.daySelected = value;
-    });
-  }
-
   final _$yourCreatedDishListAtom =
       Atom(name: '_FoodStoreBase.yourCreatedDishList');
 
@@ -287,18 +272,18 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       AsyncAction('_FoodStoreBase.addDishToASpecificDay');
 
   @override
-  Future<void> addDishToASpecificDay(Dish dish) {
+  Future<void> addDishToASpecificDay(Dish dish, DateTime day) {
     return _$addDishToASpecificDayAsyncAction
-        .run(() => super.addDishToASpecificDay(dish));
+        .run(() => super.addDishToASpecificDay(dish, day));
   }
 
   final _$removeDishFromUserDishesOfSpecificDayAsyncAction =
       AsyncAction('_FoodStoreBase.removeDishFromUserDishesOfSpecificDay');
 
   @override
-  Future<void> removeDishFromUserDishesOfSpecificDay(Dish dish) {
+  Future<void> removeDishFromUserDishesOfSpecificDay(Dish dish, DateTime day) {
     return _$removeDishFromUserDishesOfSpecificDayAsyncAction
-        .run(() => super.removeDishFromUserDishesOfSpecificDay(dish));
+        .run(() => super.removeDishFromUserDishesOfSpecificDay(dish, day));
   }
 
   final _$removeFavouriteDishAsyncAction =
@@ -360,7 +345,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     return '''
 yourFavouriteDishList: ${yourFavouriteDishList},
 isFavourite: ${isFavourite},
-daySelected: ${daySelected},
 yourCreatedDishList: ${yourCreatedDishList},
 yourDishesDayList: ${yourDishesDayList},
 firstCourseDishList: ${firstCourseDishList},

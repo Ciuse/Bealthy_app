@@ -2,23 +2,23 @@ import 'package:mobx/mobx.dart';
 import 'package:intl/intl.dart';
 
 // Include generated file
-part 'date_model.g.dart';
+part 'dateStore.g.dart';
 
 // This is the class used by rest of your codebase
-class DateModel = _DateModel with _$DateModel;
+class DateStore = _DateStoreBase with _$DateStore;
 
 // The store-class
-abstract class _DateModel with Store {
+abstract class _DateStoreBase with Store {
 
   @observable
-  DateTime date = DateTime.now() ;
+  DateTime selectedDate = DateTime.now() ;
 
   @computed
-  int get weekDay => date.weekday;
+  int get weekDay => selectedDate.weekday;
 
   @action
   void changeCurrentDate(DateTime date) {
-    this.date = date;
+    this.selectedDate = date;
     fixDate(date);
   }
 

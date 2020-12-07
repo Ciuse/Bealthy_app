@@ -1,4 +1,4 @@
-import 'package:Bealthy_app/Models/date_model.dart';
+import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -16,12 +16,12 @@ class HomePageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateModel = Provider.of<DateModel>(context);
+    final dateModel = Provider.of<DateStore>(context);
     return Scaffold(
       body: Column(children: [
         CalendarHomePage(),
         Observer(
-            builder: (_) => ListDishesOfDay(day: dateModel.date.toString()),
+            builder: (_) => ListDishesOfDay(day: dateModel.selectedDate),
         ),
 
       ]),

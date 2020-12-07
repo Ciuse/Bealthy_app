@@ -3,7 +3,8 @@ import 'dart:convert';
 
 Symptom clientFromMap(String str) => Symptom.fromMap(json.decode(str));
 
-String clientToMap1(Symptom data) => json.encode(data.toMap());
+String clientToMap1(Symptom data) => json.encode(data.toMapSymptom());
+String clientToMap2(Symptom data) => json.encode(data.toMapDaySymptom());
 
 
 
@@ -11,12 +12,14 @@ class Symptom {
   Symptom({
     this.id,
     this.name,
-    this.intensity
+    this.intensity,
+    this.mealTime,
   });
 
   String id;
   String name;
   String intensity;
+  String mealTime;
 
   factory Symptom.fromMap(Map<String, dynamic> json) =>
       Symptom(
@@ -25,11 +28,16 @@ class Symptom {
           intensity: json["intensity"]
       );
 
-  Map<String, dynamic> toMap() =>
+  Map<String, dynamic> toMapSymptom() =>
       {
-        "id": id,
         "name": name,
-        "intensity":intensity
+      };
+
+  Map<String, dynamic> toMapDaySymptom() =>
+      {
+        "name": name,
+        "intensity": intensity,
+        "mealTime":mealTime
       };
 
 }

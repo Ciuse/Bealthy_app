@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'homePage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
-import 'Models/date_model.dart';
+import 'Models/dateStore.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,8 +39,8 @@ void main() async {
   */
   initializeDateFormatting().then((_) => runApp(
       MultiProvider(providers: [
-        Provider<DateModel>(
-          create: (_) => DateModel(),
+        Provider<DateStore>(
+          create: (_) => DateStore(),
         ),
         Provider<FoodStore>(
           create: (_) => FoodStore(),

@@ -44,9 +44,6 @@ abstract class _FoodStoreBase with Store {
   bool isFavourite;
 
   @observable
-  var daySelected = DateTime.now();
-
-  @observable
   var yourCreatedDishList = new ObservableList<Dish>();
 
   @observable
@@ -233,8 +230,7 @@ abstract class _FoodStoreBase with Store {
                 .toString()
                 .split('.')
                 .last,
-            qty: null,
-            ingredients: null);
+            qty: null,);
         list.add(toAdd);
       });
     })
@@ -249,7 +245,7 @@ abstract class _FoodStoreBase with Store {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
 
-        Dish i = new Dish(id:result.id,name:result.get("name"),category:result.get("category") ,qty: "",ingredients: null);
+        Dish i = new Dish(id:result.id,name:result.get("name"),category:result.get("category") ,qty: "",);
         dishesListFromDBAndUser.add(i);
         print(i);
       }
@@ -264,7 +260,7 @@ abstract class _FoodStoreBase with Store {
             name: dish.get("name"),
             category: dish.get("category"),
             qty: null,
-            ingredients: null);
+            );
         dishesListFromDBAndUser.add(toAdd);
       });
     })
@@ -282,7 +278,7 @@ abstract class _FoodStoreBase with Store {
             name: dish.get("name"),
             category: dish.get("category"),
             qty: null,
-            ingredients: null);
+            );
         yourCreatedDishList.add(toAdd);
       });
     })
@@ -300,7 +296,7 @@ abstract class _FoodStoreBase with Store {
             name: dish.get("name"),
             category: dish.get("category"),
             qty: null,
-            ingredients: null);
+            );
         yourFavouriteDishList.add(toAdd);
       });
     })
@@ -336,7 +332,7 @@ abstract class _FoodStoreBase with Store {
             name: dish.get("name"),
             category: dish.get("category"),
             qty: null,
-            ingredients: null);
+            );
         yourDishesDayList.add(toAdd);
       }
 
@@ -346,22 +342,22 @@ abstract class _FoodStoreBase with Store {
   }
 
   @action
-  Future<void> addDishToASpecificDay(Dish dish) async {
-    String day = fixDate(daySelected);
+  Future<void> addDishToASpecificDay(Dish dish, DateTime day) async {
+    String dayFix = fixDate(day);
     await (FirebaseFirestore.instance
         .collection('UserDishes')
         .doc(auth.currentUser.uid)
         .collection("DayDishes")
-        .doc(day).set({"virtual": true}));
+        .doc(dayFix).set({"virtual": true}));
 
     await (FirebaseFirestore.instance
         .collection('UserDishes')
         .doc(auth.currentUser.uid)
         .collection("DayDishes")
-        .doc(day)
+        .doc(dayFix)
         .collection("Dishes")
         .doc(dish.id)
-        .set(dish.toMapUserDishes()));
+        .set(dish.toMapDayDishes()));
 
         yourDishesDayList.add(dish);
       }
@@ -369,8 +365,8 @@ abstract class _FoodStoreBase with Store {
 
 
   @action
-  Future<void> removeDishFromUserDishesOfSpecificDay(Dish dish) async {
-    String dayFix = fixDate(daySelected);
+  Future<void> removeDishFromUserDishesOfSpecificDay(Dish dish, DateTime day) async {
+    String dayFix = fixDate(day);
     firestoreInstance
         .collection("UserDishes")
         .doc(auth.currentUser.uid)
@@ -425,7 +421,7 @@ abstract class _FoodStoreBase with Store {
             name: dish.get("name"),
             qty: null,
             category: dish.get("category"),
-            ingredients: null).toMapDishesCategory());
+            ).toMapDishesCategory());
       });
     })
     );
