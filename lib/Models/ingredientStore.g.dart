@@ -25,6 +25,23 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     });
   }
 
+  final _$ingredientListOfDishAtom =
+      Atom(name: '_IngredientStoreBase.ingredientListOfDish');
+
+  @override
+  ObservableList<Ingredient> get ingredientListOfDish {
+    _$ingredientListOfDishAtom.reportRead();
+    return super.ingredientListOfDish;
+  }
+
+  @override
+  set ingredientListOfDish(ObservableList<Ingredient> value) {
+    _$ingredientListOfDishAtom.reportWrite(value, super.ingredientListOfDish,
+        () {
+      super.ingredientListOfDish = value;
+    });
+  }
+
   final _$ingredientsNameAtom =
       Atom(name: '_IngredientStoreBase.ingredientsName');
 
@@ -73,6 +90,24 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     return _$getIngredientsAsyncAction.run(() => super.getIngredients());
   }
 
+  final _$getIngredientsFromDatabaseDishAsyncAction =
+      AsyncAction('_IngredientStoreBase.getIngredientsFromDatabaseDish');
+
+  @override
+  Future<void> getIngredientsFromDatabaseDish(Dish dish) {
+    return _$getIngredientsFromDatabaseDishAsyncAction
+        .run(() => super.getIngredientsFromDatabaseDish(dish));
+  }
+
+  final _$getIngredientsFromUserDishAsyncAction =
+      AsyncAction('_IngredientStoreBase.getIngredientsFromUserDish');
+
+  @override
+  Future<void> getIngredientsFromUserDish(Dish dish) {
+    return _$getIngredientsFromUserDishAsyncAction
+        .run(() => super.getIngredientsFromUserDish(dish));
+  }
+
   final _$getIngredientsNameAsyncAction =
       AsyncAction('_IngredientStoreBase.getIngredientsName');
 
@@ -86,11 +121,22 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
       ActionController(name: '_IngredientStoreBase');
 
   @override
-  Future<void> loadInitialBho() {
+  Future<void> waitForIngredients() {
     final _$actionInfo = _$_IngredientStoreBaseActionController.startAction(
-        name: '_IngredientStoreBase.loadInitialBho');
+        name: '_IngredientStoreBase.waitForIngredients');
     try {
-      return super.loadInitialBho();
+      return super.waitForIngredients();
+    } finally {
+      _$_IngredientStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<void> retryForIngredients() {
+    final _$actionInfo = _$_IngredientStoreBaseActionController.startAction(
+        name: '_IngredientStoreBase.retryForIngredients');
+    try {
+      return super.retryForIngredients();
     } finally {
       _$_IngredientStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -111,6 +157,7 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   String toString() {
     return '''
 ingredientList: ${ingredientList},
+ingredientListOfDish: ${ingredientListOfDish},
 ingredientsName: ${ingredientsName},
 loadInitIngredientList: ${loadInitIngredientList}
     ''';

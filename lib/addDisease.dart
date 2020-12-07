@@ -7,6 +7,10 @@ import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:Bealthy_app/dishPageAddToDay.dart';
+
+
+
+
 class AddDisease extends StatefulWidget {
   @override
   __AddDiseaseState createState() => __AddDiseaseState();

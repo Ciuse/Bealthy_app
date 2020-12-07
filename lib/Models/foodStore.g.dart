@@ -182,6 +182,23 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  final _$dishesListFromDBAndUserAtom =
+      Atom(name: '_FoodStoreBase.dishesListFromDBAndUser');
+
+  @override
+  ObservableList<Dish> get dishesListFromDBAndUser {
+    _$dishesListFromDBAndUserAtom.reportRead();
+    return super.dishesListFromDBAndUser;
+  }
+
+  @override
+  set dishesListFromDBAndUser(ObservableList<Dish> value) {
+    _$dishesListFromDBAndUserAtom
+        .reportWrite(value, super.dishesListFromDBAndUser, () {
+      super.dishesListFromDBAndUser = value;
+    });
+  }
+
   final _$loadInitDishListAtom = Atom(name: '_FoodStoreBase.loadInitDishList');
 
   @override
@@ -197,11 +214,35 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  final _$loadInitDishesListAtom =
+      Atom(name: '_FoodStoreBase.loadInitDishesList');
+
+  @override
+  ObservableFuture<dynamic> get loadInitDishesList {
+    _$loadInitDishesListAtom.reportRead();
+    return super.loadInitDishesList;
+  }
+
+  @override
+  set loadInitDishesList(ObservableFuture<dynamic> value) {
+    _$loadInitDishesListAtom.reportWrite(value, super.loadInitDishesList, () {
+      super.loadInitDishesList = value;
+    });
+  }
+
   final _$initStoreAsyncAction = AsyncAction('_FoodStoreBase.initStore');
 
   @override
   Future<void> initStore() {
     return _$initStoreAsyncAction.run(() => super.initStore());
+  }
+
+  final _$initDishStoreAsyncAction =
+      AsyncAction('_FoodStoreBase.initDishStore');
+
+  @override
+  Future<void> initDishStore() {
+    return _$initDishStoreAsyncAction.run(() => super.initDishStore());
   }
 
   final _$initFoodCategoryListsAsyncAction =
@@ -221,6 +262,15 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       int categoryIndex, ObservableList<dynamic> list) {
     return _$_getCategoryDishesAsyncAction
         .run(() => super._getCategoryDishes(categoryIndex, list));
+  }
+
+  final _$_getDishesFromDBAndUserAsyncAction =
+      AsyncAction('_FoodStoreBase._getDishesFromDBAndUser');
+
+  @override
+  Future<void> _getDishesFromDBAndUser() {
+    return _$_getDishesFromDBAndUserAsyncAction
+        .run(() => super._getDishesFromDBAndUser());
   }
 
   final _$_getYourDishesAsyncAction =
@@ -247,6 +297,15 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   Future<void> getYourDishesOfSpecificDay(DateTime date) {
     return _$getYourDishesOfSpecificDayAsyncAction
         .run(() => super.getYourDishesOfSpecificDay(date));
+  }
+
+  final _$addDishToASpecificDayAsyncAction =
+      AsyncAction('_FoodStoreBase.addDishToASpecificDay');
+
+  @override
+  Future<void> addDishToASpecificDay(Dish dish) {
+    return _$addDishToASpecificDayAsyncAction
+        .run(() => super.addDishToASpecificDay(dish));
   }
 
   final _$removeDishFromUserDishesOfSpecificDayAsyncAction =
@@ -291,6 +350,28 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
+  Future<void> waitForDishesTotal() {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.waitForDishesTotal');
+    try {
+      return super.waitForDishesTotal();
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<void> retryForDishesTotal() {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.retryForDishesTotal');
+    try {
+      return super.retryForDishesTotal();
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addNewDishCreatedByUser(Dish dish, List<Ingredient> ingredients) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.addNewDishCreatedByUser');
@@ -326,7 +407,9 @@ secondCourseDishList: ${secondCourseDishList},
 sideDishList: ${sideDishList},
 dessertsDishList: ${dessertsDishList},
 drinksDishList: ${drinksDishList},
-loadInitDishList: ${loadInitDishList}
+dishesListFromDBAndUser: ${dishesListFromDBAndUser},
+loadInitDishList: ${loadInitDishList},
+loadInitDishesList: ${loadInitDishesList}
     ''';
   }
 }

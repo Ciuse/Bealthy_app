@@ -35,6 +35,7 @@ abstract class _FoodStoreBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
 
   bool storeInitialized = false;
+  bool storeDishInitialized = false;
 
   @observable
   var yourFavouriteDishList = new ObservableList<Dish>();
@@ -70,11 +71,27 @@ abstract class _FoodStoreBase with Store {
   var drinksDishList = new ObservableList<Dish>();
 
   @observable
+  var dishesListFromDBAndUser = new ObservableList<Dish>();
+
+  @observable
   ObservableFuture loadInitDishList;
 
   @action
   Future<void> loadInitialBho() {
     return loadInitDishList = ObservableFuture(initStore());
+  }
+
+  @observable
+  ObservableFuture loadInitDishesList;
+
+
+  @action
+  Future<void> waitForDishesTotal() {
+    return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
+  }
+  @action
+  Future<void> retryForDishesTotal() {
+    return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
   }
 
   @action
@@ -85,6 +102,14 @@ abstract class _FoodStoreBase with Store {
       await _addDishToCategory();
       await getYourDishesOfSpecificDay(DateTime.now());
       storeInitialized = true;
+    }
+  }
+
+  @action
+  Future<void> initDishStore() async {
+    if (!storeDishInitialized) {
+      await _getDishesFromDBAndUser();
+      storeDishInitialized = true;
     }
   }
 
@@ -228,6 +253,35 @@ abstract class _FoodStoreBase with Store {
     );
   }
 
+  @action
+  Future<void> _getDishesFromDBAndUser() async {
+    await (FirebaseFirestore.instance
+        .collection('Dishes')
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+
+        Dish i = new Dish(id:result.id,name:result.get("name"),category:result.get("category") ,qty: "",ingredients: null);
+        dishesListFromDBAndUser.add(i);
+        print(i);
+      }
+      );
+    }));
+    await (FirebaseFirestore.instance
+        .collection('DishesCreatedByUsers')
+        .doc(auth.currentUser.uid).collection("Dishes").get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((dish) {
+        Dish toAdd = new Dish(id: dish.id,
+            name: dish.get("name"),
+            category: dish.get("category"),
+            qty: null,
+            ingredients: null);
+        dishesListFromDBAndUser.add(toAdd);
+      });
+    })
+    );
+  }
 
   @action
   Future<void> _getYourDishes() async {

@@ -33,11 +33,15 @@ abstract class _IngredientStoreBase with Store {
   @observable
   ObservableFuture loadInitIngredientList;
 
-  @action
-  Future<void> loadInitialBho() {
-    return loadInitIngredientList = ObservableFuture(initStore());
-  }
 
+  @action
+  Future<void> waitForIngredients() {
+    return loadInitIngredientList = ObservableFuture(getIngredients());
+  }
+  @action
+  Future<void> retryForIngredients() {
+    return loadInitIngredientList = ObservableFuture(getIngredients());
+  }
   @action
   Future<void> initStore() async {
     if(!storeInitialized) {
@@ -45,6 +49,7 @@ abstract class _IngredientStoreBase with Store {
       storeInitialized=true;
     }
   }
+
 
   @action
   Future<void> getIngredients() async {

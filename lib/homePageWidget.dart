@@ -122,7 +122,7 @@ class HomePageWidget extends StatelessWidget {
           // Add your onPressed code here!
 
         },
-        child: Icon(Icons.navigation),
+        child: Icon(Icons.add, color:Colors.white),
         backgroundColor: color,
       ),
     );

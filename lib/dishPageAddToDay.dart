@@ -174,14 +174,14 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
               return showDialog(
                   context: context,
                   builder: (_) =>  new AlertDialog(
-                    title: Center(child: Text(widget.dish.name)),
+                    title: Center(child: Text("add ${widget.dish.name} to this day ")),
                     content: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children : <Widget>[
                         Expanded(
                           child: Text(
-                            "Select the category of this DISH! ",
+                            "Indicate the quantity eaten! ",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.red,

@@ -333,8 +333,8 @@ class _MyHomePageState extends State<HomePage> {
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   final List<Widget> _widgetOptions = <Widget>[
-    HomePageWidget(Colors.red),
     HomePageWidget(Colors.green),
+    HomePageWidget(Colors.red),
     HomePageWidget(Colors.yellow),
     HomePageWidget(Colors.blue),
 
@@ -372,7 +372,7 @@ class _MyHomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
-            label: 'Treatment',
+            label: 'Personal Info',
           ),
         ],
         currentIndex: _selectedIndex,

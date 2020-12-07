@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'createNewDishWidget.dart';
 import 'package:Bealthy_app/dishPageAddToDay.dart';
+import 'package:Bealthy_app/searchDishesList.dart';
+
+
 class AddMeal extends StatefulWidget {
   @override
   _AddMealState createState() => _AddMealState();
@@ -18,6 +21,21 @@ class _AddMealState extends State<AddMeal>{
     return Scaffold(
         appBar: AppBar(
           title: Text("Add meal"),
+          bottom: PreferredSize(
+            preferredSize: Size(50,50),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                onPressed: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => searchDishesList()),
+                  )
+                },
+                icon: Icon(Icons.search),
+              ),
+            ),
+          ),
         ),
         body: Center(
             child: Column(
@@ -298,3 +316,4 @@ class _YourDishListState extends State<YourDishList> {
     );
   }
 }
+
