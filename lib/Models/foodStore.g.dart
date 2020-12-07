@@ -184,6 +184,21 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  final _$resultsListAtom = Atom(name: '_FoodStoreBase.resultsList');
+
+  @override
+  ObservableList<Dish> get resultsList {
+    _$resultsListAtom.reportRead();
+    return super.resultsList;
+  }
+
+  @override
+  set resultsList(ObservableList<Dish> value) {
+    _$resultsListAtom.reportWrite(value, super.resultsList, () {
+      super.resultsList = value;
+    });
+  }
+
   final _$loadInitDishesListAtom =
       Atom(name: '_FoodStoreBase.loadInitDishesList');
 
@@ -354,6 +369,7 @@ sideDishList: ${sideDishList},
 dessertsDishList: ${dessertsDishList},
 drinksDishList: ${drinksDishList},
 dishesListFromDBAndUser: ${dishesListFromDBAndUser},
+resultsList: ${resultsList},
 loadInitDishesList: ${loadInitDishesList}
     ''';
   }
