@@ -26,7 +26,8 @@ class _searchDishesListState extends State<searchDishesList>{
     _searchController.addListener(_onSearchChanged);
     var store = Provider.of<FoodStore>(context, listen: false);
     store.initDishList();
-        
+    store.resultsList.clear();
+    _onSearchChanged();
   }
 
 
@@ -37,9 +38,31 @@ class _searchDishesListState extends State<searchDishesList>{
     super.dispose();
   }
   _onSearchChanged(){
+    searchResultList();
     print(_searchController.text);
   }
+  void searchResultList() {
 
+    var showResults = [];
+    var store = Provider.of<FoodStore>(context, listen: false);
+
+    if(_searchController.text != ""){
+
+      for(Dish dish in store.dishesListFromDBAndUser){
+        var name = dish.name.toLowerCase();
+        if(name.contains(_searchController.text.toLowerCase())){
+          showResults.add(dish);
+        }
+      }
+
+    }else{
+      showResults.addAll(store.dishesListFromDBAndUser);
+    }
+    store.resultsList.clear();
+    showResults.forEach((element) {
+      store.resultsList.add(element);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +103,22 @@ class _searchDishesListState extends State<searchDishesList>{
                             );
                           case FutureStatus.fulfilled:
                             return Expanded(child: ListView.builder(
-                                itemCount: foodStore.dishesListFromDBAndUser.length,
+                                itemCount: foodStore.resultsList.length,
                                 itemBuilder: (context, index) {
-                                  return Text(foodStore.dishesListFromDBAndUser[index].name);
+                                  return Card(
+                                    child: ListTile(
+                                      onTap: ()=> { Navigator.push(
+                                        context, MaterialPageRoute(builder: (context) =>
+                                          DishPageAddToDay(dish: foodStore.resultsList[index],
+                                              createdByUser: foodStore.isSubstring("User", foodStore.resultsList[index].id),canBeAddToADay:true)
+                                      ),
+                                      )
+                                      },
+                                      title: Text(foodStore.resultsList[index].name,style: TextStyle(fontSize: 22.0)),
+                                      subtitle: Text(foodStore.resultsList[index].category,style: TextStyle(fontSize: 18.0)),
+                                      leading: FlutterLogo(),
+                                    ),
+                                  );
                                 }));
                           case FutureStatus.pending:
                           default:
@@ -95,4 +131,6 @@ class _searchDishesListState extends State<searchDishesList>{
         )
     );
   }
+
+
 }
