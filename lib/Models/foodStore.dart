@@ -80,7 +80,6 @@ abstract class _FoodStoreBase with Store {
       await _getYourDishes();
       await _getFavouriteDishes();
       await _addDishToCategory();
-      await getYourDishesOfSpecificDay(DateTime.now());
     }
   }
 
@@ -320,31 +319,6 @@ abstract class _FoodStoreBase with Store {
   }
 
 
-
-
-
-  @action
-  Future<void> getYourDishesOfSpecificDay(DateTime date) async {
-    String day = fixDate(date);
-    yourDishesDayList.clear();
-    await (FirebaseFirestore.instance
-        .collection('UserDishes')
-        .doc(auth.currentUser.uid).collection("DayDishes").doc(day).collection(
-        "Dishes").get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((dish) {
-        Dish toAdd = new Dish(id: dish.id,
-            name: dish.get("name"),
-            category: dish.get("category"),
-            qty: null,
-            );
-        yourDishesDayList.add(toAdd);
-      }
-
-      );
-    })
-    );
-  }
 
   @action
   Future<void> addDishToASpecificDay(Dish dish, DateTime day) async {

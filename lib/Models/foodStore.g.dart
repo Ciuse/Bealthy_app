@@ -274,15 +274,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
         .run(() => super._getFavouriteDishes());
   }
 
-  final _$getYourDishesOfSpecificDayAsyncAction =
-      AsyncAction('_FoodStoreBase.getYourDishesOfSpecificDay');
-
-  @override
-  Future<void> getYourDishesOfSpecificDay(DateTime date) {
-    return _$getYourDishesOfSpecificDayAsyncAction
-        .run(() => super.getYourDishesOfSpecificDay(date));
-  }
-
   final _$addDishToASpecificDayAsyncAction =
       AsyncAction('_FoodStoreBase.addDishToASpecificDay');
 

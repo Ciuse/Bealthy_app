@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:flutter/material.dart';
 import 'homePage.dart';
@@ -50,6 +51,9 @@ void main() async {
         ),
         Provider<SymptomStore>(
           create: (_) => SymptomStore(),
+        ),
+        Provider<MealTimeStore>(
+          create: (_) => MealTimeStore(),
         )
       ], child:MyApp())));
 }

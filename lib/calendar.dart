@@ -4,6 +4,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'Models/dateStore.dart';
 import 'package:provider/provider.dart';
 
+import 'Models/mealTimeStore.dart';
+
 
 final Map<DateTime, List> _holidays = {
   DateTime(2019, 1, 1): ['New Year\'s Day'],
@@ -69,7 +71,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
   void _onDaySelected(DateTime day, List events, List holidays) {
     context.read<DateStore>().selectedDate = day;
-    context.read<FoodStore>().getYourDishesOfSpecificDay(day);
+    context.read<MealTimeStore>().initDishesOfMealTimeList(day);
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
