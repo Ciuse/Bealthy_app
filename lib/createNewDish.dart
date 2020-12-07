@@ -10,12 +10,12 @@ import 'Database/Ingredient.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
 
-class AddDishForm extends StatefulWidget {
+class CreateNewDish extends StatefulWidget {
   @override
-  _AddDishFormState createState() => _AddDishFormState();
+  _CreateNewDishState createState() => _CreateNewDishState();
 }
 
-class _AddDishFormState extends State<AddDishForm>{
+class _CreateNewDishState extends State<CreateNewDish>{
   final nameCt = TextEditingController();
   final categoryCt = TextEditingController();
   final ingredientsCt = TextEditingController();
@@ -28,6 +28,13 @@ class _AddDishFormState extends State<AddDishForm>{
 
   List<String> quantityList = [];
   List<String> categoryList = [];
+
+  String categoryDishCreated = "";
+
+  String selectIngredient = "";  //by default we are not providing any of the ingredients
+
+  List<String> ingredientsSelectedList = new List<String>();
+  List<String> ingredientsQuantityList = new List<String>();
 
   @override
   void initState() {
@@ -58,39 +65,39 @@ class _AddDishFormState extends State<AddDishForm>{
     return listToReturn;
   }
 
-  String categoryDishCreated = "";
-  final List<String> ingredientsSelectedList = new List<String>();
-
   void addIngredientsToListView(String value){
     ingredientsSelectedList.add(value);
     ingredientsQuantityList.add("");
   }
 
-  void addDishToUser(){
-    Random random = new Random();
-    int randomNumber = random.nextInt(100);
-    Dish dish = new Dish(
-        id:"Dish_User_"+randomNumber.toString(),
-        name:nameCt.text,
-        category: categoryDishCreated
-    );
-    List<Ingredient> ingredients = new List<Ingredient>();
+  void addDishToUser() {
+    if (nameCt.text != "" && categoryDishCreated != "" && ingredientsSelectedList.length>0 &&
+        ingredientsQuantityList.length==ingredientsSelectedList.length) {
+      Random random = new Random();
+      int randomNumber = random.nextInt(100);
+      Dish dish = new Dish(
+          id: "Dish_User_" + randomNumber.toString(),
+          name: nameCt.text,
+          category: categoryDishCreated
+      );
+      List<Ingredient> ingredients = new List<Ingredient>();
 
-    for(int i=0;i< ingredientsSelectedList.length;i++){
-      Ingredient ingredient =
-      new Ingredient(id:context.read<IngredientStore>().getIngredientIdFromName(ingredientsSelectedList[i]),
-          name:ingredientsSelectedList[i],
-          qty:ingredientsQuantityList[i]);
-      ingredients.add(ingredient);
+      for (int i = 0; i < ingredientsSelectedList.length; i++) {
+        Ingredient ingredient =
+        new Ingredient(
+            id: context.read<IngredientStore>().getIngredientIdFromName(
+                ingredientsSelectedList[i]),
+            name: ingredientsSelectedList[i],
+            qty: ingredientsQuantityList[i]);
+        ingredients.add(ingredient);
+      }
+
+      context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
+
+      Navigator.pop(context);
     }
-
-    context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
-
-    Navigator.pop(context);
   }
 
-  String selectIngredient = "";  //by default we are not providing any of the ingredients
-  List<String> ingredientsQuantityList = new List<String>();
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +224,7 @@ class _AddDishFormState extends State<AddDishForm>{
                 onPressed: () {
                   addDishToUser();
                   },
-                child: Text('Add Dish'),
+                child: Text('Create'),
               ),
             ),
 

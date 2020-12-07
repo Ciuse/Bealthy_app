@@ -76,11 +76,11 @@ abstract class _FoodStoreBase with Store {
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {
+      storeInitialized = true;
       await _getYourDishes();
       await _getFavouriteDishes();
       await _addDishToCategory();
       await getYourDishesOfSpecificDay(DateTime.now());
-      storeInitialized = true;
     }
   }
 

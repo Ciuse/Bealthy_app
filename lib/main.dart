@@ -1,6 +1,6 @@
-import 'package:Bealthy_app/Models/diseaseStore.dart';
+import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:flutter/material.dart';
-import 'homePageWidget.dart';
+import 'homePage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'Models/date_model.dart';
@@ -48,8 +48,8 @@ void main() async {
         Provider<IngredientStore>(
           create: (_) => IngredientStore(),
         ),
-        Provider<DiseaseStore>(
-          create: (_) => DiseaseStore(),
+        Provider<SymptomStore>(
+          create: (_) => SymptomStore(),
         )
       ], child:MyApp())));
 }
@@ -61,6 +61,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+          buttonBarTheme: ButtonBarThemeData(
+            alignment: MainAxisAlignment.spaceEvenly,
+          )),
       title: _title,
       home: LoginPage(),
     );

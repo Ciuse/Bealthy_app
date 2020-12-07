@@ -1,5 +1,5 @@
-import 'package:Bealthy_app/Database/Disease.dart';
-import 'package:Bealthy_app/Models/diseaseStore.dart';
+import 'package:Bealthy_app/Database/Symptom.dart';
+import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';

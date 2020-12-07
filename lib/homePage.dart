@@ -2,8 +2,8 @@ import 'package:Bealthy_app/Models/date_model.dart';
 import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import 'addDisease.dart';
-import 'calendarWidget.dart';
+import 'addSymptom.dart';
+import 'calendar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'addMeal.dart';
@@ -87,7 +87,7 @@ class HomePageWidget extends StatelessWidget {
                                       Navigator.pop(context);
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => AddDisease()),
+                                        MaterialPageRoute(builder: (context) => AddSymptom()),
                                       );
                                     },
                                     elevation: 2.0,
@@ -100,7 +100,7 @@ class HomePageWidget extends StatelessWidget {
                                     padding: EdgeInsets.all(15.0),
                                     shape: CircleBorder(),
                                   ),
-                                  Text("Disease",style: TextStyle(
+                                  Text("Symptom",style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.normal,
                                     fontFamily: 'Open Sans',

@@ -3,7 +3,7 @@ import 'Database/Dish.dart';
 import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'createNewDishWidget.dart';
+import 'createNewDish.dart';
 import 'package:Bealthy_app/dishPageAddToDay.dart';
 import 'package:Bealthy_app/searchDishesList.dart';
 
@@ -88,6 +88,22 @@ class _AddMealState extends State<AddMeal>{
                       ],
                     ),
                   ),
+                  FlatButton(
+                    onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CreateNewDish()),
+                      )
+                    },
+                    color: Colors.orange,
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.add),
+                        Text("Create New Dish")
+                      ],
+                    ),
+                  ),
                 ]
             )
         )
@@ -127,7 +143,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: dish,
-                        createdByUser: foodStore.isSubstring("User", dish.id,)),
+                        createdByUser: foodStore.isSubstring("User", dish.id,), canBeAddToADay: true,),
                           ))
                         },
                         color: Colors.orange,
@@ -301,17 +317,6 @@ class _YourDishListState extends State<YourDishList> {
                     )
 
             )],),
-        floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddDishForm()),
-                );
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-              },
-          child: Icon(Icons.add),
-            ),
 
     );
   }

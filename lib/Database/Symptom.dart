@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 
-Disease clientFromMap(String str) => Disease.fromMap(json.decode(str));
+Symptom clientFromMap(String str) => Symptom.fromMap(json.decode(str));
 
-String clientToMap1(Disease data) => json.encode(data.toMap());
+String clientToMap1(Symptom data) => json.encode(data.toMap());
 
 
 
-class Disease {
-  Disease({
+class Symptom {
+  Symptom({
     this.id,
     this.name,
     this.intensity
@@ -18,8 +18,8 @@ class Disease {
   String name;
   String intensity;
 
-  factory Disease.fromMap(Map<String, dynamic> json) =>
-      Disease(
+  factory Symptom.fromMap(Map<String, dynamic> json) =>
+      Symptom(
           id: json["id"],
           name: json["name"],
           intensity: json["intensity"]

@@ -23,12 +23,13 @@ class DishPageAddToDay extends StatefulWidget {
 class _DishPageAddToDayState extends State<DishPageAddToDay>{
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
-  List<String> quantityList = ["Little", "Normal", "Lots"];
 
+  List<String> quantityList;
 
 
   void initState() {
     super.initState();
+    quantityList= getQuantityName();
     var store = Provider.of<IngredientStore>(context, listen: false);
     store.ingredientListOfDish.clear();
     if(widget.createdByUser){
@@ -38,29 +39,31 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
     }
   }
 
+  List<String> getQuantityName(){
+
+    List<String> listToReturn = new List<String>();
+    Quantity.values.forEach((element) {
+      listToReturn.add(element.toString().split('.').last);
+    });
+    return listToReturn;
+  }
 
   Future getImage() async {
 
     try {
-      
       return await storage.ref("DishImage/" + widget.dish.id + ".jpg").getDownloadURL();
     }
-
     catch (e) {
       return await Future.error(e);
     }
-    
   }
 
   Future findIfLocal() {
-
      return rootBundle.load("images/"+widget.dish.id+".jpg");
-
   }
 
-  setQuantityToDish(String qty){
+  void setQuantityToDish(String qty){
     widget.dish.qty = qty;
-    print(widget.dish.qty);
   }
 
 
@@ -174,7 +177,7 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
               return showDialog(
                   context: context,
                   builder: (_) =>  new AlertDialog(
-                    title: Center(child: Text("add ${widget.dish.name} to this day ")),
+                    title: Center(child: Text("Add ${widget.dish.name} to this day ")),
                     content: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -191,10 +194,8 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                         )
                       ],
                     ),
-                    actions: <Widget>[
-                      Row(
-                          children: [
-                            for(String qty in quantityList ) RaisedButton(
+                    actions: <Widget> [
+                            for(String qty in quantityList) RaisedButton(
                                 onPressed: () => {
                                   setQuantityToDish(qty),
                                   foodStore.addDishToASpecificDay(widget.dish),
@@ -216,9 +217,8 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                                   child: Text(qty , style: TextStyle(fontSize: 20)),)
                             ),
                           ]
-                      )
-                    ],
-                  ));
+                      ),
+                  );
             }
 
             else {
