@@ -25,7 +25,7 @@ class _searchDishesListState extends State<searchDishesList>{
     super.initState();
     _searchController.addListener(_onSearchChanged);
     var store = Provider.of<FoodStore>(context, listen: false);
-    store.initDishStore();
+    store.initDishList();
         
   }
 

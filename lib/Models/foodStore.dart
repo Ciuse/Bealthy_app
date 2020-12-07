@@ -73,27 +73,6 @@ abstract class _FoodStoreBase with Store {
   @observable
   var dishesListFromDBAndUser = new ObservableList<Dish>();
 
-  @observable
-  ObservableFuture loadInitDishList;
-
-  @action
-  Future<void> loadInitialBho() {
-    return loadInitDishList = ObservableFuture(initStore());
-  }
-
-  @observable
-  ObservableFuture loadInitDishesList;
-
-
-  @action
-  Future<void> waitForDishesTotal() {
-    return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
-  }
-  @action
-  Future<void> retryForDishesTotal() {
-    return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
-  }
-
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {
@@ -105,13 +84,22 @@ abstract class _FoodStoreBase with Store {
     }
   }
 
+  @observable
+  ObservableFuture loadInitDishesList;
+
   @action
-  Future<void> initDishStore() async {
+  Future<void> initDishList() async {
     if (!storeDishInitialized) {
-      await _getDishesFromDBAndUser();
       storeDishInitialized = true;
+      return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
     }
   }
+
+  @action
+  Future<void> retryForDishesTotal() {
+    return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
+  }
+
 
   @action
   Future<void> initFoodCategoryLists(int categoryIndex) async {

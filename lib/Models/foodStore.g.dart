@@ -199,21 +199,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
-  final _$loadInitDishListAtom = Atom(name: '_FoodStoreBase.loadInitDishList');
-
-  @override
-  ObservableFuture<dynamic> get loadInitDishList {
-    _$loadInitDishListAtom.reportRead();
-    return super.loadInitDishList;
-  }
-
-  @override
-  set loadInitDishList(ObservableFuture<dynamic> value) {
-    _$loadInitDishListAtom.reportWrite(value, super.loadInitDishList, () {
-      super.loadInitDishList = value;
-    });
-  }
-
   final _$loadInitDishesListAtom =
       Atom(name: '_FoodStoreBase.loadInitDishesList');
 
@@ -237,12 +222,11 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     return _$initStoreAsyncAction.run(() => super.initStore());
   }
 
-  final _$initDishStoreAsyncAction =
-      AsyncAction('_FoodStoreBase.initDishStore');
+  final _$initDishListAsyncAction = AsyncAction('_FoodStoreBase.initDishList');
 
   @override
-  Future<void> initDishStore() {
-    return _$initDishStoreAsyncAction.run(() => super.initDishStore());
+  Future<void> initDishList() {
+    return _$initDishListAsyncAction.run(() => super.initDishList());
   }
 
   final _$initFoodCategoryListsAsyncAction =
@@ -339,28 +323,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       ActionController(name: '_FoodStoreBase');
 
   @override
-  Future<void> loadInitialBho() {
-    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
-        name: '_FoodStoreBase.loadInitialBho');
-    try {
-      return super.loadInitialBho();
-    } finally {
-      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Future<void> waitForDishesTotal() {
-    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
-        name: '_FoodStoreBase.waitForDishesTotal');
-    try {
-      return super.waitForDishesTotal();
-    } finally {
-      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   Future<void> retryForDishesTotal() {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.retryForDishesTotal');
@@ -408,7 +370,6 @@ sideDishList: ${sideDishList},
 dessertsDishList: ${dessertsDishList},
 drinksDishList: ${drinksDishList},
 dishesListFromDBAndUser: ${dishesListFromDBAndUser},
-loadInitDishList: ${loadInitDishList},
 loadInitDishesList: ${loadInitDishesList}
     ''';
   }
