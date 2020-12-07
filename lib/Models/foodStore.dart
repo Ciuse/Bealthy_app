@@ -68,7 +68,10 @@ abstract class _FoodStoreBase with Store {
   var drinksDishList = new ObservableList<Dish>();
 
   @observable
-  var dishesListFromDBAndUser = new ObservableList<Dish>();
+  var dishesListFromDBAndUser = new ObservableList<Dish>(); //lista usata nella search bar
+
+  @observable
+  var resultsList = new ObservableList<Dish>();  //lista usata nella search bar per filtrare
 
   @action
   Future<void> initStore() async {
@@ -86,6 +89,7 @@ abstract class _FoodStoreBase with Store {
 
   @action
   Future<void> initDishList() async {
+
     if (!storeDishInitialized) {
       storeDishInitialized = true;
       return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
@@ -239,6 +243,7 @@ abstract class _FoodStoreBase with Store {
 
   @action
   Future<void> _getDishesFromDBAndUser() async {
+
     await (FirebaseFirestore.instance
         .collection('Dishes')
         .get()
