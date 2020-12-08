@@ -19,26 +19,83 @@ abstract class _SymptomStoreBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
   bool storeInitialized = false;
 
+
   @observable
   var symptomList = new ObservableList<Symptom>();
+
+  @observable
+  var symptomOfADayList = new ObservableList<Symptom>();
 
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {
-      await _getsymptomList();
+      await _getSymptomList();
       storeInitialized = true;
     }
   }
 
-  @action
-  Future<void> _getsymptomList() async {
-    symptomList.add(new Symptom(id:"1",name: "Mal di pancia", intensity: null));
-    symptomList.add(new Symptom(id:"1",name: "Mal di Testa", intensity: null));
-    symptomList.add(new Symptom(id:"1",name: "Mal di Stomaco", intensity: null));
-    symptomList.add(new Symptom(id:"1",name: "Vomito", intensity: null));
-    symptomList.add(new Symptom(id:"1",name: "Dissenteria", intensity: null));
-    symptomList.add(new Symptom(id:"1",name: "Irritazione", intensity: null));
-    symptomList.add(new Symptom(id:"1",name: "Irritazione", intensity: null));
+  @observable
+  ObservableFuture loadDaySymptom;
 
+  @action
+  Future<void> initGetSymptomOfADay(DateTime day) {
+    return loadDaySymptom = ObservableFuture(_getSymptomOfADay(day));
+  }
+
+  @action
+  Future<void> _getSymptomList() async {
+    await (FirebaseFirestore.instance
+        .collection('Symptoms')
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+
+        Symptom i = new Symptom(id:result.id,name:result.get("name"));
+        symptomList.add(i);
+        print(i);
+      }
+      );
+    }));
+  }
+  @action
+  Future<void> _getSymptomOfADay(DateTime date) async {
+    String day = fixDate(date);
+    symptomOfADayList.clear();
+    await (FirebaseFirestore.instance
+        .collection('UserSymptoms')
+        .doc(auth.currentUser.uid).collection("DaySymptoms").doc(day)
+        .collection("Symptoms")
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((symptom) {
+
+        Symptom toAdd = new Symptom(
+          id: symptom.id,
+          name: symptom.get("name"),
+          intensity: symptom.get("intensity"),
+          mealTime: symptom.get("mealTime"),
+        );
+        symptomOfADayList.add(toAdd);
+      }
+      );
+    })
+    );
+  }
+
+  @action
+  bool isUserSymptomInADay (Symptom symptom)  {
+    bool found= false;
+    symptomOfADayList.forEach((element) {
+      if(element.name.compareTo(symptom.name)==0){
+        found =true;
+      }
+    });
+    return found;
+  }
+
+  String fixDate(DateTime date) {
+    String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(
+        2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    return dateSlug;
   }
 }

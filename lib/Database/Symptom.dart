@@ -18,7 +18,7 @@ class Symptom {
 
   String id;
   String name;
-  String intensity;
+  int intensity;
   String mealTime;
 
   factory Symptom.fromMap(Map<String, dynamic> json) =>
