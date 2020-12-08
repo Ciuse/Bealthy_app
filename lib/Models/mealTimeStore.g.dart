@@ -82,13 +82,23 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
         .run(() => super.initDishesOfMealTimeList(day));
   }
 
-  final _$_getDishesOfMealTimeListAsyncAction =
-      AsyncAction('_MealTimeStoreBase._getDishesOfMealTimeList');
+  final _$_getDishesOfMealTimeListOfSpecificDayAsyncAction =
+      AsyncAction('_MealTimeStoreBase._getDishesOfMealTimeListOfSpecificDay');
 
   @override
-  Future<void> _getDishesOfMealTimeList(int index, DateTime date) {
-    return _$_getDishesOfMealTimeListAsyncAction
-        .run(() => super._getDishesOfMealTimeList(index, date));
+  Future<void> _getDishesOfMealTimeListOfSpecificDay(int index, DateTime date) {
+    return _$_getDishesOfMealTimeListOfSpecificDayAsyncAction
+        .run(() => super._getDishesOfMealTimeListOfSpecificDay(index, date));
+  }
+
+  final _$removeDishOfMealTimeListOfSpecificDayAsyncAction =
+      AsyncAction('_MealTimeStoreBase.removeDishOfMealTimeListOfSpecificDay');
+
+  @override
+  Future<void> removeDishOfMealTimeListOfSpecificDay(
+      int index, Dish dish, DateTime date) {
+    return _$removeDishOfMealTimeListOfSpecificDayAsyncAction.run(
+        () => super.removeDishOfMealTimeListOfSpecificDay(index, dish, date));
   }
 
   @override

@@ -40,7 +40,9 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     return Observer(builder: (_) => Expanded(
         child: ListView(
           children:<Widget>[
-            for( var element in MealTime.values ) listViewForAMealTime(element, mealTimeStore)
+            for( var element in MealTime.values )
+              mealTimeStore.getDishesOfMealTimeList(element.index).isNotEmpty ? listViewForAMealTime(element, mealTimeStore) : SizedBox(width: 0, height: 0),
+
           ],
         )
     ));
@@ -50,68 +52,76 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
 
   Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore ){
+    return Column(children:[
+      Text(MealTime.values[mealTime.index].toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
 
-
-
-    return ListView.builder
-      (
-        shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
-        itemCount: mealTimeStore.getDishesOfMealTimeList(mealTime.index).length,
-        itemBuilder: (BuildContext context, int index) {
-          return Dismissible(
-            key: Key(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name),
-            background: Container(
-              alignment: AlignmentDirectional.centerEnd,
-              color: Colors.red,
-              child: Icon(Icons.delete, color: Colors.white),
-            ),
-
-            child: Card(
-              child: ListTile(
-                onTap: ()=> { Navigator.push(
-                  context, MaterialPageRoute(builder: (context) =>
-                    DishPageAddToDay(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
-                        createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),canBeAddToADay:false)
-                ),
-                )
-                },
-                title: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name,style: TextStyle(fontSize: 22.0)),
-                subtitle: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].category,style: TextStyle(fontSize: 18.0)),
-                leading: FlutterLogo(),
-                trailing: Row (
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      PopupMenuButton<String>(
-                        onSelected: (String choice) {
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>
-                                  DishPageAddToDay(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
-                                      createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),canBeAddToADay:false)));
-                        },
-                        itemBuilder: (BuildContext context){
-                          return ConstantsList.choices.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-
-
-                            );
-                          }).toList();
-                        },
-                      ),
-                    ]),
+      ListView.builder(
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          itemCount: mealTimeStore.getDishesOfMealTimeList(mealTime.index).length,
+          itemBuilder: (BuildContext context, int index) {
+            return Dismissible(
+              key: Key(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name),
+              background: Container(
+                alignment: AlignmentDirectional.centerEnd,
+                color: Colors.red,
+                child: Icon(Icons.delete, color: Colors.white),
               ),
-            ),
-            onDismissed: (direction){
-             // foodStore.removeDishFromUserDishesOfSpecificDay(list[index], widget.day);
-            },
-          );
 
-        }
-    );
+                child: Card(
+                  child: ListTile(
+                    onTap: ()=> { Navigator.push(
+                      context, MaterialPageRoute(builder: (context) =>
+                        DishPageAddToDay(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
+                            createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),canBeAddToADay:false)
+                    ),
+                    )
+                    },
+                    title: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name,style: TextStyle(fontSize: 22.0)),
+                    subtitle: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].category,style: TextStyle(fontSize: 18.0)),
+                    leading: FlutterLogo(),
+                    trailing: Row (
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          PopupMenuButton<String>(
+                            onSelected: (String choice) {
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) =>
+                                      DishPageAddToDay(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
+                                          createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),canBeAddToADay:false)));
+                            },
+                            itemBuilder: (BuildContext context){
+                              return ConstantsList.choices.map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+
+
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ]),
+                  ),
+
+                ),
+              onDismissed: (direction){
+                mealTimeStore.removeDishOfMealTimeListOfSpecificDay(mealTime.index,mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index], widget.day);
+              },
+            );
+
+          }
+
+      ),
+      Divider(
+        height: 2.5,
+        thickness: 2.5,
+        color: Colors.black87,
+      )
+    ]);
+
   }
 }
 

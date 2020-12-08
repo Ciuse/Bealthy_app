@@ -199,6 +199,21 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  final _$isSelectedAtom = Atom(name: '_FoodStoreBase.isSelected');
+
+  @override
+  ObservableList<bool> get isSelected {
+    _$isSelectedAtom.reportRead();
+    return super.isSelected;
+  }
+
+  @override
+  set isSelected(ObservableList<bool> value) {
+    _$isSelectedAtom.reportWrite(value, super.isSelected, () {
+      super.isSelected = value;
+    });
+  }
+
   final _$loadInitDishesListAtom =
       Atom(name: '_FoodStoreBase.loadInitDishesList');
 
@@ -220,6 +235,15 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   @override
   Future<void> initStore() {
     return _$initStoreAsyncAction.run(() => super.initStore());
+  }
+
+  final _$initBooleanDishQuantityAsyncAction =
+      AsyncAction('_FoodStoreBase.initBooleanDishQuantity');
+
+  @override
+  Future<void> initBooleanDishQuantity() {
+    return _$initBooleanDishQuantityAsyncAction
+        .run(() => super.initBooleanDishQuantity());
   }
 
   final _$initDishListAsyncAction = AsyncAction('_FoodStoreBase.initDishList');
@@ -314,6 +338,17 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       ActionController(name: '_FoodStoreBase');
 
   @override
+  void setBooleanQuantityDish() {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.setBooleanQuantityDish');
+    try {
+      return super.setBooleanQuantityDish();
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Future<void> retryForDishesTotal() {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.retryForDishesTotal');
@@ -361,6 +396,7 @@ dessertsDishList: ${dessertsDishList},
 drinksDishList: ${drinksDishList},
 dishesListFromDBAndUser: ${dishesListFromDBAndUser},
 resultsList: ${resultsList},
+isSelected: ${isSelected},
 loadInitDishesList: ${loadInitDishesList}
     ''';
   }
