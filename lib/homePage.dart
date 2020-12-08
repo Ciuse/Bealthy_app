@@ -20,6 +20,11 @@ class HomePageWidget extends StatelessWidget {
     return Scaffold(
       body: Column(children: [
         CalendarHomePage(),
+        Divider(
+          height: 2.5,
+          thickness: 2.5,
+          color: Colors.black87,
+        ),
         Observer(
             builder: (_) => ListDishesOfDay(day: dateModel.selectedDate),
         ),

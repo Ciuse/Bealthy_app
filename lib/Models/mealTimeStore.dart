@@ -32,17 +32,18 @@ abstract class _MealTimeStoreBase with Store {
   @observable
   var dinnerDishesList = new ObservableList<Dish>();
 
+
   @action
   Future<void> initDishesOfMealTimeList(DateTime day) async {
     MealTime.values.forEach((element) {
-      _getDishesOfMealTimeList(element.index,day);
+      _getDishesOfMealTimeListOfSpecificDay(element.index,day);
     });
 
   }
 
 
-  ObservableList getDishesOfMealTimeList(int categoryIndex) {
-    switch (categoryIndex) {
+  ObservableList getDishesOfMealTimeList(int mealTimeIndex) {
+    switch (mealTimeIndex) {
       case 0:
         {
           return breakfastDishesList;
@@ -71,6 +72,10 @@ abstract class _MealTimeStoreBase with Store {
         }
     }
   }
+
+
+
+
   String fixDate(DateTime date) {
     String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(
         2, '0')}-${date.day.toString().padLeft(2, '0')}";
@@ -78,7 +83,7 @@ abstract class _MealTimeStoreBase with Store {
   }
 
   @action
-  Future<void> _getDishesOfMealTimeList(int index, DateTime date) async {
+  Future<void> _getDishesOfMealTimeListOfSpecificDay(int index, DateTime date) async {
     String day = fixDate(date);
     getDishesOfMealTimeList(index).clear();
     await (FirebaseFirestore.instance
@@ -102,8 +107,24 @@ abstract class _MealTimeStoreBase with Store {
       );
     })
     );
-
   }
+
+  @action
+  Future<void> removeDishOfMealTimeListOfSpecificDay(int index,Dish dish, DateTime date) async {
+    String dayFix = fixDate(date);
+    await (FirebaseFirestore.instance
+        .collection("UserDishes")
+        .doc(auth.currentUser.uid)
+        .collection("DayDishes")
+        .doc(dayFix)
+        .collection("Dishes")
+        .doc(dish.id)
+        .delete());
+
+    getDishesOfMealTimeList(index).remove(dish);
+  }
+
+
 
   bool isSubstring(String s1, String s2) {
     int M = s1.length;

@@ -36,6 +36,8 @@ abstract class _FoodStoreBase with Store {
 
   bool storeInitialized = false;
   bool storeDishInitialized = false;
+  bool booleanQuantityDishInitialized = false;
+
 
   @observable
   var yourFavouriteDishList = new ObservableList<Dish>();
@@ -73,6 +75,9 @@ abstract class _FoodStoreBase with Store {
   @observable
   var resultsList = new ObservableList<Dish>();  //lista usata nella search bar per filtrare
 
+  @observable
+  var isSelected = new ObservableList<bool>();
+
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {
@@ -82,6 +87,21 @@ abstract class _FoodStoreBase with Store {
       await _addDishToCategory();
     }
   }
+
+  @action
+  Future<void> initBooleanDishQuantity() async {
+    if (!booleanQuantityDishInitialized) {
+      booleanQuantityDishInitialized = true;
+     setBooleanQuantityDish();
+
+    }
+  }
+@action
+void setBooleanQuantityDish(){
+  for(int i = 0; i< Quantity.values.length; i++){
+    isSelected.add(false);
+  }
+}
 
   @observable
   ObservableFuture loadInitDishesList;
