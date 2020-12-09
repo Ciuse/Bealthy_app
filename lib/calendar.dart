@@ -74,6 +74,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
     context.read<MealTimeStore>().initDishesOfMealTimeList(day);
     context.read<SymptomStore>().initGetSymptomOfADay(day);
 
+
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
@@ -82,6 +83,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
   void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format) {
     print('CALLBACK: _onCalendarCreated');
+    context.read<SymptomStore>().initGetSymptomOfADay(DateTime.now());
+    context.read<MealTimeStore>().initDishesOfMealTimeList(DateTime.now());
   }
 
   @override

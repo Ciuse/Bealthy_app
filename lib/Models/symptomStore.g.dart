@@ -9,6 +9,23 @@ part of 'symptomStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SymptomStore on _SymptomStoreBase, Store {
+  final _$symptomListOfSpecificDayAtom =
+      Atom(name: '_SymptomStoreBase.symptomListOfSpecificDay');
+
+  @override
+  ObservableList<Symptom> get symptomListOfSpecificDay {
+    _$symptomListOfSpecificDayAtom.reportRead();
+    return super.symptomListOfSpecificDay;
+  }
+
+  @override
+  set symptomListOfSpecificDay(ObservableList<Symptom> value) {
+    _$symptomListOfSpecificDayAtom
+        .reportWrite(value, super.symptomListOfSpecificDay, () {
+      super.symptomListOfSpecificDay = value;
+    });
+  }
+
   final _$symptomListAtom = Atom(name: '_SymptomStoreBase.symptomList');
 
   @override
@@ -102,6 +119,7 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   @override
   String toString() {
     return '''
+symptomListOfSpecificDay: ${symptomListOfSpecificDay},
 symptomList: ${symptomList},
 loadDaySymptom: ${loadDaySymptom}
     ''';

@@ -34,24 +34,15 @@ class _AddSymptomState extends State<AddSymptom>{
     final symptomStore = Provider.of<SymptomStore>(context);
     return SizedBox( // Horizontal ListView
       height: 80,
-      child: Observer(
-        builder: (_)
-        {
-          switch (symptomStore.loadDaySymptom.status) {
-            case FutureStatus.rejected:
-              return
-                Text('Oops something went wrong');
-
-            case FutureStatus.fulfilled:
-              return ListView.builder(
+      child:  Observer(builder: (_) => ListView.builder(
                 itemCount: symptomStore.symptomList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return Container(
+                  return Observer(builder: (_) => Container(
                     width: 70,
                     alignment: Alignment.center,
                     color: Colors.transparent,
-                    child: RawMaterialButton(
+                    child:  RawMaterialButton(
                       onPressed: () {
                       },
                       elevation: 5.0,
@@ -64,16 +55,11 @@ class _AddSymptomState extends State<AddSymptom>{
                       padding: EdgeInsets.all(15.0),
                       shape: CircleBorder(),
 
-                    ),
+                    )),
                   );
                 },
-              );
-            case FutureStatus.pending:
-            default:
-              return CircularProgressIndicator();
-          }
-        },
-      ),
+              )),
+
     );
   }
 }

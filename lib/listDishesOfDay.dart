@@ -25,8 +25,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   void initState() {
 
     super.initState();
-    var storeMealTime = Provider.of<MealTimeStore>(context, listen: false);
-    storeMealTime.initDishesOfMealTimeList(widget.day);
+
 
   }
 

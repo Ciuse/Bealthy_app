@@ -18,7 +18,8 @@ class SymptomStore = _SymptomStoreBase with _$SymptomStore;
 abstract class _SymptomStoreBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
   bool storeInitialized = false;
-
+  @observable
+  var symptomListOfSpecificDay = new ObservableList<Symptom>();
 
   @observable
   var symptomList = new ObservableList<Symptom>();
@@ -36,8 +37,10 @@ abstract class _SymptomStoreBase with Store {
 
   @action
   Future<void> initGetSymptomOfADay(DateTime day) {
-    return loadDaySymptom = ObservableFuture(_getSymptomOfADay(day));
+    _getSymptomOfADay(day);
   }
+
+
 
   @action
   Future<void> _getSymptomList() async {
@@ -50,6 +53,7 @@ abstract class _SymptomStoreBase with Store {
         Symptom i = new Symptom(id:result.id,name:result.get("name"));
         symptomList.add(i);
         print(i);
+        print(i.isSymptomSelectDay);
       }
       );
     }));
@@ -67,6 +71,14 @@ abstract class _SymptomStoreBase with Store {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((symptom) {
 
+        Symptom toAdd = new Symptom(
+          id: symptom.id,
+          name: symptom.get("name"),
+          mealTime: symptom.get("mealTime"),
+        );
+        toAdd.isSymptomSelectDay=true;
+        symptomListOfSpecificDay.add(toAdd);
+
         setUserSymptomInADay(symptom.id);
       }
       );
@@ -83,10 +95,16 @@ abstract class _SymptomStoreBase with Store {
   void setUserSymptomInADay (String symptomId)  {
     symptomList.forEach((element) {
       if(element.id.compareTo(symptomId)==0){
-        element.setIsSymptomInADay(true);
+        print("entrato");
+        element.isSymptomSelectDay = true;
       }
     });
+    symptomList.forEach((element) {
+      print(element.name);
+      print(element.isSymptomSelectDay);
+      });
   }
+
 
   String fixDate(DateTime date) {
     String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(

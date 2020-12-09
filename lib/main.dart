@@ -293,7 +293,6 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   _signInWithEmailAndPassword();
-
                 }
               },
               child: const Text('Submit'),
