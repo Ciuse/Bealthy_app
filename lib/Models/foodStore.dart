@@ -1,8 +1,9 @@
+import 'package:Bealthy_app/Database/buttonStatusModel.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../Database/Dish.dart';
-import '../Database/Ingredient.dart';
+import '../Database/dish.dart';
+import '../Database/ingredient.dart';
 
 // Include generated file
 part 'foodStore.g.dart';
@@ -37,6 +38,8 @@ abstract class _FoodStoreBase with Store {
   bool storeInitialized = false;
   bool storeDishInitialized = false;
   bool booleanQuantityDishInitialized = false;
+
+  ButtonStatusModel a = ButtonStatusModel();
 
 
   @observable

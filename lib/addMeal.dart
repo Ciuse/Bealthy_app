@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Database/Dish.dart';
+import 'Database/dish.dart';
 import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

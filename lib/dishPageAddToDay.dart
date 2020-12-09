@@ -8,7 +8,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-import 'Database/Dish.dart';
+import 'Database/dish.dart';
 import 'Models/foodStore.dart';
 class DishPageAddToDay extends StatefulWidget {
 

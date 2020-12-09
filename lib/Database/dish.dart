@@ -1,16 +1,23 @@
 import 'dart:convert';
-import 'Ingredient.dart';
+import 'package:mobx/mobx.dart';
 
-Dish clientFromMap(String str) => Dish.fromMap(json.decode(str));
+part 'dish.g.dart';
 
-String clientToMap1(Dish data) => json.encode(data.toMapDishesCategory());
-String clientToMap2(Dish data) => json.encode(data.toMapDishes());
-String clientToMap3(Dish data) => json.encode(data.toMapDayDishes());
-String clientToMap4(Dish data) => json.encode(data.toMapDishesCreatedByUser());
+Dish clientFromMap(String str) => _DishBase.fromMap(json.decode(str));
+
+String clientToMap1(_DishBase data) => json.encode(data.toMapDishesCategory());
+String clientToMap2(_DishBase data) => json.encode(data.toMapDishes());
+String clientToMap3(_DishBase data) => json.encode(data.toMapDayDishes());
+String clientToMap4(_DishBase data) => json.encode(data.toMapDishesCreatedByUser());
 
 
-class Dish {
-  Dish({
+
+// This is the class used by rest of your codebase
+class Dish = _DishBase with _$Dish;
+
+// The store-class
+abstract class _DishBase with Store {
+  _DishBase({
     this.id,
     this.name,
     this.category,
@@ -18,14 +25,19 @@ class Dish {
     this.mealTime,
   });
 
-
+  @observable
   String id;
+  @observable
   String name;
+  @observable
   String category;
+  @observable
   String qty;
+  @observable
   String mealTime;
 
-  factory Dish.fromMap(Map<String, dynamic> json) =>
+  @action
+  factory _DishBase.fromMap(Map<String, dynamic> json) =>
       Dish(
         id: json["id"],
         name: json["name"],
