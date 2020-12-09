@@ -23,9 +23,6 @@ abstract class _SymptomStoreBase with Store {
   @observable
   var symptomList = new ObservableList<Symptom>();
 
-  @observable
-  var symptomOfADayList = new ObservableList<Symptom>();
-
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {
@@ -57,10 +54,11 @@ abstract class _SymptomStoreBase with Store {
       );
     }));
   }
+
   @action
   Future<void> _getSymptomOfADay(DateTime date) async {
+    clearUserSymptomInADay();
     String day = fixDate(date);
-    symptomOfADayList.clear();
     await (FirebaseFirestore.instance
         .collection('UserSymptoms')
         .doc(auth.currentUser.uid).collection("DaySymptoms").doc(day)
@@ -69,28 +67,25 @@ abstract class _SymptomStoreBase with Store {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((symptom) {
 
-        Symptom toAdd = new Symptom(
-          id: symptom.id,
-          name: symptom.get("name"),
-          intensity: symptom.get("intensity"),
-          mealTime: symptom.get("mealTime"),
-        );
-        symptomOfADayList.add(toAdd);
+        setUserSymptomInADay(symptom.id);
       }
       );
     })
     );
   }
-
   @action
-  void isUserSymptomInADay (Symptom symptom)  {
-    bool found= false;
-    symptomOfADayList.forEach((element) {
-      if(element.name.compareTo(symptom.name)==0){
-        found=true;
+  void clearUserSymptomInADay ()  {
+    symptomList.forEach((element) {
+        element.setIsSymptomInADay(false);
+    });
+  }
+  @action
+  void setUserSymptomInADay (String symptomId)  {
+    symptomList.forEach((element) {
+      if(element.id.compareTo(symptomId)==0){
+        element.setIsSymptomInADay(true);
       }
     });
-    symptom.setIsSymptomInADay(found);
   }
 
   String fixDate(DateTime date) {

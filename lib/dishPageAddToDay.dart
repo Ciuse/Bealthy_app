@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 
 import 'Database/dish.dart';
 import 'Models/foodStore.dart';
+import 'homePage.dart';
+import 'main.dart';
 class DishPageAddToDay extends StatefulWidget {
 
   final Dish dish;
@@ -73,6 +75,7 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
   @override
   Widget build(BuildContext context) {
     FoodStore foodStore = Provider.of<FoodStore>(context);
+    MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context);
     IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
     DateStore dateStore = Provider.of<DateStore>(context);
     foodStore.isFoodFavourite(widget.dish);
@@ -200,10 +203,13 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                     ),
                     actions: <Widget> [
                             for(String qty in quantityList) RaisedButton(
-                                onPressed: () {
-                                  setQuantityAndMealTimeToDish(qty);
-                                  foodStore.addDishToASpecificDay(widget.dish, dateStore.selectedDate);
-                                  Navigator.of(context).pop(); //TODO mettere che va alla homepage
+                                onPressed:  () async => {
+                                  setQuantityAndMealTimeToDish(qty),
+                                  await mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.selectedDate),
+                                  await Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(builder: (BuildContext context) => HomePage()),
+                                  (Route<dynamic> route) => route is HomePage),
+
                                 },
                                 textColor: Colors.white,
                                 padding: const EdgeInsets.all(0.0),
@@ -236,8 +242,9 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                       FlatButton(
                         child: Text('Remove it!'),
                         onPressed: () {
-                          Navigator.of(context).pop(); //TODO mettere che va alla homepage
-                          foodStore.removeDishFromUserDishesOfSpecificDay(widget.dish, dateStore.selectedDate);
+
+                          mealTimeStore.removeDishOfMealTimeListOfSpecificDay(mealTimeStore.selectedMealTime.index, widget.dish, dateStore.selectedDate);
+
                         },
                       )
                     ],

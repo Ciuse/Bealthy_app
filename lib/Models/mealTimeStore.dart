@@ -121,7 +121,7 @@ abstract class _MealTimeStoreBase with Store {
   }
 
   @action
-  Future<void> removeDishOfMealTimeListOfSpecificDay(int index,Dish dish, DateTime date) async {
+  Future<void> removeDishOfMealTimeListOfSpecificDay(int index, Dish dish, DateTime date) async {
     String dayFix = fixDate(date);
     await (FirebaseFirestore.instance
         .collection("UserDishes")
@@ -135,7 +135,26 @@ abstract class _MealTimeStoreBase with Store {
     getDishesOfMealTimeList(index).removeWhere((element) => element.id == dish.id);
   }
 
+  @action
+  Future<void> addDishOfMealTimeListOfSpecificDay(Dish dish, DateTime day) async {
+    String dayFix = fixDate(day);
+    await (FirebaseFirestore.instance
+        .collection('UserDishes')
+        .doc(auth.currentUser.uid)
+        .collection("DayDishes")
+        .doc(dayFix).set({"virtual": true}));
 
+    await (FirebaseFirestore.instance
+        .collection('UserDishes')
+        .doc(auth.currentUser.uid)
+        .collection("DayDishes")
+        .doc(dayFix)
+        .collection("Dishes")
+        .doc(dish.id)
+        .set(dish.toMapDayDishes()));
+
+    getDishesOfMealTimeList(selectedMealTime.index).add(dish);
+  }
 
   bool isSubstring(String s1, String s2) {
     int M = s1.length;

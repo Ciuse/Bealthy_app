@@ -31,11 +31,11 @@ abstract class _SymptomBase with Store {
   String mealTime;
 
   @observable
-  bool isSymptomInADay=false;
+  bool isSymptomSelectDay=false;
 
   @action
   void setIsSymptomInADay(bool value) {
-    isSymptomInADay = value;
+    isSymptomSelectDay = value;
   }
   @action
   factory _SymptomBase.fromMap(Map<String, dynamic> json) =>

@@ -117,6 +117,15 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
         () => super.removeDishOfMealTimeListOfSpecificDay(index, dish, date));
   }
 
+  final _$addDishOfMealTimeListOfSpecificDayAsyncAction =
+      AsyncAction('_MealTimeStoreBase.addDishOfMealTimeListOfSpecificDay');
+
+  @override
+  Future<void> addDishOfMealTimeListOfSpecificDay(Dish dish, DateTime day) {
+    return _$addDishOfMealTimeListOfSpecificDayAsyncAction
+        .run(() => super.addDishOfMealTimeListOfSpecificDay(dish, day));
+  }
+
   final _$_MealTimeStoreBaseActionController =
       ActionController(name: '_MealTimeStoreBase');
 

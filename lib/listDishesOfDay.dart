@@ -34,15 +34,14 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   Widget build(BuildContext context) {
 
     final mealTimeStore = Provider.of<MealTimeStore>(context);
-    return Observer(builder: (_) => Expanded(
+    return Expanded(
         child: ListView(
           children:<Widget>[
             for( var element in MealTime.values )
-              mealTimeStore.getDishesOfMealTimeList(element.index).isNotEmpty ? listViewForAMealTime(element, mealTimeStore) : SizedBox(width: 0, height: 0),
-
+        Observer(builder: (_) => ListViewForAMealTime(element, mealTimeStore))
           ],
         )
-    ));
+    );
 
 
   }
@@ -143,7 +142,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   }
 
 
-  Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore ){
+  Widget ListViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore ){
     return Column(children:[
       DynamicListTile(mealTime.index), // per ogni meal time setto un testo e un'icona diversa
       ListView.builder(

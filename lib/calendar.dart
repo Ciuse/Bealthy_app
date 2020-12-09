@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'Models/dateStore.dart';
@@ -71,6 +72,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   void _onDaySelected(DateTime day, List events, List holidays) {
     context.read<DateStore>().selectedDate = day;
     context.read<MealTimeStore>().initDishesOfMealTimeList(day);
+    context.read<SymptomStore>().initGetSymptomOfADay(day);
+
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {

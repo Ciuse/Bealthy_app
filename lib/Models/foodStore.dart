@@ -46,9 +46,6 @@ abstract class _FoodStoreBase with Store {
   var yourCreatedDishList = new ObservableList<Dish>();
 
   @observable
-  var yourDishesDayList = new ObservableList<Dish>();
-
-  @observable
   var firstCourseDishList = new ObservableList<Dish>();
 
   @observable
@@ -344,46 +341,6 @@ void setBooleanQuantityDish(){
     String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(
         2, '0')}-${date.day.toString().padLeft(2, '0')}";
     return dateSlug;
-  }
-
-
-
-  @action
-  Future<void> addDishToASpecificDay(Dish dish, DateTime day) async {
-    String dayFix = fixDate(day);
-    await (FirebaseFirestore.instance
-        .collection('UserDishes')
-        .doc(auth.currentUser.uid)
-        .collection("DayDishes")
-        .doc(dayFix).set({"virtual": true}));
-
-    await (FirebaseFirestore.instance
-        .collection('UserDishes')
-        .doc(auth.currentUser.uid)
-        .collection("DayDishes")
-        .doc(dayFix)
-        .collection("Dishes")
-        .doc(dish.id)
-        .set(dish.toMapDayDishes()));
-
-        yourDishesDayList.add(dish);
-      }
-
-
-
-  @action
-  Future<void> removeDishFromUserDishesOfSpecificDay(Dish dish, DateTime day) async {
-    String dayFix = fixDate(day);
-    firestoreInstance
-        .collection("UserDishes")
-        .doc(auth.currentUser.uid)
-        .collection("DayDishes")
-        .doc(dayFix)
-        .collection("Dishes")
-        .doc(dish.id)
-        .delete();
-
-    yourDishesDayList..removeWhere((element) => element.id == dish.id);
   }
 
   @action

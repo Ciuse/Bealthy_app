@@ -69,18 +69,19 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
-  final _$isSymptomInADayAtom = Atom(name: '_SymptomBase.isSymptomInADay');
+  final _$isSymptomSelectDayAtom =
+      Atom(name: '_SymptomBase.isSymptomSelectDay');
 
   @override
-  bool get isSymptomInADay {
-    _$isSymptomInADayAtom.reportRead();
-    return super.isSymptomInADay;
+  bool get isSymptomSelectDay {
+    _$isSymptomSelectDayAtom.reportRead();
+    return super.isSymptomSelectDay;
   }
 
   @override
-  set isSymptomInADay(bool value) {
-    _$isSymptomInADayAtom.reportWrite(value, super.isSymptomInADay, () {
-      super.isSymptomInADay = value;
+  set isSymptomSelectDay(bool value) {
+    _$isSymptomSelectDayAtom.reportWrite(value, super.isSymptomSelectDay, () {
+      super.isSymptomSelectDay = value;
     });
   }
 
@@ -104,7 +105,7 @@ id: ${id},
 name: ${name},
 intensity: ${intensity},
 mealTime: ${mealTime},
-isSymptomInADay: ${isSymptomInADay}
+isSymptomSelectDay: ${isSymptomSelectDay}
     ''';
   }
 }

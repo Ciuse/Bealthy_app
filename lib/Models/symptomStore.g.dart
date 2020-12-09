@@ -24,22 +24,6 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
-  final _$symptomOfADayListAtom =
-      Atom(name: '_SymptomStoreBase.symptomOfADayList');
-
-  @override
-  ObservableList<Symptom> get symptomOfADayList {
-    _$symptomOfADayListAtom.reportRead();
-    return super.symptomOfADayList;
-  }
-
-  @override
-  set symptomOfADayList(ObservableList<Symptom> value) {
-    _$symptomOfADayListAtom.reportWrite(value, super.symptomOfADayList, () {
-      super.symptomOfADayList = value;
-    });
-  }
-
   final _$loadDaySymptomAtom = Atom(name: '_SymptomStoreBase.loadDaySymptom');
 
   @override
@@ -94,11 +78,22 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   }
 
   @override
-  void isUserSymptomInADay(Symptom symptom) {
+  void clearUserSymptomInADay() {
     final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
-        name: '_SymptomStoreBase.isUserSymptomInADay');
+        name: '_SymptomStoreBase.clearUserSymptomInADay');
     try {
-      return super.isUserSymptomInADay(symptom);
+      return super.clearUserSymptomInADay();
+    } finally {
+      _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setUserSymptomInADay(String symptomId) {
+    final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
+        name: '_SymptomStoreBase.setUserSymptomInADay');
+    try {
+      return super.setUserSymptomInADay(symptomId);
     } finally {
       _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -108,7 +103,6 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   String toString() {
     return '''
 symptomList: ${symptomList},
-symptomOfADayList: ${symptomOfADayList},
 loadDaySymptom: ${loadDaySymptom}
     ''';
   }
