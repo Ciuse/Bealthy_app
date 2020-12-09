@@ -26,21 +26,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
-  final _$isFavouriteAtom = Atom(name: '_FoodStoreBase.isFavourite');
-
-  @override
-  bool get isFavourite {
-    _$isFavouriteAtom.reportRead();
-    return super.isFavourite;
-  }
-
-  @override
-  set isFavourite(bool value) {
-    _$isFavouriteAtom.reportWrite(value, super.isFavourite, () {
-      super.isFavourite = value;
-    });
-  }
-
   final _$yourCreatedDishListAtom =
       Atom(name: '_FoodStoreBase.yourCreatedDishList');
 
@@ -385,7 +370,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   String toString() {
     return '''
 yourFavouriteDishList: ${yourFavouriteDishList},
-isFavourite: ${isFavourite},
 yourCreatedDishList: ${yourCreatedDishList},
 yourDishesDayList: ${yourDishesDayList},
 firstCourseDishList: ${firstCourseDishList},

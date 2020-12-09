@@ -94,7 +94,7 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   }
 
   @override
-  bool isUserSymptomInADay(Symptom symptom) {
+  void isUserSymptomInADay(Symptom symptom) {
     final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
         name: '_SymptomStoreBase.isUserSymptomInADay');
     try {

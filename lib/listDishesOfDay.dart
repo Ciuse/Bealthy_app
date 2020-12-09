@@ -1,10 +1,7 @@
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:Bealthy_app/dishPageAddToDay.dart';
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
-import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
-import 'package:Bealthy_app/dishPageAddToDay.dart';
 
 
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -35,7 +32,6 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   @override
   Widget build(BuildContext context) {
 
-    final foodStore = Provider.of<FoodStore>(context);
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     return Observer(builder: (_) => Expanded(
         child: ListView(

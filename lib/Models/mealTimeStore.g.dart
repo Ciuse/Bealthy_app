@@ -101,6 +101,20 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
         () => super.removeDishOfMealTimeListOfSpecificDay(index, dish, date));
   }
 
+  final _$_MealTimeStoreBaseActionController =
+      ActionController(name: '_MealTimeStoreBase');
+
+  @override
+  ObservableList<dynamic> getDishesOfMealTimeList(int mealTimeIndex) {
+    final _$actionInfo = _$_MealTimeStoreBaseActionController.startAction(
+        name: '_MealTimeStoreBase.getDishesOfMealTimeList');
+    try {
+      return super.getDishesOfMealTimeList(mealTimeIndex);
+    } finally {
+      _$_MealTimeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

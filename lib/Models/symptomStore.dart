@@ -83,14 +83,14 @@ abstract class _SymptomStoreBase with Store {
   }
 
   @action
-  bool isUserSymptomInADay (Symptom symptom)  {
+  void isUserSymptomInADay (Symptom symptom)  {
     bool found= false;
     symptomOfADayList.forEach((element) {
       if(element.name.compareTo(symptom.name)==0){
-        found =true;
+        found=true;
       }
     });
-    return found;
+    symptom.setIsSymptomInADay(found);
   }
 
   String fixDate(DateTime date) {

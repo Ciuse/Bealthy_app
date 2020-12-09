@@ -84,6 +84,34 @@ mixin _$Dish on _DishBase, Store {
     });
   }
 
+  final _$isFavouriteAtom = Atom(name: '_DishBase.isFavourite');
+
+  @override
+  bool get isFavourite {
+    _$isFavouriteAtom.reportRead();
+    return super.isFavourite;
+  }
+
+  @override
+  set isFavourite(bool value) {
+    _$isFavouriteAtom.reportWrite(value, super.isFavourite, () {
+      super.isFavourite = value;
+    });
+  }
+
+  final _$_DishBaseActionController = ActionController(name: '_DishBase');
+
+  @override
+  void setIsFavourite(bool value) {
+    final _$actionInfo = _$_DishBaseActionController.startAction(
+        name: '_DishBase.setIsFavourite');
+    try {
+      return super.setIsFavourite(value);
+    } finally {
+      _$_DishBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -91,7 +119,8 @@ id: ${id},
 name: ${name},
 category: ${category},
 qty: ${qty},
-mealTime: ${mealTime}
+mealTime: ${mealTime},
+isFavourite: ${isFavourite}
     ''';
   }
 }

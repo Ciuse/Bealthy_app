@@ -69,13 +69,42 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$isSymptomInADayAtom = Atom(name: '_SymptomBase.isSymptomInADay');
+
+  @override
+  bool get isSymptomInADay {
+    _$isSymptomInADayAtom.reportRead();
+    return super.isSymptomInADay;
+  }
+
+  @override
+  set isSymptomInADay(bool value) {
+    _$isSymptomInADayAtom.reportWrite(value, super.isSymptomInADay, () {
+      super.isSymptomInADay = value;
+    });
+  }
+
+  final _$_SymptomBaseActionController = ActionController(name: '_SymptomBase');
+
+  @override
+  void setIsSymptomInADay(bool value) {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.setIsSymptomInADay');
+    try {
+      return super.setIsSymptomInADay(value);
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 id: ${id},
 name: ${name},
 intensity: ${intensity},
-mealTime: ${mealTime}
+mealTime: ${mealTime},
+isSymptomInADay: ${isSymptomInADay}
     ''';
   }
 }

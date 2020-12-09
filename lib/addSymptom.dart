@@ -60,10 +60,10 @@ class __AddSymptomState extends State<AddSymptom>{
                                   onPressed: () {
                                   },
                                   elevation: 5.0,
-                                  fillColor: symptomStore.isUserSymptomInADay(symptomStore.symptomList[index]) ? Colors.blue : Colors.white,
+                                  fillColor: symptomStore.symptomList[index].isSymptomInADay ? Colors.blue : Colors.white,
                                   child: Icon(
-                                    symptomStore.isUserSymptomInADay(symptomStore.symptomList[index]) ? Icons.favorite : Icons.favorite_border,
-                                    color: symptomStore.isUserSymptomInADay(symptomStore.symptomList[index]) ? Colors.pinkAccent : null,
+                                    symptomStore.symptomList[index].isSymptomInADay ? Icons.favorite : Icons.favorite_border,
+                                    color: symptomStore.symptomList[index].isSymptomInADay ? Colors.pinkAccent : null,
                                     size: 28.0,
                                   ),
                                   padding: EdgeInsets.all(15.0),

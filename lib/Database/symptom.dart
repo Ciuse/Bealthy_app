@@ -30,6 +30,13 @@ abstract class _SymptomBase with Store {
   @observable
   String mealTime;
 
+  @observable
+  bool isSymptomInADay=false;
+
+  @action
+  void setIsSymptomInADay(bool value) {
+    isSymptomInADay = value;
+  }
   @action
   factory _SymptomBase.fromMap(Map<String, dynamic> json) =>
       Symptom(

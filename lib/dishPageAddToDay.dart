@@ -1,4 +1,3 @@
-
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -80,13 +79,13 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
         actions: <Widget>[
           Observer(builder: (_) =>IconButton(
               icon: Icon(
-                foodStore.isFavourite ? Icons.favorite : Icons.favorite_border,
-                color: foodStore.isFavourite ? Colors.pinkAccent : null,
+                widget.dish.isFavourite ? Icons.favorite : Icons.favorite_border,
+                color: widget.dish.isFavourite ? Colors.pinkAccent : null,
 
               ),
               onPressed: () {
 
-                if (foodStore.isFavourite) {
+                if (widget.dish.isFavourite) {
                   foodStore.removeFavouriteDish(widget.dish);
                 } else {
                   foodStore.addFavouriteDish(widget.dish);

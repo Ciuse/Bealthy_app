@@ -1,4 +1,3 @@
-import 'package:Bealthy_app/Database/buttonStatusModel.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,8 +41,6 @@ abstract class _FoodStoreBase with Store {
   @observable
   var yourFavouriteDishList = new ObservableList<Dish>();
 
-  @observable
-  bool isFavourite;
 
   @observable
   var yourCreatedDishList = new ObservableList<Dish>();
@@ -321,6 +318,7 @@ void setBooleanQuantityDish(){
             category: dish.get("category"),
             qty: null,
             );
+        toAdd.setIsFavourite(true);
         yourFavouriteDishList.add(toAdd);
       });
     })
@@ -329,7 +327,13 @@ void setBooleanQuantityDish(){
 
   @action
   void isFoodFavourite(Dish dish) {
-    isFavourite = yourFavouriteDishList.contains(dish);
+    bool found= false;
+    yourFavouriteDishList.forEach((element) {
+      if(element.name.compareTo(dish.name)==0){
+        found =true;
+      }
+    });
+    dish.isFavourite=found;
   }
 
   String fixDate(DateTime date) {
@@ -375,11 +379,12 @@ void setBooleanQuantityDish(){
         .doc(dish.id)
         .delete();
 
-    yourDishesDayList.remove(dish);
+    yourDishesDayList..removeWhere((element) => element.id == dish.id);
   }
 
   @action
   Future<void> removeFavouriteDish(Dish dish) async {
+    dish.setIsFavourite(false);
     firestoreInstance
         .collection("DishesFavouriteByUsers")
         .doc(auth.currentUser.uid)
@@ -387,12 +392,12 @@ void setBooleanQuantityDish(){
         .doc(dish.id)
         .delete();
 
-    yourFavouriteDishList.remove(dish);
-    isFoodFavourite(dish);
+    yourFavouriteDishList.removeWhere((element) => element.id == dish.id);
   }
 
   @action
   Future<void> addFavouriteDish(Dish dish) async {
+    dish.setIsFavourite(true);
     firestoreInstance
         .collection("DishesFavouriteByUsers")
         .doc(auth.currentUser.uid)
@@ -401,7 +406,6 @@ void setBooleanQuantityDish(){
         .set(dish.toMapDishesCreatedByUser());
 
     yourFavouriteDishList.add(dish);
-    isFoodFavourite(dish);
   }
 
   //Inizializza il database online dividendo i cibi nelle varie categorie

@@ -36,6 +36,14 @@ abstract class _DishBase with Store {
   @observable
   String mealTime;
 
+  @observable
+  bool isFavourite= false;
+
+  @action
+  void setIsFavourite(bool value) {
+    isFavourite = value;
+  }
+
   @action
   factory _DishBase.fromMap(Map<String, dynamic> json) =>
       Dish(
