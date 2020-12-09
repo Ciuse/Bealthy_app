@@ -39,9 +39,6 @@ abstract class _FoodStoreBase with Store {
   bool storeDishInitialized = false;
   bool booleanQuantityDishInitialized = false;
 
-  ButtonStatusModel a = ButtonStatusModel();
-
-
   @observable
   var yourFavouriteDishList = new ObservableList<Dish>();
 
