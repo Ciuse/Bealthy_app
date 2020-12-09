@@ -1,6 +1,7 @@
 
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
+import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,9 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
      return rootBundle.load("images/"+widget.dish.id+".jpg");
   }
 
-  void setQuantityToDish(String qty){
+  void setQuantityAndMealTimeToDish(String qty){
+    MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context, listen: false);
+    widget.dish.mealTime = mealTimeStore.selectedMealTime.toString().split('.').last;
     widget.dish.qty = qty;
   }
 
@@ -199,7 +202,7 @@ class _DishPageAddToDayState extends State<DishPageAddToDay>{
                     actions: <Widget> [
                             for(String qty in quantityList) RaisedButton(
                                 onPressed: () {
-                                  setQuantityToDish(qty);
+                                  setQuantityAndMealTimeToDish(qty);
                                   foodStore.addDishToASpecificDay(widget.dish, dateStore.selectedDate);
                                   Navigator.of(context).pop(); //TODO mettere che va alla homepage
                                 },
