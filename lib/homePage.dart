@@ -1,4 +1,6 @@
 import 'package:Bealthy_app/Models/dateStore.dart';
+import 'package:Bealthy_app/Models/foodStore.dart';
+import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'addSymptom.dart';
@@ -15,6 +17,7 @@ class HomePageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mealTimeStore = Provider.of<MealTimeStore>(context);
     final dateModel = Provider.of<DateStore>(context);
     return Scaffold(
       body: Column(children: [
@@ -54,6 +57,7 @@ class HomePageWidget extends StatelessWidget {
                                   RawMaterialButton(
 
                                     onPressed: () {
+                                      mealTimeStore.changeCurrentMealTime(0);
                                       Navigator.pop(context);
                                       Navigator.push(
                                         context,
@@ -63,13 +67,13 @@ class HomePageWidget extends StatelessWidget {
                                     elevation: 2.0,
                                     fillColor: Colors.white,
                                     child: Icon(
-                                      Icons.food_bank_outlined,
+                                      Icons.breakfast_dining,
                                       size: 35.0,
                                     ),
                                     padding: EdgeInsets.all(15.0),
                                     shape: CircleBorder(),
                                   ),
-                                  Text("Foods",style: TextStyle(
+                                  Text("Breakfast",style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.normal,
                                     fontFamily: 'Open Sans',
@@ -88,23 +92,97 @@ class HomePageWidget extends StatelessWidget {
                                   RawMaterialButton(
 
                                     onPressed: () {
+                                      mealTimeStore.changeCurrentMealTime(1);
                                       Navigator.pop(context);
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => AddSymptom()),
+                                        MaterialPageRoute(builder: (context) => AddMeal()),
                                       );
                                     },
                                     elevation: 2.0,
                                     fillColor: Colors.white,
 
                                     child: Icon(
-                                      Icons.medical_services_outlined,
+                                      Icons.lunch_dining,
                                       size: 35.0,
                                     ),
                                     padding: EdgeInsets.all(15.0),
                                     shape: CircleBorder(),
                                   ),
-                                  Text("Symptom",style: TextStyle(
+                                  Text("Lunch",style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Open Sans',
+                                    decoration: TextDecoration.none,
+                                    letterSpacing: 1.0,
+                                    wordSpacing: 5.0,
+                                    color: Colors.black,
+                                  ),)
+                                ],
+                              )],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  RawMaterialButton(
+
+                                    onPressed: () {
+                                      mealTimeStore.changeCurrentMealTime(2);
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => AddMeal()),
+                                      );
+                                    },
+                                    elevation: 2.0,
+                                    fillColor: Colors.white,
+                                    child: Icon(
+                                      Icons.fastfood_rounded,
+                                      size: 35.0,
+                                    ),
+                                    padding: EdgeInsets.all(15.0),
+                                    shape: CircleBorder(),
+                                  ),
+                                  Text("Snack",style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Open Sans',
+                                    decoration: TextDecoration.none,
+                                    letterSpacing: 1.0,
+                                    wordSpacing: 5.0,
+                                    color: Colors.black,
+                                  ),)
+                                ],
+                              ),
+
+                              Padding(padding: EdgeInsets.all(15)),
+
+                              Column(
+                                children: [
+                                  RawMaterialButton(
+
+                                    onPressed: () {
+                                      mealTimeStore.changeCurrentMealTime(3);
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => AddMeal()),
+                                      );
+                                    },
+                                    elevation: 2.0,
+                                    fillColor: Colors.white,
+
+                                    child: Icon(
+                                      Icons.dinner_dining,
+                                      size: 35.0,
+                                    ),
+                                    padding: EdgeInsets.all(15.0),
+                                    shape: CircleBorder(),
+                                  ),
+                                  Text("Dinner",style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.normal,
                                     fontFamily: 'Open Sans',

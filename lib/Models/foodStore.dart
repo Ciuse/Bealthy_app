@@ -1,8 +1,10 @@
-import 'package:mobx/mobx.dart';
+import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../Database/dish.dart';
-import '../Database/ingredient.dart';
+import 'package:mobx/mobx.dart';
+import 'package:Bealthy_app/Database/buttonStatusModel.dart';
+import '../Database/Dish.dart';
+import '../Database/Ingredient.dart';
 
 // Include generated file
 part 'foodStore.g.dart';
@@ -74,6 +76,10 @@ abstract class _FoodStoreBase with Store {
 
   @observable
   var isSelected = new ObservableList<bool>();
+
+
+
+
 
   @action
   Future<void> initStore() async {

@@ -1,4 +1,5 @@
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
+import 'package:Bealthy_app/addMeal.dart';
 import 'package:Bealthy_app/dishPageAddToDay.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -46,11 +47,105 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   }
 
+  Widget DynamicListTile(int index){
+    final mealTimeStore = Provider.of<MealTimeStore>(context);
+    switch(index) {
+      case 0: {
+        return  ListTile(
+          title: Text(MealTime.Breakfast.toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
+          trailing: Row (
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.breakfast_dining),
+                  tooltip: 'Add new dish to Breakfast',
+                  onPressed: () {
+                    mealTimeStore.changeCurrentMealTime(index);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddMeal()),
+                    );
+                  },
+                ),
+              ]),
+        );
+      }
+      break;
+
+      case 1: {
+        return ListTile(
+          title: Text(MealTime.Lunch.toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
+          trailing: Row (
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.lunch_dining),
+                  tooltip: 'Add new dish to Lunch',
+                  onPressed: () {
+                    mealTimeStore.changeCurrentMealTime(index);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddMeal()),
+                    );
+                  },
+                ),
+              ]),
+        );
+      }
+      break;
+      case 2: {
+        return ListTile(
+          title: Text(MealTime.Snack.toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
+          trailing: Row (
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.fastfood_rounded),
+                  tooltip: 'Add new dish to Snack',
+                  onPressed: () {
+                    mealTimeStore.changeCurrentMealTime(index);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddMeal()),
+                    );
+                  },
+                ),
+              ]),
+        );
+      }
+      break;
+      case 3: {
+        return ListTile(
+          title: Text(MealTime.Dinner.toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
+          trailing: Row (
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.dinner_dining),
+                  tooltip: 'Add new dish to Dinner',
+                  onPressed: () {
+                    mealTimeStore.changeCurrentMealTime(index);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddMeal()),
+                    );
+                  },
+                ),
+              ]),
+        );
+      }
+      break;
+      default: {
+        print("No meal time found");
+      }
+      break;
+    }
+  }
+
 
   Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore ){
     return Column(children:[
-      Text(MealTime.values[mealTime.index].toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
-
+      DynamicListTile(mealTime.index), // per ogni meal time setto un testo e un'icona diversa
       ListView.builder(
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
@@ -136,4 +231,3 @@ class ConstantsList  {
   ];
 
 }
-

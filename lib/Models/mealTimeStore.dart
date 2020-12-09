@@ -32,6 +32,17 @@ abstract class _MealTimeStoreBase with Store {
   @observable
   var dinnerDishesList = new ObservableList<Dish>();
 
+  @observable
+  MealTime selectedMealTime;
+
+
+  @action
+  void changeCurrentMealTime(int mealTimeIndex) {
+
+    this.selectedMealTime = MealTime.values[mealTimeIndex];
+    print(this.selectedMealTime);
+
+  }
 
   @action
   Future<void> initDishesOfMealTimeList(DateTime day) async {
