@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:Bealthy_app/Database/Dish.dart';
-import 'package:Bealthy_app/Database/Ingredient.dart';
+import 'package:Bealthy_app/Database/dish.dart';
+import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

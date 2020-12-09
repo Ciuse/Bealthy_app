@@ -1,4 +1,4 @@
-import 'package:Bealthy_app/Database/Symptom.dart';
+import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

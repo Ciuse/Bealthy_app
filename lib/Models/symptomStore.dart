@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Bealthy_app/Database/Symptom.dart';
+import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

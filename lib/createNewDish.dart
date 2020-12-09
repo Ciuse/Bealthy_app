@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-import 'Database/Dish.dart';
-import 'Database/Ingredient.dart';
+import 'Database/dish.dart';
+import 'Database/ingredient.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
 
