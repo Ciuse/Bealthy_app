@@ -73,6 +73,22 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
     });
   }
 
+  final _$selectedMealTimeAtom =
+      Atom(name: '_MealTimeStoreBase.selectedMealTime');
+
+  @override
+  MealTime get selectedMealTime {
+    _$selectedMealTimeAtom.reportRead();
+    return super.selectedMealTime;
+  }
+
+  @override
+  set selectedMealTime(MealTime value) {
+    _$selectedMealTimeAtom.reportWrite(value, super.selectedMealTime, () {
+      super.selectedMealTime = value;
+    });
+  }
+
   final _$initDishesOfMealTimeListAsyncAction =
       AsyncAction('_MealTimeStoreBase.initDishesOfMealTimeList');
 
@@ -105,6 +121,17 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
       ActionController(name: '_MealTimeStoreBase');
 
   @override
+  void changeCurrentMealTime(int mealTimeIndex) {
+    final _$actionInfo = _$_MealTimeStoreBaseActionController.startAction(
+        name: '_MealTimeStoreBase.changeCurrentMealTime');
+    try {
+      return super.changeCurrentMealTime(mealTimeIndex);
+    } finally {
+      _$_MealTimeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   ObservableList<dynamic> getDishesOfMealTimeList(int mealTimeIndex) {
     final _$actionInfo = _$_MealTimeStoreBaseActionController.startAction(
         name: '_MealTimeStoreBase.getDishesOfMealTimeList');
@@ -121,7 +148,8 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
 breakfastDishesList: ${breakfastDishesList},
 lunchDishesList: ${lunchDishesList},
 snackDishesList: ${snackDishesList},
-dinnerDishesList: ${dinnerDishesList}
+dinnerDishesList: ${dinnerDishesList},
+selectedMealTime: ${selectedMealTime}
     ''';
   }
 }

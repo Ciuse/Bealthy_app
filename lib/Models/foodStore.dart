@@ -1,10 +1,8 @@
-import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
-import 'package:Bealthy_app/Database/buttonStatusModel.dart';
-import '../Database/Dish.dart';
-import '../Database/Ingredient.dart';
+import '../Database/dish.dart';
+import '../Database/ingredient.dart';
 
 // Include generated file
 part 'foodStore.g.dart';
