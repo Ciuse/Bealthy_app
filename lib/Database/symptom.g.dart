@@ -54,16 +54,31 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$frequencyAtom = Atom(name: '_SymptomBase.frequency');
+
+  @override
+  int get frequency {
+    _$frequencyAtom.reportRead();
+    return super.frequency;
+  }
+
+  @override
+  set frequency(int value) {
+    _$frequencyAtom.reportWrite(value, super.frequency, () {
+      super.frequency = value;
+    });
+  }
+
   final _$mealTimeAtom = Atom(name: '_SymptomBase.mealTime');
 
   @override
-  String get mealTime {
+  List<dynamic> get mealTime {
     _$mealTimeAtom.reportRead();
     return super.mealTime;
   }
 
   @override
-  set mealTime(String value) {
+  set mealTime(List<dynamic> value) {
     _$mealTimeAtom.reportWrite(value, super.mealTime, () {
       super.mealTime = value;
     });
@@ -104,6 +119,7 @@ mixin _$Symptom on _SymptomBase, Store {
 id: ${id},
 name: ${name},
 intensity: ${intensity},
+frequency: ${frequency},
 mealTime: ${mealTime},
 isSymptomSelectDay: ${isSymptomSelectDay}
     ''';

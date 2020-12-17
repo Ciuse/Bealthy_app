@@ -3,7 +3,7 @@ import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import 'listOfSymptomsOfDay.dart';
+import 'listSymptomsOfDay.dart';
 import 'calendar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';

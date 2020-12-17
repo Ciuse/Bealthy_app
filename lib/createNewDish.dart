@@ -9,6 +9,7 @@ import 'Database/dish.dart';
 import 'Database/ingredient.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
+import 'Database/enumerators.dart';
 
 class CreateNewDish extends StatefulWidget {
   @override

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'Database/enumerators.dart';
 import 'Database/dish.dart';
 import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'createNewDish.dart';
-import 'package:Bealthy_app/dishPageAddToDay.dart';
+import 'package:Bealthy_app/dishPage.dart';
 import 'package:Bealthy_app/searchDishesList.dart';
 
 
@@ -142,7 +143,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                         onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: dish,
+                            MaterialPageRoute(builder: (context) => DishPage(dish: dish,
                         createdByUser: foodStore.isSubstring("User", dish.id,), canBeAddToADay: true,),
                           ))
                         },
@@ -242,7 +243,7 @@ class _CategoryDishListState extends State<CategoryDishList> {
                         onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DishPageAddToDay(dish: item, createdByUser: false,canBeAddToADay: true)),
+                            MaterialPageRoute(builder: (context) => DishPage(dish: item, createdByUser: false,canBeAddToADay: true)),
                           )
                         },
                         color: Colors.orange,
@@ -300,7 +301,7 @@ class _YourDishListState extends State<YourDishList> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
-                                    DishPageAddToDay(dish: item, createdByUser: true, canBeAddToADay: true),
+                                    DishPage(dish: item, createdByUser: true, canBeAddToADay: true),
                                 )
                               )
                             },

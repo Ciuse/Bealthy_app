@@ -1,11 +1,13 @@
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:Bealthy_app/addMeal.dart';
-import 'package:Bealthy_app/dishPageAddToDay.dart';
+import 'package:Bealthy_app/dishPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
 import 'package:flutter_mobx/flutter_mobx.dart';
+
+import 'Database/enumerators.dart';
 
 
 class ListDishesOfDay extends StatefulWidget {
@@ -161,7 +163,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                   child: ListTile(
                     onTap: ()=> { Navigator.push(
                       context, MaterialPageRoute(builder: (context) =>
-                        DishPageAddToDay(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
+                        DishPage(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
                             createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),canBeAddToADay:false)
                     ),
                     )
@@ -178,7 +180,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) =>
-                                      DishPageAddToDay(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
+                                      DishPage(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
                                           createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),canBeAddToADay:false)));
                             },
                             itemBuilder: (BuildContext context){

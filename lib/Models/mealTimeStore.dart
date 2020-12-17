@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/dish.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobx/mobx.dart';
@@ -7,13 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 // Include generated file
 part 'mealTimeStore.g.dart';
-
-enum MealTime{
-  Breakfast,
-  Lunch,
-  Snack,
-  Dinner
-}
 
 FirebaseAuth auth = FirebaseAuth.instance;
 

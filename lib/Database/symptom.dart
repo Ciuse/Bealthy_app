@@ -28,7 +28,9 @@ abstract class _SymptomBase with Store {
   @observable
   int intensity;
   @observable
-  String mealTime;
+  int frequency;
+  @observable
+  List<dynamic> mealTime; //TODO fare una lista di stringe o cmq mealtime
 
   @observable
   bool isSymptomSelectDay=false;

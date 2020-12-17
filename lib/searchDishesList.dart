@@ -7,7 +7,7 @@ import 'Database/dish.dart';
 import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:Bealthy_app/dishPageAddToDay.dart';
+import 'package:Bealthy_app/dishPage.dart';
 
 
 class searchDishesList extends StatefulWidget {
@@ -109,7 +109,7 @@ class _searchDishesListState extends State<searchDishesList>{
                                     child: ListTile(
                                       onTap: ()=> { Navigator.push(
                                         context, MaterialPageRoute(builder: (context) =>
-                                          DishPageAddToDay(dish: foodStore.resultsList[index],
+                                          DishPage(dish: foodStore.resultsList[index],
                                               createdByUser: foodStore.isSubstring("User", foodStore.resultsList[index].id),canBeAddToADay:true)
                                       ),
                                       )

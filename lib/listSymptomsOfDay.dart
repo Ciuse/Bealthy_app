@@ -1,5 +1,7 @@
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
+import 'package:Bealthy_app/allSymptomsPage.dart';
+import 'package:Bealthy_app/symptomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -34,16 +36,45 @@ class _AddSymptomState extends State<AddSymptom>{
     final symptomStore = Provider.of<SymptomStore>(context);
     return SizedBox( // Horizontal ListView
       height: 80,
-      child:  Observer(builder: (_) => ListView.builder(
-                itemCount: symptomStore.symptomList.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Observer(builder: (_) => Container(
+      child:  Observer(builder: (_) => ListView(
+          scrollDirection: Axis.horizontal,
+          children:[
+            Container(
+                width: 70,
+                alignment: Alignment.center,
+                color: Colors.transparent,
+                child:  RawMaterialButton(
+                  onPressed: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AllSymptomsPage()))
+                  },
+                  elevation: 5.0,
+                  fillColor: Colors.white,
+                  child: Icon(
+                    Icons.apps_rounded,
+                    size: 28.0,
+                  ),
+                  padding: EdgeInsets.all(15.0),
+                  shape: CircleBorder(),
+
+                )),
+            ListView.builder(
+              itemCount: symptomStore.symptomList.length,
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Observer(builder: (_) => Container(
                     width: 70,
                     alignment: Alignment.center,
                     color: Colors.transparent,
                     child:  RawMaterialButton(
-                      onPressed: () {
+                      onPressed: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomList[index]))
+                        )
                       },
                       elevation: 5.0,
                       fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.blue : Colors.white,
@@ -58,13 +89,16 @@ class _AddSymptomState extends State<AddSymptom>{
                     )),
                   );
                 },
-              )),
+              )
+      ]
+      )
+      ),
 
     );
   }
 }
 
-
+/*
 List<Widget> _buildRowList(SymptomStore symptomStore) {
 
   int i =0;
@@ -107,4 +141,4 @@ List<Widget> _buildRowList(SymptomStore symptomStore) {
 
   return lines;
 }
-
+*/

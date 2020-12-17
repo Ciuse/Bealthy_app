@@ -3,16 +3,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'Database/symptom.dart';
 
-class SymptomPage extends StatefulWidget {
+class AllSymptomsPage extends StatefulWidget {
 
-  final Symptom symptom;
-  SymptomPage({@required this.symptom});
 
   @override
-  _SymptomPageState createState() => _SymptomPageState();
+  _AllSymptomsPageState createState() => _AllSymptomsPageState();
 }
 
-class _SymptomPageState extends State<SymptomPage> {
+class _AllSymptomsPageState extends State<AllSymptomsPage> {
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
 
@@ -26,8 +24,8 @@ class _SymptomPageState extends State<SymptomPage> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.symptom.name),
+          title: Text("Symptoms"),
         ),
-        body: Text("Sintomo"));
+        body: Text("Tutti i sintomi"));
   }
 }

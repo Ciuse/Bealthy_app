@@ -7,23 +7,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'Database/enumerators.dart';
 
 import 'Database/dish.dart';
 import 'Models/foodStore.dart';
-import 'homePage.dart';
 import 'main.dart';
-class DishPageAddToDay extends StatefulWidget {
+
+class DishPage extends StatefulWidget {
 
   final Dish dish;
   final bool createdByUser;
   final bool canBeAddToADay;
-  DishPageAddToDay({@required this.dish, @required this.createdByUser, @required this.canBeAddToADay});
+  DishPage({@required this.dish, @required this.createdByUser, @required this.canBeAddToADay});
 
   @override
-  _DishPageAddToDayState createState() => _DishPageAddToDayState();
+  _DishPageState createState() => _DishPageState();
 }
 
-class _DishPageAddToDayState extends State<DishPageAddToDay>{
+class _DishPageState extends State<DishPage>{
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
 

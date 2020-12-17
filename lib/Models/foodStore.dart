@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
@@ -7,20 +8,6 @@ import '../Database/ingredient.dart';
 // Include generated file
 part 'foodStore.g.dart';
 
-enum Category {
-  First_Course, //ANTIPASTI
-  Main_Course, //PRIMI
-  Second_Course, //SECONDI
-  Side, //CONTORNI
-  Desserts, //DOLCE
-  Drinks, //BEVANDE
-}
-
-enum Quantity {
-  Little, //Poca
-  Normal, //Media
-  Lots, //Tanta
-}
 
 //flutter packages pub run build_runner build
 //flutter packages pub run build_runner watch

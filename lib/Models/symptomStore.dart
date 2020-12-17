@@ -52,8 +52,7 @@ abstract class _SymptomStoreBase with Store {
 
         Symptom i = new Symptom(id:result.id,name:result.get("name"));
         symptomList.add(i);
-        print(i);
-        print(i.isSymptomSelectDay);
+
       }
       );
     }));
@@ -71,10 +70,11 @@ abstract class _SymptomStoreBase with Store {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((symptom) {
 
+
         Symptom toAdd = new Symptom(
           id: symptom.id,
           name: symptom.get("name"),
-          mealTime: symptom.get("mealTime"),
+          mealTime: symptom.get("mealTime")
         );
         toAdd.isSymptomSelectDay=true;
         symptomListOfSpecificDay.add(toAdd);
@@ -95,15 +95,13 @@ abstract class _SymptomStoreBase with Store {
   void setUserSymptomInADay (String symptomId)  {
     symptomList.forEach((element) {
       if(element.id.compareTo(symptomId)==0){
-        print("entrato");
         element.isSymptomSelectDay = true;
       }
     });
     symptomList.forEach((element) {
-      print(element.name);
-      print(element.isSymptomSelectDay);
       });
   }
+
 
 
   String fixDate(DateTime date) {
