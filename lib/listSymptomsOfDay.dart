@@ -34,6 +34,7 @@ class _AddSymptomState extends State<AddSymptom>{
   @override
   Widget build(BuildContext context) {
     final symptomStore = Provider.of<SymptomStore>(context);
+
     return SizedBox( // Horizontal ListView
       height: 80,
       child:  Observer(builder: (_) => ListView(

@@ -57,6 +57,28 @@ mixin _$DateStore on _DateStoreBase, Store {
   }
 
   @override
+  void nextDay(DateTime day) {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.nextDay');
+    try {
+      return super.nextDay(day);
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void previousDay(DateTime day) {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.previousDay');
+    try {
+      return super.previousDay(day);
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedDate: ${selectedDate},

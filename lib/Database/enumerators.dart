@@ -27,3 +27,9 @@ enum Intensity{
   Snack,
   Dinner
 }
+
+enum FormatAnimation
+{
+  slide,
+  scale
+}
