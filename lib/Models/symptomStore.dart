@@ -36,7 +36,7 @@ abstract class _SymptomStoreBase with Store {
   ObservableFuture loadDaySymptom;
 
   @action
-  Future<void> initGetSymptomOfADay(DateTime day) {
+  void initGetSymptomOfADay(DateTime day) {
     _getSymptomOfADay(day);
   }
 

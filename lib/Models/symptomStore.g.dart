@@ -84,7 +84,7 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
       ActionController(name: '_SymptomStoreBase');
 
   @override
-  Future<void> initGetSymptomOfADay(DateTime day) {
+  void initGetSymptomOfADay(DateTime day) {
     final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
         name: '_SymptomStoreBase.initGetSymptomOfADay');
     try {
