@@ -86,13 +86,13 @@ Widget modifyWidget(Symptom symptom,BuildContext context, SymptomStore symptomSt
           Text("Intensity"),
           Observer(builder: (_) =>
               Slider(
-                divisions: 5,
-                value: symptomStore.rating,
-                label:  "${symptomStore.rating}",
+                divisions: 10,
+                value:  symptom.intensity.toDouble(),
+                label:  "${symptom.intensity}",
                 min: 0,
                 max: 10,
                 onChanged: (val) {
-                  symptomStore.rating = val;
+                  symptom.intensity = val.toInt()  ;
                 },
               )),
         ],
