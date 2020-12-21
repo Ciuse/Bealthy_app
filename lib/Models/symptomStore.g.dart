@@ -24,11 +24,26 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
+  final _$ratingAtom = Atom(name: '_SymptomStoreBase.rating');
+
+  @override
+  double get rating {
+    _$ratingAtom.reportRead();
+    return super.rating;
+  }
+
+  @override
+  set rating(double value) {
+    _$ratingAtom.reportWrite(value, super.rating, () {
+      super.rating = value;
+    });
+  }
+
   final _$initStoreAsyncAction = AsyncAction('_SymptomStoreBase.initStore');
 
   @override
-  Future<void> initStore() {
-    return _$initStoreAsyncAction.run(() => super.initStore());
+  Future<void> initStore(DateTime day) {
+    return _$initStoreAsyncAction.run(() => super.initStore(day));
   }
 
   final _$_getSymptomListAsyncAction =
@@ -85,7 +100,8 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   @override
   String toString() {
     return '''
-symptomList: ${symptomList}
+symptomList: ${symptomList},
+rating: ${rating}
     ''';
   }
 }

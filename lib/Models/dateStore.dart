@@ -29,20 +29,12 @@ abstract class _DateStoreBase with Store {
 
 @action
   void nextDay(DateTime day) {
-    if (day.day == 31) {
-      selectedDate = DateTime(day.year, day.month + 1, 1);
-    } else {
       selectedDate = DateTime(day.year, day.month, day.day+1);
-    }
   }
 
   @action
   void previousDay(DateTime day) {
-    if (day.day == 1) {
-      selectedDate = DateTime(day.year, day.month - 1, 31);
-    } else {
       selectedDate = DateTime(day.year, day.month, day.day-1);
-    }
   }
 
 }

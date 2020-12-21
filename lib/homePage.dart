@@ -3,7 +3,7 @@ import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import 'listSymptomsOfDay.dart';
+import 'symptomsBar.dart';
 import 'calendar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class HomePageWidget extends StatelessWidget {
           thickness: 2.5,
           color: Colors.black87,
         ),
-        SymptomBar(day: dateModel.selectedDate),
+        SymptomsBar(day: dateModel.selectedDate),
         Divider(
           height: 2.5,
           thickness: 2.5,
