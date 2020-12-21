@@ -27,9 +27,10 @@ abstract class _SymptomStoreBase with Store {
   double rating = 0.0;
 
   @action
-  Future<void> initStore() async {
+  Future<void> initStore(DateTime day) async {
     if (!storeInitialized) {
       await _getSymptomList();
+      await getSymptomsOfADay(day);
       storeInitialized = true;
     }
   }

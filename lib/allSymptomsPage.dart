@@ -7,17 +7,16 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'Database/enumerators.dart';
-import 'Database/symptom.dart';
 import 'headerScrollStyle.dart';
 
 
 
 class AllSymptomsPage extends StatefulWidget {
- final headerScrollStyle = const HeaderScrollStyle();
- final formatAnimation = FormatAnimation.slide;
+  final headerScrollStyle = const HeaderScrollStyle();
+  final formatAnimation = FormatAnimation.slide;
 
 
- @override
+  @override
   _AllSymptomsPageState createState() => _AllSymptomsPageState();
 }
 
@@ -77,7 +76,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
           );
         },
         child: _buildHorizontalSwipeWrapper(
-          child: _symptomsContent()
+            child: _symptomsContent()
         ),
       );
     }
@@ -149,20 +148,24 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
 
   Widget _symptomsContent() {
     return
-     Container(
-            child:ReorderableListView(
-                children: [
-          for(final symptom in symptomStore.symptomList )
-            ListTile(
-              key: Key(symptom.id),
-              title: Text(symptom.name, style: TextStyle(fontSize: 22.0)),
-              leading: FlutterLogo(),
-            )
-        ],
-        onReorder: (oldIndex, newIndex) {
-          symptomStore.reorderList(oldIndex, newIndex);
-        }
-    ));
+      Container(
+          child:ReorderableListView(
+              children: [
+                for(var symptom in symptomStore.symptomList )
+                  ListTile(
+                    key: Key(symptom.id),
+                    title: Text(symptom.name, style: TextStyle(fontSize: 22.0)),
+                    leading: Icon(
+                      symptom.isSymptomSelectDay ? Icons.favorite : Icons.favorite_border,
+                      color: symptom.isSymptomSelectDay ? Colors.pinkAccent : null,
+                      size: 28.0,
+                    ),
+                  )
+              ],
+              onReorder: (oldIndex, newIndex) {
+                symptomStore.reorderList(oldIndex, newIndex);
+              }
+          ));
   }
 
   void _onHorizontalSwipe(DismissDirection direction) {

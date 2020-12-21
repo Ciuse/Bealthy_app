@@ -11,6 +11,7 @@ import 'Database/enumerators.dart';
 
 import 'Database/dish.dart';
 import 'Models/foodStore.dart';
+import 'homePage.dart';
 import 'main.dart';
 
 class DishPage extends StatefulWidget {
@@ -44,7 +45,6 @@ class _DishPageState extends State<DishPage>{
   }
 
   List<String> getQuantityName(){
-
     List<String> listToReturn = new List<String>();
     Quantity.values.forEach((element) {
       listToReturn.add(element.toString().split('.').last);
@@ -52,8 +52,20 @@ class _DishPageState extends State<DishPage>{
     return listToReturn;
   }
 
-  Future getImage() async {
+  int getEnumIndex(String name){
+    int i =0;
+    int toReturn=0;
+    MealTime.values.forEach((element) {
+      if (element.toString().contains(name))
+      {
+        toReturn=i;
+      }
+    }
+    );
+    return toReturn;
+  }
 
+  Future getImage() async {
     try {
       return await storage.ref("DishImage/" + widget.dish.id + ".jpg").getDownloadURL();
     }
@@ -88,16 +100,13 @@ class _DishPageState extends State<DishPage>{
               icon: Icon(
                 widget.dish.isFavourite ? Icons.favorite : Icons.favorite_border,
                 color: widget.dish.isFavourite ? Colors.pinkAccent : null,
-
               ),
               onPressed: () {
-
                 if (widget.dish.isFavourite) {
                   foodStore.removeFavouriteDish(widget.dish);
                 } else {
                   foodStore.addFavouriteDish(widget.dish);
                 }
-
                 // do something
               }
           ))
@@ -126,10 +135,6 @@ class _DishPageState extends State<DishPage>{
                                 child: ClipOval(
                                   child: Image.network(remoteString.data, fit: BoxFit.fill),),
                               );
-
-
-
-
                             }
                           }
                           else {
@@ -147,14 +152,11 @@ class _DishPageState extends State<DishPage>{
                               image: AssetImage("images/" + widget.dish.id + ".jpg"),
                             )
                         ));
-
                   }
                 } else{
-
                   return CircularProgressIndicator();
                 }
               }
-
           )
     ),
       Expanded(
@@ -204,13 +206,11 @@ class _DishPageState extends State<DishPage>{
                     ),
                     actions: <Widget> [
                             for(String qty in quantityList) RaisedButton(
-                                onPressed:  () async => {
-                                  setQuantityAndMealTimeToDish(qty),
-                                  await mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.selectedDate),
-                                  await Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(builder: (BuildContext context) => HomePage()),
-                                  (Route<dynamic> route) => route is HomePage),
-
+                                onPressed:  () {
+                                  setQuantityAndMealTimeToDish(qty);
+                                   mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.selectedDate)
+                                       .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                   );
                                 },
                                 textColor: Colors.white,
                                 padding: const EdgeInsets.all(0.0),
@@ -244,7 +244,8 @@ class _DishPageState extends State<DishPage>{
                         child: Text('Remove it!'),
                         onPressed: () {
 
-                          mealTimeStore.removeDishOfMealTimeListOfSpecificDay(mealTimeStore.selectedMealTime.index, widget.dish, dateStore.selectedDate);
+                          mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getEnumIndex(widget.dish.mealTime), widget.dish, dateStore.selectedDate)
+                              .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
 
                         },
                       )

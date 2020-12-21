@@ -1,5 +1,6 @@
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'Models/dateStore.dart';
 import 'package:provider/provider.dart';
@@ -28,10 +29,12 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
-
+  DateStore dateStore;
+  DateTime dateNormalized;
   @override
   void initState() {
     super.initState();
+    dateStore = Provider.of<DateStore>(context, listen: false);
     final _selectedDay = DateTime.now();
 
     _illneses = {
@@ -70,7 +73,13 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
-    context.read<DateStore>().selectedDate = day;
+    dateStore.selectedDate = day;
+    context.read<MealTimeStore>().initDishesOfMealTimeList(day);
+    context.read<SymptomStore>().getSymptomsOfADay(day);
+  }
+
+  void _onDayChangedTab(DateTime day) {
+    dateStore.selectedDate = day;
     context.read<MealTimeStore>().initDishesOfMealTimeList(day);
     context.read<SymptomStore>().getSymptomsOfADay(day);
   }
@@ -85,8 +94,19 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
     context.read<MealTimeStore>().initDishesOfMealTimeList(DateTime.now());
   }
 
+  void reactToDataChange(){
+    reaction((_) => dateStore.selectedDate, (value) => {
+      dateNormalized=DateTime.utc(value.year, value.month, value.day, 12),
+      if(_calendarController.selectedDay!=dateNormalized){
+        _calendarController.setSelectedDay(dateNormalized, isProgrammatic: false),
+        _onDayChangedTab(dateNormalized),
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    reactToDataChange();
     return Container(
       child: new ListView(
 

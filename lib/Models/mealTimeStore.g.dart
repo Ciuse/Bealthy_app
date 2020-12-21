@@ -141,7 +141,7 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
   }
 
   @override
-  ObservableList<dynamic> getDishesOfMealTimeList(int mealTimeIndex) {
+  ObservableList<Dish> getDishesOfMealTimeList(int mealTimeIndex) {
     final _$actionInfo = _$_MealTimeStoreBaseActionController.startAction(
         name: '_MealTimeStoreBase.getDishesOfMealTimeList');
     try {

@@ -47,7 +47,7 @@ abstract class _MealTimeStoreBase with Store {
   }
 
   @action
-  ObservableList getDishesOfMealTimeList(int mealTimeIndex) {
+  ObservableList<Dish> getDishesOfMealTimeList(int mealTimeIndex) {
     switch (mealTimeIndex) {
       case 0:
         {
@@ -126,7 +126,17 @@ abstract class _MealTimeStoreBase with Store {
         .doc(dish.id)
         .delete());
 
-    getDishesOfMealTimeList(index).removeWhere((element) => element.id == dish.id);
+    print(index);
+    print("prima");
+    getDishesOfMealTimeList(index).forEach((element) {
+      print(element.name);
+    });
+    getDishesOfMealTimeList(index).removeWhere((element) => element.id == dish.id); //todo sembra non rimuoverlo3
+    print("dopo");
+
+    getDishesOfMealTimeList(index).forEach((element) {
+      print(element.name);
+    });
   }
 
   @action

@@ -11,15 +11,15 @@ import 'package:provider/provider.dart';
 import 'Models/dateStore.dart';
 
 
-class SymptomBar extends StatefulWidget {
+class SymptomsBar extends StatefulWidget {
   final DateTime day;
-  SymptomBar({@required this.day});
+  SymptomsBar({@required this.day});
 
   @override
-  _SymptomBarState createState() => _SymptomBarState();
+  _SymptomsBarState createState() => _SymptomsBarState();
 }
 
-class _SymptomBarState extends State<SymptomBar>{
+class _SymptomsBarState extends State<SymptomsBar>{
 
 
   @override
@@ -27,8 +27,7 @@ class _SymptomBarState extends State<SymptomBar>{
   void initState() {
     super.initState();
     var store = Provider.of<SymptomStore>(context, listen: false);
-    store.initStore();
-    store.getSymptomsOfADay(widget.day);
+    store.initStore(widget.day);
   }
 
 
