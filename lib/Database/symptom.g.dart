@@ -114,6 +114,50 @@ mixin _$Symptom on _SymptomBase, Store {
   }
 
   @override
+  void setIntensity(int value) {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.setIntensity');
+    try {
+      return super.setIntensity(value);
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFrequency(int value) {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.setFrequency');
+    try {
+      return super.setFrequency(value);
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMealTime(List<dynamic> value) {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.setMealTime');
+    try {
+      return super.setMealTime(value);
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetValue() {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.resetValue');
+    try {
+      return super.resetValue();
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 id: ${id},

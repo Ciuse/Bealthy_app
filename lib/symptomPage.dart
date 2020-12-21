@@ -23,11 +23,10 @@ class _SymptomPageState extends State<SymptomPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.symptom.name),
         ),
-        body: Text("Sintomo"));
+        body: Text(widget.symptom.intensity.toString()));
   }
 }

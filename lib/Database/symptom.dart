@@ -40,6 +40,27 @@ abstract class _SymptomBase with Store {
     isSymptomSelectDay = value;
   }
   @action
+  void setIntensity(int value) {
+    intensity = value;
+  }
+  @action
+  void setFrequency(int value) {
+    frequency = value;
+  }
+  @action
+  void setMealTime(List<dynamic> value) {
+    mealTime = value;
+  }
+
+  @action
+  void resetValue() {
+    setIntensity(0);
+    setFrequency(0);
+    setMealTime(null);
+    setIsSymptomInADay(false);
+  }
+
+  @action
   factory _SymptomBase.fromMap(Map<String, dynamic> json) =>
       Symptom(
           id: json["id"],

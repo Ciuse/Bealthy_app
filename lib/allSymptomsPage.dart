@@ -1,4 +1,5 @@
 import 'package:Bealthy_app/Models/dateStore.dart';
+import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +25,13 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
   DateStore dateStore;
+  SymptomStore symptomStore;
   double animationStartPos=0;
 
   void initState() {
     super.initState();
     dateStore = Provider.of<DateStore>(context, listen: false);
+    symptomStore = Provider.of<SymptomStore>(context, listen: false);
   }
 
   @override
@@ -39,14 +42,12 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
         ),
         body: Column(
           mainAxisSize: MainAxisSize.min,
-    children: [
+          children: [
             Observer(builder: (_) => _buildHeader(dateStore.selectedDate)),
-      Padding(
-        padding:const EdgeInsets.only(bottom: 4.0, left: 8.0, right: 8.0),
-        child: Observer(builder: (_) => _buildContent()),
-      ),
-        ],
-    )
+            Expanded(child:Observer(builder: (_) => _buildContent()),
+            ),
+          ],
+        )
 
     );
   }
@@ -57,10 +58,10 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
             milliseconds: 330
         ),
         curve: Curves.fastOutSlowIn,
-        alignment: Alignment(0, -1),
         vsync: this,
+        alignment: Alignment(0, -1),
         child: _buildHorizontalSwipeWrapper(
-            child:Text(dateStore.selectedDate.toString())
+            child:_symptomsContent()
         ),
       );
     } else {
@@ -76,7 +77,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
           );
         },
         child: _buildHorizontalSwipeWrapper(
-          child: Text(dateStore.selectedDate.toString())
+          child: _symptomsContent()
         ),
       );
     }
@@ -144,6 +145,24 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
       ),
     );
 
+  }
+
+  Widget _symptomsContent() {
+    return
+     Container(
+            child:ReorderableListView(
+                children: [
+          for(final symptom in symptomStore.symptomList )
+            ListTile(
+              key: Key(symptom.id),
+              title: Text(symptom.name, style: TextStyle(fontSize: 22.0)),
+              leading: FlutterLogo(),
+            )
+        ],
+        onReorder: (oldIndex, newIndex) {
+          symptomStore.reorderList(oldIndex, newIndex);
+        }
+    ));
   }
 
   void _onHorizontalSwipe(DismissDirection direction) {

@@ -16,10 +16,9 @@ class SymptomStore = _SymptomStoreBase with _$SymptomStore;
 
 // The store-class
 abstract class _SymptomStoreBase with Store {
+
   final firestoreInstance = FirebaseFirestore.instance;
   bool storeInitialized = false;
-  @observable
-  var symptomListOfSpecificDay = new ObservableList<Symptom>();
 
   @observable
   var symptomList = new ObservableList<Symptom>();
@@ -31,16 +30,6 @@ abstract class _SymptomStoreBase with Store {
       storeInitialized = true;
     }
   }
-
-  @observable
-  ObservableFuture loadDaySymptom;
-
-  @action
-  void initGetSymptomOfADay(DateTime day) {
-    _getSymptomOfADay(day);
-  }
-
-
 
   @action
   Future<void> _getSymptomList() async {
@@ -59,8 +48,23 @@ abstract class _SymptomStoreBase with Store {
   }
 
   @action
-  Future<void> _getSymptomOfADay(DateTime date) async {
-    clearUserSymptomInADay();
+  Symptom getSymptomFromList(String symptomId){
+    Symptom symptom;
+    symptomList.forEach((element) {
+      if(element.id.compareTo(symptomId)==0){
+        symptom = element;
+      }
+    });
+    if (symptom==null){
+      print("Errore nel codice dato");
+    }
+    return symptom;
+  }
+
+  @action
+  Future<void> getSymptomsOfADay(DateTime date) async {
+
+    _resetSymptomsValue();
     String day = fixDate(date);
     await (FirebaseFirestore.instance
         .collection('UserSymptoms')
@@ -69,39 +73,26 @@ abstract class _SymptomStoreBase with Store {
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((symptom) {
-
-
-        Symptom toAdd = new Symptom(
-          id: symptom.id,
-          name: symptom.get("name"),
-          mealTime: symptom.get("mealTime")
-        );
-        toAdd.isSymptomSelectDay=true;
-        symptomListOfSpecificDay.add(toAdd);
-
-        setUserSymptomInADay(symptom.id);
+        Symptom toUpdate = getSymptomFromList(symptom.id);
+        toUpdate.setIsSymptomInADay(true);
+        toUpdate.setIntensity(symptom.get("intensity"));
+        toUpdate.setMealTime(symptom.get("mealTime"));
       }
       );
     })
     );
   }
+
   @action
-  void clearUserSymptomInADay ()  {
+  void _resetSymptomsValue ()  {
     symptomList.forEach((element) {
-        element.setIsSymptomInADay(false);
+      element.resetValue();
     });
-  }
-  @action
-  void setUserSymptomInADay (String symptomId)  {
-    symptomList.forEach((element) {
-      if(element.id.compareTo(symptomId)==0){
-        element.isSymptomSelectDay = true;
-      }
-    });
-    symptomList.forEach((element) {
-      });
   }
 
+  void reorderList(int oldIndex, int newIndex){
+    symptomList.insert(newIndex, symptomList.removeAt(oldIndex));
+  }
 
 
   String fixDate(DateTime date) {

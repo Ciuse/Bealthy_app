@@ -27,7 +27,7 @@ class HomePageWidget extends StatelessWidget {
           thickness: 2.5,
           color: Colors.black87,
         ),
-        AddSymptom(day: dateModel.selectedDate),
+        SymptomBar(day: dateModel.selectedDate),
         Divider(
           height: 2.5,
           thickness: 2.5,

@@ -1,6 +1,7 @@
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:Bealthy_app/allSymptomsPage.dart';
+import 'package:Bealthy_app/calendar.dart';
 import 'package:Bealthy_app/symptomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -10,15 +11,15 @@ import 'package:provider/provider.dart';
 import 'Models/dateStore.dart';
 
 
-class AddSymptom extends StatefulWidget {
+class SymptomBar extends StatefulWidget {
   final DateTime day;
-  AddSymptom({@required this.day});
+  SymptomBar({@required this.day});
 
   @override
-  _AddSymptomState createState() => _AddSymptomState();
+  _SymptomBarState createState() => _SymptomBarState();
 }
 
-class _AddSymptomState extends State<AddSymptom>{
+class _SymptomBarState extends State<SymptomBar>{
 
 
   @override
@@ -27,7 +28,7 @@ class _AddSymptomState extends State<AddSymptom>{
     super.initState();
     var store = Provider.of<SymptomStore>(context, listen: false);
     store.initStore();
-    store.initGetSymptomOfADay(widget.day);
+    store.getSymptomsOfADay(widget.day);
   }
 
 
@@ -48,7 +49,8 @@ class _AddSymptomState extends State<AddSymptom>{
                   onPressed: () => {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AllSymptomsPage()))
+                        MaterialPageRoute(builder: (context) => AllSymptomsPage())).then((value) =>
+                    {})
                   },
                   elevation: 5.0,
                   fillColor: Colors.white,

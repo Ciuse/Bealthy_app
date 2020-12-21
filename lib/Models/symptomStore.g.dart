@@ -9,23 +9,6 @@ part of 'symptomStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SymptomStore on _SymptomStoreBase, Store {
-  final _$symptomListOfSpecificDayAtom =
-      Atom(name: '_SymptomStoreBase.symptomListOfSpecificDay');
-
-  @override
-  ObservableList<Symptom> get symptomListOfSpecificDay {
-    _$symptomListOfSpecificDayAtom.reportRead();
-    return super.symptomListOfSpecificDay;
-  }
-
-  @override
-  set symptomListOfSpecificDay(ObservableList<Symptom> value) {
-    _$symptomListOfSpecificDayAtom
-        .reportWrite(value, super.symptomListOfSpecificDay, () {
-      super.symptomListOfSpecificDay = value;
-    });
-  }
-
   final _$symptomListAtom = Atom(name: '_SymptomStoreBase.symptomList');
 
   @override
@@ -38,21 +21,6 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   set symptomList(ObservableList<Symptom> value) {
     _$symptomListAtom.reportWrite(value, super.symptomList, () {
       super.symptomList = value;
-    });
-  }
-
-  final _$loadDaySymptomAtom = Atom(name: '_SymptomStoreBase.loadDaySymptom');
-
-  @override
-  ObservableFuture<dynamic> get loadDaySymptom {
-    _$loadDaySymptomAtom.reportRead();
-    return super.loadDaySymptom;
-  }
-
-  @override
-  set loadDaySymptom(ObservableFuture<dynamic> value) {
-    _$loadDaySymptomAtom.reportWrite(value, super.loadDaySymptom, () {
-      super.loadDaySymptom = value;
     });
   }
 
@@ -71,46 +39,35 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     return _$_getSymptomListAsyncAction.run(() => super._getSymptomList());
   }
 
-  final _$_getSymptomOfADayAsyncAction =
-      AsyncAction('_SymptomStoreBase._getSymptomOfADay');
+  final _$getSymptomsOfADayAsyncAction =
+      AsyncAction('_SymptomStoreBase.getSymptomsOfADay');
 
   @override
-  Future<void> _getSymptomOfADay(DateTime date) {
-    return _$_getSymptomOfADayAsyncAction
-        .run(() => super._getSymptomOfADay(date));
+  Future<void> getSymptomsOfADay(DateTime date) {
+    return _$getSymptomsOfADayAsyncAction
+        .run(() => super.getSymptomsOfADay(date));
   }
 
   final _$_SymptomStoreBaseActionController =
       ActionController(name: '_SymptomStoreBase');
 
   @override
-  void initGetSymptomOfADay(DateTime day) {
+  Symptom getSymptomFromList(String symptomId) {
     final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
-        name: '_SymptomStoreBase.initGetSymptomOfADay');
+        name: '_SymptomStoreBase.getSymptomFromList');
     try {
-      return super.initGetSymptomOfADay(day);
+      return super.getSymptomFromList(symptomId);
     } finally {
       _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void clearUserSymptomInADay() {
+  void _resetSymptomsValue() {
     final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
-        name: '_SymptomStoreBase.clearUserSymptomInADay');
+        name: '_SymptomStoreBase._resetSymptomsValue');
     try {
-      return super.clearUserSymptomInADay();
-    } finally {
-      _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setUserSymptomInADay(String symptomId) {
-    final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
-        name: '_SymptomStoreBase.setUserSymptomInADay');
-    try {
-      return super.setUserSymptomInADay(symptomId);
+      return super._resetSymptomsValue();
     } finally {
       _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -119,9 +76,7 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   @override
   String toString() {
     return '''
-symptomListOfSpecificDay: ${symptomListOfSpecificDay},
-symptomList: ${symptomList},
-loadDaySymptom: ${loadDaySymptom}
+symptomList: ${symptomList}
     ''';
   }
 }
