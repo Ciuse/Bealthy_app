@@ -24,21 +24,6 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
-  final _$ratingAtom = Atom(name: '_SymptomStoreBase.rating');
-
-  @override
-  double get rating {
-    _$ratingAtom.reportRead();
-    return super.rating;
-  }
-
-  @override
-  set rating(double value) {
-    _$ratingAtom.reportWrite(value, super.rating, () {
-      super.rating = value;
-    });
-  }
-
   final _$initStoreAsyncAction = AsyncAction('_SymptomStoreBase.initStore');
 
   @override
@@ -87,6 +72,17 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   }
 
   @override
+  void createStringMealTime(Symptom symptom) {
+    final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
+        name: '_SymptomStoreBase.createStringMealTime');
+    try {
+      return super.createStringMealTime(symptom);
+    } finally {
+      _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _resetSymptomsValue() {
     final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
         name: '_SymptomStoreBase._resetSymptomsValue');
@@ -100,8 +96,7 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   @override
   String toString() {
     return '''
-symptomList: ${symptomList},
-rating: ${rating}
+symptomList: ${symptomList}
     ''';
   }
 }

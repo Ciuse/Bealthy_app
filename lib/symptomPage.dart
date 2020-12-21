@@ -81,7 +81,6 @@ Widget descriptionWidget(Symptom symptom){
 }
 
 Widget modifyWidget(Symptom symptom,BuildContext context, SymptomStore symptomStore, DateTime date){
-  bool check = false;
   return Container(
       child:  Column(
         children: [
@@ -125,11 +124,13 @@ Widget modifyWidget(Symptom symptom,BuildContext context, SymptomStore symptomSt
       ));
 
 }
-void modifySymptom(BuildContext context, Symptom symptomToUpdate, DateTime date){
-  print(date);
-  context.read<SymptomStore>().updateSymptom(symptomToUpdate, date);
 
-  Navigator.pop(context);
+void modifySymptom(BuildContext context, Symptom symptomToUpdate, DateTime date){
+
+  if((symptomToUpdate.frequency>0 && symptomToUpdate.intensity>0) && symptomToUpdate.isPresentAtLeastOneTrue()){
+    context.read<SymptomStore>().updateSymptom(symptomToUpdate, date);
+    Navigator.pop(context);
+  }
 }
 
 List<String> getMealTimeName(){

@@ -87,6 +87,7 @@ abstract class _SymptomStoreBase with Store {
         toUpdate.setIsSymptomInADay(true);
         toUpdate.setIntensity(symptom.get("intensity"));
         toUpdate.setFrequency(symptom.get("frequency"));
+        print(symptom.get("mealTime"));
         toUpdate.setMealTime(symptom.get("mealTime"));
         toUpdate.setMealTimeBoolList();
       }
@@ -95,10 +96,38 @@ abstract class _SymptomStoreBase with Store {
     );
   }
 
+  int getEnumIndex(String name){
+    int i =0;
+    int toReturn=0;
+    MealTime.values.forEach((element) {
+      if (element.toString().contains(name))
+      {
+        toReturn=i;
+      }
+    }
+    );
+    return toReturn;
+  }
+
+  @action
+  void createStringMealTime(Symptom symptom){
+    List<String> listToAdd = new List<String>();
+    int index =0;
+    symptom.mealTimeBoolList.forEach((element) {
+      if(element.isSelected==true){
+        String toAdd = "${MealTime.values[index].toString().split('.').last}";
+        listToAdd.add(toAdd);
+      }
+      index++;
+    });
+    symptom.mealTime = listToAdd;
+    print("listtoadd"+listToAdd.toString());
+  }
+
   @action
   Future<void> updateSymptom(Symptom symptom, DateTime date) async {
     String day = fixDate(date);
-
+    createStringMealTime(symptom);
     if(symptom.isSymptomSelectDay){
       print("sintomo già presente nel db");
       await (FirebaseFirestore.instance

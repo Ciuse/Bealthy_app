@@ -126,17 +126,8 @@ abstract class _MealTimeStoreBase with Store {
         .doc(dish.id)
         .delete());
 
-    print(index);
-    print("prima");
-    getDishesOfMealTimeList(index).forEach((element) {
-      print(element.name);
-    });
     getDishesOfMealTimeList(index).removeWhere((element) => element.id == dish.id); //todo sembra non rimuoverlo3
-    print("dopo");
 
-    getDishesOfMealTimeList(index).forEach((element) {
-      print(element.name);
-    });
   }
 
   @action

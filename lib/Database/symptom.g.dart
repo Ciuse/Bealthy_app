@@ -125,6 +125,17 @@ mixin _$Symptom on _SymptomBase, Store {
   final _$_SymptomBaseActionController = ActionController(name: '_SymptomBase');
 
   @override
+  bool isPresentAtLeastOneTrue() {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.isPresentAtLeastOneTrue');
+    try {
+      return super.isPresentAtLeastOneTrue();
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void createMealTimeListBool() {
     final _$actionInfo = _$_SymptomBaseActionController.startAction(
         name: '_SymptomBase.createMealTimeListBool');

@@ -53,6 +53,16 @@ abstract class _SymptomBase with Store {
   }
 
   @action
+  bool isPresentAtLeastOneTrue(){
+    bool isPresent=false;
+    mealTimeBoolList.forEach((element) {
+      if(element.isSelected)
+        isPresent= true;
+    });
+    return isPresent;
+  }
+
+  @action
   void createMealTimeListBool(){
     MealTime.values.forEach((element) {
       MealTimeBool mealTimeBool = new MealTimeBool(isSelected: false);
