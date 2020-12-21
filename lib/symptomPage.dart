@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,10 +27,9 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   void initState() {
     super.initState();
     _tabController = getTabController();
-    var store = Provider.of<SymptomStore>(context, listen: false);
     var storeDate = Provider.of<DateStore>(context, listen: false);
+    var storeSymptom = Provider.of<SymptomStore>(context, listen: false);
     widget.date = storeDate.selectedDate;
-    //store.initSymptomOfDayList(widget.date);
   }
 
   @override
@@ -44,9 +44,10 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
 
 
+
   @override
   Widget build(BuildContext context) {
-
+    print(widget.symptom.frequency);
     final symptomStore = Provider.of<SymptomStore>(context);
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
@@ -62,13 +63,14 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
       body: TabBarView(
         controller: _tabController,
         children:[
-          modifyWidget(widget.symptom,context, symptomStore),
+          modifyWidget(widget.symptom,context, symptomStore, widget.date ),
           descriptionWidget(widget.symptom),
         ],
       ),
     ));
   }
 }
+
 
 Widget descriptionWidget(Symptom symptom){
   return Column(
@@ -78,7 +80,8 @@ Widget descriptionWidget(Symptom symptom){
   );
 }
 
-Widget modifyWidget(Symptom symptom,BuildContext context, SymptomStore symptomStore){
+Widget modifyWidget(Symptom symptom,BuildContext context, SymptomStore symptomStore, DateTime date){
+  bool check = false;
   return Container(
       child:  Column(
         children: [
@@ -95,7 +98,72 @@ Widget modifyWidget(Symptom symptom,BuildContext context, SymptomStore symptomSt
                   symptom.intensity = val.toInt()  ;
                 },
               )),
+          Divider(height: 30),
+          Text("Frequency"),
+          Observer(builder: (_) =>
+              Slider(
+                divisions: 10,
+                value:  symptom.frequency.toDouble(),
+                label:  "${symptom.frequency}",
+                min: 0,
+                max: 10,
+                onChanged: (val) {
+                  symptom.frequency = val.toInt();
+                },
+              )),
+          mealTimeList(symptom),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                modifySymptom(context,symptom, date);
+              },
+              child: Text('Modify Symptom'),
+            ),
+          ),
         ],
       ));
 
+}
+void modifySymptom(BuildContext context, Symptom symptomToUpdate, DateTime date){
+  print(date);
+  context.read<SymptomStore>().updateSymptom(symptomToUpdate, date);
+
+  Navigator.pop(context);
+}
+
+List<String> getMealTimeName(){
+
+  List<String> listToReturn = new List<String>();
+  MealTime.values.forEach((element) {
+    listToReturn.add(element.toString().split('.').last);
+  });
+  return listToReturn;
+}
+
+
+
+Widget mealTimeList(Symptom symptom){
+  print(symptom.mealTimeBoolList.length);
+  return Expanded(child:
+      Observer(builder: (_) =>ListView.builder(
+        itemCount: symptom.mealTimeBoolList.length,
+        itemBuilder: (BuildContext context, int index){
+          return Observer(builder: (_) =>CheckboxListTile(
+                    activeColor: Colors.green,
+                    checkColor: Colors.black,
+                      value: symptom.mealTimeBoolList[index].isSelected,
+                      title: new Text(MealTime.values[index].toString().split('.').last),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged:(bool val){
+                        symptom.mealTimeBoolList[index].setIsSelected(val);
+                        //symptom.setIndexMealTimeBool(val, index);
+                        print( symptom.mealTimeBoolList);
+                        },
+
+          ));
+
+        }
+    )),
+  );
 }

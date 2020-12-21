@@ -48,6 +48,15 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
         .run(() => super.getSymptomsOfADay(date));
   }
 
+  final _$updateSymptomAsyncAction =
+      AsyncAction('_SymptomStoreBase.updateSymptom');
+
+  @override
+  Future<void> updateSymptom(Symptom symptom, DateTime date) {
+    return _$updateSymptomAsyncAction
+        .run(() => super.updateSymptom(symptom, date));
+  }
+
   final _$_SymptomStoreBaseActionController =
       ActionController(name: '_SymptomStoreBase');
 

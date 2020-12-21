@@ -100,7 +100,62 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$mealTimeBoolListAtom = Atom(name: '_SymptomBase.mealTimeBoolList');
+
+  @override
+  List<MealTimeBool> get mealTimeBoolList {
+    _$mealTimeBoolListAtom.reportRead();
+    return super.mealTimeBoolList;
+  }
+
+  @override
+  set mealTimeBoolList(List<MealTimeBool> value) {
+    _$mealTimeBoolListAtom.reportWrite(value, super.mealTimeBoolList, () {
+      super.mealTimeBoolList = value;
+    });
+  }
+
+  final _$initStoreAsyncAction = AsyncAction('_SymptomBase.initStore');
+
+  @override
+  Future<void> initStore() {
+    return _$initStoreAsyncAction.run(() => super.initStore());
+  }
+
   final _$_SymptomBaseActionController = ActionController(name: '_SymptomBase');
+
+  @override
+  void createMealTimeListBool() {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.createMealTimeListBool');
+    try {
+      return super.createMealTimeListBool();
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMealTimeBoolList() {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.setMealTimeBoolList');
+    try {
+      return super.setMealTimeBoolList();
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetMealTimeBoolList() {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.resetMealTimeBoolList');
+    try {
+      return super.resetMealTimeBoolList();
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setIsSymptomInADay(bool value) {
@@ -165,7 +220,8 @@ name: ${name},
 intensity: ${intensity},
 frequency: ${frequency},
 mealTime: ${mealTime},
-isSymptomSelectDay: ${isSymptomSelectDay}
+isSymptomSelectDay: ${isSymptomSelectDay},
+mealTimeBoolList: ${mealTimeBoolList}
     ''';
   }
 }

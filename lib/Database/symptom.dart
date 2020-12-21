@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:Bealthy_app/Database/enumerators.dart';
+import 'package:Bealthy_app/Database/mealTimeBool.dart';
 import 'package:mobx/mobx.dart';
 
 part 'symptom.g.dart';
@@ -14,10 +16,12 @@ class Symptom = _SymptomBase with _$Symptom;
 
 // The store-class
 abstract class _SymptomBase with Store {
-  _SymptomBase({
+  _SymptomBase(
+  {
     this.id,
     this.name,
     this.intensity,
+    this.frequency,
     this.mealTime,
   });
 
@@ -34,6 +38,50 @@ abstract class _SymptomBase with Store {
 
   @observable
   bool isSymptomSelectDay=false;
+
+  bool storeInitialized = false;
+
+  @observable
+  var mealTimeBoolList = new List<MealTimeBool>();
+
+  @action
+  Future<void> initStore() async {
+    if (!storeInitialized) {
+      storeInitialized = true;
+      createMealTimeListBool();
+    }
+  }
+
+  @action
+  void createMealTimeListBool(){
+    MealTime.values.forEach((element) {
+      MealTimeBool mealTimeBool = new MealTimeBool(isSelected: false);
+      mealTimeBoolList.add(mealTimeBool);
+    });
+  }
+
+  @action
+  void setMealTimeBoolList() {
+    //in teoria si creano nell'ordine giusto
+    int index = 0;
+    MealTime.values.forEach((element) {
+      mealTime.forEach((elem)  {
+        if(element.toString().toString().split('.').last==elem.toString()){
+          mealTimeBoolList[index].setIsSelected(true);
+        return;
+        }
+        index++;
+      });
+      index = 0;
+    });
+  }
+
+  @action
+  void resetMealTimeBoolList() {
+    mealTimeBoolList.forEach((element) {
+      element.setIsSelected(false);
+      });
+  }
 
   @action
   void setIsSymptomInADay(bool value) {
@@ -58,6 +106,7 @@ abstract class _SymptomBase with Store {
     setFrequency(0);
     setMealTime(null);
     setIsSymptomInADay(false);
+    resetMealTimeBoolList();
   }
 
   @action
@@ -65,7 +114,8 @@ abstract class _SymptomBase with Store {
       Symptom(
           id: json["id"],
           name: json["name"],
-          intensity: json["intensity"]
+          intensity: json["intensity"],
+          frequency: json["frequency"]
       );
 
   Map<String, dynamic> toMapSymptom() =>
@@ -77,7 +127,8 @@ abstract class _SymptomBase with Store {
       {
         "name": name,
         "intensity": intensity,
-        "mealTime":mealTime
+        "mealTime":mealTime,
+        "frequency":frequency,
       };
 
 }

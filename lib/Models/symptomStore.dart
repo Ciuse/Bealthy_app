@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:Bealthy_app/Database/enumerators.dart';
+import 'package:Bealthy_app/Database/mealTimeBool.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,8 +25,7 @@ abstract class _SymptomStoreBase with Store {
   @observable
   var symptomList = new ObservableList<Symptom>();
 
-  @observable
-  double rating = 0.0;
+
 
   @action
   Future<void> initStore() async {
@@ -33,6 +34,8 @@ abstract class _SymptomStoreBase with Store {
       storeInitialized = true;
     }
   }
+
+
 
   @action
   Future<void> _getSymptomList() async {
@@ -43,12 +46,15 @@ abstract class _SymptomStoreBase with Store {
       querySnapshot.docs.forEach((result) {
 
         Symptom i = new Symptom(id:result.id,name:result.get("name"));
+        i.initStore();
         symptomList.add(i);
 
       }
       );
     }));
   }
+
+
 
   @action
   Symptom getSymptomFromList(String symptomId){
@@ -79,11 +85,51 @@ abstract class _SymptomStoreBase with Store {
         Symptom toUpdate = getSymptomFromList(symptom.id);
         toUpdate.setIsSymptomInADay(true);
         toUpdate.setIntensity(symptom.get("intensity"));
+        toUpdate.setFrequency(symptom.get("frequency"));
         toUpdate.setMealTime(symptom.get("mealTime"));
+        toUpdate.setMealTimeBoolList();
       }
       );
     })
     );
+  }
+
+  @action
+  Future<void> updateSymptom(Symptom symptom, DateTime date) async {
+    String day = fixDate(date);
+
+    if(symptom.isSymptomSelectDay){
+      print("sintomo già presente nel db");
+      await (FirebaseFirestore.instance
+          .collection("UserSymptoms")
+          .doc(auth.currentUser.uid)
+          .collection("DaySymptoms")
+          .doc(day)
+          .collection("Symptoms")
+          .doc(symptom.id)
+          .set(symptom.toMapDaySymptom()));
+    }else{
+      print("sintomo non presente nel db");
+
+      await (FirebaseFirestore.instance
+          .collection("UserSymptoms")
+          .doc(auth.currentUser.uid)
+          .collection("DaySymptoms")
+          .doc(day)
+          .set({"virtual": true}));
+
+      await (FirebaseFirestore.instance
+          .collection("UserSymptoms")
+          .doc(auth.currentUser.uid)
+          .collection("DaySymptoms")
+          .doc(day)
+          .collection("Symptoms")
+          .doc(symptom.id)
+          .set(symptom.toMapDaySymptom()));
+
+      symptom.isSymptomSelectDay=true;
+    }
+
   }
 
   @action

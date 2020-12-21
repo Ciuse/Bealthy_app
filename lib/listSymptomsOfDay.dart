@@ -76,8 +76,9 @@ class _SymptomBarState extends State<SymptomBar>{
                       onPressed: () => {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomList[index]))
-                        )
+                          MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomList[index])
+                          )
+                        )//todo inserire qui il salvataggio
                       },
                       elevation: 5.0,
                       fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.blue : Colors.white,
