@@ -24,6 +24,9 @@ abstract class _SymptomStoreBase with Store {
   @observable
   var symptomList = new ObservableList<Symptom>();
 
+  @observable
+  double rating = 0.0;
+
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {

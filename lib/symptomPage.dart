@@ -1,13 +1,17 @@
+import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Database/symptom.dart';
 
 class SymptomPage extends StatefulWidget {
 
   final Symptom symptom;
+  DateTime date;
   SymptomPage({@required this.symptom});
 
   @override
@@ -18,14 +22,14 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
   TabController _tabController;
-  static double _lowerValue = 0.0;
-  static double _upperValue = 10.0;
-
-  RangeValues values = RangeValues(_lowerValue, _upperValue);
 
   void initState() {
     super.initState();
     _tabController = getTabController();
+    var store = Provider.of<SymptomStore>(context, listen: false);
+    var storeDate = Provider.of<DateStore>(context, listen: false);
+    widget.date = storeDate.selectedDate;
+    //store.initSymptomOfDayList(widget.date);
   }
 
   @override
@@ -42,6 +46,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+
     final symptomStore = Provider.of<SymptomStore>(context);
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
@@ -57,7 +62,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
       body: TabBarView(
         controller: _tabController,
         children:[
-          modifyWidget(context, _lowerValue, _upperValue, values),
+          modifyWidget(widget.symptom,context, symptomStore),
           descriptionWidget(widget.symptom),
         ],
       ),
@@ -73,29 +78,24 @@ Widget descriptionWidget(Symptom symptom){
   );
 }
 
-Widget modifyWidget(BuildContext context, double lowerValue, double upperValue, RangeValues values){
-    return Column(
-      children: [
-        Divider(height: 30),
-        Text("Intensity"),
-        SliderTheme(
-          data: SliderTheme.of(context).copyWith(
-            trackHeight: 10,
-            overlayColor: Colors.transparent,
-          ),
-          child: RangeSlider(
-            activeColor: Colors.transparent,
-            inactiveColor: Colors.black87,
-            divisions: 5,
-            labels: RangeLabels(values.start.toString(), values.end.toString()),
-            min: lowerValue,
-            max: upperValue,
-            values: values,
-            onChanged: (val) {
-                values = val;
-            },
-          ),
-        )
-      ],
-    );
-  }
+Widget modifyWidget(Symptom symptom,BuildContext context, SymptomStore symptomStore){
+  return Container(
+      child:  Column(
+        children: [
+          Divider(height: 30),
+          Text("Intensity"),
+          Observer(builder: (_) =>
+              Slider(
+                divisions: 5,
+                value: symptomStore.rating,
+                label:  "${symptomStore.rating}",
+                min: 0,
+                max: 10,
+                onChanged: (val) {
+                  symptomStore.rating = val;
+                },
+              )),
+        ],
+      ));
+
+}
