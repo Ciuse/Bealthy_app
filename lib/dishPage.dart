@@ -11,8 +11,6 @@ import 'Database/enumerators.dart';
 
 import 'Database/dish.dart';
 import 'Models/foodStore.dart';
-import 'homePage.dart';
-import 'main.dart';
 
 class DishPage extends StatefulWidget {
 
@@ -128,7 +126,6 @@ class _DishPageState extends State<DishPage>{
                               return Text("Image not found");
                             }
                             else {
-                              print("IMAGE NET");
                               return Container(
                                 width: 200,
                                 height: 200,

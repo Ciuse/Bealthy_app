@@ -30,7 +30,7 @@ class _AddMealState extends State<AddMeal>{
                 onPressed: () => {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => searchDishesList()),
+                    MaterialPageRoute(builder: (context) => SearchDishesList()),
                   )
                 },
                 icon: Icon(Icons.search),

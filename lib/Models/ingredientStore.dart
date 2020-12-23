@@ -59,7 +59,6 @@ abstract class _IngredientStoreBase with Store {
       querySnapshot.docs.forEach((result) {
         Ingredient i = new Ingredient(id:result.id,name:result.get("name"),qty: "" );
         ingredientList.add(i);
-        print(i);
       }
       );
     }));

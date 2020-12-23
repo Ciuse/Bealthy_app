@@ -34,7 +34,6 @@ abstract class _MealTimeStoreBase with Store {
   void changeCurrentMealTime(int mealTimeIndex) {
 
     this.selectedMealTime = MealTime.values[mealTimeIndex];
-    print(this.selectedMealTime);
 
   }
 

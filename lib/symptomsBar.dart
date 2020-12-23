@@ -1,14 +1,10 @@
-import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:Bealthy_app/allSymptomsPage.dart';
-import 'package:Bealthy_app/calendar.dart';
 import 'package:Bealthy_app/symptomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
-import 'Models/dateStore.dart';
 
 
 class SymptomsBar extends StatefulWidget {

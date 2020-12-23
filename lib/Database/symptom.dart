@@ -39,7 +39,11 @@ abstract class _SymptomBase with Store {
   @observable
   bool isSymptomSelectDay=false;
 
+  @observable
+  bool isModifyButtonActive=false;
 
+  @observable
+  bool isPresentAtLeastOneMeal=false;
 
   bool storeInitialized = false;
 
@@ -56,12 +60,15 @@ abstract class _SymptomBase with Store {
 
   @action
   bool isPresentAtLeastOneTrue(){
-    bool isPresent=false;
+    int count = 0;
     mealTimeBoolList.forEach((element) {
-      if(element.isSelected)
-        isPresent= true;
+      if(element.isSelected){
+        count = count+1;
+      }
     });
-    return isPresent;
+   if(count>0){
+     return true;
+   }else return false;
   }
 
   @action

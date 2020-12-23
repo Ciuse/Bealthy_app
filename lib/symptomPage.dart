@@ -12,7 +12,6 @@ import 'Database/symptom.dart';
 class SymptomPage extends StatefulWidget {
 
   final Symptom symptom;
-  DateTime date;
   SymptomPage({@required this.symptom});
 
   @override
@@ -25,14 +24,14 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   TabController _tabController;
   int intensityFromDb;
   int frequencyFromDb;
+  DateTime date;
   var mealTimeBoolListFromDb = new List<bool>();
 
   void initState() {
     super.initState();
     _tabController = getTabController();
     var storeDate = Provider.of<DateStore>(context, listen: false);
-    var storeSymptom = Provider.of<SymptomStore>(context, listen: false);
-    widget.date = storeDate.selectedDate;
+    date = storeDate.selectedDate;
     intensityFromDb = widget.symptom.intensity;
     frequencyFromDb = widget.symptom.frequency;
     widget.symptom.mealTimeBoolList.forEach((element) {
@@ -53,7 +52,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    print(widget.symptom.frequency);
+    reactButtonEnabled();
     final symptomStore = Provider.of<SymptomStore>(context);
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
@@ -69,26 +68,25 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
       body: TabBarView(
         controller: _tabController,
         children: [
-          modifyWidget(widget.symptom, context, symptomStore, widget.date),
-          descriptionWidget(widget.symptom),
+          modifyWidget(symptomStore),
+          descriptionWidget(),
         ],
       ),
     ));
   }
 
 
-  Widget descriptionWidget(Symptom symptom) {
+  Widget descriptionWidget() {
     return Column(
       children: [
-        symptom.isSymptomSelectDay
-            ? Text(symptom.name + " is present today")
-            : Text(symptom.name + "is not present"),
+        widget.symptom.isSymptomSelectDay
+            ? Text(widget.symptom.name + " is present today")
+            : Text(widget.symptom.name + "is not present"),
       ],
     );
   }
 
-  Widget modifyWidget(Symptom symptom, BuildContext context,
-      SymptomStore symptomStore, DateTime date) {
+  Widget modifyWidget(SymptomStore symptomStore) {
     return Container(
         child: Column(
           children: [
@@ -97,12 +95,12 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             Observer(builder: (_) =>
                 Slider(
                   divisions: 10,
-                  value: symptom.intensity.toDouble(),
-                  label: "${symptom.intensity}",
+                  value: widget.symptom.intensity.toDouble(),
+                  label: "${widget.symptom.intensity}",
                   min: 0,
                   max: 10,
                   onChanged: (val) {
-                    symptom.intensity = val.toInt();
+                    widget.symptom.intensity = val.toInt();
                   },
                 )),
             Divider(height: 30),
@@ -110,19 +108,22 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             Observer(builder: (_) =>
                 Slider(
                   divisions: 10,
-                  value: symptom.frequency.toDouble(),
-                  label: "${symptom.frequency}",
+                  value: widget.symptom.frequency.toDouble(),
+                  label: "${widget.symptom.frequency}",
                   min: 0,
                   max: 10,
                   onChanged: (val) {
-                    symptom.frequency = val.toInt();
+                    widget.symptom.frequency = val.toInt();
                   },
                 )),
-            mealTimeList(symptom),
-            Padding(
+            mealTimeList(widget.symptom),
+        Observer(builder: (_) =>  Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: alertSymptom(symptomStore),
-            ),
+              child: ElevatedButton(
+                onPressed: !widget.symptom.isModifyButtonActive?  null :  () => buttonActivated(symptomStore),
+                child: Text('Save'),
+              )
+            ))
           ],
         ));
   }
@@ -153,55 +154,79 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return listToReturn;
   }
 
-  Widget alertSymptom(SymptomStore symptomStore){
 
-    return ElevatedButton(
-      onPressed: () {
-        if (!widget.symptom.isSymptomSelectDay) {
-          if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
-              widget.symptom.isPresentAtLeastOneTrue()) {
-            context.read<SymptomStore>().updateSymptom(widget.symptom, widget.date);
-            Navigator.pop(context);
-          }
-        } else {
-          if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
-              widget.symptom.isPresentAtLeastOneTrue()) {
-            if (widget.symptom.frequency != frequencyFromDb ||
-                widget.symptom.intensity != intensityFromDb || !areMealTimeBoolListsEqual()) {
-              context.read<SymptomStore>().updateSymptom(widget.symptom, widget.date);
-              Navigator.pop(context);
-            }
-          }else{
-            if((widget.symptom.frequency == 0 && widget.symptom.intensity == 0) &&
-                !widget.symptom.isPresentAtLeastOneTrue()){
-              return showDialog(
-                  context: context,
-                  builder: (_) =>  new AlertDialog(
-                    title: new Text(widget.symptom.name),
-                    content: new Text("Are you sure to reset it?"),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('Remove it!'),
-                        onPressed: () {
-                          symptomStore.removeSymptomOfSpecificDay( widget.symptom, widget.date)
-                              .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
-                        },
-                      )
-                    ],
-                  ));
-            }
-          }
-
+  buttonActivated(SymptomStore symptomStore){
+    if (!widget.symptom.isSymptomSelectDay) {
+      if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
+          widget.symptom.isPresentAtLeastOneTrue()){
+        context.read<SymptomStore>().updateSymptom(widget.symptom, date);
+        Navigator.pop(context);
+      }
+    } else {
+      if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
+          widget.symptom.isPresentAtLeastOneTrue()) {
+        if (widget.symptom.frequency != frequencyFromDb ||
+            widget.symptom.intensity != intensityFromDb || !areMealTimeBoolListsEqual()) {
+          context.read<SymptomStore>().updateSymptom(widget.symptom, date);
+          Navigator.pop(context);
         }
-      },
-      child: Text('Modify Symptom'),
-    );
+      }else{
+        if((widget.symptom.frequency == 0 && widget.symptom.intensity == 0) &&
+            !widget.symptom.isPresentAtLeastOneTrue()){
+          return showDialog(
+              context: context,
+              builder: (_) =>  new AlertDialog(
+                title: new Text(widget.symptom.name),
+                content: new Text("Are you sure to remove it?"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Remove it!'),
+                    onPressed: () {
+                      symptomStore.removeSymptomOfSpecificDay( widget.symptom, date)
+                          .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+                    },
+                  )
+                ],
+              ));
+        }
+      }
+    }
+  }
 
+  void reactButtonEnabled(){
+    reaction((_) => {widget.symptom.frequency, widget.symptom.intensity,
+      widget.symptom.mealTimeBoolList.forEach((element) {
+        element.isSelected;
+      })}, (_) => {
+      if (!widget.symptom.isSymptomSelectDay) {
+        if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
+            widget.symptom.isPresentAtLeastOneTrue()){
+          widget.symptom.isModifyButtonActive = true
+        }else{ widget.symptom.isModifyButtonActive = false}
+      } else
+        {
+          if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0 &&
+              widget.symptom.isPresentAtLeastOneTrue()) &&
+              (widget.symptom.frequency != frequencyFromDb ||
+                  widget.symptom.intensity != intensityFromDb ||
+                  !areMealTimeBoolListsEqual())) {
+            widget.symptom.isModifyButtonActive = true
+          } else
+            {
+              if((widget.symptom.frequency == 0 &&
+                  widget.symptom.intensity == 0) &&
+                  !widget.symptom.isPresentAtLeastOneTrue()){
+                widget.symptom.isModifyButtonActive = true
+              }else{
+                widget.symptom.isModifyButtonActive = false
+              }
+            }
+        }
 
+    });
   }
 
   Widget mealTimeList(Symptom symptom) {
-    print(symptom.mealTimeBoolList.length);
     return Expanded(child:
     Observer(builder: (_) =>
         ListView.builder(
@@ -219,8 +244,6 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                     controlAffinity: ListTileControlAffinity.leading,
                     onChanged: (bool val) {
                       symptom.mealTimeBoolList[index].setIsSelected(val);
-                      //symptom.setIndexMealTimeBool(val, index);
-                      print(symptom.mealTimeBoolList);
                     },
 
                   ));

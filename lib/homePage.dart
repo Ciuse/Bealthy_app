@@ -1,7 +1,5 @@
 import 'package:Bealthy_app/Models/dateStore.dart';
-import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'symptomsBar.dart';
 import 'calendar.dart';

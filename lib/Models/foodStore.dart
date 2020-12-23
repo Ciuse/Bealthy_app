@@ -256,7 +256,6 @@ void setBooleanQuantityDish(){
 
         Dish i = new Dish(id:result.id,name:result.get("name"),category:result.get("category") ,qty: "",);
         dishesListFromDBAndUser.add(i);
-        print(i);
       }
       );
     }));

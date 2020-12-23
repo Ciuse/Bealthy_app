@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:Bealthy_app/Database/enumerators.dart';
-import 'package:Bealthy_app/Database/mealTimeBool.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,8 +35,6 @@ abstract class _SymptomStoreBase with Store {
     }
   }
 
-
-
   @action
   Future<void> _getSymptomList() async {
     await (FirebaseFirestore.instance
@@ -49,13 +46,10 @@ abstract class _SymptomStoreBase with Store {
         Symptom i = new Symptom(id:result.id,name:result.get("name"));
         i.initStore();
         symptomList.add(i);
-
       }
       );
     }));
   }
-
-
 
   @action
   Symptom getSymptomFromList(String symptomId){
@@ -120,7 +114,6 @@ abstract class _SymptomStoreBase with Store {
       index++;
     });
     symptom.mealTime = listToAdd;
-    print("listtoadd"+listToAdd.toString());
   }
 
   @action
@@ -128,7 +121,6 @@ abstract class _SymptomStoreBase with Store {
     String day = fixDate(date);
     createStringMealTime(symptom);
     if(symptom.isSymptomSelectDay){
-      print("sintomo già presente nel db");
       await (FirebaseFirestore.instance
           .collection("UserSymptoms")
           .doc(auth.currentUser.uid)
@@ -138,8 +130,6 @@ abstract class _SymptomStoreBase with Store {
           .doc(symptom.id)
           .set(symptom.toMapDaySymptom()));
     }else{
-      print("sintomo non presente nel db");
-
       await (FirebaseFirestore.instance
           .collection("UserSymptoms")
           .doc(auth.currentUser.uid)

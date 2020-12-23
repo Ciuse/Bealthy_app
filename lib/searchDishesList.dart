@@ -1,6 +1,3 @@
-import 'package:Bealthy_app/Database/symptom.dart';
-import 'package:Bealthy_app/Models/symptomStore.dart';
-import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'Database/dish.dart';
@@ -10,12 +7,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:Bealthy_app/dishPage.dart';
 
 
-class searchDishesList extends StatefulWidget {
+class SearchDishesList extends StatefulWidget {
   @override
-  _searchDishesListState createState() => _searchDishesListState();
+  _SearchDishesListState createState() => _SearchDishesListState();
 }
 
-class _searchDishesListState extends State<searchDishesList>{
+class _SearchDishesListState extends State<SearchDishesList>{
 
 
   TextEditingController _searchController = TextEditingController();
@@ -39,7 +36,6 @@ class _searchDishesListState extends State<searchDishesList>{
   }
   _onSearchChanged(){
     searchResultList();
-    print(_searchController.text);
   }
   void searchResultList() {
 

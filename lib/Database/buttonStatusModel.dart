@@ -1,5 +1,4 @@
 import 'package:mobx/mobx.dart';
-import 'package:intl/intl.dart';
 
 // Include generated file
 part 'buttonStatusModel.g.dart';

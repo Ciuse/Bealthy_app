@@ -11,10 +11,8 @@ import 'Database/enumerators.dart';
 
 
 class ListDishesOfDay extends StatefulWidget {
-
   final DateTime day;
   ListDishesOfDay({@required this.day});
-
 
   @override
   _ListDishesOfDayState createState() => _ListDishesOfDayState();
@@ -22,24 +20,19 @@ class ListDishesOfDay extends StatefulWidget {
 
 class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
-
   @override
   void initState() {
-
     super.initState();
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     return Expanded(
         child: ListView(
           children:<Widget>[
             for( var element in MealTime.values )
-        Observer(builder: (_) => ListViewForAMealTime(element, mealTimeStore))
+        Observer(builder: (_) => listViewForAMealTime(element, mealTimeStore))
           ],
         )
     );
@@ -47,7 +40,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   }
 
-  Widget DynamicListTile(int index){
+  dynamicListTile(int index){
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     switch(index) {
       case 0: {
@@ -143,9 +136,10 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   }
 
 
-  Widget ListViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore ){
-    return Column(children:[
-      DynamicListTile(mealTime.index), // per ogni meal time setto un testo e un'icona diversa
+  Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore ){
+    return Column(
+        children:[
+      dynamicListTile(mealTime.index), // per ogni meal time setto un testo e un'icona diversa
       ListView.builder(
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),

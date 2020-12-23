@@ -100,6 +100,40 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$isModifyButtonActiveAtom =
+      Atom(name: '_SymptomBase.isModifyButtonActive');
+
+  @override
+  bool get isModifyButtonActive {
+    _$isModifyButtonActiveAtom.reportRead();
+    return super.isModifyButtonActive;
+  }
+
+  @override
+  set isModifyButtonActive(bool value) {
+    _$isModifyButtonActiveAtom.reportWrite(value, super.isModifyButtonActive,
+        () {
+      super.isModifyButtonActive = value;
+    });
+  }
+
+  final _$isPresentAtLeastOneMealAtom =
+      Atom(name: '_SymptomBase.isPresentAtLeastOneMeal');
+
+  @override
+  bool get isPresentAtLeastOneMeal {
+    _$isPresentAtLeastOneMealAtom.reportRead();
+    return super.isPresentAtLeastOneMeal;
+  }
+
+  @override
+  set isPresentAtLeastOneMeal(bool value) {
+    _$isPresentAtLeastOneMealAtom
+        .reportWrite(value, super.isPresentAtLeastOneMeal, () {
+      super.isPresentAtLeastOneMeal = value;
+    });
+  }
+
   final _$mealTimeBoolListAtom = Atom(name: '_SymptomBase.mealTimeBoolList');
 
   @override
@@ -232,6 +266,8 @@ intensity: ${intensity},
 frequency: ${frequency},
 mealTime: ${mealTime},
 isSymptomSelectDay: ${isSymptomSelectDay},
+isModifyButtonActive: ${isModifyButtonActive},
+isPresentAtLeastOneMeal: ${isPresentAtLeastOneMeal},
 mealTimeBoolList: ${mealTimeBoolList}
     ''';
   }

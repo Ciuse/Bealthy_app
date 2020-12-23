@@ -196,7 +196,6 @@ class _CreateNewDishState extends State<CreateNewDish>{
                                   }
 
                                   ingredientsQuantityList[index]=value;
-                                  print(ingredientsQuantityList);
                                 });
                               } ,
 
@@ -211,7 +210,6 @@ class _CreateNewDishState extends State<CreateNewDish>{
                             }
                             ingredientsSelectedList.removeAt(index);
                             ingredientsQuantityList.removeAt(index);
-                            print(ingredientsQuantityList);
                           });
                         },
                       );
