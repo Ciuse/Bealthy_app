@@ -39,6 +39,8 @@ abstract class _SymptomBase with Store {
   @observable
   bool isSymptomSelectDay=false;
 
+
+
   bool storeInitialized = false;
 
   @observable
@@ -78,6 +80,7 @@ abstract class _SymptomBase with Store {
       mealTime.forEach((elem)  {
         if(element.toString().toString().split('.').last==elem.toString()){
           mealTimeBoolList[index].setIsSelected(true);
+          //mealTimeBoolListFromDb[index].setIsSelected(true);
         return;
         }
         index++;
@@ -85,6 +88,8 @@ abstract class _SymptomBase with Store {
       index = 0;
     });
   }
+
+
 
   @action
   void resetMealTimeBoolList() {
@@ -109,6 +114,7 @@ abstract class _SymptomBase with Store {
   void setMealTime(List<dynamic> value) {
     mealTime = value;
   }
+
 
   @action
   void resetValue() {

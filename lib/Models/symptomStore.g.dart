@@ -57,6 +57,15 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
         .run(() => super.updateSymptom(symptom, date));
   }
 
+  final _$removeSymptomOfSpecificDayAsyncAction =
+      AsyncAction('_SymptomStoreBase.removeSymptomOfSpecificDay');
+
+  @override
+  Future<void> removeSymptomOfSpecificDay(Symptom symptom, DateTime date) {
+    return _$removeSymptomOfSpecificDayAsyncAction
+        .run(() => super.removeSymptomOfSpecificDay(symptom, date));
+  }
+
   final _$_SymptomStoreBaseActionController =
       ActionController(name: '_SymptomStoreBase');
 

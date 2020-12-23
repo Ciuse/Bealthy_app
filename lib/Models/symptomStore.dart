@@ -87,7 +87,6 @@ abstract class _SymptomStoreBase with Store {
         toUpdate.setIsSymptomInADay(true);
         toUpdate.setIntensity(symptom.get("intensity"));
         toUpdate.setFrequency(symptom.get("frequency"));
-        print(symptom.get("mealTime"));
         toUpdate.setMealTime(symptom.get("mealTime"));
         toUpdate.setMealTimeBoolList();
       }
@@ -173,6 +172,21 @@ abstract class _SymptomStoreBase with Store {
     symptomList.insert(newIndex, symptomList.removeAt(oldIndex));
   }
 
+
+  @action
+  Future<void> removeSymptomOfSpecificDay(Symptom symptom, DateTime date) async {
+    String dayFix = fixDate(date);
+    await (FirebaseFirestore.instance
+        .collection("UserSymptoms")
+        .doc(auth.currentUser.uid)
+        .collection("DaySymptoms")
+        .doc(dayFix)
+        .collection("Symptoms")
+        .doc(symptom.id)
+        .delete());
+
+    symptom.resetValue();
+  }
 
   String fixDate(DateTime date) {
     String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(
