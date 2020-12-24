@@ -57,7 +57,7 @@ class _DishPageState extends State<DishPage>{
       if (element.toString().contains(name))
       {
         toReturn=i;
-      }
+      }i++;
     }
     );
     return toReturn;

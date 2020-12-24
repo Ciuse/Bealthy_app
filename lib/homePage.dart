@@ -18,6 +18,10 @@ class HomePageWidget extends StatelessWidget {
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     final dateModel = Provider.of<DateStore>(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.teal,
+        title: const Text('Bealthy', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+      ),
       body: Column(children: [
         CalendarHomePage(),
         Divider(

@@ -1,5 +1,8 @@
-import 'package:Bealthy_app/Models/mealTimeStore.dart';
-import 'package:Bealthy_app/Models/symptomStore.dart';
+import 'package:Bealthy_app/treatmentPage.dart';
+
+import 'Models/mealTimeStore.dart';
+import 'Models/symptomStore.dart';
+import 'overviewPage.dart';
 import 'package:flutter/material.dart';
 import 'homePage.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -10,34 +13,14 @@ import 'Models/ingredientStore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'personalPage.dart';
+
 FirebaseAuth auth = FirebaseAuth.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-/*
-  auth.authStateChanges()
-      .listen((User user) {
-    if (user == null) {
-      print('User is currently signed out!');
-    } else {
-      print('User is signed in!');
-    }
-  });
 
-  try {
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: "Account1@gmail.com",
-        password: "Prova1"
-    );
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found') {
-      print('No user found for that email.');
-    } else if (e.code == 'wrong-password') {
-      print('Wrong password provided for that user.');
-    }
-  }
-  */
   initializeDateFormatting().then((_) => runApp(
       MultiProvider(providers: [
         Provider<DateStore>(
@@ -339,9 +322,9 @@ class _MyHomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
     HomePageWidget(Colors.green),
-    HomePageWidget(Colors.red),
-    HomePageWidget(Colors.yellow),
-    HomePageWidget(Colors.blue),
+    OverviewPage(),
+    TreatmentPage(),
+    PersonalPage(),
 
   ];
 
@@ -355,9 +338,6 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bealthy'),
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

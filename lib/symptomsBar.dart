@@ -4,6 +4,7 @@ import 'package:Bealthy_app/symptomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 
 
@@ -77,8 +78,8 @@ class _SymptomsBarState extends State<SymptomsBar>{
                       },
                       elevation: 5.0,
                       fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.blue : Colors.white,
-                      child: Icon(
-                        symptomStore.symptomList[index].isSymptomSelectDay ? Icons.favorite : Icons.favorite_border,
+                      child: ImageIcon(
+                        AssetImage("images/" +symptomStore.symptomList[index].id+".png" ),
                         color: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.pinkAccent : null,
                         size: 28.0,
                       ),

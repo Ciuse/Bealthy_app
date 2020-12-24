@@ -24,6 +24,10 @@ abstract class _SymptomStoreBase with Store {
   @observable
   var symptomList = new ObservableList<Symptom>();
 
+  @observable
+  var symptomListOfSpecificDay = new ObservableList<Symptom>();
+
+
 
 
   @action
@@ -65,9 +69,11 @@ abstract class _SymptomStoreBase with Store {
     return symptom;
   }
 
+
+
   @action
   Future<void> getSymptomsOfADay(DateTime date) async {
-
+    symptomListOfSpecificDay.clear();
     _resetSymptomsValue();
     String day = fixDate(date);
     await (FirebaseFirestore.instance
@@ -83,23 +89,17 @@ abstract class _SymptomStoreBase with Store {
         toUpdate.setFrequency(symptom.get("frequency"));
         toUpdate.setMealTime(symptom.get("mealTime"));
         toUpdate.setMealTimeBoolList();
+        //lista dei sintomi di un giorno specifico
+        symptomListOfSpecificDay.add(toUpdate);
       }
       );
     })
     );
   }
 
-  int getEnumIndex(String name){
-    int i =0;
-    int toReturn=0;
-    MealTime.values.forEach((element) {
-      if (element.toString().contains(name))
-      {
-        toReturn=i;
-      }
-    }
-    );
-    return toReturn;
+
+  int getIndexFromSymptomsList(Symptom symptom,List<Symptom> symptoms){
+    return symptoms.indexOf(symptom,0);
   }
 
   @action
@@ -147,6 +147,7 @@ abstract class _SymptomStoreBase with Store {
           .set(symptom.toMapDaySymptom()));
 
       symptom.isSymptomSelectDay=true;
+      symptomListOfSpecificDay.add(symptom);
     }
 
   }
@@ -176,6 +177,7 @@ abstract class _SymptomStoreBase with Store {
         .delete());
 
     symptom.resetValue();
+    symptomListOfSpecificDay.removeWhere((element) => symptom.id == element.id);
   }
 
   String fixDate(DateTime date) {

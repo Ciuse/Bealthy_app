@@ -24,6 +24,23 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
+  final _$symptomListOfSpecificDayAtom =
+      Atom(name: '_SymptomStoreBase.symptomListOfSpecificDay');
+
+  @override
+  ObservableList<Symptom> get symptomListOfSpecificDay {
+    _$symptomListOfSpecificDayAtom.reportRead();
+    return super.symptomListOfSpecificDay;
+  }
+
+  @override
+  set symptomListOfSpecificDay(ObservableList<Symptom> value) {
+    _$symptomListOfSpecificDayAtom
+        .reportWrite(value, super.symptomListOfSpecificDay, () {
+      super.symptomListOfSpecificDay = value;
+    });
+  }
+
   final _$initStoreAsyncAction = AsyncAction('_SymptomStoreBase.initStore');
 
   @override
@@ -105,7 +122,8 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   @override
   String toString() {
     return '''
-symptomList: ${symptomList}
+symptomList: ${symptomList},
+symptomListOfSpecificDay: ${symptomListOfSpecificDay}
     ''';
   }
 }
