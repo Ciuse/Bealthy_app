@@ -49,6 +49,14 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return TabController(length: 2, vsync: this);
   }
 
+  Future getImage() async {
+    try {
+      return await storage.ref("SymptomImage/" + widget.symptom.id + ".png").getDownloadURL();
+    }
+    catch (e) {
+      return await Future.error(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +86,33 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
   Widget descriptionWidget() {
     return Column(
-      children: [
-        widget.symptom.isSymptomSelectDay
-            ? Text(widget.symptom.name + " is present today")
-            : Text(widget.symptom.name + "is not present"),
-      ],
-    );
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: FutureBuilder(
+                future: getImage(),
+                builder: (context, remoteString) {
+                  if (remoteString.connectionState != ConnectionState.waiting) {
+                    if (remoteString.hasError) {
+                      return Text("Image not found");
+                    }
+                    else {
+                      return Container(
+                        width: 200,
+                        height: 200,
+                        child: ClipOval(
+                          child: Image.network(remoteString.data, fit: BoxFit.fill),),
+                      );
+                    }
+                  }
+                  else {
+                    return CircularProgressIndicator();
+                  }
+                }
+            )),
+          Divider(height: 30),
+          Text("Description",style: TextStyle(fontWeight: FontWeight.bold),),
+        ]);
   }
 
   Widget modifyWidget(SymptomStore symptomStore) {
@@ -91,7 +120,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
         child: Column(
           children: [
             Divider(height: 30),
-            Text("Intensity"),
+            Text("Intensity",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
             Observer(builder: (_) =>
                 Slider(
                   divisions: 10,
@@ -104,7 +133,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                   },
                 )),
             Divider(height: 30),
-            Text("Frequency"),
+            Text("Frequency",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
             Observer(builder: (_) =>
                 Slider(
                   divisions: 10,
@@ -116,7 +145,11 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                     widget.symptom.frequency = val.toInt();
                   },
                 )),
+            Divider(height: 30),
+            Text("When did the symptom occur?",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
+            Divider(height: 30),
             mealTimeList(widget.symptom),
+            Divider(height: 30),
         Observer(builder: (_) =>  Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
