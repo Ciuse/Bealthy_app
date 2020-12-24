@@ -155,9 +155,9 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
                   ListTile(
                     key: Key(symptom.id),
                     title: Text(symptom.name, style: TextStyle(fontSize: 22.0)),
-                    leading: Icon(
-                      symptom.isSymptomSelectDay ? Icons.favorite : Icons.favorite_border,
-                      color: symptom.isSymptomSelectDay ? Colors.pinkAccent : null,
+                    leading: ImageIcon(
+                      AssetImage("images/" +symptomStore.symptomList[symptomStore.getIndexFromSymptomsList(symptom, symptomStore.symptomList)].id+".png" ),
+                      color: symptomStore.symptomList[symptomStore.getIndexFromSymptomsList(symptom, symptomStore.symptomList)].isSymptomSelectDay ? Colors.pinkAccent : null,
                       size: 28.0,
                     ),
                   )
