@@ -42,7 +42,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
         body: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Observer(builder: (_) => _buildHeader(dateStore.selectedDate)),
+            Observer(builder: (_) => _buildHeader(dateStore.calendarSelectedDate)),
             Expanded(child:Observer(builder: (_) => _buildContent()),
             ),
           ],
@@ -97,7 +97,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
       },
       layoutBuilder: (currentChild, _) => currentChild,
       child: Dismissible(
-        key: ValueKey(dateStore.selectedDate),
+        key: ValueKey(dateStore.calendarSelectedDate),
         resizeDuration: null,
         onDismissed: _onHorizontalSwipe,
         direction: DismissDirection.horizontal,
@@ -180,13 +180,13 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
 
   void selectPrevious() {
     animationStartPos= -1.2;
-    context.read<DateStore>().previousDay(dateStore.selectedDate);
+    context.read<DateStore>().previousDayCalendar();
   }
 
   void selectNext() {
     animationStartPos= 1.2;
 
-    context.read<DateStore>().nextDay(dateStore.selectedDate);
+    context.read<DateStore>().nextDayCalendar();
   }
 }
 

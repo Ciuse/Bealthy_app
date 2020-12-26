@@ -205,7 +205,7 @@ class _DishPageState extends State<DishPage>{
                             for(String qty in quantityList) RaisedButton(
                                 onPressed:  () {
                                   setQuantityAndMealTimeToDish(qty);
-                                   mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.selectedDate)
+                                   mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
                                        .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
                                    );
                                 },
@@ -241,7 +241,7 @@ class _DishPageState extends State<DishPage>{
                         child: Text('Remove it!'),
                         onPressed: () {
 
-                          mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getEnumIndex(widget.dish.mealTime), widget.dish, dateStore.selectedDate)
+                          mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getEnumIndex(widget.dish.mealTime), widget.dish, dateStore.calendarSelectedDate)
                               .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
 
                         },

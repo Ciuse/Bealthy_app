@@ -73,13 +73,13 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
-    dateStore.selectedDate = day;
+    dateStore.calendarSelectedDate = day;
     context.read<MealTimeStore>().initDishesOfMealTimeList(day);
     context.read<SymptomStore>().getSymptomsOfADay(day);
   }
 
   void _onDayChangedTab(DateTime day) {
-    dateStore.selectedDate = day;
+    dateStore.calendarSelectedDate = day;
     context.read<MealTimeStore>().initDishesOfMealTimeList(day);
     context.read<SymptomStore>().getSymptomsOfADay(day);
   }
@@ -90,12 +90,13 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
   void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format) {
     print('CALLBACK: _onCalendarCreated');
-    context.read<SymptomStore>().getSymptomsOfADay(DateTime.now());
-    context.read<MealTimeStore>().initDishesOfMealTimeList(DateTime.now());
+    dateStore.calendarSelectedDate=DateTime.now();
+    context.read<SymptomStore>().getSymptomsOfADay(dateStore.calendarSelectedDate);
+    context.read<MealTimeStore>().initDishesOfMealTimeList(dateStore.calendarSelectedDate);
   }
 
   void reactToDataChange(){
-    reaction((_) => dateStore.selectedDate, (value) => {
+    reaction((_) => dateStore.calendarSelectedDate, (value) => {
       dateNormalized=DateTime.utc(value.year, value.month, value.day, 12),
       if(_calendarController.selectedDay!=dateNormalized){
         _calendarController.setSelectedDay(dateNormalized, isProgrammatic: false),

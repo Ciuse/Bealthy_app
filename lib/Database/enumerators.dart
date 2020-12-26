@@ -13,6 +13,11 @@ enum Quantity {
   Lots, //Tanta
 }
 
+enum TemporalTime {
+  Day,
+  Week,
+  Month,
+}
 
 enum MealTime{
   Breakfast,

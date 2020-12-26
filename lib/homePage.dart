@@ -29,13 +29,13 @@ class HomePageWidget extends StatelessWidget {
           thickness: 2.5,
           color: Colors.black87,
         ),
-        SymptomsBar(day: dateModel.selectedDate),
+        SymptomsBar(day: dateModel.calendarSelectedDate),
         Divider(
           height: 2.5,
           thickness: 2.5,
           color: Colors.black87,
         ),
-        ListDishesOfDay(day: dateModel.selectedDate),
+        ListDishesOfDay(day: dateModel.calendarSelectedDate),
 
       ]),
       floatingActionButton: FloatingActionButton(

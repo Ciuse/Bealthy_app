@@ -1,11 +1,14 @@
 import 'dart:math';
 
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:Bealthy_app/Models/overviewStore.dart';
+import 'package:Bealthy_app/headerScrollStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'Database/symptom.dart';
+import 'Database/enumerators.dart';
 import 'Models/dateStore.dart';
 import 'Models/symptomStore.dart';
 
@@ -13,22 +16,25 @@ import 'Models/symptomStore.dart';
 
 
 class OverviewPage extends StatefulWidget {
+  final headerScrollStyle = const HeaderScrollStyle();
+  final formatAnimation = FormatAnimation.slide;
+
   @override
   _OverviewPageState createState() => _OverviewPageState();
 }
 
 class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMixin {
   TabController _tabController;
-  DateTime date;
-  SymptomStore symptomStore;
+  DateStore dateStore;
+  OverviewStore overviewStore;
+  double animationStartPos=0;
 
 
   void initState() {
     _tabController = getTabController();
-    var storeDate = Provider.of<DateStore>(context, listen: false);
-    date = storeDate.selectedDate;
-    symptomStore = Provider.of<SymptomStore>(context, listen: false);
-    symptomStore.initStore(date);
+    dateStore = Provider.of<DateStore>(context, listen: false);
+    dateStore.overviewSelectedDate=DateTime.now();
+    overviewStore = Provider.of<OverviewStore>(context, listen: false);
 
   }
 
@@ -45,7 +51,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    final symptomStore = Provider.of<SymptomStore>(context);
+    reactToDataChange();
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal,
@@ -61,27 +67,151 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           controller: _tabController,
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          symptomStore.symptomListOfSpecificDay.length>0? symptomsWidget(symptomStore) : Container(child: Text("no symptoms present"),),
-          ingredientsWidget(),
-        ],
-      ),
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Observer(builder: (_) => _buildHeader(dateStore.overviewSelectedDate)),
+    Observer(builder: (_) =>  Expanded(child: _buildContent()))
+              //Add this to give height
+          ],
+      )
     ));
   }
-
-  int getNumOfSymptomsInSpecificDay(){
-    int num=0;
-    symptomStore.symptomList.forEach((element) {
-      if(element.isSymptomSelectDay){
-        num = num+1;
-      }
-    });
-    return num;
+  Widget _buildContent() {
+    if (widget.formatAnimation == FormatAnimation.slide) {
+      return AnimatedSize(
+        duration: Duration(
+            milliseconds: 330
+        ),
+        curve: Curves.fastOutSlowIn,
+        vsync: this,
+        alignment: Alignment(0, -1),
+        child: _buildHorizontalSwipeWrapper(
+            child: Observer(builder: (_) => overviewContent())
+        ),
+      );
+    } else {
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 350),
+        transitionBuilder: (child, animation) {
+          return SizeTransition(
+            sizeFactor: animation,
+            child: ScaleTransition(
+              scale: animation,
+              child: child,
+            ),
+          );
+        },
+        child: _buildHorizontalSwipeWrapper(
+            child: Observer(builder: (_) => overviewContent())
+        ),
+      );
+    }
   }
 
-  Widget symptomsWidget(SymptomStore symptomStore) {
+  Widget _buildHorizontalSwipeWrapper({Widget child}) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 850),
+      switchInCurve: Curves.decelerate,
+      transitionBuilder: (child, animation) {
+        return SlideTransition(
+          position: Tween<Offset>(
+              begin: Offset(animationStartPos, 0),
+              end: Offset(0, 0))
+              .animate(animation),
+          child: child,
+        );
+      },
+      layoutBuilder: (currentChild, _) => currentChild,
+      child: Dismissible(
+        key: ValueKey(dateStore.overviewSelectedDate),
+        resizeDuration: null,
+        onDismissed: _onHorizontalSwipe,
+        direction: DismissDirection.horizontal,
+        child: child,
+      ),
+    );
+  }
+  void _onHorizontalSwipe(DismissDirection direction) {
+    if (direction == DismissDirection.startToEnd) {
+      // Swipe right
+      selectPrevious();
+    } else {
+      // Swipe left
+      selectNext();
+    }
+  }
+
+  Widget overviewContent (){
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        overviewStore.symptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget(),
+
+        ingredientsWidget(),
+      ],
+    );
+  }
+  Widget noSymptomsWidget() {
+    return Container(child: Text("No symptoms present"));
+  }
+
+  void selectPrevious() {
+    animationStartPos= -1.2;
+    context.read<DateStore>().previousDayOverview();
+  }
+
+  void selectNext() {
+    animationStartPos= 1.2;
+    context.read<DateStore>().nextDayOverview();
+  }
+  void reactToDataChange(){
+    reaction((_) => dateStore.overviewSelectedDate, (value) => {
+      overviewStore.initializeOverviewList(dateStore),
+    });
+  }
+
+  Widget _buildHeader(DateTime day) {
+    final children = [
+      _CustomIconButton(
+        icon: widget.headerScrollStyle.leftChevronIcon,
+        onTap: selectPrevious,
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: widget.headerScrollStyle.leftChevronPadding,
+      ),
+      Expanded(
+        child: GestureDetector(
+          onTap: null,
+          onLongPress: null,
+          child: Text(DateFormat.yMMMMEEEEd("en_US").format(day),
+            style: widget.headerScrollStyle.titleTextStyle,
+            textAlign: widget.headerScrollStyle.centerHeaderTitle
+                ? TextAlign.center
+                : TextAlign.start,
+          ),
+        ),
+      ),
+      _CustomIconButton(
+        icon: widget.headerScrollStyle.rightChevronIcon,
+        onTap: selectNext,
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: widget.headerScrollStyle.leftChevronPadding,
+      ),
+    ];
+
+    return Container(
+      decoration: widget.headerScrollStyle.decoration,
+      margin: widget.headerScrollStyle.headerMargin,
+      padding: widget.headerScrollStyle.headerPadding,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: children,
+      ),
+    );
+
+  }
+
+  Widget symptomsWidget() {
     return Column(children: [
       Divider(height: 30),
       PieChartSample2(),
@@ -89,7 +219,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           height: 80,
           child: Observer(builder: (_) =>
               ListView.builder(
-                itemCount: symptomStore.symptomListOfSpecificDay.length,
+                itemCount: overviewStore.symptomsPresentMap.length,
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
@@ -107,7 +237,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                             fillColor: Colors.white,
                             child: ImageIcon(
                               AssetImage("images/" +
-                                  symptomStore.symptomListOfSpecificDay[index].id + ".png"),
+                                  overviewStore.symptomsPresentMap.keys.elementAt(index) + ".png"),
                               size: 28.0,
                             ),
                             padding: EdgeInsets.all(15.0),
@@ -194,6 +324,7 @@ class PieChart2State extends State {
 
     List colorsOfChart = [Colors.red,Colors.cyanAccent,Colors.brown,Colors.yellow,Colors.blueAccent,Colors.green,Colors.teal,Colors.pinkAccent];
     SymptomStore symptomStore = Provider.of<SymptomStore>(context);
+    OverviewStore overviewStore = Provider.of<OverviewStore>(context);
     return Observer(builder: (_) => AspectRatio(
       aspectRatio: 1.3,
       child: Card(
@@ -223,7 +354,7 @@ class PieChart2State extends State {
                       ),
                       sectionsSpace: 0,
                       centerSpaceRadius: 40,
-                      sections: symptomStore.symptomListOfSpecificDay.length>0 ? showingSections(colorsOfChart,symptomStore) : null,
+                      sections: overviewStore.symptomsPresentMap.length>0 ? showingSections(colorsOfChart,overviewStore, symptomStore) : 0,
                   ),
                 )),
               ),
@@ -233,10 +364,10 @@ class PieChart2State extends State {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                for(var symptom in symptomStore.symptomListOfSpecificDay)
+                for(var symptomId in overviewStore.symptomsPresentMap.keys)
                   Indicator(
-                    color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptom, symptomStore.symptomList)],
-                    text: symptom.name,
+                    color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(symptomId), symptomStore.symptomList)],
+                    text: symptomStore.getSymptomFromList(symptomId).name,
                     isSquare: true,
                   ),
                 SizedBox(
@@ -253,17 +384,18 @@ class PieChart2State extends State {
     ));
   }
 
-  List<PieChartSectionData> showingSections(List colorsOfChart, SymptomStore symptomStore) {
+  List<PieChartSectionData> showingSections(List colorsOfChart, OverviewStore overviewStore, SymptomStore symptomStore) {
 
-    return List.generate(symptomStore.symptomListOfSpecificDay.length, (i) {
+    return List.generate(overviewStore.symptomsPresentMap.length, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
 
+
         return PieChartSectionData(
-          color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.symptomListOfSpecificDay[i], symptomStore.symptomList)],
-          value: 100/symptomStore.symptomListOfSpecificDay.length,
-          title: '${(100/symptomStore.symptomListOfSpecificDay.length).toStringAsFixed(1)}%',
+          color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(overviewStore.symptomsPresentMap.keys.elementAt(i)), symptomStore.symptomList)],
+          value: (overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100,
+          title: '${((overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%',
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
@@ -274,3 +406,35 @@ class PieChart2State extends State {
 }
 
 
+
+class _CustomIconButton extends StatelessWidget {
+  final Icon icon;
+  final VoidCallback onTap;
+  final EdgeInsets margin;
+  final EdgeInsets padding;
+
+  const _CustomIconButton({
+    Key key,
+    @required this.icon,
+    @required this.onTap,
+    this.margin,
+    this.padding,
+  })  : assert(icon != null),
+        assert(onTap != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: margin,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(100.0),
+        child: Padding(
+          padding: padding,
+          child: icon,
+        ),
+      ),
+    );
+  }
+}

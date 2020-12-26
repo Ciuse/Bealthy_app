@@ -1,6 +1,7 @@
 import 'package:Bealthy_app/treatmentPage.dart';
 
 import 'Models/mealTimeStore.dart';
+import 'Models/overviewStore.dart';
 import 'Models/symptomStore.dart';
 import 'overviewPage.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,9 @@ void main() async {
         ),
         Provider<MealTimeStore>(
           create: (_) => MealTimeStore(),
+        ),
+        Provider<OverviewStore>(
+          create: (_) => OverviewStore(),
         )
       ], child:MyApp())));
 }

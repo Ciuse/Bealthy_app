@@ -16,18 +16,37 @@ mixin _$DateStore on _DateStoreBase, Store {
           Computed<int>(() => super.weekDay, name: '_DateStoreBase.weekDay'))
       .value;
 
-  final _$selectedDateAtom = Atom(name: '_DateStoreBase.selectedDate');
+  final _$calendarSelectedDateAtom =
+      Atom(name: '_DateStoreBase.calendarSelectedDate');
 
   @override
-  DateTime get selectedDate {
-    _$selectedDateAtom.reportRead();
-    return super.selectedDate;
+  DateTime get calendarSelectedDate {
+    _$calendarSelectedDateAtom.reportRead();
+    return super.calendarSelectedDate;
   }
 
   @override
-  set selectedDate(DateTime value) {
-    _$selectedDateAtom.reportWrite(value, super.selectedDate, () {
-      super.selectedDate = value;
+  set calendarSelectedDate(DateTime value) {
+    _$calendarSelectedDateAtom.reportWrite(value, super.calendarSelectedDate,
+        () {
+      super.calendarSelectedDate = value;
+    });
+  }
+
+  final _$overviewSelectedDateAtom =
+      Atom(name: '_DateStoreBase.overviewSelectedDate');
+
+  @override
+  DateTime get overviewSelectedDate {
+    _$overviewSelectedDateAtom.reportRead();
+    return super.overviewSelectedDate;
+  }
+
+  @override
+  set overviewSelectedDate(DateTime value) {
+    _$overviewSelectedDateAtom.reportWrite(value, super.overviewSelectedDate,
+        () {
+      super.overviewSelectedDate = value;
     });
   }
 
@@ -57,22 +76,44 @@ mixin _$DateStore on _DateStoreBase, Store {
   }
 
   @override
-  void nextDay(DateTime day) {
+  void nextDayCalendar() {
     final _$actionInfo = _$_DateStoreBaseActionController.startAction(
-        name: '_DateStoreBase.nextDay');
+        name: '_DateStoreBase.nextDayCalendar');
     try {
-      return super.nextDay(day);
+      return super.nextDayCalendar();
     } finally {
       _$_DateStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void previousDay(DateTime day) {
+  void previousDayCalendar() {
     final _$actionInfo = _$_DateStoreBaseActionController.startAction(
-        name: '_DateStoreBase.previousDay');
+        name: '_DateStoreBase.previousDayCalendar');
     try {
-      return super.previousDay(day);
+      return super.previousDayCalendar();
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void nextDayOverview() {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.nextDayOverview');
+    try {
+      return super.nextDayOverview();
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void previousDayOverview() {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.previousDayOverview');
+    try {
+      return super.previousDayOverview();
     } finally {
       _$_DateStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -81,7 +122,8 @@ mixin _$DateStore on _DateStoreBase, Store {
   @override
   String toString() {
     return '''
-selectedDate: ${selectedDate},
+calendarSelectedDate: ${calendarSelectedDate},
+overviewSelectedDate: ${overviewSelectedDate},
 weekDay: ${weekDay}
     ''';
   }

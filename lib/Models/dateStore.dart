@@ -10,14 +10,17 @@ class DateStore = _DateStoreBase with _$DateStore;
 abstract class _DateStoreBase with Store {
 
   @observable
-  DateTime selectedDate = DateTime.now() ;
+  DateTime calendarSelectedDate = DateTime.now() ;
 
   @computed
-  int get weekDay => selectedDate.weekday;
+  int get weekDay => calendarSelectedDate.weekday;
+
+  @observable
+  DateTime overviewSelectedDate = DateTime.now() ;
 
   @action
   void changeCurrentDate(DateTime date) {
-    this.selectedDate = date;
+    this.calendarSelectedDate = date;
     fixDate(date);
   }
 
@@ -28,14 +31,22 @@ abstract class _DateStoreBase with Store {
   }
 
 @action
-  void nextDay(DateTime day) {
-      selectedDate = DateTime(day.year, day.month, day.day+1);
+  void nextDayCalendar() {
+  calendarSelectedDate = DateTime(calendarSelectedDate.year, calendarSelectedDate.month, calendarSelectedDate.day+1);
   }
 
   @action
-  void previousDay(DateTime day) {
-      selectedDate = DateTime(day.year, day.month, day.day-1);
+  void previousDayCalendar() {
+    calendarSelectedDate = DateTime(calendarSelectedDate.year, calendarSelectedDate.month, calendarSelectedDate.day-1);
+  }
+  @action
+  void nextDayOverview() {
+    overviewSelectedDate = DateTime(overviewSelectedDate.year, overviewSelectedDate.month, overviewSelectedDate.day+1);
   }
 
+  @action
+  void previousDayOverview() {
+    overviewSelectedDate = DateTime(overviewSelectedDate.year, overviewSelectedDate.month, overviewSelectedDate.day-1);
+  }
 }
 

@@ -1,5 +1,6 @@
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
+import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -26,12 +27,15 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   int frequencyFromDb;
   DateTime date;
   var mealTimeBoolListFromDb = new List<bool>();
+  OverviewStore overviewStore;
+  DateStore dateStore;
 
   void initState() {
     super.initState();
     _tabController = getTabController();
-    var storeDate = Provider.of<DateStore>(context, listen: false);
-    date = storeDate.selectedDate;
+    dateStore = Provider.of<DateStore>(context, listen: false);
+    overviewStore = Provider.of<OverviewStore>(context, listen: false);
+    date = dateStore.calendarSelectedDate;
     intensityFromDb = widget.symptom.intensity;
     frequencyFromDb = widget.symptom.frequency;
     widget.symptom.mealTimeBoolList.forEach((element) {
@@ -192,7 +196,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     if (!widget.symptom.isSymptomSelectDay) {
       if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
           widget.symptom.isPresentAtLeastOneTrue()){
-        context.read<SymptomStore>().updateSymptom(widget.symptom, date);
+        symptomStore.updateSymptom(widget.symptom, date).then((value) => overviewStore.initializeOverviewList(dateStore));
         Navigator.pop(context);
       }
     } else {
@@ -200,7 +204,8 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
           widget.symptom.isPresentAtLeastOneTrue()) {
         if (widget.symptom.frequency != frequencyFromDb ||
             widget.symptom.intensity != intensityFromDb || !areMealTimeBoolListsEqual()) {
-          context.read<SymptomStore>().updateSymptom(widget.symptom, date);
+          symptomStore.updateSymptom(widget.symptom, date).then((value) => overviewStore.initializeOverviewList(dateStore));
+
           Navigator.pop(context);
         }
       }else{
@@ -216,7 +221,8 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                     child: Text('Remove it!'),
                     onPressed: () {
                       symptomStore.removeSymptomOfSpecificDay( widget.symptom, date)
-                          .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+                          .then((value) => Navigator.of(context).popUntil((route) => route.isFirst))
+                          .then((value) => overviewStore.initializeOverviewList(dateStore));
                     },
                   )
                 ],
