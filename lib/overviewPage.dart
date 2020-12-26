@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/headerScrollStyle.dart';
+import 'package:Bealthy_app/ingredientOverview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -147,8 +148,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
       controller: _tabController,
       children: [
         overviewStore.symptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget(),
-
-        ingredientsWidget(),
+        IngredientOverview(),
       ],
     );
   }
@@ -253,13 +253,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     );
   }
 
-  Widget ingredientsWidget() {
-    return Column(
-        children: [
-          Container()
-        ]
-    );
-  }
 }
 
 class Indicator extends StatelessWidget {
