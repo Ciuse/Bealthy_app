@@ -31,6 +31,7 @@ abstract class _DateStoreBase with Store {
     for (int i = 0; i <= lastDate.difference(firstDate).inDays; i++) {
       rangeDays.add(firstDate.add(Duration(days: i)));
     }
+
   }
 
 

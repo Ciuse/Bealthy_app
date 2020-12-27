@@ -12,15 +12,15 @@ mixin _$OverviewStore on _OverviewBase, Store {
   final _$mapOverviewAtom = Atom(name: '_OverviewBase.mapOverview');
 
   @override
-  ObservableMap<DateTime, List<Symptom>> get mapOverview {
+  ObservableMap<DateTime, List<Symptom>> get mapSymptomsOverview {
     _$mapOverviewAtom.reportRead();
-    return super.mapOverview;
+    return super.mapSymptomsOverview;
   }
 
   @override
-  set mapOverview(ObservableMap<DateTime, List<Symptom>> value) {
-    _$mapOverviewAtom.reportWrite(value, super.mapOverview, () {
-      super.mapOverview = value;
+  set mapSymptomsOverview(ObservableMap<DateTime, List<Symptom>> value) {
+    _$mapOverviewAtom.reportWrite(value, super.mapSymptomsOverview, () {
+      super.mapSymptomsOverview = value;
     });
   }
 
@@ -158,7 +158,7 @@ mixin _$OverviewStore on _OverviewBase, Store {
   @override
   String toString() {
     return '''
-mapOverview: ${mapOverview},
+mapOverview: ${mapSymptomsOverview},
 overviewSymptomList: ${overviewSymptomList},
 timeSelected: ${timeSelected},
 symptomsPresentMap: ${symptomsPresentMap},

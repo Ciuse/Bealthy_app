@@ -31,7 +31,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   List<String> temporalList = [];
 
 
-  ReactionDisposer reaction1;
 
   void initState() {
   temporalList= getTemporalName();
@@ -39,8 +38,12 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
+    dateStore.overviewDefaultLastDate=DateTime.now();
+
     overviewStore = Provider.of<OverviewStore>(context, listen: false);
-    reaction1=reactToDataChange();
+    overviewStore.timeSelected = TemporalTime.Day;
+    overviewStore.initializeOverviewList(dateStore);
+
 
   }
 
@@ -56,7 +59,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   @override
   void dispose() {
     _tabController.dispose();
-    reaction1.reaction.dispose();
     super.dispose();
   }
 
@@ -67,21 +69,22 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(length: 2, child: Scaffold(
-      appBar: AppBar(
-        title: Text("Statistics",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
-        actions: <Widget>[
-          PopupMenuButton(
-            onSelected: choiceAction,
-              itemBuilder: (BuildContext context)
-              {
-                return temporalList.map((String choice) {
+        appBar: AppBar(
+          title: Text("Statistics",
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+          actions: <Widget>[
+            PopupMenuButton(
+                onSelected: choiceAction,
+                icon: Icon(Icons.calendar_today),
+                itemBuilder: (BuildContext context)
+                {
+                  return temporalList.map((String choice) {
                     return PopupMenuItem<String>(
                         value: choice,
                         child: Text(choice));
-                }).toList();
-              }
-          )
+                  }).toList();
+                }
+            )
         ],
         backgroundColor: Colors.teal,
         bottom: TabBar(
@@ -205,44 +208,39 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   void selectPreviousDay() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousDayOverview();
+    overviewStore.initializeOverviewList(dateStore);
   }
 
   void selectNextDay() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextDayOverview();
+    overviewStore.initializeOverviewList(dateStore);
   }
 
   void selectPreviousWeek() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousWeekOverview();
+    overviewStore.initializeOverviewList(dateStore);
+
   }
 
   void selectNextWeek() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextWeekOverview();
+    overviewStore.initializeOverviewList(dateStore);
   }
 
   void selectPreviousMonth() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousMonthOverview();
+    overviewStore.initializeOverviewList(dateStore);
   }
 
   void selectNextMonth() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextMonthOverview();
+    overviewStore.initializeOverviewList(dateStore);
   }
-
-
-
-  ReactionDisposer reactToDataChange(){
-    return reaction((changeDay) => {dateStore.overviewDefaultLastDate, dateStore.overviewFirstDate}, (value) => {
-      print(value),
-      overviewStore.initializeOverviewList(dateStore),
-
-    });
-  }
-
-
 
   Widget _buildHeaderDay(DateTime day) {
     final children = [
