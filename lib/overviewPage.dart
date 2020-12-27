@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/headerScrollStyle.dart';
 import 'package:Bealthy_app/ingredientOverview.dart';
@@ -29,16 +27,25 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   DateStore dateStore;
   OverviewStore overviewStore;
   double animationStartPos=0;
-
+  final temporalCt = TextEditingController();
+  List<String> temporalList = [];
 
   void initState() {
+    temporalList= getTemporalName();
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
-    dateStore.overviewSelectedDate=DateTime.now();
     overviewStore = Provider.of<OverviewStore>(context, listen: false);
 
   }
 
+  List<String> getTemporalName(){
+
+    List<String> listToReturn = new List<String>();
+    TemporalTime.values.forEach((element) {
+      listToReturn.add(element.toString().split('.').last);
+    });
+    return listToReturn;
+  }
 
   @override
   void dispose() {
@@ -55,9 +62,22 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     reactToDataChange();
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
         title: Text("Statistics",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+        actions: <Widget>[
+          PopupMenuButton(
+            onSelected: choiceAction,
+              itemBuilder: (BuildContext context)
+              {
+                return temporalList.map((String choice) {
+                    return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice));
+                }).toList();
+              }
+          )
+        ],
+        backgroundColor: Colors.teal,
         bottom: TabBar(
           labelColor: Colors.black,
           indicatorColor: Colors.black,
@@ -71,13 +91,41 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         body: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Observer(builder: (_) => _buildHeader(dateStore.overviewSelectedDate)),
+            Observer(builder: (_) =>
+            overviewStore.timeSelected==TemporalTime.Day? _buildHeaderDay(dateStore.overviewDefaultLastDate):
+            overviewStore.timeSelected==TemporalTime.Week? _buildHeaderWeek(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate):
+            overviewStore.timeSelected==TemporalTime.Month? _buildHeaderMonth(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate): null
+            ),
     Observer(builder: (_) =>  Expanded(child: _buildContent()))
               //Add this to give height
           ],
       )
     ));
   }
+
+  void choiceAction(String choice){
+    TemporalTime.values.forEach((element) {
+        if(element.toString().split('.').last==choice){
+          overviewStore.timeSelected = element;
+        }
+      });
+    if(choice== TemporalTime.Day.toString().split('.').last){
+      overviewStore.initializeOverviewList(dateStore);
+    }
+    if(choice== TemporalTime.Week.toString().split('.').last){
+      //calcolo il primo giorno della settimana e trovo i giorni del range
+      dateStore.firstDayInWeek();
+      //trovo le statistiche di quel range di giorni
+      overviewStore.initializeOverviewList(dateStore);
+    }
+    if(choice== TemporalTime.Month.toString().split('.').last){
+      //calcolo il primo giorno del mese e trovo i giorni del range
+      dateStore.firstDayInMonth();
+      //trovo le statistiche di quel range di giorni
+      overviewStore.initializeOverviewList(dateStore);
+    }
+  }
+
   Widget _buildContent() {
     if (widget.formatAnimation == FormatAnimation.slide) {
       return AnimatedSize(
@@ -125,7 +173,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
       },
       layoutBuilder: (currentChild, _) => currentChild,
       child: Dismissible(
-        key: ValueKey(dateStore.overviewSelectedDate),
+        key: ValueKey(dateStore.overviewDefaultLastDate),
         resizeDuration: null,
         onDismissed: _onHorizontalSwipe,
         direction: DismissDirection.horizontal,
@@ -136,10 +184,10 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   void _onHorizontalSwipe(DismissDirection direction) {
     if (direction == DismissDirection.startToEnd) {
       // Swipe right
-      selectPrevious();
+      selectPreviousDay();
     } else {
       // Swipe left
-      selectNext();
+      selectNextDay();
     }
   }
 
@@ -156,26 +204,53 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return Container(child: Text("No symptoms present"));
   }
 
-  void selectPrevious() {
+  void selectPreviousDay() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousDayOverview();
   }
 
-  void selectNext() {
+  void selectNextDay() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextDayOverview();
   }
+
+  void selectPreviousWeek() {
+    animationStartPos= -1.2;
+    context.read<DateStore>().previousWeekOverview();
+  }
+
+  void selectNextWeek() {
+    animationStartPos= 1.2;
+    context.read<DateStore>().nextWeekOverview();
+  }
+
+  void selectPreviousMonth() {
+    animationStartPos= -1.2;
+    context.read<DateStore>().previousMonthOverview();
+  }
+
+  void selectNextMonth() {
+    animationStartPos= 1.2;
+    context.read<DateStore>().nextMonthOverview();
+  }
+
+
+
   void reactToDataChange(){
-    reaction((_) => dateStore.overviewSelectedDate, (value) => {
+    reaction((_) => {dateStore.overviewDefaultLastDate, dateStore.overviewFirstDate}, (value) => {
+      print(value),
       overviewStore.initializeOverviewList(dateStore),
+
     });
   }
 
-  Widget _buildHeader(DateTime day) {
+
+
+  Widget _buildHeaderDay(DateTime day) {
     final children = [
       _CustomIconButton(
         icon: widget.headerScrollStyle.leftChevronIcon,
-        onTap: selectPrevious,
+        onTap: selectPreviousDay,
         margin: widget.headerScrollStyle.leftChevronMargin,
         padding: widget.headerScrollStyle.leftChevronPadding,
       ),
@@ -193,7 +268,87 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
       ),
       _CustomIconButton(
         icon: widget.headerScrollStyle.rightChevronIcon,
-        onTap: selectNext,
+        onTap: selectNextDay,
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: widget.headerScrollStyle.leftChevronPadding,
+      ),
+    ];
+
+    return Container(
+      decoration: widget.headerScrollStyle.decoration,
+      margin: widget.headerScrollStyle.headerMargin,
+      padding: widget.headerScrollStyle.headerPadding,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: children,
+      ),
+    );
+
+  }
+
+  Widget _buildHeaderWeek(DateTime firstDay, DateTime lastDay) {
+    final children = [
+      _CustomIconButton(
+        icon: widget.headerScrollStyle.leftChevronIcon,
+        onTap: selectPreviousWeek,
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: widget.headerScrollStyle.leftChevronPadding,
+      ),
+      Expanded(
+        child: GestureDetector(
+          onTap: null,
+          onLongPress: null,
+          child: Text(DateFormat.yMMMMEEEEd("en_US").format(firstDay) + DateFormat.yMMMMEEEEd("en_US").format(lastDay),
+            style: widget.headerScrollStyle.titleTextStyle,
+            textAlign: widget.headerScrollStyle.centerHeaderTitle
+                ? TextAlign.center
+                : TextAlign.start,
+          ),
+        ),
+      ),
+      _CustomIconButton(
+        icon: widget.headerScrollStyle.rightChevronIcon,
+        onTap: selectNextWeek,
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: widget.headerScrollStyle.leftChevronPadding,
+      ),
+    ];
+
+    return Container(
+      decoration: widget.headerScrollStyle.decoration,
+      margin: widget.headerScrollStyle.headerMargin,
+      padding: widget.headerScrollStyle.headerPadding,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: children,
+      ),
+    );
+
+  }
+
+  Widget _buildHeaderMonth(DateTime firstDay, DateTime lastDay) {
+    final children = [
+      _CustomIconButton(
+        icon: widget.headerScrollStyle.leftChevronIcon,
+        onTap: selectPreviousMonth,
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: widget.headerScrollStyle.leftChevronPadding,
+      ),
+      Expanded(
+        child: GestureDetector(
+          onTap: null,
+          onLongPress: null,
+          child: Text(DateFormat.yMMMMEEEEd("en_US").format(firstDay) + DateFormat.yMMMMEEEEd("en_US").format(lastDay),
+            style: widget.headerScrollStyle.titleTextStyle,
+            textAlign: widget.headerScrollStyle.centerHeaderTitle
+                ? TextAlign.center
+                : TextAlign.start,
+          ),
+        ),
+      ),
+      _CustomIconButton(
+        icon: widget.headerScrollStyle.rightChevronIcon,
+        onTap: selectNextMonth,
         margin: widget.headerScrollStyle.leftChevronMargin,
         padding: widget.headerScrollStyle.leftChevronPadding,
       ),

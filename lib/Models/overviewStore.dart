@@ -46,16 +46,18 @@ abstract class _OverviewBase with Store {
   @action
   Future<void> initializeOverviewList(DateStore dateStore) async {
     mapOverview.clear();
+    symptomsPresentMap.clear();
     switch(timeSelected.index){
-      case 0: await getSymptomsOfADay(dateStore.overviewSelectedDate)
-          .then((value) => mapOverview.putIfAbsent(dateStore.overviewSelectedDate, () => overviewSymptomList))
+      case 0: await getSymptomsOfADay(dateStore.overviewDefaultLastDate)
+          .then((value) => mapOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewSymptomList))
           .then((value) => numOfCategorySymptoms()); break;
-      case 1: break;
-      case 2: break;
+      case 1: await getSymptomsOfAWeek(dateStore);break;
+      case 2: await getSymptomsOfAMonth(dateStore);break;
 
     }
 
   }
+
 
   @action
   int totalNumOfSymptomList(){
@@ -69,7 +71,6 @@ abstract class _OverviewBase with Store {
 
   @action
   void numOfCategorySymptoms(){
-    symptomsPresentMap.clear();
     mapOverview.values.forEach((symptomsList) {
       symptomsList.forEach((symptom) {
         if(!symptomsPresentMap.keys.contains(symptom.id)){
@@ -84,8 +85,8 @@ abstract class _OverviewBase with Store {
 
   @action
   Future<void> getSymptomsOfADay(DateTime date) async {
-    overviewSymptomList.clear();
-    String day = fixDate(date);
+        String day = fixDate(date);
+        overviewSymptomList.clear();
     await (FirebaseFirestore.instance
         .collection('UserSymptoms')
         .doc(auth.currentUser.uid).collection("DaySymptoms").doc(day)
@@ -110,11 +111,30 @@ abstract class _OverviewBase with Store {
     );
   }
 
+  @action
+  Future<void> getSymptomsOfAWeek(DateStore dateStore) async {
+    dateStore.rangeDays.forEach((element) async {
+      await getSymptomsOfADay(element)
+          .then((value) => mapOverview.putIfAbsent(element, () => overviewSymptomList))
+          .then((value) => numOfCategorySymptoms());
+    });
+    
+  }
+
+  
+  @action
+  Future<void> getSymptomsOfAMonth(DateStore dateStore) async {
+    dateStore.rangeDays.forEach((element) async {
+      await getSymptomsOfADay(element)
+          .then((value) => mapOverview.putIfAbsent(element, () => overviewSymptomList))
+          .then((value) => numOfCategorySymptoms());
+    });
+  }
+
 
   int getIndexFromSymptomsList(Symptom symptom,List<Symptom> symptoms){
     return symptoms.indexOf(symptom,0);
   }
-
 
 
   String fixDate(DateTime date) {

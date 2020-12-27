@@ -37,16 +37,16 @@ mixin _$DateStore on _DateStoreBase, Store {
       Atom(name: '_DateStoreBase.overviewSelectedDate');
 
   @override
-  DateTime get overviewSelectedDate {
+  DateTime get overviewDefaultLastDate {
     _$overviewSelectedDateAtom.reportRead();
-    return super.overviewSelectedDate;
+    return super.overviewDefaultLastDate;
   }
 
   @override
-  set overviewSelectedDate(DateTime value) {
-    _$overviewSelectedDateAtom.reportWrite(value, super.overviewSelectedDate,
+  set overviewDefaultLastDate(DateTime value) {
+    _$overviewSelectedDateAtom.reportWrite(value, super.overviewDefaultLastDate,
         () {
-      super.overviewSelectedDate = value;
+      super.overviewDefaultLastDate = value;
     });
   }
 
@@ -123,7 +123,7 @@ mixin _$DateStore on _DateStoreBase, Store {
   String toString() {
     return '''
 calendarSelectedDate: ${calendarSelectedDate},
-overviewSelectedDate: ${overviewSelectedDate},
+overviewSelectedDate: ${overviewDefaultLastDate},
 weekDay: ${weekDay}
     ''';
   }

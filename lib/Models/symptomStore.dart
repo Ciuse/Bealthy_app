@@ -84,10 +84,10 @@ abstract class _SymptomStoreBase with Store {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((symptom) {
         Symptom toUpdate = getSymptomFromList(symptom.id);
-        toUpdate.setIsSymptomInADay(true);
         toUpdate.setIntensity(symptom.get("intensity"));
         toUpdate.setFrequency(symptom.get("frequency"));
         toUpdate.setMealTime(symptom.get("mealTime"));
+        toUpdate.setIsSymptomInADay(true);
         toUpdate.setMealTimeBoolList();
         //lista dei sintomi di un giorno specifico
         symptomListOfSpecificDay.add(toUpdate);

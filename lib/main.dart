@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/treatmentPage.dart';
 
 import 'Models/mealTimeStore.dart';
@@ -322,8 +323,15 @@ class HomePage extends StatefulWidget {
 /// This is the private State class that goes with HomePage.
 class _MyHomePageState extends State<HomePage> {
 
-
+  OverviewStore overviewStore;
+  DateStore dateStore;
   int _selectedIndex = 0;
+
+  void initState() {
+   overviewStore = Provider.of<OverviewStore>(context, listen: false);
+   dateStore = Provider.of<DateStore>(context, listen: false);
+  }
+
   final List<Widget> _widgetOptions = <Widget>[
     HomePageWidget(Colors.green),
     OverviewPage(),
@@ -335,7 +343,9 @@ class _MyHomePageState extends State<HomePage> {
   void _bottomBarOnTapped(int index) {
     setState(() {
       _selectedIndex = index;
+
     });
+
   }
 
   @override

@@ -16,7 +16,23 @@ abstract class _DateStoreBase with Store {
   int get weekDay => calendarSelectedDate.weekday;
 
   @observable
-  DateTime overviewSelectedDate = DateTime.now() ;
+  DateTime overviewDefaultLastDate = DateTime.now();
+
+  @observable
+  var rangeDays= new ObservableList<DateTime>();
+
+
+  @observable
+  DateTime overviewFirstDate;
+
+  @action
+  void getDaysOfAWeekOrMonth(DateTime firstDate, DateTime lastDate) {
+    rangeDays.clear();
+    for (int i = 0; i <= lastDate.difference(firstDate).inDays; i++) {
+      rangeDays.add(firstDate.add(Duration(days: i)));
+    }
+  }
+
 
   @action
   void changeCurrentDate(DateTime date) {
@@ -41,12 +57,54 @@ abstract class _DateStoreBase with Store {
   }
   @action
   void nextDayOverview() {
-    overviewSelectedDate = DateTime(overviewSelectedDate.year, overviewSelectedDate.month, overviewSelectedDate.day+1);
+    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day+1);
   }
 
   @action
   void previousDayOverview() {
-    overviewSelectedDate = DateTime(overviewSelectedDate.year, overviewSelectedDate.month, overviewSelectedDate.day-1);
+    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-1);
+  }
+
+  @action
+  void nextWeekOverview() {
+    overviewFirstDate = DateTime(overviewFirstDate.year, overviewFirstDate.month, overviewFirstDate.day+7);
+    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day+7);
+    getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
+  }
+
+  @action
+  void previousWeekOverview() {
+    overviewFirstDate = DateTime(overviewFirstDate.year, overviewFirstDate.month, overviewFirstDate.day-7);
+    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-7);
+    getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
+  }
+
+  @action
+  void nextMonthOverview() {
+    overviewFirstDate = DateTime(overviewFirstDate.year, overviewFirstDate.month, overviewFirstDate.day+30);
+    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day+30);
+    getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
+  }
+
+  @action
+  void previousMonthOverview() {
+    overviewFirstDate = DateTime(overviewFirstDate.year, overviewFirstDate.month, overviewFirstDate.day-30);
+    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-30);
+    getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
+  }
+
+
+
+  @action
+  void firstDayInWeek() {
+    overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-7);
+    getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
+  }
+
+  @action
+  void firstDayInMonth() {
+    overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-30);
+    getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
   }
 }
 
