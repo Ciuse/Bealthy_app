@@ -30,11 +30,17 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   final temporalCt = TextEditingController();
   List<String> temporalList = [];
 
+
+  ReactionDisposer reaction1;
+
   void initState() {
-    temporalList= getTemporalName();
+  temporalList= getTemporalName();
+    super.initState();
+
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
     overviewStore = Provider.of<OverviewStore>(context, listen: false);
+    reaction1=reactToDataChange();
 
   }
 
@@ -50,6 +56,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   @override
   void dispose() {
     _tabController.dispose();
+    reaction1.reaction.dispose();
     super.dispose();
   }
 
@@ -59,7 +66,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    reactToDataChange();
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
         title: Text("Statistics",
@@ -175,25 +181,17 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
       child: Dismissible(
         key: ValueKey(dateStore.overviewDefaultLastDate),
         resizeDuration: null,
-        onDismissed: _onHorizontalSwipe,
         direction: DismissDirection.horizontal,
         child: child,
       ),
     );
   }
-  void _onHorizontalSwipe(DismissDirection direction) {
-    if (direction == DismissDirection.startToEnd) {
-      // Swipe right
-      selectPreviousDay();
-    } else {
-      // Swipe left
-      selectNextDay();
-    }
-  }
+
 
   Widget overviewContent (){
+
     return TabBarView(
-      controller: _tabController,
+    controller: _tabController,
       children: [
         overviewStore.symptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget(),
         IngredientOverview(),
@@ -236,8 +234,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
 
 
-  void reactToDataChange(){
-    reaction((_) => {dateStore.overviewDefaultLastDate, dateStore.overviewFirstDate}, (value) => {
+  ReactionDisposer reactToDataChange(){
+    return reaction((changeDay) => {dateStore.overviewDefaultLastDate, dateStore.overviewFirstDate}, (value) => {
       print(value),
       overviewStore.initializeOverviewList(dateStore),
 
@@ -367,7 +365,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   }
 
   Widget symptomsWidget() {
-    return Column(children: [
+    return Column(
+      children: [
       Divider(height: 30),
       PieChartSample2(),
       SizedBox( // Horizontal ListView
@@ -542,8 +541,8 @@ class PieChart2State extends State {
 
         return PieChartSectionData(
           color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(overviewStore.symptomsPresentMap.keys.elementAt(i)), symptomStore.symptomList)],
-          value: (overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100,
-          title: '${((overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%',
+          value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
+          title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%' : '',
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
