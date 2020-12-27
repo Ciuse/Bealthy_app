@@ -31,7 +31,7 @@ class IngredientOverviewState extends State {
 
   }
   ReactionDisposer reactToDataChange(){
-    return reaction((changeDay) => dateStore.overviewSelectedDate, (value) => {
+    return reaction((changeDay) => dateStore.overviewDefaultLastDate, (value) => {
       overviewStore.initializeIngredientList(dateStore),
     });
   }

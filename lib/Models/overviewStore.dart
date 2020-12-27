@@ -77,10 +77,10 @@ abstract class _OverviewBase with Store {
     overviewIngredientList.clear();
     switch(timeSelected.index){
       case 0:
-        await getDishesOfADay(dateStore.overviewSelectedDate).then((value) =>
+        await getDishesOfADay(dateStore.overviewDefaultLastDate).then((value) =>
         {
           Future.forEach(overviewDishList, getIngredientOfADay).then((value) => {
-            mapIngredientsOverview.putIfAbsent(dateStore.overviewSelectedDate, () => overviewIngredientList)
+            mapIngredientsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewIngredientList)
           }).then((value) => numOfCategoryIngredient())});
 
         break;
