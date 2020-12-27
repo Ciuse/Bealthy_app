@@ -54,12 +54,28 @@ mixin _$Ingredient on _IngredientBase, Store {
     });
   }
 
+  final _$dayRepetitionAtom = Atom(name: '_IngredientBase.dayRepetition');
+
+  @override
+  int get dayRepetition {
+    _$dayRepetitionAtom.reportRead();
+    return super.dayRepetition;
+  }
+
+  @override
+  set dayRepetition(int value) {
+    _$dayRepetitionAtom.reportWrite(value, super.dayRepetition, () {
+      super.dayRepetition = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 id: ${id},
 name: ${name},
-qty: ${qty}
+qty: ${qty},
+dayRepetition: ${dayRepetition}
     ''';
   }
 }

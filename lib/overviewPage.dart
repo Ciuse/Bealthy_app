@@ -29,13 +29,16 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   DateStore dateStore;
   OverviewStore overviewStore;
   double animationStartPos=0;
-
+  ReactionDisposer reaction1;
 
   void initState() {
+    super.initState();
+
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
     dateStore.overviewSelectedDate=DateTime.now();
     overviewStore = Provider.of<OverviewStore>(context, listen: false);
+    reaction1=reactToDataChange();
 
   }
 
@@ -43,6 +46,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   @override
   void dispose() {
     _tabController.dispose();
+    reaction1.reaction.dispose();
     super.dispose();
   }
 
@@ -52,7 +56,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    reactToDataChange();
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal,
@@ -127,25 +130,17 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
       child: Dismissible(
         key: ValueKey(dateStore.overviewSelectedDate),
         resizeDuration: null,
-        onDismissed: _onHorizontalSwipe,
         direction: DismissDirection.horizontal,
         child: child,
       ),
     );
   }
-  void _onHorizontalSwipe(DismissDirection direction) {
-    if (direction == DismissDirection.startToEnd) {
-      // Swipe right
-      selectPrevious();
-    } else {
-      // Swipe left
-      selectNext();
-    }
-  }
+
 
   Widget overviewContent (){
+
     return TabBarView(
-      controller: _tabController,
+    controller: _tabController,
       children: [
         overviewStore.symptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget(),
         IngredientOverview(),
@@ -165,8 +160,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     animationStartPos= 1.2;
     context.read<DateStore>().nextDayOverview();
   }
-  void reactToDataChange(){
-    reaction((_) => dateStore.overviewSelectedDate, (value) => {
+  ReactionDisposer reactToDataChange(){
+    return reaction((changeDay) => dateStore.overviewSelectedDate, (value) => {
       overviewStore.initializeOverviewList(dateStore),
     });
   }
@@ -212,7 +207,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   }
 
   Widget symptomsWidget() {
-    return Column(children: [
+    return Column(
+      children: [
       Divider(height: 30),
       PieChartSample2(),
       SizedBox( // Horizontal ListView
@@ -387,8 +383,8 @@ class PieChart2State extends State {
 
         return PieChartSectionData(
           color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(overviewStore.symptomsPresentMap.keys.elementAt(i)), symptomStore.symptomList)],
-          value: (overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100,
-          title: '${((overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%',
+          value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
+          title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%' : '',
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),

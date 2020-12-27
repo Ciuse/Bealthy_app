@@ -160,7 +160,11 @@ abstract class _SymptomStoreBase with Store {
   }
 
   void reorderList(int oldIndex, int newIndex){
-    symptomList.insert(newIndex, symptomList.removeAt(oldIndex));
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final Symptom item = symptomList.removeAt(oldIndex);
+    symptomList.insert(newIndex, item);
   }
 
 
