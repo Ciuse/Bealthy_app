@@ -25,8 +25,7 @@ abstract class _IngredientBase with Store {
   @observable
   String qty;
 
-  @observable
-  int dayRepetition=0;
+
 
   @action
   factory _IngredientBase.fromMap(Map<String, dynamic> json) =>

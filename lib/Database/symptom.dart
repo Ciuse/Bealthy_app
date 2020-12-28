@@ -50,6 +50,7 @@ abstract class _SymptomBase with Store {
   @observable
   var mealTimeBoolList = new List<MealTimeBool>();
 
+
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {

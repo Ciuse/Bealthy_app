@@ -1,6 +1,7 @@
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/headerScrollStyle.dart';
 import 'package:Bealthy_app/ingredientOverview.dart';
+import 'package:Bealthy_app/overviewSingleSymptom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -384,6 +385,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                           child: RawMaterialButton(
                             onPressed: () =>
                             {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => OverviewSingleSymptom()))
                             },
                             elevation: 5.0,
                             fillColor: Colors.white,

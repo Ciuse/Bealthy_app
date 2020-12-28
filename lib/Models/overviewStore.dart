@@ -36,9 +36,8 @@ abstract class _OverviewBase with Store {
   @observable
   var symptomsPresentMap = new ObservableMap<String, int>();
 
-
   @observable
-  var  mapIngredientsOverview = new ObservableMap<DateTime,List<Ingredient>>();
+  var mapIngredientsOverview = new ObservableMap<DateTime,List<Ingredient>>();
 
   @observable
   var overviewDishList = new ObservableList<Dish>();
@@ -66,13 +65,13 @@ abstract class _OverviewBase with Store {
     switch(timeSelected.index){
       case 0: await getSymptomsOfADay(dateStore.overviewDefaultLastDate)
           .then((value) => mapSymptomsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewSymptomList))
-          .then((value) => numOfCategorySymptoms()); break;
+          .then((value) => totalOccurrenceSymptoms()); break;
       case 1:
-        await Future.wait(dateStore.rangeDays.map(getSymptomsSingleDayOfAWeek))
-            .then((value) =>  numOfCategorySymptoms());
+        await Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
+            .then((value) =>  totalOccurrenceSymptoms());
       break;
-      case 2: await Future.wait(dateStore.rangeDays.map(getSymptomsSingleDayOfAWeek))
-          .then((value) =>  numOfCategorySymptoms());
+      case 2: await Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
+          .then((value) =>  totalOccurrenceSymptoms());
       break;
     }
 
@@ -88,15 +87,15 @@ abstract class _OverviewBase with Store {
         {
           Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) => {
             mapIngredientsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewIngredientList)
-          }).then((value) => numOfCategoryIngredient())});
+          }).then((value) => totalOccurrenceIngredients())});
 
         break;
       case 1:
         await Future.wait(dateStore.rangeDays.map(getIngredientSingleDayOfAPeriod))
-            .then((value) =>  numOfCategoryIngredient());
+            .then((value) =>  totalOccurrenceIngredients());
         break;
       case 2: await Future.wait(dateStore.rangeDays.map(getIngredientSingleDayOfAPeriod))
-          .then((value) =>  numOfCategoryIngredient());
+          .then((value) =>  totalOccurrenceIngredients());
 
     }
 
@@ -119,8 +118,7 @@ abstract class _OverviewBase with Store {
     return count;
   }
   @action
-  void numOfCategorySymptoms(){
-
+  void totalOccurrenceSymptoms(){
     mapSymptomsOverview.values.forEach((symptomsList) {
       symptomsList.forEach((symptom) {
         if(!symptomsPresentMap.keys.contains(symptom.id)){
@@ -132,9 +130,9 @@ abstract class _OverviewBase with Store {
       });
     });
   }
-  @action
 
-  void numOfCategoryIngredient(){
+  @action
+  void totalOccurrenceIngredients(){
     mapIngredientsOverview.values.forEach((ingredientList) {
       ingredientList.forEach((ingredient) {
         if(!ingredientPresentMap.keys.contains(ingredient.id)){
@@ -145,7 +143,6 @@ abstract class _OverviewBase with Store {
         }
       });
     });
-
   }
 
   @action
@@ -175,20 +172,10 @@ abstract class _OverviewBase with Store {
   }
 
   @action
-  Future<void> getSymptomsSingleDayOfAWeek(DateTime dateTime) async {
+  Future<void> getSymptomSingleDayOfAPeriod(DateTime dateTime) async {
       await getSymptomsOfADay(dateTime)
-          .then((value) =>
-      {mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList, ifAbsent: ()=> overviewSymptomList)});
+          .then((value) => mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList, ifAbsent: ()=> overviewSymptomList));
   }
-
-
-  @action
-  Future<void> getSymptomsSingleDayOfAMonth(DateTime dateTime) async {
-    await getSymptomsOfADay(dateTime)
-        .then((value) =>
-    {mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList, ifAbsent: ()=> overviewSymptomList)});
-  }
-
 
   int getIndexFromSymptomsList(Symptom symptom,List<Symptom> symptoms){
     return symptoms.indexOf(symptom,0);

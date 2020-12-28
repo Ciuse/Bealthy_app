@@ -172,22 +172,13 @@ mixin _$OverviewStore on _OverviewBase, Store {
         .run(() => super.getSymptomsOfADay(date));
   }
 
-  final _$getSymptomsSingleDayOfAWeekAsyncAction =
-      AsyncAction('_OverviewBase.getSymptomsSingleDayOfAWeek');
+  final _$getSymptomSingleDayOfAPeriodAsyncAction =
+      AsyncAction('_OverviewBase.getSymptomSingleDayOfAPeriod');
 
   @override
-  Future<void> getSymptomsSingleDayOfAWeek(DateTime dateTime) {
-    return _$getSymptomsSingleDayOfAWeekAsyncAction
-        .run(() => super.getSymptomsSingleDayOfAWeek(dateTime));
-  }
-
-  final _$getSymptomsSingleDayOfAMonthAsyncAction =
-      AsyncAction('_OverviewBase.getSymptomsSingleDayOfAMonth');
-
-  @override
-  Future<void> getSymptomsSingleDayOfAMonth(DateTime dateTime) {
-    return _$getSymptomsSingleDayOfAMonthAsyncAction
-        .run(() => super.getSymptomsSingleDayOfAMonth(dateTime));
+  Future<void> getSymptomSingleDayOfAPeriod(DateTime dateTime) {
+    return _$getSymptomSingleDayOfAPeriodAsyncAction
+        .run(() => super.getSymptomSingleDayOfAPeriod(dateTime));
   }
 
   final _$getDishesOfADayAsyncAction =
@@ -251,22 +242,22 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
-  void numOfCategorySymptoms() {
+  void totalOccurrenceSymptoms() {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
-        name: '_OverviewBase.numOfCategorySymptoms');
+        name: '_OverviewBase.totalOccurrenceSymptoms');
     try {
-      return super.numOfCategorySymptoms();
+      return super.totalOccurrenceSymptoms();
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void numOfCategoryIngredient() {
+  void totalOccurrenceIngredients() {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
-        name: '_OverviewBase.numOfCategoryIngredient');
+        name: '_OverviewBase.totalOccurrenceIngredients');
     try {
-      return super.numOfCategoryIngredient();
+      return super.totalOccurrenceIngredients();
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }
