@@ -73,7 +73,7 @@ class _DishPageState extends State<DishPage>{
   }
 
   Future findIfLocal() {
-     return rootBundle.load("images/"+widget.dish.id+".jpg");
+     return rootBundle.load("images/"+widget.dish.id+".png");
   }
 
   void setQuantityAndMealTimeToDish(String qty){
@@ -146,7 +146,7 @@ class _DishPageState extends State<DishPage>{
                         height: 200,
                         child:  ClipOval(
                             child: Image(
-                              image: AssetImage("images/" + widget.dish.id + ".jpg"),
+                              image: AssetImage("images/" + widget.dish.id + ".png"),
                             )
                         ));
                   }
