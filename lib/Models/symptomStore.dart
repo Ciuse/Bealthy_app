@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,13 +28,14 @@ abstract class _SymptomStoreBase with Store {
   @observable
   var symptomListOfSpecificDay = new ObservableList<Symptom>();
 
-
+  Map colorSymptomsMap = new Map<String , Color>();
 
 
   @action
   Future<void> initStore(DateTime day) async {
     if (!storeInitialized) {
-      await _getSymptomList();
+      
+      await _getSymptomList().then((value) => initializeColorMap());
       await getSymptomsOfADay(day);
       storeInitialized = true;
     }
@@ -182,6 +184,18 @@ abstract class _SymptomStoreBase with Store {
 
     symptom.resetValue();
     symptomListOfSpecificDay.removeWhere((element) => symptom.id == element.id);
+  }
+
+  void initializeColorMap(){
+    List<String> keys = new List<String>();
+    symptomList.forEach((element) {
+      keys.add(element.id);
+    });
+    List<Color> colorsOfChart = [Colors.red,Colors.cyanAccent, Colors.purple,Colors.yellow,Colors.blueAccent,
+      Colors.green,Colors.teal,Colors.pinkAccent];
+
+  
+    colorSymptomsMap=Map.fromIterables(keys, colorsOfChart);
   }
 
   String fixDate(DateTime date) {

@@ -43,7 +43,6 @@ class _CreateNewDishState extends State<CreateNewDish>{
     quantityList= getQuantityName();
     super.initState();
     var store = Provider.of<IngredientStore>(context, listen: false);
-    store.initStore();
     store.ingredientsName.clear();
     store.getIngredientsName();
   }

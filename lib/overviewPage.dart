@@ -294,7 +294,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         child: GestureDetector(
           onTap: null,
           onLongPress: null,
-          child: Text(DateFormat.yMMMMEEEEd("en_US").format(firstDay) + DateFormat.yMMMMEEEEd("en_US").format(lastDay),
+          child: Text(DateFormat.yMMMMEEEEd("en_US").format(firstDay) +"\n"+ DateFormat.yMMMMEEEEd("en_US").format(lastDay),
             style: widget.headerScrollStyle.titleTextStyle,
             textAlign: widget.headerScrollStyle.centerHeaderTitle
                 ? TextAlign.center
@@ -334,7 +334,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         child: GestureDetector(
           onTap: null,
           onLongPress: null,
-          child: Text(DateFormat.yMMMMEEEEd("en_US").format(firstDay) + DateFormat.yMMMMEEEEd("en_US").format(lastDay),
+          child: Text(DateFormat.yMMMMEEEEd("en_US").format(firstDay)  +"\n"+ DateFormat.yMMMMEEEEd("en_US").format(lastDay),
             style: widget.headerScrollStyle.titleTextStyle,
             textAlign: widget.headerScrollStyle.centerHeaderTitle
                 ? TextAlign.center
@@ -467,7 +467,6 @@ class PieChart2State extends State {
   @override
   Widget build(BuildContext context) {
 
-    List colorsOfChart = [Colors.red,Colors.cyanAccent,Colors.brown,Colors.yellow,Colors.blueAccent,Colors.green,Colors.teal,Colors.pinkAccent];
     SymptomStore symptomStore = Provider.of<SymptomStore>(context);
     OverviewStore overviewStore = Provider.of<OverviewStore>(context);
     return Observer(builder: (_) => AspectRatio(
@@ -499,7 +498,7 @@ class PieChart2State extends State {
                       ),
                       sectionsSpace: 0,
                       centerSpaceRadius: 40,
-                      sections: overviewStore.symptomsPresentMap.length>0 ? showingSections(colorsOfChart,overviewStore, symptomStore) : 0,
+                      sections: overviewStore.symptomsPresentMap.length>0 ? showingSections(overviewStore, symptomStore) : 0,
                   ),
                 )),
               ),
@@ -509,9 +508,9 @@ class PieChart2State extends State {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                for(var symptomId in overviewStore.symptomsPresentMap.keys)
+                for(String symptomId in overviewStore.symptomsPresentMap.keys)
                   Indicator(
-                    color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(symptomId), symptomStore.symptomList)],
+                    color: symptomStore.colorSymptomsMap[symptomId],
                     text: symptomStore.getSymptomFromList(symptomId).name,
                     isSquare: true,
                   ),
@@ -529,7 +528,7 @@ class PieChart2State extends State {
     ));
   }
 
-  List<PieChartSectionData> showingSections(List colorsOfChart, OverviewStore overviewStore, SymptomStore symptomStore) {
+  List<PieChartSectionData> showingSections(OverviewStore overviewStore, SymptomStore symptomStore) {
 
     return List.generate(overviewStore.symptomsPresentMap.length, (i) {
       final isTouched = i == touchedIndex;
@@ -538,7 +537,7 @@ class PieChart2State extends State {
 
 
         return PieChartSectionData(
-          color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(overviewStore.symptomsPresentMap.keys.elementAt(i)), symptomStore.symptomList)],
+          color: symptomStore.colorSymptomsMap[overviewStore.symptomsPresentMap.keys.elementAt(i)],
           value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
           title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%' : '',
           radius: radius,

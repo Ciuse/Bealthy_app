@@ -82,15 +82,15 @@ abstract class _DateStoreBase with Store {
 
   @action
   void nextMonthOverview() {
-    overviewFirstDate = DateTime(overviewFirstDate.year, overviewFirstDate.month, overviewFirstDate.day+30);
-    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day+30);
+    overviewFirstDate = DateTime(overviewFirstDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day+31);
+    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day+31 );
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
   }
 
   @action
   void previousMonthOverview() {
-    overviewFirstDate = DateTime(overviewFirstDate.year, overviewFirstDate.month, overviewFirstDate.day-30);
-    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-30);
+    overviewFirstDate = DateTime(overviewFirstDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day-31);
+    overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day-31 );
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
   }
 
@@ -98,13 +98,13 @@ abstract class _DateStoreBase with Store {
 
   @action
   void firstDayInWeek() {
-    overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-7);
+    overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-6);
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
   }
 
   @action
   void firstDayInMonth() {
-    overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-30);
+    overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day-31 );
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
   }
 }

@@ -154,6 +154,17 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   }
 
   @override
+  Ingredient getSymptomFromList(String ingredientId) {
+    final _$actionInfo = _$_IngredientStoreBaseActionController.startAction(
+        name: '_IngredientStoreBase.getSymptomFromList');
+    try {
+      return super.getSymptomFromList(ingredientId);
+    } finally {
+      _$_IngredientStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 ingredientList: ${ingredientList},

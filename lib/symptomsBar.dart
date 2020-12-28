@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:Bealthy_app/allSymptomsPage.dart';
 import 'package:Bealthy_app/symptomPage.dart';
@@ -25,6 +26,8 @@ class _SymptomsBarState extends State<SymptomsBar>{
     super.initState();
     var store = Provider.of<SymptomStore>(context, listen: false);
     store.initStore(widget.day);
+    var storeIngredient = Provider.of<IngredientStore>(context, listen: false);
+    storeIngredient.initStore();
   }
 
 

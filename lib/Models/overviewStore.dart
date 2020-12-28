@@ -5,7 +5,6 @@ import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,17 +59,19 @@ abstract class _OverviewBase with Store {
 
   @action
   Future<void> initializeOverviewList(DateStore dateStore) async {
+    initializeIngredientList(dateStore);
     mapSymptomsOverview.clear();
     symptomsPresentMap.clear();
+    overviewSymptomList.clear();
     switch(timeSelected.index){
       case 0: await getSymptomsOfADay(dateStore.overviewDefaultLastDate)
           .then((value) => mapSymptomsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewSymptomList))
           .then((value) => numOfCategorySymptoms()); break;
       case 1:
-        await Future.wait(dateStore.rangeDays.map(getSymptomsOfAWeek))
+        await Future.wait(dateStore.rangeDays.map(getSymptomsSingleDayOfAWeek))
             .then((value) =>  numOfCategorySymptoms());
       break;
-      case 2: await Future.wait(dateStore.rangeDays.map(getSymptomsOfAWeek))
+      case 2: await Future.wait(dateStore.rangeDays.map(getSymptomsSingleDayOfAWeek))
           .then((value) =>  numOfCategorySymptoms());
       break;
     }
@@ -80,17 +81,22 @@ abstract class _OverviewBase with Store {
   Future<void> initializeIngredientList(DateStore dateStore) async {
     mapIngredientsOverview.clear();
     overviewIngredientList.clear();
+    ingredientPresentMap.clear();
     switch(timeSelected.index){
       case 0:
         await getDishesOfADay(dateStore.overviewDefaultLastDate).then((value) =>
         {
-          Future.forEach(overviewDishList, getIngredientOfADay).then((value) => {
+          Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) => {
             mapIngredientsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewIngredientList)
           }).then((value) => numOfCategoryIngredient())});
 
         break;
-      case 1: break;
-      case 2: break;
+      case 1:
+        await Future.wait(dateStore.rangeDays.map(getIngredientSingleDayOfAPeriod))
+            .then((value) =>  numOfCategoryIngredient());
+        break;
+      case 2: await Future.wait(dateStore.rangeDays.map(getIngredientSingleDayOfAPeriod))
+          .then((value) =>  numOfCategoryIngredient());
 
     }
 
@@ -129,7 +135,6 @@ abstract class _OverviewBase with Store {
   @action
 
   void numOfCategoryIngredient(){
-    ingredientPresentMap.clear();
     mapIngredientsOverview.values.forEach((ingredientList) {
       ingredientList.forEach((ingredient) {
         if(!ingredientPresentMap.keys.contains(ingredient.id)){
@@ -170,7 +175,7 @@ abstract class _OverviewBase with Store {
   }
 
   @action
-  Future<void> getSymptomsOfAWeek(DateTime dateTime) async {
+  Future<void> getSymptomsSingleDayOfAWeek(DateTime dateTime) async {
       await getSymptomsOfADay(dateTime)
           .then((value) =>
       {mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList, ifAbsent: ()=> overviewSymptomList)});
@@ -178,7 +183,7 @@ abstract class _OverviewBase with Store {
 
 
   @action
-  Future<void> getSymptomsOfAMonth(DateTime dateTime) async {
+  Future<void> getSymptomsSingleDayOfAMonth(DateTime dateTime) async {
     await getSymptomsOfADay(dateTime)
         .then((value) =>
     {mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList, ifAbsent: ()=> overviewSymptomList)});
@@ -192,13 +197,18 @@ abstract class _OverviewBase with Store {
   @action
   Future<void> getDishesOfADay(DateTime date) async {
     overviewDishList.clear();
-    String day = fixDate(date);
-    await (FirebaseFirestore.instance
+    await Future.wait(MealTime.values.map((meal) => getDishMealTime(meal, date)));
+  }
+
+  @action
+  Future<dynamic> getDishMealTime(MealTime mealTime, DateTime dateTime) async {
+    String day = fixDate(dateTime);
+    await FirebaseFirestore.instance
         .collection('UserDishes')
         .doc(auth.currentUser.uid)
         .collection("DayDishes")
         .doc(day)
-        .collection("Dishes")
+        .collection(mealTime.toString().toString().split('.').last)
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((dish) {
@@ -209,11 +219,19 @@ abstract class _OverviewBase with Store {
         overviewDishList.add(toAdd);
       }
       );
-    }));
+    });
   }
 
   @action
-  Future<void> getIngredientOfADay(Dish dish) async {
+  Future<void> getIngredientSingleDayOfAPeriod(DateTime dateTime) async {
+    await getDishesOfADay(dateTime)
+        .then((value) => Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) =>
+      mapIngredientsOverview.putIfAbsent(dateTime, () => overviewIngredientList))
+    );
+  }
+
+  @action
+  Future<void> getIngredientOfADish(Dish dish) async {
     if(isSubstring("User", dish.id,)){
       await (FirebaseFirestore.instance
           .collection("DishesCreatedByUsers")
@@ -239,6 +257,8 @@ abstract class _OverviewBase with Store {
       }));
     }
   }
+
+
 
   String fixDate(DateTime date) {
     String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Bealthy_app/Database/dish.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,7 @@ abstract class _IngredientStoreBase with Store {
   @observable
   ObservableFuture loadInitIngredientList;
 
+  Map colorIngredientMap = new Map<String , Color>();
 
   @action
   Future<void> waitForIngredients() {
@@ -45,7 +47,7 @@ abstract class _IngredientStoreBase with Store {
   @action
   Future<void> initStore() async {
     if(!storeInitialized) {
-      await getIngredients();
+      await getIngredients().then((value) => initializeColorMap());
       storeInitialized=true;
     }
   }
@@ -114,7 +116,32 @@ abstract class _IngredientStoreBase with Store {
     return id;
   }
 
+  @action
+  Ingredient getSymptomFromList(String ingredientId){
+    Ingredient ingredient;
+    ingredientList.forEach((element) {
+      if(element.id.compareTo(ingredientId)==0){
+        ingredient = element;
+      }
+    });
+    if (ingredient==null){
+      print("Errore nel codice dato");
+    }
+    return ingredient;
+  }
 
+  void initializeColorMap(){
+    List<String> keys = new List<String>();
+    ingredientList.forEach((element) {
+      keys.add(element.id);
+    });
+    List<Color> colorsOfChart = [Colors.red,Colors.cyanAccent, Colors.purple,Colors.deepOrange,Colors.blueAccent,
+      Colors.green,Colors.teal,Colors.pinkAccent,Colors.blueGrey,Colors.black,Colors.orangeAccent,
+      Colors.yellowAccent,Colors.grey,Colors.lightBlueAccent];
+
+
+    colorIngredientMap=Map.fromIterables(keys, colorsOfChart);
+  }
 
 
 }

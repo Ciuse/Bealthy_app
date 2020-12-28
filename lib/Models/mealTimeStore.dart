@@ -93,7 +93,7 @@ abstract class _MealTimeStoreBase with Store {
     await (FirebaseFirestore.instance
         .collection('UserDishes')
         .doc(auth.currentUser.uid).collection("DayDishes").doc(day).collection(
-        "Dishes").where("mealTime",isEqualTo:MealTime.values[index].toString().split('.').last)
+        MealTime.values[index].toString().split('.').last)
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((dish) {
@@ -121,7 +121,7 @@ abstract class _MealTimeStoreBase with Store {
         .doc(auth.currentUser.uid)
         .collection("DayDishes")
         .doc(dayFix)
-        .collection("Dishes")
+        .collection(dish.mealTime.toString().split('.').last)
         .doc(dish.id)
         .delete());
 
@@ -143,7 +143,7 @@ abstract class _MealTimeStoreBase with Store {
         .doc(auth.currentUser.uid)
         .collection("DayDishes")
         .doc(dayFix)
-        .collection("Dishes")
+        .collection(dish.mealTime.toString().split('.').last)
         .doc(dish.id)
         .set(dish.toMapDayDishes()));
 

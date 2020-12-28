@@ -9,17 +9,18 @@ part of 'overviewStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$OverviewStore on _OverviewBase, Store {
-  final _$mapOverviewAtom = Atom(name: '_OverviewBase.mapOverview');
+  final _$mapSymptomsOverviewAtom =
+      Atom(name: '_OverviewBase.mapSymptomsOverview');
 
   @override
   ObservableMap<DateTime, List<Symptom>> get mapSymptomsOverview {
-    _$mapOverviewAtom.reportRead();
+    _$mapSymptomsOverviewAtom.reportRead();
     return super.mapSymptomsOverview;
   }
 
   @override
   set mapSymptomsOverview(ObservableMap<DateTime, List<Symptom>> value) {
-    _$mapOverviewAtom.reportWrite(value, super.mapSymptomsOverview, () {
+    _$mapSymptomsOverviewAtom.reportWrite(value, super.mapSymptomsOverview, () {
       super.mapSymptomsOverview = value;
     });
   }
@@ -68,6 +69,38 @@ mixin _$OverviewStore on _OverviewBase, Store {
   set symptomsPresentMap(ObservableMap<String, int> value) {
     _$symptomsPresentMapAtom.reportWrite(value, super.symptomsPresentMap, () {
       super.symptomsPresentMap = value;
+    });
+  }
+
+  final _$mapIngredientsOverviewAtom =
+      Atom(name: '_OverviewBase.mapIngredientsOverview');
+
+  @override
+  ObservableMap<DateTime, List<Ingredient>> get mapIngredientsOverview {
+    _$mapIngredientsOverviewAtom.reportRead();
+    return super.mapIngredientsOverview;
+  }
+
+  @override
+  set mapIngredientsOverview(ObservableMap<DateTime, List<Ingredient>> value) {
+    _$mapIngredientsOverviewAtom
+        .reportWrite(value, super.mapIngredientsOverview, () {
+      super.mapIngredientsOverview = value;
+    });
+  }
+
+  final _$overviewDishListAtom = Atom(name: '_OverviewBase.overviewDishList');
+
+  @override
+  ObservableList<Dish> get overviewDishList {
+    _$overviewDishListAtom.reportRead();
+    return super.overviewDishList;
+  }
+
+  @override
+  set overviewDishList(ObservableList<Dish> value) {
+    _$overviewDishListAtom.reportWrite(value, super.overviewDishList, () {
+      super.overviewDishList = value;
     });
   }
 
@@ -121,6 +154,15 @@ mixin _$OverviewStore on _OverviewBase, Store {
         .run(() => super.initializeOverviewList(dateStore));
   }
 
+  final _$initializeIngredientListAsyncAction =
+      AsyncAction('_OverviewBase.initializeIngredientList');
+
+  @override
+  Future<void> initializeIngredientList(DateStore dateStore) {
+    return _$initializeIngredientListAsyncAction
+        .run(() => super.initializeIngredientList(dateStore));
+  }
+
   final _$getSymptomsOfADayAsyncAction =
       AsyncAction('_OverviewBase.getSymptomsOfADay');
 
@@ -128,6 +170,59 @@ mixin _$OverviewStore on _OverviewBase, Store {
   Future<void> getSymptomsOfADay(DateTime date) {
     return _$getSymptomsOfADayAsyncAction
         .run(() => super.getSymptomsOfADay(date));
+  }
+
+  final _$getSymptomsSingleDayOfAWeekAsyncAction =
+      AsyncAction('_OverviewBase.getSymptomsSingleDayOfAWeek');
+
+  @override
+  Future<void> getSymptomsSingleDayOfAWeek(DateTime dateTime) {
+    return _$getSymptomsSingleDayOfAWeekAsyncAction
+        .run(() => super.getSymptomsSingleDayOfAWeek(dateTime));
+  }
+
+  final _$getSymptomsSingleDayOfAMonthAsyncAction =
+      AsyncAction('_OverviewBase.getSymptomsSingleDayOfAMonth');
+
+  @override
+  Future<void> getSymptomsSingleDayOfAMonth(DateTime dateTime) {
+    return _$getSymptomsSingleDayOfAMonthAsyncAction
+        .run(() => super.getSymptomsSingleDayOfAMonth(dateTime));
+  }
+
+  final _$getDishesOfADayAsyncAction =
+      AsyncAction('_OverviewBase.getDishesOfADay');
+
+  @override
+  Future<void> getDishesOfADay(DateTime date) {
+    return _$getDishesOfADayAsyncAction.run(() => super.getDishesOfADay(date));
+  }
+
+  final _$getDishMealTimeAsyncAction =
+      AsyncAction('_OverviewBase.getDishMealTime');
+
+  @override
+  Future<dynamic> getDishMealTime(MealTime mealTime, DateTime dateTime) {
+    return _$getDishMealTimeAsyncAction
+        .run(() => super.getDishMealTime(mealTime, dateTime));
+  }
+
+  final _$getIngredientSingleDayOfAPeriodAsyncAction =
+      AsyncAction('_OverviewBase.getIngredientSingleDayOfAPeriod');
+
+  @override
+  Future<void> getIngredientSingleDayOfAPeriod(DateTime dateTime) {
+    return _$getIngredientSingleDayOfAPeriodAsyncAction
+        .run(() => super.getIngredientSingleDayOfAPeriod(dateTime));
+  }
+
+  final _$getIngredientOfADishAsyncAction =
+      AsyncAction('_OverviewBase.getIngredientOfADish');
+
+  @override
+  Future<void> getIngredientOfADish(Dish dish) {
+    return _$getIngredientOfADishAsyncAction
+        .run(() => super.getIngredientOfADish(dish));
   }
 
   final _$_OverviewBaseActionController =
@@ -145,6 +240,17 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
+  int totalNumOfIngredientList() {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.totalNumOfIngredientList');
+    try {
+      return super.totalNumOfIngredientList();
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void numOfCategorySymptoms() {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
         name: '_OverviewBase.numOfCategorySymptoms');
@@ -156,12 +262,25 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
+  void numOfCategoryIngredient() {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.numOfCategoryIngredient');
+    try {
+      return super.numOfCategoryIngredient();
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-mapOverview: ${mapSymptomsOverview},
+mapSymptomsOverview: ${mapSymptomsOverview},
 overviewSymptomList: ${overviewSymptomList},
 timeSelected: ${timeSelected},
 symptomsPresentMap: ${symptomsPresentMap},
+mapIngredientsOverview: ${mapIngredientsOverview},
+overviewDishList: ${overviewDishList},
 overviewIngredientList: ${overviewIngredientList},
 ingredientPresentMap: ${ingredientPresentMap}
     ''';

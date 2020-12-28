@@ -33,25 +33,67 @@ mixin _$DateStore on _DateStoreBase, Store {
     });
   }
 
-  final _$overviewSelectedDateAtom =
-      Atom(name: '_DateStoreBase.overviewSelectedDate');
+  final _$overviewDefaultLastDateAtom =
+      Atom(name: '_DateStoreBase.overviewDefaultLastDate');
 
   @override
   DateTime get overviewDefaultLastDate {
-    _$overviewSelectedDateAtom.reportRead();
+    _$overviewDefaultLastDateAtom.reportRead();
     return super.overviewDefaultLastDate;
   }
 
   @override
   set overviewDefaultLastDate(DateTime value) {
-    _$overviewSelectedDateAtom.reportWrite(value, super.overviewDefaultLastDate,
-        () {
+    _$overviewDefaultLastDateAtom
+        .reportWrite(value, super.overviewDefaultLastDate, () {
       super.overviewDefaultLastDate = value;
+    });
+  }
+
+  final _$rangeDaysAtom = Atom(name: '_DateStoreBase.rangeDays');
+
+  @override
+  ObservableList<DateTime> get rangeDays {
+    _$rangeDaysAtom.reportRead();
+    return super.rangeDays;
+  }
+
+  @override
+  set rangeDays(ObservableList<DateTime> value) {
+    _$rangeDaysAtom.reportWrite(value, super.rangeDays, () {
+      super.rangeDays = value;
+    });
+  }
+
+  final _$overviewFirstDateAtom =
+      Atom(name: '_DateStoreBase.overviewFirstDate');
+
+  @override
+  DateTime get overviewFirstDate {
+    _$overviewFirstDateAtom.reportRead();
+    return super.overviewFirstDate;
+  }
+
+  @override
+  set overviewFirstDate(DateTime value) {
+    _$overviewFirstDateAtom.reportWrite(value, super.overviewFirstDate, () {
+      super.overviewFirstDate = value;
     });
   }
 
   final _$_DateStoreBaseActionController =
       ActionController(name: '_DateStoreBase');
+
+  @override
+  void getDaysOfAWeekOrMonth(DateTime firstDate, DateTime lastDate) {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.getDaysOfAWeekOrMonth');
+    try {
+      return super.getDaysOfAWeekOrMonth(firstDate, lastDate);
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void changeCurrentDate(DateTime date) {
@@ -120,10 +162,78 @@ mixin _$DateStore on _DateStoreBase, Store {
   }
 
   @override
+  void nextWeekOverview() {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.nextWeekOverview');
+    try {
+      return super.nextWeekOverview();
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void previousWeekOverview() {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.previousWeekOverview');
+    try {
+      return super.previousWeekOverview();
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void nextMonthOverview() {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.nextMonthOverview');
+    try {
+      return super.nextMonthOverview();
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void previousMonthOverview() {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.previousMonthOverview');
+    try {
+      return super.previousMonthOverview();
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void firstDayInWeek() {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.firstDayInWeek');
+    try {
+      return super.firstDayInWeek();
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void firstDayInMonth() {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.firstDayInMonth');
+    try {
+      return super.firstDayInMonth();
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 calendarSelectedDate: ${calendarSelectedDate},
-overviewSelectedDate: ${overviewDefaultLastDate},
+overviewDefaultLastDate: ${overviewDefaultLastDate},
+rangeDays: ${rangeDays},
+overviewFirstDate: ${overviewFirstDate},
 weekDay: ${weekDay}
     ''';
   }

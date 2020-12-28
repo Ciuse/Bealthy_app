@@ -1,7 +1,7 @@
+import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import 'Models/dateStore.dart';
@@ -21,24 +21,17 @@ class IngredientOverviewState extends State {
   DateStore dateStore;
   OverviewStore overviewStore;
   double animationStartPos=0;
-  ReactionDisposer reaction1;
 
   void initState() {
     super.initState();
     dateStore = Provider.of<DateStore>(context, listen: false);
     overviewStore = Provider.of<OverviewStore>(context, listen: false);
-    reaction1=reactToDataChange();
 
   }
-  ReactionDisposer reactToDataChange(){
-    return reaction((changeDay) => dateStore.overviewDefaultLastDate, (value) => {
-      overviewStore.initializeIngredientList(dateStore),
-    });
-  }
+
 
   @override
   void dispose() {
-    reaction1.reaction.dispose();
     super.dispose();
   }
 
@@ -110,8 +103,7 @@ class PieChartIngredientState extends State {
 
   @override
   Widget build(BuildContext context) {
-
-    List colorsOfChart = [Colors.red,Colors.cyanAccent,Colors.brown,Colors.yellow,Colors.blueAccent,Colors.green,Colors.teal,Colors.pinkAccent];
+    IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
     OverviewStore overviewStore = Provider.of<OverviewStore>(context);
     return Observer(builder: (_) => AspectRatio(
       aspectRatio: 1.3,
@@ -142,7 +134,7 @@ class PieChartIngredientState extends State {
                     ),
                     sectionsSpace: 0,
                     centerSpaceRadius: 40,
-                    sections: overviewStore.ingredientPresentMap.length>0 ? showingSections(colorsOfChart,overviewStore) : null,
+                    sections: overviewStore.ingredientPresentMap.length>0 ? showingSections(overviewStore,ingredientStore) : null,
                   ),
                 )),
               ),
@@ -154,8 +146,8 @@ class PieChartIngredientState extends State {
               children:[
                 for(var ingredientId in overviewStore.ingredientPresentMap.keys)
                   Indicator(
-                    color: colorsOfChart[1],
-                    text: ingredientId,
+                    color: ingredientStore.colorIngredientMap[ingredientId],
+                    text: ingredientStore.getSymptomFromList(ingredientId).name,
                     isSquare: true,
                   ),
                 SizedBox(
@@ -172,7 +164,7 @@ class PieChartIngredientState extends State {
     ));
   }
 
-  List<PieChartSectionData> showingSections(List colorsOfChart, OverviewStore overviewStore, ) {
+  List<PieChartSectionData> showingSections(OverviewStore overviewStore,IngredientStore ingredientStore ) {
 
     return List.generate(overviewStore.ingredientPresentMap.length, (i) {
       final isTouched = i == touchedIndex;
@@ -181,7 +173,7 @@ class PieChartIngredientState extends State {
 
 
       return PieChartSectionData(
-        color: colorsOfChart[1],
+        color: ingredientStore.colorIngredientMap[overviewStore.ingredientPresentMap.keys.elementAt(i)],
         value: overviewStore.totalNumOfIngredientList()>0 ? (overviewStore.ingredientPresentMap.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100 :1,
         title: overviewStore.totalNumOfIngredientList()>0 ? '${((overviewStore.ingredientPresentMap.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100).toStringAsFixed(1)}%' : '',
         radius: radius,
