@@ -25,6 +25,7 @@ abstract class _OverviewBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
   bool storeInitialized = false;
 
+  int count=0;
   @observable
   var  mapSymptomsOverview = new ObservableMap<DateTime,List<Symptom>>();
 
@@ -174,15 +175,16 @@ abstract class _OverviewBase with Store {
 
   @action
   Future<void> getSymptomsOfADay(DateTime date) async {
-        String day = fixDate(date);
-        overviewSymptomList.clear();
+    String day = fixDate(date);
     await (FirebaseFirestore.instance
         .collection('UserSymptoms')
         .doc(auth.currentUser.uid).collection("DaySymptoms").doc(day)
         .collection("Symptoms")
         .get()
         .then((querySnapshot) {
-      querySnapshot.docs.forEach((symptom) {
+      overviewSymptomList.clear();
+      print(overviewSymptomList);
+      querySnapshot.docs.forEach((symptom) {print("");
         Symptom toAdd = new Symptom(id:symptom.id, name: symptom.get("name"));
         toAdd.initStore();
         toAdd.setIsSymptomInADay(true);
@@ -196,12 +198,16 @@ abstract class _OverviewBase with Store {
       );
     })
     );
+    print("");
   }
 
   @action
   Future<void> getSymptomSingleDayOfAPeriod(DateTime dateTime) async {
       await getSymptomsOfADay(dateTime)
-          .then((value) => mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList, ifAbsent: ()=> overviewSymptomList));
+          .then((value) =>
+           {
+             mapSymptomsOverview.putIfAbsent(dateTime, () => overviewSymptomList)});
+             //mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList, ifAbsent: ()=> overviewSymptomList)});
   }
 
   int getIndexFromSymptomsList(Symptom symptom,List<Symptom> symptoms){
@@ -243,6 +249,46 @@ abstract class _OverviewBase with Store {
       mapIngredientsOverview.putIfAbsent(dateTime, () => overviewIngredientList))
     );
   }
+
+  @action
+  double mealTimeValueSymptom(Symptom symptom){
+    double value;
+    int count=0;
+    symptom.mealTimeBoolList.forEach((element) {
+      if(element.isSelected==true){
+        count=count+1;
+      }
+    });
+    if(count==1){
+      value = 0.5;
+    }
+    if(count==2){
+      value = 0.7;
+    }
+    if(count==3){
+      value = 0.9;
+    }
+    if(count==4){
+      value = 1.0;
+    }
+    return value;
+  }
+
+
+  @action
+  void initializeOverviewValue(DateTime dateTime, String symptomId){
+    print(mapSymptomsOverview[dateTime].length);
+
+    if( mapSymptomsOverview[dateTime].any((element) => element.id==symptomId)){
+      Symptom toUpdate = mapSymptomsOverview[dateTime].firstWhere((element) => element.id==symptomId);
+      toUpdate.overviewValue = toUpdate.intensity*toUpdate.frequency*mealTimeValueSymptom(toUpdate);
+    }else{
+      Symptom symptomNotPresent = new Symptom(id: symptomId);
+      mapSymptomsOverview[dateTime].add(symptomNotPresent);
+      symptomNotPresent.overviewValue = 0;
+    }
+  }
+
 
   @action
   Future<void> getIngredientOfADish(Dish dish) async {

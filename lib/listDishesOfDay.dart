@@ -164,10 +164,15 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                     },
                     title: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name,style: TextStyle(fontSize: 22.0)),
                     subtitle: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].category,style: TextStyle(fontSize: 18.0)),
-                    leading: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id)? FlutterLogo(): ImageIcon(
-                      AssetImage("images/" +mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id+".png" ),
-                      size: 28.0,
-                    ),
+                    leading: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id)? FlutterLogo():
+                    Container(
+                        width: 50,
+                        height: 50,
+                        child:  ClipOval(
+                            child: Image(
+                              image: AssetImage("images/" +mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id+".png" ),
+                            )
+                        )),
                     trailing: Row (
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[

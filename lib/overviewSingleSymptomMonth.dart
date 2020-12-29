@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -8,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-class OverviewSingleSymptom extends StatefulWidget {
+class OverviewSingleSymptomMonth extends StatefulWidget {
+  final String symptomId;
+  OverviewSingleSymptomMonth({@required this.symptomId});
 
   @override
-  _OverviewSingleSymptomState createState() => _OverviewSingleSymptomState();
+  _OverviewSingleSymptomMonthState createState() => _OverviewSingleSymptomMonthState();
 }
 
-class _OverviewSingleSymptomState extends State<OverviewSingleSymptom>  {
+class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>  {
   @override
   Widget build(BuildContext context) {
     final overviewStore = Provider.of<OverviewStore>(context);
@@ -360,32 +359,12 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                 return '10';
               case 14:
                 return '15';
-              case 15:
-                return '16';
-              case 16:
-                return '17';
-              case 17:
-                return '18';
-              case 18:
-                return '19';
               case 19:
                 return '20';
-              case 20:
-                return '21';
-              case 21:
-                return '22';
-              case 22:
-                return '23';
-              case 23:
-                return '24';
               case 24:
                 return '25';
-              case 25:
-                return '26';
-              case 26:
-                return '27';
-              case 27:
-                return '28';
+              case 29:
+                return '30';
               default:
                 return '';
             }

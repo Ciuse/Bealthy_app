@@ -1,16 +1,17 @@
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/headerScrollStyle.dart';
 import 'package:Bealthy_app/ingredientOverview.dart';
-import 'package:Bealthy_app/overviewSingleSymptom.dart';
+import 'package:Bealthy_app/overviewSingleSymptomMonth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'Database/enumerators.dart';
 import 'Models/dateStore.dart';
 import 'Models/symptomStore.dart';
+import 'OverviewSingleSymptomDay.dart';
+import 'OverviewSingleSymptomWeek.dart';
 
 
 
@@ -387,7 +388,11 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                             {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => OverviewSingleSymptom()))
+                                  MaterialPageRoute(builder: (context) =>
+                                  overviewStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.symptomsPresentMap.keys.elementAt(index)):
+                                  overviewStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.symptomsPresentMap.keys.elementAt(index)):
+                                  overviewStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.symptomsPresentMap.keys.elementAt(index)): null
+                                  ))
                             },
                             elevation: 5.0,
                             fillColor: Colors.white,
