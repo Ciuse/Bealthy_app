@@ -37,6 +37,9 @@ abstract class _SymptomBase with Store {
   List<dynamic> mealTime; //TODO fare una lista di stringe o cmq mealtime
 
   @observable
+  double overviewValue;
+
+  @observable
   bool isSymptomSelectDay=false;
 
   @observable
