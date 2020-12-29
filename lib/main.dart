@@ -1,4 +1,5 @@
 import 'package:Bealthy_app/Database/enumerators.dart';
+import 'package:Bealthy_app/Database/symptomOverviewGraphStore.dart';
 import 'package:Bealthy_app/treatmentPage.dart';
 
 import 'Models/mealTimeStore.dart';
@@ -42,6 +43,9 @@ void main() async {
         ),
         Provider<OverviewStore>(
           create: (_) => OverviewStore(),
+        ),
+        Provider<SymptomOverviewGraphStore>(
+          create: (_) => SymptomOverviewGraphStore(),
         )
       ], child:MyApp())));
 }

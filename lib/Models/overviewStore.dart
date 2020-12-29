@@ -5,6 +5,7 @@ import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,7 +35,10 @@ abstract class _OverviewBase with Store {
   TemporalTime timeSelected = TemporalTime.Day;
 
   @observable
-  var symptomsPresentMap = new ObservableMap<String, int>();
+  var totalSymptomsPresentMap = new ObservableMap<String, int>();
+
+  @observable
+  var singleDaySymptomPresentMap = new ObservableMap<String, int>();
 
   @observable
   var mapIngredientsOverview = new ObservableMap<DateTime,List<Ingredient>>();
@@ -46,7 +50,10 @@ abstract class _OverviewBase with Store {
   var overviewIngredientList = new ObservableList<Ingredient>();
 
   @observable
-  var ingredientPresentMap = new ObservableMap<String, int>();
+  var totalIngredientPresentMap = new ObservableMap<String, int>();
+
+  @observable
+  var singleDayIngredientPresentMap = new ObservableMap<String, int>();
 
   @action
   Future<void> initStore(DateTime day) async {
@@ -60,7 +67,7 @@ abstract class _OverviewBase with Store {
   Future<void> initializeOverviewList(DateStore dateStore) async {
     initializeIngredientList(dateStore);
     mapSymptomsOverview.clear();
-    symptomsPresentMap.clear();
+    totalSymptomsPresentMap.clear();
     overviewSymptomList.clear();
     switch(timeSelected.index){
       case 0: await getSymptomsOfADay(dateStore.overviewDefaultLastDate)
@@ -80,7 +87,7 @@ abstract class _OverviewBase with Store {
   Future<void> initializeIngredientList(DateStore dateStore) async {
     mapIngredientsOverview.clear();
     overviewIngredientList.clear();
-    ingredientPresentMap.clear();
+    totalIngredientPresentMap.clear();
     switch(timeSelected.index){
       case 0:
         await getDishesOfADay(dateStore.overviewDefaultLastDate).then((value) =>
@@ -117,17 +124,28 @@ abstract class _OverviewBase with Store {
     });
     return count;
   }
+
   @action
   void totalOccurrenceSymptoms(){
     mapSymptomsOverview.values.forEach((symptomsList) {
       symptomsList.forEach((symptom) {
-        if(!symptomsPresentMap.keys.contains(symptom.id)){
-          int occurrence=1;
-          symptomsPresentMap.putIfAbsent(symptom.id, () => occurrence);
+        if(!totalSymptomsPresentMap.keys.contains(symptom.id)){
+          totalSymptomsPresentMap.putIfAbsent(symptom.id, () => 1);
       }else{
-          symptomsPresentMap.update(symptom.id, (value) => value+1);
+          totalSymptomsPresentMap.update(symptom.id, (value) => value+1);
         }
       });
+    });
+  }
+
+  void singleDayOccurrenceSymptom(DateTime dateTime) {
+    mapSymptomsOverview[dateTime].forEach((ingredient) {
+      if (!singleDaySymptomPresentMap.keys.contains(ingredient.id)) {
+        singleDaySymptomPresentMap.putIfAbsent(ingredient.id, () => 1);
+      } else {
+        singleDaySymptomPresentMap.update(
+            ingredient.id, (value) => value + 1);
+      }
     });
   }
 
@@ -135,13 +153,22 @@ abstract class _OverviewBase with Store {
   void totalOccurrenceIngredients(){
     mapIngredientsOverview.values.forEach((ingredientList) {
       ingredientList.forEach((ingredient) {
-        if(!ingredientPresentMap.keys.contains(ingredient.id)){
-          int occurrence=1;
-          ingredientPresentMap.putIfAbsent(ingredient.id, () => occurrence);
+        if(!totalIngredientPresentMap.keys.contains(ingredient.id)){
+          totalIngredientPresentMap.putIfAbsent(ingredient.id, () => 1);
         }else{
-          ingredientPresentMap.update(ingredient.id, (value) => value+1);
+          totalIngredientPresentMap.update(ingredient.id, (value) => value+1);
         }
       });
+    });
+  }
+
+  void singleDayOccurrenceIngredients(DateTime dateTime){
+    mapIngredientsOverview[dateTime].forEach((ingredient) {
+      if(!singleDayIngredientPresentMap.keys.contains(ingredient.id)){
+        singleDayIngredientPresentMap.putIfAbsent(ingredient.id, () => 1);
+      }else{
+        singleDayIngredientPresentMap.update(ingredient.id, (value) => value+1);
+      }
     });
   }
 
@@ -244,7 +271,6 @@ abstract class _OverviewBase with Store {
       }));
     }
   }
-
 
 
   String fixDate(DateTime date) {

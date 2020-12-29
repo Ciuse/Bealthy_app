@@ -17,12 +17,40 @@ class OverviewSingleSymptom extends StatefulWidget {
 class _OverviewSingleSymptomState extends State<OverviewSingleSymptom>  {
   @override
   Widget build(BuildContext context) {
+    final overviewStore = Provider.of<OverviewStore>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text("Symptom Overview"),
         ),
         body: Observer(builder: (_) => Column(
-            children: <Widget>[BarChartSymptom()
+            children: <Widget>[BarChartSymptom(),
+              Container(
+                  child: true==true
+                      ? ListView(
+                      children: [
+                        for(var ingredient in overviewStore.singleDayIngredientPresentMap.keys )
+                          Container(
+                              width: 50,
+                              height: 50,
+                              child:  ClipOval(
+                                  child: Image(
+                                    image: AssetImage("images/" + ingredient + ".png"),
+                                  )
+                              ))])
+                      : ListView(
+                      children: [
+                        for(var ingredient in overviewStore.singleDayIngredientPresentMap.keys )
+                          Container(
+                              width: 50,
+                              height: 50,
+                              child:  ClipOval(
+                                  child: Image(
+                                    image: AssetImage("images/" + ingredient + ".png"),
+                                  )
+                              ))
+                      ]
+                  ))
+
             ]
         )
         )

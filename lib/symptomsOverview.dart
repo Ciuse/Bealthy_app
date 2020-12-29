@@ -25,7 +25,7 @@ class SymptomsOverviewState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return overviewStore.symptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget();
+    return overviewStore.totalSymptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget();
   }
 
 
@@ -37,7 +37,7 @@ class SymptomsOverviewState extends State {
           height: 80,
           child: Observer(builder: (_) =>
               ListView.builder(
-                itemCount: overviewStore.symptomsPresentMap.length,
+                itemCount: overviewStore.totalSymptomsPresentMap.length,
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
@@ -55,7 +55,7 @@ class SymptomsOverviewState extends State {
                             fillColor: Colors.white,
                             child: ImageIcon(
                               AssetImage("images/" +
-                                  overviewStore.symptomsPresentMap.keys.elementAt(index) + ".png"),
+                                  overviewStore.totalSymptomsPresentMap.keys.elementAt(index) + ".png"),
                               size: 28.0,
                             ),
                             padding: EdgeInsets.all(15.0),
@@ -169,7 +169,7 @@ class PieChart2State extends State {
                     ),
                     sectionsSpace: 0,
                     centerSpaceRadius: 40,
-                    sections: overviewStore.symptomsPresentMap.length>0 ? showingSections(colorsOfChart,overviewStore, symptomStore) : null,
+                    sections: overviewStore.totalSymptomsPresentMap.length>0 ? showingSections(colorsOfChart,overviewStore, symptomStore) : null,
                   ),
                 )),
               ),
@@ -179,7 +179,7 @@ class PieChart2State extends State {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                for(var symptomId in overviewStore.symptomsPresentMap.keys)
+                for(var symptomId in overviewStore.totalSymptomsPresentMap.keys)
                   Indicator(
                     color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(symptomId), symptomStore.symptomList)],
                     text: symptomStore.getSymptomFromList(symptomId).name,
@@ -201,16 +201,16 @@ class PieChart2State extends State {
 
   List<PieChartSectionData> showingSections(List colorsOfChart, OverviewStore overviewStore, SymptomStore symptomStore) {
 
-    return List.generate(overviewStore.symptomsPresentMap.length, (i) {
+    return List.generate(overviewStore.totalSymptomsPresentMap.length, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
 
 
       return PieChartSectionData(
-        color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(overviewStore.symptomsPresentMap.keys.elementAt(i)), symptomStore.symptomList)],
-        value: (overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100,
-        title: '${((overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%',
+        color: colorsOfChart[symptomStore.getIndexFromSymptomsList(symptomStore.getSymptomFromList(overviewStore.totalSymptomsPresentMap.keys.elementAt(i)), symptomStore.symptomList)],
+        value: (overviewStore.totalSymptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100,
+        title: '${((overviewStore.totalSymptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%',
         radius: radius,
         titleStyle: TextStyle(
             fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),

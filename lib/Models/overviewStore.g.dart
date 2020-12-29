@@ -56,19 +56,37 @@ mixin _$OverviewStore on _OverviewBase, Store {
     });
   }
 
-  final _$symptomsPresentMapAtom =
-      Atom(name: '_OverviewBase.symptomsPresentMap');
+  final _$totalSymptomsPresentMapAtom =
+      Atom(name: '_OverviewBase.totalSymptomsPresentMap');
 
   @override
-  ObservableMap<String, int> get symptomsPresentMap {
-    _$symptomsPresentMapAtom.reportRead();
-    return super.symptomsPresentMap;
+  ObservableMap<String, int> get totalSymptomsPresentMap {
+    _$totalSymptomsPresentMapAtom.reportRead();
+    return super.totalSymptomsPresentMap;
   }
 
   @override
-  set symptomsPresentMap(ObservableMap<String, int> value) {
-    _$symptomsPresentMapAtom.reportWrite(value, super.symptomsPresentMap, () {
-      super.symptomsPresentMap = value;
+  set totalSymptomsPresentMap(ObservableMap<String, int> value) {
+    _$totalSymptomsPresentMapAtom
+        .reportWrite(value, super.totalSymptomsPresentMap, () {
+      super.totalSymptomsPresentMap = value;
+    });
+  }
+
+  final _$singleDaySymptomPresentMapAtom =
+      Atom(name: '_OverviewBase.singleDaySymptomPresentMap');
+
+  @override
+  ObservableMap<String, int> get singleDaySymptomPresentMap {
+    _$singleDaySymptomPresentMapAtom.reportRead();
+    return super.singleDaySymptomPresentMap;
+  }
+
+  @override
+  set singleDaySymptomPresentMap(ObservableMap<String, int> value) {
+    _$singleDaySymptomPresentMapAtom
+        .reportWrite(value, super.singleDaySymptomPresentMap, () {
+      super.singleDaySymptomPresentMap = value;
     });
   }
 
@@ -121,20 +139,37 @@ mixin _$OverviewStore on _OverviewBase, Store {
     });
   }
 
-  final _$ingredientPresentMapAtom =
-      Atom(name: '_OverviewBase.ingredientPresentMap');
+  final _$totalIngredientPresentMapAtom =
+      Atom(name: '_OverviewBase.totalIngredientPresentMap');
 
   @override
-  ObservableMap<String, int> get ingredientPresentMap {
-    _$ingredientPresentMapAtom.reportRead();
-    return super.ingredientPresentMap;
+  ObservableMap<String, int> get totalIngredientPresentMap {
+    _$totalIngredientPresentMapAtom.reportRead();
+    return super.totalIngredientPresentMap;
   }
 
   @override
-  set ingredientPresentMap(ObservableMap<String, int> value) {
-    _$ingredientPresentMapAtom.reportWrite(value, super.ingredientPresentMap,
-        () {
-      super.ingredientPresentMap = value;
+  set totalIngredientPresentMap(ObservableMap<String, int> value) {
+    _$totalIngredientPresentMapAtom
+        .reportWrite(value, super.totalIngredientPresentMap, () {
+      super.totalIngredientPresentMap = value;
+    });
+  }
+
+  final _$singleDayIngredientPresentMapAtom =
+      Atom(name: '_OverviewBase.singleDayIngredientPresentMap');
+
+  @override
+  ObservableMap<String, int> get singleDayIngredientPresentMap {
+    _$singleDayIngredientPresentMapAtom.reportRead();
+    return super.singleDayIngredientPresentMap;
+  }
+
+  @override
+  set singleDayIngredientPresentMap(ObservableMap<String, int> value) {
+    _$singleDayIngredientPresentMapAtom
+        .reportWrite(value, super.singleDayIngredientPresentMap, () {
+      super.singleDayIngredientPresentMap = value;
     });
   }
 
@@ -269,11 +304,13 @@ mixin _$OverviewStore on _OverviewBase, Store {
 mapSymptomsOverview: ${mapSymptomsOverview},
 overviewSymptomList: ${overviewSymptomList},
 timeSelected: ${timeSelected},
-symptomsPresentMap: ${symptomsPresentMap},
+totalSymptomsPresentMap: ${totalSymptomsPresentMap},
+singleDaySymptomPresentMap: ${singleDaySymptomPresentMap},
 mapIngredientsOverview: ${mapIngredientsOverview},
 overviewDishList: ${overviewDishList},
 overviewIngredientList: ${overviewIngredientList},
-ingredientPresentMap: ${ingredientPresentMap}
+totalIngredientPresentMap: ${totalIngredientPresentMap},
+singleDayIngredientPresentMap: ${singleDayIngredientPresentMap}
     ''';
   }
 }

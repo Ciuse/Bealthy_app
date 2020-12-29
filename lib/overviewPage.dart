@@ -197,7 +197,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return TabBarView(
     controller: _tabController,
       children: [
-        overviewStore.symptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget(),
+        overviewStore.totalSymptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget(),
         IngredientOverview(),
       ],
     );
@@ -372,7 +372,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           height: 80,
           child: Observer(builder: (_) =>
               ListView.builder(
-                itemCount: overviewStore.symptomsPresentMap.length,
+                itemCount: overviewStore.totalSymptomsPresentMap.length,
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
@@ -393,7 +393,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                             fillColor: Colors.white,
                             child: ImageIcon(
                               AssetImage("images/" +
-                                  overviewStore.symptomsPresentMap.keys.elementAt(index) + ".png"),
+                                  overviewStore.totalSymptomsPresentMap.keys.elementAt(index) + ".png"),
                               size: 28.0,
                             ),
                             padding: EdgeInsets.all(15.0),
@@ -502,7 +502,7 @@ class PieChart2State extends State {
                       ),
                       sectionsSpace: 0,
                       centerSpaceRadius: 40,
-                      sections: overviewStore.symptomsPresentMap.length>0 ? showingSections(overviewStore, symptomStore) : 0,
+                      sections: overviewStore.totalSymptomsPresentMap.length>0 ? showingSections(overviewStore, symptomStore) : 0,
                   ),
                 )),
               ),
@@ -512,7 +512,7 @@ class PieChart2State extends State {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                for(String symptomId in overviewStore.symptomsPresentMap.keys)
+                for(String symptomId in overviewStore.totalSymptomsPresentMap.keys)
                   Indicator(
                     color: symptomStore.colorSymptomsMap[symptomId],
                     text: symptomStore.getSymptomFromList(symptomId).name,
@@ -534,16 +534,16 @@ class PieChart2State extends State {
 
   List<PieChartSectionData> showingSections(OverviewStore overviewStore, SymptomStore symptomStore) {
 
-    return List.generate(overviewStore.symptomsPresentMap.length, (i) {
+    return List.generate(overviewStore.totalSymptomsPresentMap.length, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
 
 
         return PieChartSectionData(
-          color: symptomStore.colorSymptomsMap[overviewStore.symptomsPresentMap.keys.elementAt(i)],
-          value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
-          title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.symptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%' : '',
+          color: symptomStore.colorSymptomsMap[overviewStore.totalSymptomsPresentMap.keys.elementAt(i)],
+          value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.totalSymptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
+          title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.totalSymptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%' : '',
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
