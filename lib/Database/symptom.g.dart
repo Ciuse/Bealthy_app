@@ -84,6 +84,21 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$overviewValueAtom = Atom(name: '_SymptomBase.overviewValue');
+
+  @override
+  double get overviewValue {
+    _$overviewValueAtom.reportRead();
+    return super.overviewValue;
+  }
+
+  @override
+  set overviewValue(double value) {
+    _$overviewValueAtom.reportWrite(value, super.overviewValue, () {
+      super.overviewValue = value;
+    });
+  }
+
   final _$isSymptomSelectDayAtom =
       Atom(name: '_SymptomBase.isSymptomSelectDay');
 
@@ -265,6 +280,7 @@ name: ${name},
 intensity: ${intensity},
 frequency: ${frequency},
 mealTime: ${mealTime},
+overviewValue: ${overviewValue},
 isSymptomSelectDay: ${isSymptomSelectDay},
 isModifyButtonActive: ${isModifyButtonActive},
 isPresentAtLeastOneMeal: ${isPresentAtLeastOneMeal},

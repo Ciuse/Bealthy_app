@@ -13,13 +13,13 @@ mixin _$SymptomOverviewGraphStore on _SymptomOverviewGraphStoreBase, Store {
       Atom(name: '_SymptomOverviewGraphStoreBase.touchedIndex');
 
   @override
-  String get touchedIndex {
+  int get touchedIndex {
     _$touchedIndexAtom.reportRead();
     return super.touchedIndex;
   }
 
   @override
-  set touchedIndex(String value) {
+  set touchedIndex(int value) {
     _$touchedIndexAtom.reportWrite(value, super.touchedIndex, () {
       super.touchedIndex = value;
     });

@@ -72,7 +72,7 @@ abstract class _OverviewBase with Store {
     overviewSymptomList.clear();
     switch(timeSelected.index){
       case 0: await getSymptomsOfADay(dateStore.overviewDefaultLastDate)
-          .then((value) => mapSymptomsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewSymptomList))
+          .then((value) => mapSymptomsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewSymptomList.toList()))
           .then((value) => totalOccurrenceSymptoms()); break;
       case 1:
         await Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
@@ -94,7 +94,7 @@ abstract class _OverviewBase with Store {
         await getDishesOfADay(dateStore.overviewDefaultLastDate).then((value) =>
         {
           Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) => {
-            mapIngredientsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewIngredientList)
+            mapIngredientsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewIngredientList.toList())
           }).then((value) => totalOccurrenceIngredients())});
 
         break;
@@ -175,16 +175,14 @@ abstract class _OverviewBase with Store {
 
   @action
   Future<void> getSymptomsOfADay(DateTime date) async {
-    String day = fixDate(date);
     await (FirebaseFirestore.instance
         .collection('UserSymptoms')
-        .doc(auth.currentUser.uid).collection("DaySymptoms").doc(day)
+        .doc(auth.currentUser.uid).collection("DaySymptoms").doc(fixDate(date))
         .collection("Symptoms")
         .get()
         .then((querySnapshot) {
       overviewSymptomList.clear();
-      print(overviewSymptomList);
-      querySnapshot.docs.forEach((symptom) {print("");
+      querySnapshot.docs.forEach((symptom) {
         Symptom toAdd = new Symptom(id:symptom.id, name: symptom.get("name"));
         toAdd.initStore();
         toAdd.setIsSymptomInADay(true);
@@ -198,7 +196,6 @@ abstract class _OverviewBase with Store {
       );
     })
     );
-    print("");
   }
 
   @action
@@ -206,8 +203,7 @@ abstract class _OverviewBase with Store {
       await getSymptomsOfADay(dateTime)
           .then((value) =>
            {
-             mapSymptomsOverview.putIfAbsent(dateTime, () => overviewSymptomList)});
-             //mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList, ifAbsent: ()=> overviewSymptomList)});
+             mapSymptomsOverview.update(dateTime, (value) => overviewSymptomList.toList(), ifAbsent: ()=> overviewSymptomList.toList())});
   }
 
   int getIndexFromSymptomsList(Symptom symptom,List<Symptom> symptoms){
@@ -246,7 +242,7 @@ abstract class _OverviewBase with Store {
   Future<void> getIngredientSingleDayOfAPeriod(DateTime dateTime) async {
     await getDishesOfADay(dateTime)
         .then((value) => Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) =>
-      mapIngredientsOverview.putIfAbsent(dateTime, () => overviewIngredientList))
+      mapIngredientsOverview.putIfAbsent(dateTime, () => overviewIngredientList.toList()))
     );
   }
 
@@ -271,19 +267,22 @@ abstract class _OverviewBase with Store {
     if(count==4){
       value = 1.0;
     }
+    if(count==0){
+      value = 0;
+    }
     return value;
   }
 
 
   @action
   void initializeOverviewValue(DateTime dateTime, String symptomId){
-    print(mapSymptomsOverview[dateTime].length);
 
     if( mapSymptomsOverview[dateTime].any((element) => element.id==symptomId)){
       Symptom toUpdate = mapSymptomsOverview[dateTime].firstWhere((element) => element.id==symptomId);
-      toUpdate.overviewValue = toUpdate.intensity*toUpdate.frequency*mealTimeValueSymptom(toUpdate);
+      toUpdate.overviewValue = toUpdate.intensity*toUpdate.frequency*mealTimeValueSymptom(toUpdate)+2.5;
+      print(toUpdate.overviewValue);
     }else{
-      Symptom symptomNotPresent = new Symptom(id: symptomId);
+      Symptom symptomNotPresent = new Symptom(id: symptomId, intensity: 0,frequency: 0,mealTime: []);
       mapSymptomsOverview[dateTime].add(symptomNotPresent);
       symptomNotPresent.overviewValue = 0;
     }

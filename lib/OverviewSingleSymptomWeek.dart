@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import 'Database/symptomOverviewGraphStore.dart';
 import 'Models/dateStore.dart';
 
 class OverviewSingleSymptomWeek extends StatefulWidget {
@@ -34,10 +35,9 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
         appBar: AppBar(
           title: Text("Symptom Overview"),
         ),
-        body: Observer(builder: (_) => Column(
+        body:Column(
             children: <Widget>[BarChartSymptom(symptomId: widget.symptomId,)
             ]
-        )
         )
     );
   }
@@ -65,8 +65,6 @@ class BarChartSymptom extends StatefulWidget {
 class BarChartSymptomState extends State<BarChartSymptom> {
   final Color barBackgroundColor = Colors.white70;
   final Duration animDuration = const Duration(milliseconds: 250);
-
-  int touchedIndex;
 
   bool isPlaying = false;
 
@@ -115,7 +113,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       double y, {
         bool isTouched = false,
         Color barColor = Colors.black87,
-        double width = 7.5,
+        double width = 12,
         List<int> showTooltips = const [],
       }) {
 
@@ -123,8 +121,8 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       x: x,
       barRods: [
         BarChartRodData(
-          y: isTouched ? y + 1 : y,
-          colors: isTouched ? [Colors.yellow] : [barColor],
+          y: isTouched ? y + 1 : y+0.01, //todo: il 0.01 permette di cliccare quelli a 0-> lasciarlo o no?
+          colors: isTouched ? [Colors.green] : [barColor],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
@@ -137,19 +135,20 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     );
   }
 
-  List<BarChartGroupData> showingGroups(DateStore dateStore, OverviewStore overviewStore)  {
+  List<BarChartGroupData> showingGroups(DateStore dateStore, OverviewStore overviewStore, SymptomOverviewGraphStore graphStore)  {
     return List.generate(dateStore.rangeDays.length, (i)
     {
       return makeGroupData(
           i, overviewStore.mapSymptomsOverview[dateStore.rangeDays[i]]
           .firstWhere((element) => element.id == widget.symptomId)
-          .overviewValue, isTouched: i == touchedIndex);
+          .overviewValue, isTouched: i == graphStore.touchedIndex);
     });
   }
 
   BarChartData mainBarData() {
     DateStore dateStore = Provider.of<DateStore>(context);
     OverviewStore overviewStore = Provider.of<OverviewStore>(context);
+    SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
@@ -182,16 +181,21 @@ class BarChartSymptomState extends State<BarChartSymptom> {
               return BarTooltipItem(
                   weekDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
             }),
+        allowTouchBarBackDraw: true,
+        touchExtraThreshold: EdgeInsets.all(4),
+        enabled: true,
         touchCallback: (barTouchResponse) {
-          setState(() {
-            if (barTouchResponse.spot != null &&
-                barTouchResponse.touchInput is! FlPanEnd &&
-                barTouchResponse.touchInput is! FlLongPressEnd) {
-              touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-            } else {
-              touchedIndex = -1;
+          if(barTouchResponse.touchInput is FlPanStart) {
+            if (barTouchResponse.spot != null) {
+              graphStore.touchedIndex =
+                  barTouchResponse.spot.touchedBarGroupIndex;
+              print(barTouchResponse.spot );
+
             }
-          });
+            else{
+              graphStore.touchedIndex = -1;
+            }
+          }
         },
       ),
       titlesData: FlTitlesData(
@@ -244,7 +248,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(dateStore, overviewStore),
+      barGroups: showingGroups(dateStore, overviewStore, graphStore),
     );
   }
 }

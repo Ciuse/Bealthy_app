@@ -299,6 +299,28 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
+  double mealTimeValueSymptom(Symptom symptom) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.mealTimeValueSymptom');
+    try {
+      return super.mealTimeValueSymptom(symptom);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void initializeOverviewValue(DateTime dateTime, String symptomId) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.initializeOverviewValue');
+    try {
+      return super.initializeOverviewValue(dateTime, symptomId);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 mapSymptomsOverview: ${mapSymptomsOverview},

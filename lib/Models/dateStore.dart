@@ -82,14 +82,14 @@ abstract class _DateStoreBase with Store {
 
   @action
   void nextMonthOverview() {
-    overviewFirstDate = DateTime(overviewFirstDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day+31);
+    overviewFirstDate = DateTime(overviewFirstDate.year, overviewFirstDate.month,overviewFirstDate.day+31);
     overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day+31 );
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
   }
 
   @action
   void previousMonthOverview() {
-    overviewFirstDate = DateTime(overviewFirstDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day-31);
+    overviewFirstDate = DateTime(overviewFirstDate.year, overviewFirstDate.month,overviewFirstDate.day-31);
     overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day-31 );
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
   }

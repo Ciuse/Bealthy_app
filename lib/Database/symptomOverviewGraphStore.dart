@@ -10,7 +10,7 @@ class SymptomOverviewGraphStore = _SymptomOverviewGraphStoreBase with _$SymptomO
 // The store-class
 abstract class _SymptomOverviewGraphStoreBase with Store {
   @observable
-  String touchedIndex;
+  int touchedIndex;
 
 
 }
