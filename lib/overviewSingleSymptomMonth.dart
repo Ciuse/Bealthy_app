@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import 'Database/symptomOverviewGraphStore.dart';
+import 'Models/dateStore.dart';
+
 class OverviewSingleSymptomMonth extends StatefulWidget {
   final String symptomId;
   OverviewSingleSymptomMonth({@required this.symptomId});
@@ -14,44 +17,29 @@ class OverviewSingleSymptomMonth extends StatefulWidget {
 }
 
 class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>  {
+
+  SymptomStore symptomStore;
+  DateStore dateStore;
+  OverviewStore overviewStore;
+  void initState() {
+    super.initState();
+    overviewStore = Provider.of<OverviewStore>(context, listen: false);
+    dateStore = Provider.of<DateStore>(context, listen: false);
+    symptomStore = Provider.of<SymptomStore>(context, listen: false);
+    dateStore.rangeDays.forEach((dateTime) {
+      overviewStore.initializeOverviewValue(dateTime, widget.symptomId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final overviewStore = Provider.of<OverviewStore>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text("Symptom Overview"),
+          title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+"\n"+"Overview"),
         ),
-        body: Observer(builder: (_) => Column(
-            children: <Widget>[BarChartSymptom(),
-              Container(
-                  child: true==true
-                      ? ListView(
-                      children: [
-                        for(var ingredient in overviewStore.singleDayIngredientPresentMap.keys )
-                          Container(
-                              width: 50,
-                              height: 50,
-                              child:  ClipOval(
-                                  child: Image(
-                                    image: AssetImage("images/" + ingredient + ".png"),
-                                  )
-                              ))])
-                      : ListView(
-                      children: [
-                        for(var ingredient in overviewStore.singleDayIngredientPresentMap.keys )
-                          Container(
-                              width: 50,
-                              height: 50,
-                              child:  ClipOval(
-                                  child: Image(
-                                    image: AssetImage("images/" + ingredient + ".png"),
-                                  )
-                              ))
-                      ]
-                  ))
-
+        body:Column(
+            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId)
             ]
-        )
         )
     );
   }
@@ -68,6 +56,8 @@ class BarChartSymptom extends StatefulWidget {
     Colors.pink,
     Colors.redAccent,
   ];
+  final String symptomId;
+  BarChartSymptom({@required this.symptomId});
 
   @override
   BarChartSymptomState createState() => BarChartSymptomState();
@@ -80,12 +70,15 @@ class BarChartSymptomState extends State<BarChartSymptom> {
   int touchedIndex;
 
   bool isPlaying = false;
+  DateStore dateStore;
+
+  void initState() {
+    super.initState();
+    dateStore = Provider.of<DateStore>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    SymptomStore symptomStore = Provider.of<SymptomStore>(context);
-    OverviewStore overviewStore = Provider.of<OverviewStore>(context);
 
     return AspectRatio(
       aspectRatio: 1,
@@ -151,78 +144,20 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(31, (i) {
-    switch (i) {
-      case 0:
-        return makeGroupData(0, 5, isTouched: i == touchedIndex);
-      case 1:
-        return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
-      case 2:
-        return makeGroupData(2, 5, isTouched: i == touchedIndex);
-      case 3:
-        return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
-      case 4:
-        return makeGroupData(4, 9, isTouched: i == touchedIndex);
-      case 5:
-        return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
-      case 6:
-        return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
-      case 7:
-        return makeGroupData(7, 5, isTouched: i == touchedIndex);
-      case 8:
-        return makeGroupData(8, 6.5, isTouched: i == touchedIndex);
-      case 9:
-        return makeGroupData(9, 5, isTouched: i == touchedIndex);
-      case 10:
-        return makeGroupData(10, 7.5, isTouched: i == touchedIndex);
-      case 11:
-        return makeGroupData(11, 9, isTouched: i == touchedIndex);
-      case 12:
-        return makeGroupData(12, 11.5, isTouched: i == touchedIndex);
-      case 13:
-        return makeGroupData(13, 6.5, isTouched: i == touchedIndex);
-      case 14:
-        return makeGroupData(14, 5, isTouched: i == touchedIndex);
-      case 15:
-        return makeGroupData(15, 6.5, isTouched: i == touchedIndex);
-      case 16:
-        return makeGroupData(16, 5, isTouched: i == touchedIndex);
-      case 17:
-        return makeGroupData(17, 7.5, isTouched: i == touchedIndex);
-      case 18:
-        return makeGroupData(18, 9, isTouched: i == touchedIndex);
-      case 19:
-        return makeGroupData(19, 11.5, isTouched: i == touchedIndex);
-      case 20:
-        return makeGroupData(20, 6.5, isTouched: i == touchedIndex);
-      case 21:
-        return makeGroupData(21, 5, isTouched: i == touchedIndex);
-      case 22:
-        return makeGroupData(22, 6.5, isTouched: i == touchedIndex);
-      case 23:
-        return makeGroupData(23, 5, isTouched: i == touchedIndex);
-      case 24:
-        return makeGroupData(24, 7.5, isTouched: i == touchedIndex);
-      case 25:
-        return makeGroupData(25, 9, isTouched: i == touchedIndex);
-      case 26:
-        return makeGroupData(26, 11.5, isTouched: i == touchedIndex);
-      case 27:
-        return makeGroupData(27, 6.5, isTouched: i == touchedIndex);
-      case 28:
-        return makeGroupData(28, 6.5, isTouched: i == touchedIndex);
-      case 29:
-        return makeGroupData(29, 5, isTouched: i == touchedIndex);
-      case 30:
-        return makeGroupData(30, 7.5, isTouched: i == touchedIndex);
-      case 31:
-        return makeGroupData(31, 9, isTouched: i == touchedIndex);
-      default:
-        return null;
-    }
-  });
+  List<BarChartGroupData> showingGroups(DateStore dateStore, OverviewStore overviewStore, SymptomOverviewGraphStore graphStore)  {
+    return List.generate(dateStore.rangeDays.length, (i)
+    {
+      return makeGroupData(
+          i, overviewStore.mapSymptomsOverview[dateStore.rangeDays[i]]
+          .firstWhere((element) => element.id == widget.symptomId)
+          .overviewValue, isTouched: i == graphStore.touchedIndex);
+    });
+  }
 
   BarChartData mainBarData() {
+    DateStore dateStore = Provider.of<DateStore>(context);
+    OverviewStore overviewStore = Provider.of<OverviewStore>(context);
+    SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
@@ -331,15 +266,17 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                   weekDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
             }),
         touchCallback: (barTouchResponse) {
-          setState(() {
-            if (barTouchResponse.spot != null &&
-                barTouchResponse.touchInput is! FlPanEnd &&
-                barTouchResponse.touchInput is! FlLongPressEnd) {
-              touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-            } else {
-              touchedIndex = -1;
+          if(barTouchResponse.touchInput is FlPanStart) {
+            if (barTouchResponse.spot != null) {
+              graphStore.touchedIndex =
+                  barTouchResponse.spot.touchedBarGroupIndex;
+              print(barTouchResponse.spot );
+
             }
-          });
+            else{
+              graphStore.touchedIndex = -1;
+            }
+          }
         },
       ),
       titlesData: FlTitlesData(
@@ -392,7 +329,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(),
+      barGroups: showingGroups(dateStore, overviewStore, graphStore),
     );
   }
 }

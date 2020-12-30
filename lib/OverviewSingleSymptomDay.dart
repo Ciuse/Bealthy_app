@@ -14,11 +14,20 @@ class OverviewSingleSymptomDay extends StatefulWidget {
 }
 
 class _OverviewSingleSymptomDayState extends State<OverviewSingleSymptomDay>  {
+
+  SymptomStore symptomStore;
+
+  void initState() {
+    super.initState();
+    symptomStore = Provider.of<SymptomStore>(context, listen: false);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Symptom Overview"),
+          title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+"\n"+"Overview"),
         ),
         body: Observer(builder: (_) => Column(
             children: <Widget>[BarChartSymptom()
