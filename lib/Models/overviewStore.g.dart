@@ -216,14 +216,6 @@ mixin _$OverviewStore on _OverviewBase, Store {
         .run(() => super.getSymptomSingleDayOfAPeriod(dateTime));
   }
 
-  final _$getDishesOfADayAsyncAction =
-      AsyncAction('_OverviewBase.getDishesOfADay');
-
-  @override
-  Future<void> getDishesOfADay(DateTime date) {
-    return _$getDishesOfADayAsyncAction.run(() => super.getDishesOfADay(date));
-  }
-
   final _$getDishMealTimeAsyncAction =
       AsyncAction('_OverviewBase.getDishMealTime');
 
@@ -231,15 +223,6 @@ mixin _$OverviewStore on _OverviewBase, Store {
   Future<dynamic> getDishMealTime(MealTime mealTime, DateTime dateTime) {
     return _$getDishMealTimeAsyncAction
         .run(() => super.getDishMealTime(mealTime, dateTime));
-  }
-
-  final _$getIngredientSingleDayOfAPeriodAsyncAction =
-      AsyncAction('_OverviewBase.getIngredientSingleDayOfAPeriod');
-
-  @override
-  Future<void> getIngredientSingleDayOfAPeriod(DateTime dateTime) {
-    return _$getIngredientSingleDayOfAPeriodAsyncAction
-        .run(() => super.getIngredientSingleDayOfAPeriod(dateTime));
   }
 
   final _$getIngredientOfADishAsyncAction =

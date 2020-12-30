@@ -23,33 +23,6 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
         ),
         body: Observer(builder: (_) => Column(
             children: <Widget>[BarChartSymptom(),
-              Container(
-                  child: true==true
-                      ? ListView(
-                      children: [
-                        for(var ingredient in overviewStore.singleDayIngredientPresentMap.keys )
-                          Container(
-                              width: 50,
-                              height: 50,
-                              child:  ClipOval(
-                                  child: Image(
-                                    image: AssetImage("images/" + ingredient + ".png"),
-                                  )
-                              ))])
-                      : ListView(
-                      children: [
-                        for(var ingredient in overviewStore.singleDayIngredientPresentMap.keys )
-                          Container(
-                              width: 50,
-                              height: 50,
-                              child:  ClipOval(
-                                  child: Image(
-                                    image: AssetImage("images/" + ingredient + ".png"),
-                                  )
-                              ))
-                      ]
-                  ))
-
             ]
         )
         )

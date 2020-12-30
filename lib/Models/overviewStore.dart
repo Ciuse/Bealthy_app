@@ -77,34 +77,53 @@ abstract class _OverviewBase with Store {
       case 1:
         await Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
             .then((value) =>  totalOccurrenceSymptoms());
-      break;
+        break;
       case 2: await Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
           .then((value) =>  totalOccurrenceSymptoms());
       break;
     }
 
   }
+
+  function1(DateStore dateStore) async {
+    await  Future.forEach(dateStore.rangeDays, (day) async {await asyncOne(day);}).then((value) => totalOccurrenceIngredients());
+  }
+
+  asyncOne(DateTime day) async {
+    await Future.forEach(MealTime.values, (mealTime) async {
+      await getDishMealTime(mealTime, day);
+    }).then((value) => asyncTwo(day));
+  }
+
+  asyncTwo(DateTime day) async
+  {
+        await Future.forEach(overviewDishList, (dish) async {await getIngredientOfADish(dish);}).then((value) => asyncTre(day));
+
+  }
+
+  asyncTre(DateTime day)async{
+    mapIngredientsOverview.update(day, (value) => overviewIngredientList.toList(), ifAbsent: ()=> overviewIngredientList.toList());
+    overviewDishList.clear();
+    overviewIngredientList.clear();
+  }
+
   @action
   Future<void> initializeIngredientList(DateStore dateStore) async {
     mapIngredientsOverview.clear();
     overviewIngredientList.clear();
     totalIngredientPresentMap.clear();
+    overviewDishList.clear();
     switch(timeSelected.index){
       case 0:
-        await getDishesOfADay(dateStore.overviewDefaultLastDate).then((value) =>
-        {
-          Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) => {
-            mapIngredientsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewIngredientList.toList())
-          }).then((value) => totalOccurrenceIngredients())});
-
-        break;
-      case 1:
-        await Future.wait(dateStore.rangeDays.map(getIngredientSingleDayOfAPeriod))
-            .then((value) =>  totalOccurrenceIngredients());
-        break;
-      case 2: await Future.wait(dateStore.rangeDays.map(getIngredientSingleDayOfAPeriod))
-          .then((value) =>  totalOccurrenceIngredients());
-
+      // await getDishesOfADay(dateStore.overviewDefaultLastDate).then((value) =>
+      // {
+      //   Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) => {
+      //     mapIngredientsOverview.putIfAbsent(dateStore.overviewDefaultLastDate, () => overviewIngredientList.toList())
+      //   }).then((value) => totalOccurrenceIngredients())});break;
+      case 1: await function1(dateStore);
+      break;
+      case 2: await function1(dateStore);
+      break;
     }
 
   }
@@ -164,6 +183,8 @@ abstract class _OverviewBase with Store {
   }
 
   void singleDayOccurrenceIngredients(DateTime dateTime){
+    singleDayIngredientPresentMap.clear();
+    print(" ");
     mapIngredientsOverview[dateTime].forEach((ingredient) {
       if(!singleDayIngredientPresentMap.keys.contains(ingredient.id)){
         singleDayIngredientPresentMap.putIfAbsent(ingredient.id, () => 1);
@@ -211,19 +232,12 @@ abstract class _OverviewBase with Store {
   }
 
   @action
-  Future<void> getDishesOfADay(DateTime date) async {
-    overviewDishList.clear();
-    await Future.wait(MealTime.values.map((meal) => getDishMealTime(meal, date)));
-  }
-
-  @action
   Future<dynamic> getDishMealTime(MealTime mealTime, DateTime dateTime) async {
-    String day = fixDate(dateTime);
-    await FirebaseFirestore.instance
+    await (FirebaseFirestore.instance
         .collection('UserDishes')
         .doc(auth.currentUser.uid)
         .collection("DayDishes")
-        .doc(day)
+        .doc(fixDate(dateTime))
         .collection(mealTime.toString().toString().split('.').last)
         .get()
         .then((querySnapshot) {
@@ -235,15 +249,7 @@ abstract class _OverviewBase with Store {
         overviewDishList.add(toAdd);
       }
       );
-    });
-  }
-
-  @action
-  Future<void> getIngredientSingleDayOfAPeriod(DateTime dateTime) async {
-    await getDishesOfADay(dateTime)
-        .then((value) => Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) =>
-      mapIngredientsOverview.putIfAbsent(dateTime, () => overviewIngredientList.toList()))
-    );
+    }));
   }
 
   @action

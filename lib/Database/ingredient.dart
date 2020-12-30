@@ -16,8 +16,11 @@ abstract class _IngredientBase with Store {
   _IngredientBase({
     this.id,
     this.name,
-    this.qty
+    this.qty,
+    this.mealTime,
+    this.totalQuantity,
   });
+
   @observable
   String id;
   @observable
@@ -25,7 +28,11 @@ abstract class _IngredientBase with Store {
   @observable
   String qty;
 
+  @observable
+  String mealTime;
 
+  @observable
+  String totalQuantity;
 
   @action
   factory _IngredientBase.fromMap(Map<String, dynamic> json) =>

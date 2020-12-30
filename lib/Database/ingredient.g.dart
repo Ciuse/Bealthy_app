@@ -54,12 +54,44 @@ mixin _$Ingredient on _IngredientBase, Store {
     });
   }
 
+  final _$mealTimeAtom = Atom(name: '_IngredientBase.mealTime');
+
+  @override
+  String get mealTime {
+    _$mealTimeAtom.reportRead();
+    return super.mealTime;
+  }
+
+  @override
+  set mealTime(String value) {
+    _$mealTimeAtom.reportWrite(value, super.mealTime, () {
+      super.mealTime = value;
+    });
+  }
+
+  final _$totalQuantityAtom = Atom(name: '_IngredientBase.totalQuantity');
+
+  @override
+  String get totalQuantity {
+    _$totalQuantityAtom.reportRead();
+    return super.totalQuantity;
+  }
+
+  @override
+  set totalQuantity(String value) {
+    _$totalQuantityAtom.reportWrite(value, super.totalQuantity, () {
+      super.totalQuantity = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 id: ${id},
 name: ${name},
-qty: ${qty}
+qty: ${qty},
+mealTime: ${mealTime},
+totalQuantity: ${totalQuantity}
     ''';
   }
 }

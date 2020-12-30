@@ -31,15 +31,59 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Symptom Overview"),
         ),
         body:Column(
-            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId,)
+            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId,),
+        Observer(builder: (_) =>Expanded(
+                  child: buildIngredientRow() ))
             ]
         )
     );
+  }
+
+  Widget buildIngredientRow(){
+
+    SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
+    return graphStore.touchedIndex==-1?
+    ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for(var ingredient in overviewStore.totalIngredientPresentMap.keys )
+            Column(children: [ Container(
+                width: 50,
+                height: 50,
+                child:  ClipOval(
+                    child: Image(
+                      image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                    )
+                )),
+              Text(overviewStore.totalIngredientPresentMap[ingredient].toString())
+            ])
+
+        ])
+        : overviewStore.singleDayIngredientPresentMap.keys.length==0
+        ? Text("NO INGREDIENT THIS DAY")
+        :ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for(var ingredient in overviewStore.singleDayIngredientPresentMap.keys )
+            Column(children: [
+              Container(
+                  width: 50,
+                  height: 50,
+                  child:  ClipOval(
+                      child: Image(
+                        image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                      )
+                  )),
+              Text(overviewStore.singleDayIngredientPresentMap[ingredient].toString())
+            ],
+            )
+        ]);
   }
 }
 
@@ -107,6 +151,8 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       ),
     );
   }
+
+
 
   BarChartGroupData makeGroupData(
       int x,
@@ -187,10 +233,8 @@ class BarChartSymptomState extends State<BarChartSymptom> {
         touchCallback: (barTouchResponse) {
           if(barTouchResponse.touchInput is FlPanStart) {
             if (barTouchResponse.spot != null) {
-              graphStore.touchedIndex =
-                  barTouchResponse.spot.touchedBarGroupIndex;
-              print(barTouchResponse.spot );
-
+              graphStore.touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
+              overviewStore.singleDayOccurrenceIngredients(dateStore.rangeDays[graphStore.touchedIndex]);
             }
             else{
               graphStore.touchedIndex = -1;
