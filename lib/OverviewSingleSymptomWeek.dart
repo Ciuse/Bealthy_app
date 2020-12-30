@@ -18,11 +18,13 @@ class OverviewSingleSymptomWeek extends StatefulWidget {
 class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  {
   DateStore dateStore;
   OverviewStore overviewStore;
+  SymptomStore symptomStore;
 
   void initState() {
     super.initState();
     overviewStore = Provider.of<OverviewStore>(context, listen: false);
     dateStore = Provider.of<DateStore>(context, listen: false);
+    symptomStore = Provider.of<SymptomStore>(context, listen: false);
     dateStore.rangeDays.forEach((dateTime) {
       overviewStore.initializeOverviewValue(dateTime, widget.symptomId);
     });
@@ -34,7 +36,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Symptom Overview"),
+          title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+"\n"+"Overview"),
         ),
         body:Column(
             children: <Widget>[BarChartSymptom(symptomId: widget.symptomId,),
@@ -90,7 +92,6 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
 
 
 class BarChartSymptom extends StatefulWidget {
-
   final List<Color> availableColors = [
     Colors.purpleAccent,
     Colors.yellow,
@@ -111,6 +112,12 @@ class BarChartSymptomState extends State<BarChartSymptom> {
   final Duration animDuration = const Duration(milliseconds: 250);
 
   bool isPlaying = false;
+  DateStore dateStore;
+
+  void initState() {
+    super.initState();
+    dateStore = Provider.of<DateStore>(context, listen: false);
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +135,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  Text("Dicembre",style: TextStyle(
+                  Text("Dicembre" ,style: TextStyle(
                       color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),),
 
                   const SizedBox(
@@ -247,24 +254,24 @@ class BarChartSymptomState extends State<BarChartSymptom> {
         bottomTitles: SideTitles(
           showTitles: true,
           getTextStyles: (value) =>
-          const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 14,),
+          const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 10,),
           margin: 8,
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return '1';
+                return 'Monday';
               case 1:
-                return '5';
+                return 'Tuesday';
               case 2:
-                return '10';
+                return 'Wednesday';
               case 3:
-                return '15';
+                return 'Thursday';
               case 4:
-                return '20';
+                return 'Friday';
               case 5:
-                return '25';
+                return 'Saturday';
               case 6:
-                return '30';
+                return 'Sunday';
               default:
                 return '';
             }
