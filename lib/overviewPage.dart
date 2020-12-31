@@ -44,7 +44,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
     overviewStore = Provider.of<OverviewStore>(context, listen: false);
     overviewStore.timeSelected = TemporalTime.Day;
-    overviewStore.initializeOverviewList(dateStore);
+    overviewStore.initializeSymptomsMap(dateStore);
 
 
   }
@@ -121,19 +121,19 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         }
       });
     if(choice== TemporalTime.Day.toString().split('.').last){
-      overviewStore.initializeOverviewList(dateStore);
+      overviewStore.initializeSymptomsMap(dateStore);
     }
     if(choice== TemporalTime.Week.toString().split('.').last){
       //calcolo il primo giorno della settimana e trovo i giorni del range
       dateStore.firstDayInWeek();
       //trovo le statistiche di quel range di giorni
-      overviewStore.initializeOverviewList(dateStore);
+      overviewStore.initializeSymptomsMap(dateStore);
     }
     if(choice== TemporalTime.Month.toString().split('.').last){
       //calcolo il primo giorno del mese e trovo i giorni del range
       dateStore.firstDayInMonth();
       //trovo le statistiche di quel range di giorni
-      overviewStore.initializeOverviewList(dateStore);
+      overviewStore.initializeSymptomsMap(dateStore);
     }
   }
 
@@ -198,7 +198,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return TabBarView(
     controller: _tabController,
       children: [
-        overviewStore.totalSymptomsPresentMap.length>0? symptomsWidget() : noSymptomsWidget(),
+        overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget(),
         IngredientOverview(),
       ],
     );
@@ -210,38 +210,38 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   void selectPreviousDay() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousDayOverview();
-    overviewStore.initializeOverviewList(dateStore);
+    overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectNextDay() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextDayOverview();
-    overviewStore.initializeOverviewList(dateStore);
+    overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectPreviousWeek() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousWeekOverview();
-    overviewStore.initializeOverviewList(dateStore);
+    overviewStore.initializeSymptomsMap(dateStore);
 
   }
 
   void selectNextWeek() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextWeekOverview();
-    overviewStore.initializeOverviewList(dateStore);
+    overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectPreviousMonth() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousMonthOverview();
-    overviewStore.initializeOverviewList(dateStore);
+    overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectNextMonth() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextMonthOverview();
-    overviewStore.initializeOverviewList(dateStore);
+    overviewStore.initializeSymptomsMap(dateStore);
   }
 
   Widget _buildHeaderDay(DateTime day) {
@@ -373,7 +373,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           height: 80,
           child: Observer(builder: (_) =>
               ListView.builder(
-                itemCount: overviewStore.totalSymptomsPresentMap.length,
+                itemCount: overviewStore.totalOccurrenceSymptom.length,
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
@@ -389,16 +389,16 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) =>
-                                  overviewStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.totalSymptomsPresentMap.keys.elementAt(index)):
-                                  overviewStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.totalSymptomsPresentMap.keys.elementAt(index)):
-                                  overviewStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.totalSymptomsPresentMap.keys.elementAt(index)): null
+                                  overviewStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index)):
+                                  overviewStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index)):
+                                  overviewStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index)): null
                                   ))
                             },
                             elevation: 5.0,
                             fillColor: Colors.white,
                             child: ImageIcon(
                               AssetImage("images/" +
-                                  overviewStore.totalSymptomsPresentMap.keys.elementAt(index) + ".png"),
+                                  overviewStore.totalOccurrenceSymptom.keys.elementAt(index) + ".png"),
                               size: 28.0,
                             ),
                             padding: EdgeInsets.all(15.0),
@@ -507,7 +507,7 @@ class PieChart2State extends State {
                       ),
                       sectionsSpace: 0,
                       centerSpaceRadius: 40,
-                      sections: overviewStore.totalSymptomsPresentMap.length>0 ? showingSections(overviewStore, symptomStore) : 0,
+                      sections: overviewStore.totalOccurrenceSymptom.length>0 ? showingSections(overviewStore, symptomStore) : 0,
                   ),
                 )),
               ),
@@ -517,7 +517,7 @@ class PieChart2State extends State {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                for(String symptomId in overviewStore.totalSymptomsPresentMap.keys)
+                for(String symptomId in overviewStore.totalOccurrenceSymptom.keys)
                   Indicator(
                     color: symptomStore.colorSymptomsMap[symptomId],
                     text: symptomStore.getSymptomFromList(symptomId).name,
@@ -539,16 +539,16 @@ class PieChart2State extends State {
 
   List<PieChartSectionData> showingSections(OverviewStore overviewStore, SymptomStore symptomStore) {
 
-    return List.generate(overviewStore.totalSymptomsPresentMap.length, (i) {
+    return List.generate(overviewStore.totalOccurrenceSymptom.length, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
 
 
         return PieChartSectionData(
-          color: symptomStore.colorSymptomsMap[overviewStore.totalSymptomsPresentMap.keys.elementAt(i)],
-          value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.totalSymptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
-          title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.totalSymptomsPresentMap.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%' : '',
+          color: symptomStore.colorSymptomsMap[overviewStore.totalOccurrenceSymptom.keys.elementAt(i)],
+          value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.totalOccurrenceSymptom.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
+          title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.totalOccurrenceSymptom.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%' : '',
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),

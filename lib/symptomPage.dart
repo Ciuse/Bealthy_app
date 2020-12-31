@@ -196,7 +196,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     if (!widget.symptom.isSymptomSelectDay) {
       if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
           widget.symptom.isPresentAtLeastOneTrue()){
-        symptomStore.updateSymptom(widget.symptom, date).then((value) => overviewStore.initializeOverviewList(dateStore));
+        symptomStore.updateSymptom(widget.symptom, date).then((value) => overviewStore.initializeSymptomsMap(dateStore));
         Navigator.pop(context);
       }
     } else {
@@ -204,7 +204,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
           widget.symptom.isPresentAtLeastOneTrue()) {
         if (widget.symptom.frequency != frequencyFromDb ||
             widget.symptom.intensity != intensityFromDb || !areMealTimeBoolListsEqual()) {
-          symptomStore.updateSymptom(widget.symptom, date).then((value) => overviewStore.initializeOverviewList(dateStore));
+          symptomStore.updateSymptom(widget.symptom, date).then((value) => overviewStore.initializeSymptomsMap(dateStore));
 
           Navigator.pop(context);
         }
@@ -222,7 +222,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                     onPressed: () {
                       symptomStore.removeSymptomOfSpecificDay( widget.symptom, date)
                           .then((value) => Navigator.of(context).popUntil((route) => route.isFirst))
-                          .then((value) => overviewStore.initializeOverviewList(dateStore));
+                          .then((value) => overviewStore.initializeSymptomsMap(dateStore));
                     },
                   )
                 ],

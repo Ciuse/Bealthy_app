@@ -37,7 +37,7 @@ class IngredientOverviewState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) =>overviewStore.totalIngredientPresentMap.length>0? ingredientsWidget() : noIngredientsWidget());
+    return Observer(builder: (_) =>overviewStore.totalOccurrenceIngredient.length>0? ingredientsWidget() : noIngredientsWidget());
   }
 
   Widget ingredientsWidget(){
@@ -49,7 +49,7 @@ class IngredientOverviewState extends State {
               height: 80,
               child: Observer(builder: (_) =>
                   ListView.builder(
-                    itemCount: overviewStore.totalIngredientPresentMap.length,
+                    itemCount: overviewStore.totalOccurrenceIngredient.length,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
@@ -134,7 +134,7 @@ class PieChartIngredientState extends State {
                     ),
                     sectionsSpace: 0,
                     centerSpaceRadius: 40,
-                    sections: overviewStore.totalIngredientPresentMap.length>0 ? showingSections(overviewStore,ingredientStore) : null,
+                    sections: overviewStore.totalOccurrenceIngredient.length>0 ? showingSections(overviewStore,ingredientStore) : null,
                   ),
                 )),
               ),
@@ -144,7 +144,7 @@ class PieChartIngredientState extends State {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                for(var ingredientId in overviewStore.totalIngredientPresentMap.keys)
+                for(var ingredientId in overviewStore.totalOccurrenceIngredient.keys)
                   Indicator(
                     color: ingredientStore.colorIngredientMap[ingredientId],
                     text: ingredientStore.getSymptomFromList(ingredientId).name,
@@ -166,16 +166,16 @@ class PieChartIngredientState extends State {
 
   List<PieChartSectionData> showingSections(OverviewStore overviewStore,IngredientStore ingredientStore ) {
 
-    return List.generate(overviewStore.totalIngredientPresentMap.length, (i) {
+    return List.generate(overviewStore.totalOccurrenceIngredient.length, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
 
 
       return PieChartSectionData(
-        color: ingredientStore.colorIngredientMap[overviewStore.totalIngredientPresentMap.keys.elementAt(i)],
-        value: overviewStore.totalNumOfIngredientList()>0 ? (overviewStore.totalIngredientPresentMap.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100 :1,
-        title: overviewStore.totalNumOfIngredientList()>0 ? '${((overviewStore.totalIngredientPresentMap.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100).toStringAsFixed(1)}%' : '',
+        color: ingredientStore.colorIngredientMap[overviewStore.totalOccurrenceIngredient.keys.elementAt(i)],
+        value: overviewStore.totalNumOfIngredientList()>0 ? (overviewStore.totalOccurrenceIngredient.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100 :1,
+        title: overviewStore.totalNumOfIngredientList()>0 ? '${((overviewStore.totalOccurrenceIngredient.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100).toStringAsFixed(1)}%' : '',
         radius: radius,
         titleStyle: TextStyle(
             fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),

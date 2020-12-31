@@ -32,7 +32,7 @@ abstract class _IngredientBase with Store {
   String mealTime;
 
   @observable
-  String totalQuantity;
+  int totalQuantity;
 
   @action
   factory _IngredientBase.fromMap(Map<String, dynamic> json) =>

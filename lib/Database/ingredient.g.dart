@@ -72,13 +72,13 @@ mixin _$Ingredient on _IngredientBase, Store {
   final _$totalQuantityAtom = Atom(name: '_IngredientBase.totalQuantity');
 
   @override
-  String get totalQuantity {
+  int get totalQuantity {
     _$totalQuantityAtom.reportRead();
     return super.totalQuantity;
   }
 
   @override
-  set totalQuantity(String value) {
+  set totalQuantity(int value) {
     _$totalQuantityAtom.reportWrite(value, super.totalQuantity, () {
       super.totalQuantity = value;
     });

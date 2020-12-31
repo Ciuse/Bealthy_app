@@ -9,19 +9,52 @@ part of 'overviewStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$OverviewStore on _OverviewBase, Store {
-  final _$mapSymptomsOverviewAtom =
-      Atom(name: '_OverviewBase.mapSymptomsOverview');
+  final _$timeSelectedAtom = Atom(name: '_OverviewBase.timeSelected');
 
   @override
-  ObservableMap<DateTime, List<Symptom>> get mapSymptomsOverview {
-    _$mapSymptomsOverviewAtom.reportRead();
-    return super.mapSymptomsOverview;
+  TemporalTime get timeSelected {
+    _$timeSelectedAtom.reportRead();
+    return super.timeSelected;
   }
 
   @override
-  set mapSymptomsOverview(ObservableMap<DateTime, List<Symptom>> value) {
-    _$mapSymptomsOverviewAtom.reportWrite(value, super.mapSymptomsOverview, () {
-      super.mapSymptomsOverview = value;
+  set timeSelected(TemporalTime value) {
+    _$timeSelectedAtom.reportWrite(value, super.timeSelected, () {
+      super.timeSelected = value;
+    });
+  }
+
+  final _$mapSymptomsOverviewPeriodAtom =
+      Atom(name: '_OverviewBase.mapSymptomsOverviewPeriod');
+
+  @override
+  ObservableMap<DateTime, List<Symptom>> get mapSymptomsOverviewPeriod {
+    _$mapSymptomsOverviewPeriodAtom.reportRead();
+    return super.mapSymptomsOverviewPeriod;
+  }
+
+  @override
+  set mapSymptomsOverviewPeriod(ObservableMap<DateTime, List<Symptom>> value) {
+    _$mapSymptomsOverviewPeriodAtom
+        .reportWrite(value, super.mapSymptomsOverviewPeriod, () {
+      super.mapSymptomsOverviewPeriod = value;
+    });
+  }
+
+  final _$mapSymptomsOverviewDayAtom =
+      Atom(name: '_OverviewBase.mapSymptomsOverviewDay');
+
+  @override
+  ObservableMap<MealTime, List<Symptom>> get mapSymptomsOverviewDay {
+    _$mapSymptomsOverviewDayAtom.reportRead();
+    return super.mapSymptomsOverviewDay;
+  }
+
+  @override
+  set mapSymptomsOverviewDay(ObservableMap<MealTime, List<Symptom>> value) {
+    _$mapSymptomsOverviewDayAtom
+        .reportWrite(value, super.mapSymptomsOverviewDay, () {
+      super.mapSymptomsOverviewDay = value;
     });
   }
 
@@ -41,69 +74,73 @@ mixin _$OverviewStore on _OverviewBase, Store {
     });
   }
 
-  final _$timeSelectedAtom = Atom(name: '_OverviewBase.timeSelected');
+  final _$totalOccurrenceSymptomAtom =
+      Atom(name: '_OverviewBase.totalOccurrenceSymptom');
 
   @override
-  TemporalTime get timeSelected {
-    _$timeSelectedAtom.reportRead();
-    return super.timeSelected;
+  ObservableMap<String, int> get totalOccurrenceSymptom {
+    _$totalOccurrenceSymptomAtom.reportRead();
+    return super.totalOccurrenceSymptom;
   }
 
   @override
-  set timeSelected(TemporalTime value) {
-    _$timeSelectedAtom.reportWrite(value, super.timeSelected, () {
-      super.timeSelected = value;
+  set totalOccurrenceSymptom(ObservableMap<String, int> value) {
+    _$totalOccurrenceSymptomAtom
+        .reportWrite(value, super.totalOccurrenceSymptom, () {
+      super.totalOccurrenceSymptom = value;
     });
   }
 
-  final _$totalSymptomsPresentMapAtom =
-      Atom(name: '_OverviewBase.totalSymptomsPresentMap');
+  final _$dayOccurrenceSymptomAtom =
+      Atom(name: '_OverviewBase.dayOccurrenceSymptom');
 
   @override
-  ObservableMap<String, int> get totalSymptomsPresentMap {
-    _$totalSymptomsPresentMapAtom.reportRead();
-    return super.totalSymptomsPresentMap;
+  ObservableMap<String, int> get dayOccurrenceSymptom {
+    _$dayOccurrenceSymptomAtom.reportRead();
+    return super.dayOccurrenceSymptom;
   }
 
   @override
-  set totalSymptomsPresentMap(ObservableMap<String, int> value) {
-    _$totalSymptomsPresentMapAtom
-        .reportWrite(value, super.totalSymptomsPresentMap, () {
-      super.totalSymptomsPresentMap = value;
+  set dayOccurrenceSymptom(ObservableMap<String, int> value) {
+    _$dayOccurrenceSymptomAtom.reportWrite(value, super.dayOccurrenceSymptom,
+        () {
+      super.dayOccurrenceSymptom = value;
     });
   }
 
-  final _$singleDaySymptomPresentMapAtom =
-      Atom(name: '_OverviewBase.singleDaySymptomPresentMap');
+  final _$mapIngredientsOverviewPeriodAtom =
+      Atom(name: '_OverviewBase.mapIngredientsOverviewPeriod');
 
   @override
-  ObservableMap<String, int> get singleDaySymptomPresentMap {
-    _$singleDaySymptomPresentMapAtom.reportRead();
-    return super.singleDaySymptomPresentMap;
+  ObservableMap<DateTime, List<Ingredient>> get mapIngredientsOverviewPeriod {
+    _$mapIngredientsOverviewPeriodAtom.reportRead();
+    return super.mapIngredientsOverviewPeriod;
   }
 
   @override
-  set singleDaySymptomPresentMap(ObservableMap<String, int> value) {
-    _$singleDaySymptomPresentMapAtom
-        .reportWrite(value, super.singleDaySymptomPresentMap, () {
-      super.singleDaySymptomPresentMap = value;
+  set mapIngredientsOverviewPeriod(
+      ObservableMap<DateTime, List<Ingredient>> value) {
+    _$mapIngredientsOverviewPeriodAtom
+        .reportWrite(value, super.mapIngredientsOverviewPeriod, () {
+      super.mapIngredientsOverviewPeriod = value;
     });
   }
 
-  final _$mapIngredientsOverviewAtom =
-      Atom(name: '_OverviewBase.mapIngredientsOverview');
+  final _$mapIngredientsOverviewDayAtom =
+      Atom(name: '_OverviewBase.mapIngredientsOverviewDay');
 
   @override
-  ObservableMap<DateTime, List<Ingredient>> get mapIngredientsOverview {
-    _$mapIngredientsOverviewAtom.reportRead();
-    return super.mapIngredientsOverview;
+  ObservableMap<MealTime, List<Ingredient>> get mapIngredientsOverviewDay {
+    _$mapIngredientsOverviewDayAtom.reportRead();
+    return super.mapIngredientsOverviewDay;
   }
 
   @override
-  set mapIngredientsOverview(ObservableMap<DateTime, List<Ingredient>> value) {
-    _$mapIngredientsOverviewAtom
-        .reportWrite(value, super.mapIngredientsOverview, () {
-      super.mapIngredientsOverview = value;
+  set mapIngredientsOverviewDay(
+      ObservableMap<MealTime, List<Ingredient>> value) {
+    _$mapIngredientsOverviewDayAtom
+        .reportWrite(value, super.mapIngredientsOverviewDay, () {
+      super.mapIngredientsOverviewDay = value;
     });
   }
 
@@ -139,37 +176,37 @@ mixin _$OverviewStore on _OverviewBase, Store {
     });
   }
 
-  final _$totalIngredientPresentMapAtom =
-      Atom(name: '_OverviewBase.totalIngredientPresentMap');
+  final _$totalOccurrenceIngredientAtom =
+      Atom(name: '_OverviewBase.totalOccurrenceIngredient');
 
   @override
-  ObservableMap<String, int> get totalIngredientPresentMap {
-    _$totalIngredientPresentMapAtom.reportRead();
-    return super.totalIngredientPresentMap;
+  ObservableMap<String, int> get totalOccurrenceIngredient {
+    _$totalOccurrenceIngredientAtom.reportRead();
+    return super.totalOccurrenceIngredient;
   }
 
   @override
-  set totalIngredientPresentMap(ObservableMap<String, int> value) {
-    _$totalIngredientPresentMapAtom
-        .reportWrite(value, super.totalIngredientPresentMap, () {
-      super.totalIngredientPresentMap = value;
+  set totalOccurrenceIngredient(ObservableMap<String, int> value) {
+    _$totalOccurrenceIngredientAtom
+        .reportWrite(value, super.totalOccurrenceIngredient, () {
+      super.totalOccurrenceIngredient = value;
     });
   }
 
-  final _$singleDayIngredientPresentMapAtom =
-      Atom(name: '_OverviewBase.singleDayIngredientPresentMap');
+  final _$dayOccurrenceIngredientAtom =
+      Atom(name: '_OverviewBase.dayOccurrenceIngredient');
 
   @override
-  ObservableMap<String, int> get singleDayIngredientPresentMap {
-    _$singleDayIngredientPresentMapAtom.reportRead();
-    return super.singleDayIngredientPresentMap;
+  ObservableMap<String, int> get dayOccurrenceIngredient {
+    _$dayOccurrenceIngredientAtom.reportRead();
+    return super.dayOccurrenceIngredient;
   }
 
   @override
-  set singleDayIngredientPresentMap(ObservableMap<String, int> value) {
-    _$singleDayIngredientPresentMapAtom
-        .reportWrite(value, super.singleDayIngredientPresentMap, () {
-      super.singleDayIngredientPresentMap = value;
+  set dayOccurrenceIngredient(ObservableMap<String, int> value) {
+    _$dayOccurrenceIngredientAtom
+        .reportWrite(value, super.dayOccurrenceIngredient, () {
+      super.dayOccurrenceIngredient = value;
     });
   }
 
@@ -180,22 +217,22 @@ mixin _$OverviewStore on _OverviewBase, Store {
     return _$initStoreAsyncAction.run(() => super.initStore(day));
   }
 
-  final _$initializeOverviewListAsyncAction =
-      AsyncAction('_OverviewBase.initializeOverviewList');
+  final _$initializeSymptomsMapAsyncAction =
+      AsyncAction('_OverviewBase.initializeSymptomsMap');
 
   @override
-  Future<void> initializeOverviewList(DateStore dateStore) {
-    return _$initializeOverviewListAsyncAction
-        .run(() => super.initializeOverviewList(dateStore));
+  Future<void> initializeSymptomsMap(DateStore dateStore) {
+    return _$initializeSymptomsMapAsyncAction
+        .run(() => super.initializeSymptomsMap(dateStore));
   }
 
-  final _$initializeIngredientListAsyncAction =
-      AsyncAction('_OverviewBase.initializeIngredientList');
+  final _$initializeIngredientMapAsyncAction =
+      AsyncAction('_OverviewBase.initializeIngredientMap');
 
   @override
-  Future<void> initializeIngredientList(DateStore dateStore) {
-    return _$initializeIngredientListAsyncAction
-        .run(() => super.initializeIngredientList(dateStore));
+  Future<void> initializeIngredientMap(DateStore dateStore) {
+    return _$initializeIngredientMapAsyncAction
+        .run(() => super.initializeIngredientMap(dateStore));
   }
 
   final _$getSymptomsOfADayAsyncAction =
@@ -260,22 +297,66 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
-  void totalOccurrenceSymptoms() {
+  void totalOccurrenceSymptomsDay() {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
-        name: '_OverviewBase.totalOccurrenceSymptoms');
+        name: '_OverviewBase.totalOccurrenceSymptomsDay');
     try {
-      return super.totalOccurrenceSymptoms();
+      return super.totalOccurrenceSymptomsDay();
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void totalOccurrenceIngredients() {
+  void totalOccurrenceSymptomsPeriod() {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
-        name: '_OverviewBase.totalOccurrenceIngredients');
+        name: '_OverviewBase.totalOccurrenceSymptomsPeriod');
     try {
-      return super.totalOccurrenceIngredients();
+      return super.totalOccurrenceSymptomsPeriod();
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void totalOccurrenceIngredientsPeriod() {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.totalOccurrenceIngredientsPeriod');
+    try {
+      return super.totalOccurrenceIngredientsPeriod();
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void totalOccurrenceIngredientsDay() {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.totalOccurrenceIngredientsDay');
+    try {
+      return super.totalOccurrenceIngredientsDay();
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void singleDayOccurrenceIngredients(DateTime dateTime) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.singleDayOccurrenceIngredients');
+    try {
+      return super.singleDayOccurrenceIngredients(dateTime);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMealTimeSymptomMap() {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.setMealTimeSymptomMap');
+    try {
+      return super.setMealTimeSymptomMap();
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }
@@ -306,16 +387,18 @@ mixin _$OverviewStore on _OverviewBase, Store {
   @override
   String toString() {
     return '''
-mapSymptomsOverview: ${mapSymptomsOverview},
-overviewSymptomList: ${overviewSymptomList},
 timeSelected: ${timeSelected},
-totalSymptomsPresentMap: ${totalSymptomsPresentMap},
-singleDaySymptomPresentMap: ${singleDaySymptomPresentMap},
-mapIngredientsOverview: ${mapIngredientsOverview},
+mapSymptomsOverviewPeriod: ${mapSymptomsOverviewPeriod},
+mapSymptomsOverviewDay: ${mapSymptomsOverviewDay},
+overviewSymptomList: ${overviewSymptomList},
+totalOccurrenceSymptom: ${totalOccurrenceSymptom},
+dayOccurrenceSymptom: ${dayOccurrenceSymptom},
+mapIngredientsOverviewPeriod: ${mapIngredientsOverviewPeriod},
+mapIngredientsOverviewDay: ${mapIngredientsOverviewDay},
 overviewDishList: ${overviewDishList},
 overviewIngredientList: ${overviewIngredientList},
-totalIngredientPresentMap: ${totalIngredientPresentMap},
-singleDayIngredientPresentMap: ${singleDayIngredientPresentMap}
+totalOccurrenceIngredient: ${totalOccurrenceIngredient},
+dayOccurrenceIngredient: ${dayOccurrenceIngredient}
     ''';
   }
 }

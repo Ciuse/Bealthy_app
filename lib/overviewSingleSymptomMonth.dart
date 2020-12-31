@@ -148,7 +148,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     return List.generate(dateStore.rangeDays.length, (i)
     {
       return makeGroupData(
-          i, overviewStore.mapSymptomsOverview[dateStore.rangeDays[i]]
+          i, overviewStore.mapSymptomsOverviewPeriod[dateStore.rangeDays[i]]
           .firstWhere((element) => element.id == widget.symptomId)
           .overviewValue, isTouched: i == graphStore.touchedIndex);
     });

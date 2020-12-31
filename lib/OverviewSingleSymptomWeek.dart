@@ -54,7 +54,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
     ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in overviewStore.totalIngredientPresentMap.keys )
+          for(var ingredient in overviewStore.totalOccurrenceIngredient.keys )
             Column(children: [ Container(
                 width: 50,
                 height: 50,
@@ -63,16 +63,16 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                       image: AssetImage("images/ingredients/" + ingredient + ".png"),
                     )
                 )),
-              Text(overviewStore.totalIngredientPresentMap[ingredient].toString())
+              Text(overviewStore.totalOccurrenceIngredient[ingredient].toString())
             ])
 
         ])
-        : overviewStore.singleDayIngredientPresentMap.keys.length==0
+        : overviewStore.dayOccurrenceIngredient.keys.length==0
         ? Text("NO INGREDIENT THIS DAY")
         :ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in overviewStore.singleDayIngredientPresentMap.keys )
+          for(var ingredient in overviewStore.dayOccurrenceIngredient.keys )
             Column(children: [
               Container(
                   width: 50,
@@ -82,7 +82,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                         image: AssetImage("images/ingredients/" + ingredient + ".png"),
                       )
                   )),
-              Text(overviewStore.singleDayIngredientPresentMap[ingredient].toString())
+              Text(overviewStore.dayOccurrenceIngredient[ingredient].toString())
             ],
             )
         ]);
@@ -192,7 +192,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     return List.generate(dateStore.rangeDays.length, (i)
     {
       return makeGroupData(
-          i, overviewStore.mapSymptomsOverview[dateStore.rangeDays[i]]
+          i, overviewStore.mapSymptomsOverviewPeriod[dateStore.rangeDays[i]]
           .firstWhere((element) => element.id == widget.symptomId)
           .overviewValue, isTouched: i == graphStore.touchedIndex);
     });
@@ -208,29 +208,8 @@ class BarChartSymptomState extends State<BarChartSymptom> {
             tooltipBgColor: Colors.blueGrey,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String weekDay;
-              switch (group.x.toInt()) {
-                case 0:
-                  weekDay = 'Monday';
-                  break;
-                case 1:
-                  weekDay = 'Tuesday';
-                  break;
-                case 2:
-                  weekDay = 'Wednesday';
-                  break;
-                case 3:
-                  weekDay = 'Thursday';
-                  break;
-                case 4:
-                  weekDay = 'Friday';
-                  break;
-                case 5:
-                  weekDay = 'Saturday';
-                  break;
-                case 6:
-                  weekDay = 'Sunday';
-                  break;
-              }
+                weekDay = overviewStore.fixDate(dateStore.rangeDays[group.x.toInt()]);
+
               return BarTooltipItem(
                   weekDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
             }),
@@ -257,24 +236,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 10,),
           margin: 8,
           getTitles: (double value) {
-            switch (value.toInt()) {
-              case 0:
-                return 'Monday';
-              case 1:
-                return 'Tuesday';
-              case 2:
-                return 'Wednesday';
-              case 3:
-                return 'Thursday';
-              case 4:
-                return 'Friday';
-              case 5:
-                return 'Saturday';
-              case 6:
-                return 'Sunday';
-              default:
-                return '';
-            }
+            return dateStore.rangeDays[value.toInt()].day.toString();
           },
         ),
         leftTitles: SideTitles(
