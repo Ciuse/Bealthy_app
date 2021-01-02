@@ -74,6 +74,10 @@ abstract class _DishBase with Store {
         "mealTime":mealTime
       };
 
+  Map<String, dynamic> toMapUpdateQtyOfDish() =>
+      {
+        "qty": qty,
+      };
 
   Map<String, dynamic> toMapDishesCreatedByUser() =>
       {

@@ -26,6 +26,9 @@ abstract class _IngredientStoreBase with Store {
   var ingredientList = new ObservableList<Ingredient>();
 
   @observable
+  String rebuiltDishImage = "";
+
+  @observable
   var ingredientListOfDish = new ObservableList<Ingredient>();
 
   @observable

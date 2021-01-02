@@ -24,6 +24,8 @@ FirebaseAuth auth = FirebaseAuth.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // Obtain a list of the available cameras on the device.
+
 
   initializeDateFormatting().then((_) => runApp(
       MultiProvider(providers: [

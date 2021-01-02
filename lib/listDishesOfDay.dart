@@ -242,7 +242,9 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                              for(String qty in quantityList) RaisedButton(
                                                  onPressed:  () {
                                                    mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].qty = qty;
-                                                   print("after:"+mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].qty);
+                                                   mealTimeStore.updateDishOfMealTimeListOfSpecificDay(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index], widget.day)
+                                                       .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                                   );
                                                  },
                                                  textColor: Colors.white,
                                                  padding: const EdgeInsets.all(0.0),
