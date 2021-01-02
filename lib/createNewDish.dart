@@ -110,6 +110,15 @@ class _CreateNewDishState extends State<CreateNewDish>{
         body: Observer(builder: (_) => Column(
 
           children: <Widget>[
+            Container(
+              width: 200,
+              height: 200,
+              child: ClipOval(
+                  child: Image(
+                    image: AssetImage("images/Dish_1.png"),
+                  )
+              ),
+            ),
             TextField(
               controller: nameCt,
               decoration: InputDecoration(

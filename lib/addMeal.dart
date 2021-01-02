@@ -10,6 +10,8 @@ import 'package:Bealthy_app/searchDishesList.dart';
 
 
 class AddMeal extends StatefulWidget {
+  final String title;
+  AddMeal({@required this.title});
   @override
   _AddMealState createState() => _AddMealState();
 }
@@ -21,7 +23,7 @@ class _AddMealState extends State<AddMeal>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Add meal"),
+          title: Text("Add new dish to"+" "+widget.title),
           bottom: PreferredSize(
             preferredSize: Size(50,50),
             child: Container(

@@ -67,7 +67,7 @@ class HomePageWidget extends StatelessWidget {
                                       Navigator.pop(context);
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => AddMeal()),
+                                        MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last)),
                                       );
                                     },
                                     elevation: 2.0,
@@ -102,7 +102,7 @@ class HomePageWidget extends StatelessWidget {
                                       Navigator.pop(context);
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => AddMeal()),
+                                        MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last,)),
                                       );
                                     },
                                     elevation: 2.0,
@@ -140,7 +140,7 @@ class HomePageWidget extends StatelessWidget {
                                       Navigator.pop(context);
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => AddMeal()),
+                                        MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last,)),
                                       );
                                     },
                                     elevation: 2.0,
@@ -175,7 +175,7 @@ class HomePageWidget extends StatelessWidget {
                                       Navigator.pop(context);
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => AddMeal()),
+                                        MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last)),
                                       );
                                     },
                                     elevation: 2.0,
