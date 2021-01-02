@@ -1,5 +1,6 @@
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
+import 'package:move_to_background/move_to_background.dart';
 
 import 'symptomsBar.dart';
 import 'calendar.dart';
@@ -9,9 +10,14 @@ import 'addMeal.dart';
 import 'listDishesOfDay.dart';
 
 
-class HomePageWidget extends StatelessWidget {
+class HomePageWidget extends StatefulWidget {
   final Color color;
+
   HomePageWidget(this.color);
+  @override
+  _HomePageWidgetState createState() => _HomePageWidgetState();
+}
+class _HomePageWidgetState extends State<HomePageWidget>{
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +217,7 @@ class HomePageWidget extends StatelessWidget {
 
         },
         child: Icon(Icons.add, color:Colors.white),
-        backgroundColor: color,
+        backgroundColor: widget.color,
       ),
     );
   }

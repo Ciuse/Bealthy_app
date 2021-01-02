@@ -1,8 +1,10 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 
 import 'Database/dish.dart';
@@ -16,7 +18,12 @@ class CreateNewDish extends StatefulWidget {
   _CreateNewDishState createState() => _CreateNewDishState();
 }
 
-class _CreateNewDishState extends State<CreateNewDish>{
+class _CreateNewDishState extends State<CreateNewDish> {
+
+  KeyboardVisibilityNotification _keyboardVisibility = new KeyboardVisibilityNotification();
+  int _keyboardVisibilitySubscriberId;
+  bool _keyboardState;
+
   final nameCt = TextEditingController();
   final categoryCt = TextEditingController();
   final ingredientsCt = TextEditingController();
@@ -24,6 +31,7 @@ class _CreateNewDishState extends State<CreateNewDish>{
   final ingredientSelected = TextEditingController();
   final quantitySelected = TextEditingController();
 
+  ScrollController _controller;
 
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
@@ -39,6 +47,22 @@ class _CreateNewDishState extends State<CreateNewDish>{
 
   @override
   void initState() {
+    super.initState();
+    _keyboardState = _keyboardVisibility.isKeyboardVisible;
+    _controller = ScrollController();
+
+    _keyboardVisibilitySubscriberId = _keyboardVisibility.addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          _keyboardState = visible;
+          print(_keyboardState);
+          if(visible==true)
+          _controller.jumpTo(_controller.offset + 100);
+        });
+      },
+    );
+
+
     categoryList= getCategoryName();
     quantityList= getQuantityName();
     super.initState();
@@ -46,7 +70,11 @@ class _CreateNewDishState extends State<CreateNewDish>{
     store.ingredientsName.clear();
     store.getIngredientsName();
   }
-
+  @override
+  void dispose() {
+    _keyboardVisibility.removeListener(_keyboardVisibilitySubscriberId);
+    super.dispose();
+  }
   List<String> getCategoryName(){
 
     List<String> listToReturn = new List<String>();
@@ -102,14 +130,21 @@ class _CreateNewDishState extends State<CreateNewDish>{
   @override
   Widget build(BuildContext context) {
     final ingredientStore = Provider.of<IngredientStore>(context);
-
     return Scaffold(
         appBar: AppBar(
           title: Text("Create New Dish"),
         ),
-        body: Observer(builder: (_) => Column(
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          controller: _controller,
+        child:Observer(builder: (_) =>Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[   Flexible(
+              child:
 
-          children: <Widget>[
+        Column(
+
+          children: [
             Container(
               width: 200,
               height: 200,
@@ -119,19 +154,27 @@ class _CreateNewDishState extends State<CreateNewDish>{
                   )
               ),
             ),
-            TextField(
+
+
+          TextField(
               controller: nameCt,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Name',
               ),
             ),
-            DropDownField(
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+          ),
+
+          DropDownField(
               controller: categoryCt,
               hintText: "Select Category",
               enabled: true,
               itemsVisibleInDropdown: 3,
               items: categoryList,
+
               strict: false,
               onValueChanged: (value){
                 setState(() {
@@ -147,7 +190,13 @@ class _CreateNewDishState extends State<CreateNewDish>{
 
             ),
 
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+
+          ),
+
             DropDownField(
+
               controller: ingredientSelected,
               hintText: "Select an ingredient",
               enabled: true,
@@ -164,6 +213,7 @@ class _CreateNewDishState extends State<CreateNewDish>{
 
                   selectIngredient = value;
                   addIngredientsToListView(value);
+                  ingredientStore.ingredientsName.remove(value);
                   ingredientSelected.clear();
 
                 });
@@ -171,9 +221,17 @@ class _CreateNewDishState extends State<CreateNewDish>{
 
             ),
 
-            Expanded(
-                child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
+          Divider(height: 30, color: Colors.black,),
+               Container(
+                 height: ingredientsSelectedList.length >= 3 ? MediaQuery.of(context).size.height/4 : null,
+                 child:
+               ListView.separated(
+                   separatorBuilder: (BuildContext context, int index) {
+                   return SizedBox(
+                     height: 10,
+                   );
+                 },
+                    shrinkWrap: true,
                     itemCount: ingredientsSelectedList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Dismissible(
@@ -183,11 +241,23 @@ class _CreateNewDishState extends State<CreateNewDish>{
                           color: Colors.red,
                           child: Icon(Icons.delete, color: Colors.white),
                         ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                        Flexible(
+                          flex:1,
+                          fit: FlexFit.tight,
 
-                        child: new Column(
-                          children: <Widget>[
+                          child:
                             new Text('${ingredientsSelectedList[index]}',
                                 style: TextStyle(fontSize: 18)),
+                        ),
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  flex:2,
+                                  child:
                             new DropDownField(
                               hintText: "Select a quantity",
                               enabled: true,
@@ -207,7 +277,7 @@ class _CreateNewDishState extends State<CreateNewDish>{
                                 });
                               } ,
 
-                            ),
+                            )),
                           ],),
                         onDismissed: (direction){
                           setState(() {
@@ -223,8 +293,8 @@ class _CreateNewDishState extends State<CreateNewDish>{
                       );
                     }
                 )
-            ),
-
+            ,
+               ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
@@ -234,10 +304,10 @@ class _CreateNewDishState extends State<CreateNewDish>{
                 child: Text('Create'),
               ),
             ),
+        ]) )],
+        )
+        )
+        ));
 
-          ],
-        )
-        )
-    );
   }
 }

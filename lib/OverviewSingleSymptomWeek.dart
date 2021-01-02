@@ -214,7 +214,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                   weekDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
             }),
         allowTouchBarBackDraw: true,
-        touchExtraThreshold: EdgeInsets.all(4),
+        touchExtraThreshold: EdgeInsets.all(22),
         enabled: true,
         touchCallback: (barTouchResponse) {
           if(barTouchResponse.touchInput is FlPanStart) {

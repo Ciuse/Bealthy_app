@@ -43,6 +43,8 @@ dependencies:
   percent_indicator: ^2.1.7+2
   flutter_range_slider: ^1.5.0
   fl_chart: ^0.12.1
+  move_to_background: ^1.0.1
+  keyboard_visibility: ^0.5.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

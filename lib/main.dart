@@ -1,6 +1,7 @@
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/symptomOverviewGraphStore.dart';
 import 'package:Bealthy_app/treatmentPage.dart';
+import 'package:move_to_background/move_to_background.dart';
 
 import 'Models/mealTimeStore.dart';
 import 'Models/overviewStore.dart';
@@ -56,14 +57,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return WillPopScope(
+      onWillPop: () async {
+        MoveToBackground.moveTaskToBack();
+        return false;},
+      child:
+      MaterialApp(
       theme: ThemeData(
           buttonBarTheme: ButtonBarThemeData(
             alignment: MainAxisAlignment.spaceEvenly,
           )),
       title: _title,
       home: FirstLoadingPage(),
-    );
+    ));
   }
 }
 
@@ -375,8 +381,11 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+          MoveToBackground.moveTaskToBack();
+          return false;},
+        child:Scaffold(
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -404,7 +413,7 @@ class _MyHomePageState extends State<HomePage> {
         selectedItemColor: Colors.blue,
         onTap: _bottomBarOnTapped,
       ),
-    );
+    ));
   }
 }
 

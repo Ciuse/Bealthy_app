@@ -101,13 +101,13 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                     height: 12,
                   ),
                   Expanded(
-                    child: Padding(
+                    child: Observer(builder: (_) =>Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: BarChart(
                         mainBarData(),
                         swapAnimationDuration: animDuration,
                       ),
-                    ),
+                    )),
                   )
                 ],
               ),
@@ -130,7 +130,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       x: x,
       barRods: [
         BarChartRodData(
-          y: isTouched ? y + 1 : y,
+          y: isTouched ? y + 1 : y+0.01, //todo: il 0.01 permette di cliccare quelli a 0-> lasciarlo o no?
           colors: isTouched ? [Colors.yellow] : [barColor],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
@@ -265,13 +265,14 @@ class BarChartSymptomState extends State<BarChartSymptom> {
               return BarTooltipItem(
                   weekDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
             }),
+        allowTouchBarBackDraw: true,
+        touchExtraThreshold: EdgeInsets.all(2),
+        enabled: true,
         touchCallback: (barTouchResponse) {
           if(barTouchResponse.touchInput is FlPanStart) {
             if (barTouchResponse.spot != null) {
-              graphStore.touchedIndex =
-                  barTouchResponse.spot.touchedBarGroupIndex;
-              print(barTouchResponse.spot );
-
+              graphStore.touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
+              overviewStore.singleDayOccurrenceIngredients(dateStore.rangeDays[graphStore.touchedIndex]);
             }
             else{
               graphStore.touchedIndex = -1;
