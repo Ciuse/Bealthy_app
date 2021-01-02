@@ -46,6 +46,17 @@ abstract class _MealTimeStoreBase with Store {
   }
 
   @action
+  int getMealTimeIndexFromName(String mealTimeDishName){
+    int index =0;
+    MealTime.values.forEach((element) {
+      if(element.toString().split('.').last==mealTimeDishName){
+        index= MealTime.values.indexOf(element);
+      }
+    });
+    return index;
+  }
+
+  @action
   ObservableList<Dish> getDishesOfMealTimeList(int mealTimeIndex) {
     switch (mealTimeIndex) {
       case 0:
@@ -148,6 +159,20 @@ abstract class _MealTimeStoreBase with Store {
         .set(dish.toMapDayDishes()));
 
     getDishesOfMealTimeList(selectedMealTime.index).add(dish);
+  }
+
+  @action
+  Future<void> updateDishOfMealTimeListOfSpecificDay(Dish dish, DateTime day) async {
+    String dayFix = fixDate(day);
+    await (FirebaseFirestore.instance
+        .collection('UserDishes')
+        .doc(auth.currentUser.uid)
+        .collection("DayDishes")
+        .doc(dayFix)
+        .collection(dish.mealTime)
+        .doc(dish.id)
+        .set(dish.toMapDayDishes()));
+
   }
 
   bool isSubstring(String s1, String s2) {

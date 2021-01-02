@@ -6,11 +6,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'Database/enumerators.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'Database/dish.dart';
 import 'Models/foodStore.dart';
+import 'package:camera/camera.dart';
+
+import 'uploadNewPictureToUserDish.dart';
+
+
 
 class DishPage extends StatefulWidget {
 
@@ -26,22 +32,29 @@ class DishPage extends StatefulWidget {
 class _DishPageState extends State<DishPage>{
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
-
   List<String> quantityList;
-
+  List<CameraDescription> cameras;
+  IngredientStore ingredientStore;
 
   void initState() {
     super.initState();
+    initializeCameras();
     quantityList= getQuantityName();
-    var store = Provider.of<IngredientStore>(context, listen: false);
-    store.ingredientListOfDish.clear();
+    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
+    ingredientStore.rebuiltDishImage="";
+    ingredientStore.ingredientListOfDish.clear();
     if(widget.createdByUser){
-      store.getIngredientsFromUserDish(widget.dish);
+      ingredientStore.getIngredientsFromUserDish(widget.dish);
     }else{
-      store.getIngredientsFromDatabaseDish(widget.dish);
+      ingredientStore.getIngredientsFromDatabaseDish(widget.dish);
     }
   }
 
+  Future<void> initializeCameras() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    cameras = await availableCameras();
+
+  }
   List<String> getQuantityName(){
     List<String> listToReturn = new List<String>();
     Quantity.values.forEach((element) {
@@ -82,6 +95,28 @@ class _DishPageState extends State<DishPage>{
     widget.dish.qty = qty;
   }
 
+  void checkPermissionOpenCamera() async{
+    var cameraStatus = await Permission.camera.status;
+
+    if (!cameraStatus.isGranted)
+      await Permission.camera.request();
+
+    if(await Permission.camera.isGranted){
+        openCamera();
+    }else{
+      showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
+    }
+  }
+
+  openCamera() async {
+    ingredientStore.rebuiltDishImage = await Navigator.push(
+      context,
+      MaterialPageRoute<String>(
+        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dish: widget.dish,),
+      ),
+    );
+    print(ingredientStore.rebuiltDishImage);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +129,60 @@ class _DishPageState extends State<DishPage>{
       appBar: AppBar(
         title: Text(widget.dish.name),
         actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.mode_rounded,
+              ),
+              onPressed: () {
+                return showDialog(
+                  context: context,
+                  builder: (_) =>  new AlertDialog(
+                      title: Center(child: Text("Modify the quantity of ${widget.dish.name}")),
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children : <Widget>[
+                          Expanded(
+                            child: Text(
+                              "Indicate the quantity eaten! ",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.red,
+
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      actions: <Widget> [
+                        for(String qty in quantityList) RaisedButton(
+                            onPressed:  () {
+
+                              widget.dish.qty = qty;
+                              mealTimeStore.updateDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
+                                  .then((value) => Navigator.of(context).pop()
+                              );
+                            },
+                            textColor: Colors.white,
+                            padding: const EdgeInsets.all(0.0),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: <Color>[
+                                    Color(0xFF0D47A1),
+                                    Color(0xFF1976D2),
+                                    Color(0xFF42A5F5),
+                                  ],
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(qty , style: TextStyle(fontSize: 20)),)
+                        ),
+                      ]
+                  ),
+                );
+              }
+          ),
           Observer(builder: (_) =>IconButton(
               icon: Icon(
                 widget.dish.isFavourite ? Icons.favorite : Icons.favorite_border,
@@ -111,7 +200,8 @@ class _DishPageState extends State<DishPage>{
         ],
       ),
       body: Column(
-    children: [Container(
+    children: [
+      Container(
           padding: EdgeInsets.all(10.0),
           child: FutureBuilder (
               future: findIfLocal(),
@@ -127,10 +217,24 @@ class _DishPageState extends State<DishPage>{
                             }
                             else {
                               return Container(
-                                width: 200,
-                                height: 200,
-                                child: ClipOval(
-                                  child: Image.network(remoteString.data, fit: BoxFit.fill),),
+                                  width: 600,
+                                  height: 200,
+                                  child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Flexible(
+                                            fit:FlexFit.loose,
+                                            flex:2,
+                                            child: ClipOval(
+                                              child: ingredientStore.rebuiltDishImage==""? Image.network(remoteString.data, fit: BoxFit.fill):
+                                              Image.network(ingredientStore.rebuiltDishImage, fit: BoxFit.fill),)),
+                                        Flexible(
+                                            fit:FlexFit.loose,
+                                            flex:1,
+                                            child:IconButton(onPressed: checkPermissionOpenCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                              color: Colors.black,)),
+                                      ])
                               );
                             }
                           }
@@ -156,6 +260,22 @@ class _DishPageState extends State<DishPage>{
               }
           )
     ),
+      Divider(
+        height: 5,
+        thickness: 2.5,
+        color: Colors.black87,
+      ),
+      Container(
+        width: 300,
+        height: 50,
+        alignment: Alignment.center,
+        child:Observer(builder: (_) =>Text("The quantity you eat today is:"+ " " +widget.dish.qty)),
+      ),
+      Divider(
+        height: 5,
+        thickness: 2.5,
+        color: Colors.black87,
+      ),
       Expanded(
           child:
           Observer(builder: (_) =>new ListView.builder
@@ -166,7 +286,14 @@ class _DishPageState extends State<DishPage>{
                   child: ListTile(
                     title: Text(ingredientStore.ingredientListOfDish[index].name),
                     subtitle: Text(ingredientStore.ingredientListOfDish[index].qty),
-                    leading: FlutterLogo(),
+                    leading: Container(
+                        width: 50,
+                        height: 50,
+                        child:  ClipOval(
+                            child: Image(
+                              image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
+                            )
+                        )),
 
                   ),
                 );
@@ -258,3 +385,4 @@ class _DishPageState extends State<DishPage>{
     );
   }
 }
+
