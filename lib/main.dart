@@ -62,8 +62,28 @@ class MyApp extends StatelessWidget {
             alignment: MainAxisAlignment.spaceEvenly,
           )),
       title: _title,
-      home: LoginPage(),
+      home: FirstLoadingPage(),
     );
+  }
+}
+
+class FirstLoadingPage extends StatefulWidget{
+  @override
+  _FirstLoadingPageState createState() => _FirstLoadingPageState();
+
+}
+
+class _FirstLoadingPageState extends State<FirstLoadingPage> {
+  @override
+  Widget build(BuildContext context) {
+    if(auth.currentUser!=null){
+      print("A");
+      return HomePage();
+    }
+    else{
+      print("B");
+      return LoginPage();
+    }
   }
 }
 
