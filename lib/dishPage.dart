@@ -217,24 +217,26 @@ class _DishPageState extends State<DishPage>{
                             }
                             else {
                               return Container(
-                                  width: 600,
-                                  height: 200,
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                alignment: Alignment.center ,
+                                  child: Stack(
                                       children: [
-                                        Flexible(
-                                            fit:FlexFit.loose,
-                                            flex:2,
+                                        Container
+                                          (width: 150,
+                                            height: 150,
                                             child: ClipOval(
-                                              child: ingredientStore.rebuiltDishImage==""? Image.network(remoteString.data, fit: BoxFit.fill):
-                                              Image.network(ingredientStore.rebuiltDishImage, fit: BoxFit.fill),)),
-                                        Flexible(
-                                            fit:FlexFit.loose,
-                                            flex:1,
-                                            child:IconButton(onPressed: checkPermissionOpenCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                              color: Colors.black,)),
+                                          child: ingredientStore.rebuiltDishImage==""? Image.network(remoteString.data, fit: BoxFit.fill):
+                                          Image.network(ingredientStore.rebuiltDishImage, fit: BoxFit.fill),)),
+
+                                        Stack(
+                                            children:  <Widget>[
+                                              Container(
+                                                  margin: const EdgeInsets.only(left: 125,top:125),
+                                                  child:IconButton(padding: EdgeInsets.all(2),onPressed: checkPermissionOpenCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                                    color: Colors.black,)),]
+
+                                        )
                                       ])
+
                               );
                             }
                           }

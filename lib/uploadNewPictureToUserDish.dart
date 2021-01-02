@@ -88,19 +88,24 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
                 SizedBox(height: 20.0),
                 Expanded(
                   child: Stack(
+                    alignment: AlignmentDirectional.center,
                     children: <Widget>[
                       Container(
-                        height: double.infinity,
-                        margin: const EdgeInsets.only(
-                            left: 30.0, right: 30.0, top: 10.0),
+                        height:_imageFile != null
+                            ? null
+                            :100,
+                        width: _imageFile != null
+                            ? null
+                            :100,
+                        margin: const EdgeInsets.only(top: 25.0),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30.0),
+                          borderRadius: BorderRadius.circular(60.0),
                           child: _imageFile != null
                               ? Image.file(_imageFile)
                               : FlatButton(
                             child: Icon(
                               Icons.add_a_photo,
-                              size: 50,
+                              size: 55,
                             ),
                             onPressed: pickImage,
                           ),
