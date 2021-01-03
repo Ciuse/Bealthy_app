@@ -232,7 +232,7 @@ abstract class _OverviewBase with Store {
   }
 
   @action
-  void singleDayOccurrenceIngredients(DateTime dateTime){
+  void singleDayOccurrenceIngredientsPeriod(DateTime dateTime){
     dayOccurrenceIngredient.clear();
     mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
       if(!dayOccurrenceIngredient.keys.contains(ingredient.id)){
@@ -242,7 +242,17 @@ abstract class _OverviewBase with Store {
       }
     });
   }
-
+  @action
+  void singleDayOccurrenceIngredientsDay(MealTime mealTime){
+    dayOccurrenceIngredient.clear();
+    mapIngredientsOverviewDay[mealTime].forEach((ingredient) {
+      if(!dayOccurrenceIngredient.keys.contains(ingredient.id)){
+        dayOccurrenceIngredient.putIfAbsent(ingredient.id, () => 1);
+      }else{
+        dayOccurrenceIngredient.update(ingredient.id, (value) => value+1);
+      }
+    });
+  }
   @action
   Future<void> getSymptomsOfADay(DateTime date) async {
     await (FirebaseFirestore.instance
@@ -343,14 +353,29 @@ abstract class _OverviewBase with Store {
     return value;
   }
 
+  @action
+  void initializeOverviewValueDay(String symptomId){
+    MealTime.values.forEach((mealTime) {
+      if( mapSymptomsOverviewDay[mealTime].any((element) => element.id==symptomId)){
+        Symptom toUpdate = mapSymptomsOverviewDay[mealTime].firstWhere((element) => element.id==symptomId);
+        toUpdate.overviewValue = toUpdate.intensity*toUpdate.frequency*mealTimeValueSymptom(toUpdate);
+        toUpdate.overviewValue.roundToDouble();
+      }else{
+        Symptom symptomNotPresent = new Symptom(id: symptomId, intensity: 0,frequency: 0,mealTime: []);
+        mapSymptomsOverviewDay[mealTime].add(symptomNotPresent);
+        symptomNotPresent.overviewValue = 0;
+      }
+    });
+  }
 
   @action
-  void initializeOverviewValue(DateTime dateTime, String symptomId){
+  void initializeOverviewValuePeriod(DateTime dateTime, String symptomId){
 
     if( mapSymptomsOverviewPeriod[dateTime].any((element) => element.id==symptomId)){
       Symptom toUpdate = mapSymptomsOverviewPeriod[dateTime].firstWhere((element) => element.id==symptomId);
       toUpdate.overviewValue = toUpdate.intensity*toUpdate.frequency*mealTimeValueSymptom(toUpdate);
-      toUpdate.overviewValue.roundToDouble();
+      toUpdate.overviewValue = toUpdate.overviewValue.roundToDouble();
+      print(toUpdate.overviewValue);
     }else{
       Symptom symptomNotPresent = new Symptom(id: symptomId, intensity: 0,frequency: 0,mealTime: []);
       mapSymptomsOverviewPeriod[dateTime].add(symptomNotPresent);

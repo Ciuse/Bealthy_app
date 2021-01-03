@@ -1,8 +1,6 @@
-import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/symptomOverviewGraphStore.dart';
 import 'package:Bealthy_app/treatmentPage.dart';
 import 'package:move_to_background/move_to_background.dart';
-
 import 'Models/mealTimeStore.dart';
 import 'Models/overviewStore.dart';
 import 'Models/symptomStore.dart';

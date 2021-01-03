@@ -1,9 +1,13 @@
+import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+
+import 'Database/symptomOverviewGraphStore.dart';
+import 'Models/dateStore.dart';
 
 class OverviewSingleSymptomDay extends StatefulWidget {
   final String symptomId;
@@ -14,14 +18,15 @@ class OverviewSingleSymptomDay extends StatefulWidget {
 }
 
 class _OverviewSingleSymptomDayState extends State<OverviewSingleSymptomDay>  {
-
+  OverviewStore overviewStore;
   SymptomStore symptomStore;
 
   void initState() {
     super.initState();
+    overviewStore = Provider.of<OverviewStore>(context, listen: false);
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
+    overviewStore.initializeOverviewValueDay(widget.symptomId);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +34,56 @@ class _OverviewSingleSymptomDayState extends State<OverviewSingleSymptomDay>  {
         appBar: AppBar(
           title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+"\n"+"Overview"),
         ),
-        body: Observer(builder: (_) => Column(
-            children: <Widget>[BarChartSymptom()
+        body: Column(
+            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId),
+              Observer(builder: (_) =>Expanded(
+                  child: buildIngredientRow() ))
             ]
-        )
         )
     );
   }
+
+  Widget buildIngredientRow(){
+
+    SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
+    return graphStore.touchedIndex==-1?
+    ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for(var ingredient in overviewStore.totalOccurrenceIngredient.keys )
+            Column(children: [ Container(
+                width: 50,
+                height: 50,
+                child:  ClipOval(
+                    child: Image(
+                      image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                    )
+                )),
+              Text(overviewStore.totalOccurrenceIngredient[ingredient].toString())
+            ])
+
+        ])
+        : overviewStore.dayOccurrenceIngredient.keys.length==0
+        ? Text("NO INGREDIENT THIS DAY")
+        :ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for(var ingredient in overviewStore.dayOccurrenceIngredient.keys )
+            Column(children: [
+              Container(
+                  width: 50,
+                  height: 50,
+                  child:  ClipOval(
+                      child: Image(
+                        image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                      )
+                  )),
+              Text(overviewStore.dayOccurrenceIngredient[ingredient].toString())
+            ],
+            )
+        ]);
+  }
+
 }
 
 
@@ -49,6 +97,8 @@ class BarChartSymptom extends StatefulWidget {
     Colors.pink,
     Colors.redAccent,
   ];
+  final String symptomId;
+  BarChartSymptom({@required this.symptomId});
 
   @override
   BarChartSymptomState createState() => BarChartSymptomState();
@@ -64,9 +114,6 @@ class BarChartSymptomState extends State<BarChartSymptom> {
 
   @override
   Widget build(BuildContext context) {
-
-    SymptomStore symptomStore = Provider.of<SymptomStore>(context);
-    OverviewStore overviewStore = Provider.of<OverviewStore>(context);
 
     return AspectRatio(
       aspectRatio: 1,
@@ -89,13 +136,13 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                     height: 12,
                   ),
                   Expanded(
-                    child: Padding(
+                    child: Observer(builder: (_) =>Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: BarChart(
                         mainBarData(),
                         swapAnimationDuration: animDuration,
                       ),
-                    ),
+                    )),
                   )
                 ],
               ),
@@ -118,7 +165,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       x: x,
       barRods: [
         BarChartRodData(
-          y: isTouched ? y + 1 : y,
+          y: isTouched ? y + 1 : y+0.01,
           colors: isTouched ? [Colors.yellow] : [barColor],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
@@ -132,55 +179,43 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(4, (i) {
-    switch (i) {
-      case 0:
-        return makeGroupData(0, 5, isTouched: i == touchedIndex);
-      case 1:
-        return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
-      case 2:
-        return makeGroupData(2, 5, isTouched: i == touchedIndex);
-      case 3:
-        return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
-      default:
-        return null;
-    }
-  });
+  List<BarChartGroupData> showingGroups(OverviewStore overviewStore, SymptomOverviewGraphStore graphStore) {
+    return List.generate(MealTime.values.length, (i)
+    {
+      return makeGroupData(
+          i, overviewStore.mapSymptomsOverviewDay[MealTime.values[i]]
+          .firstWhere((element) => element.id == widget.symptomId)
+          .overviewValue, isTouched: i == graphStore.touchedIndex);
+    });
+  }
 
   BarChartData mainBarData() {
+    OverviewStore overviewStore = Provider.of<OverviewStore>(context);
+    SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
             tooltipBgColor: Colors.blueGrey,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String mealTimeDay;
-              switch (group.x.toInt()) {
-                case 0:
-                  mealTimeDay = 'Breakfast';
-                  break;
-                case 1:
-                  mealTimeDay = 'Lunch';
-                  break;
-                case 2:
-                  mealTimeDay = 'Snack';
-                  break;
-                case 3:
-                  mealTimeDay = 'Dinner';
-                  break;
-              }
+              mealTimeDay = MealTime.values[group.x.toInt()].toString().split('.').last;
+
               return BarTooltipItem(
                   mealTimeDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
             }),
+        allowTouchBarBackDraw: true,
+        touchExtraThreshold: EdgeInsets.all(22),
+        enabled: true,
         touchCallback: (barTouchResponse) {
-          setState(() {
-            if (barTouchResponse.spot != null &&
-                barTouchResponse.touchInput is! FlPanEnd &&
-                barTouchResponse.touchInput is! FlLongPressEnd) {
-              touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-            } else {
-              touchedIndex = -1;
+          if(barTouchResponse.touchInput is FlPanStart) {
+            if (barTouchResponse.spot != null) {
+              graphStore.touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
+              overviewStore.singleDayOccurrenceIngredientsDay(MealTime.values[graphStore.touchedIndex]);
             }
-          });
+            else{
+              graphStore.touchedIndex = -1;
+            }
+          }
         },
       ),
       titlesData: FlTitlesData(
@@ -227,7 +262,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(),
+      barGroups: showingGroups(overviewStore,graphStore),
     );
   }
 }

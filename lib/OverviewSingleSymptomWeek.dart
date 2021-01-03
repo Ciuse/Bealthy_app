@@ -26,7 +26,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
     dateStore = Provider.of<DateStore>(context, listen: false);
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
     dateStore.rangeDays.forEach((dateTime) {
-      overviewStore.initializeOverviewValue(dateTime, widget.symptomId);
+      overviewStore.initializeOverviewValuePeriod(dateTime, widget.symptomId);
     });
 
   }
@@ -220,7 +220,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           if(barTouchResponse.touchInput is FlPanStart) {
             if (barTouchResponse.spot != null) {
               graphStore.touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-              overviewStore.singleDayOccurrenceIngredients(dateStore.rangeDays[graphStore.touchedIndex]);
+              overviewStore.singleDayOccurrenceIngredientsPeriod(dateStore.rangeDays[graphStore.touchedIndex]);
             }
             else{
               graphStore.touchedIndex = -1;

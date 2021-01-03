@@ -126,6 +126,15 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
         .run(() => super.addDishOfMealTimeListOfSpecificDay(dish, day));
   }
 
+  final _$updateDishOfMealTimeListOfSpecificDayAsyncAction =
+      AsyncAction('_MealTimeStoreBase.updateDishOfMealTimeListOfSpecificDay');
+
+  @override
+  Future<void> updateDishOfMealTimeListOfSpecificDay(Dish dish, DateTime day) {
+    return _$updateDishOfMealTimeListOfSpecificDayAsyncAction
+        .run(() => super.updateDishOfMealTimeListOfSpecificDay(dish, day));
+  }
+
   final _$_MealTimeStoreBaseActionController =
       ActionController(name: '_MealTimeStoreBase');
 
@@ -135,6 +144,17 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
         name: '_MealTimeStoreBase.changeCurrentMealTime');
     try {
       return super.changeCurrentMealTime(mealTimeIndex);
+    } finally {
+      _$_MealTimeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int getMealTimeIndexFromName(String mealTimeDishName) {
+    final _$actionInfo = _$_MealTimeStoreBaseActionController.startAction(
+        name: '_MealTimeStoreBase.getMealTimeIndexFromName');
+    try {
+      return super.getMealTimeIndexFromName(mealTimeDishName);
     } finally {
       _$_MealTimeStoreBaseActionController.endAction(_$actionInfo);
     }

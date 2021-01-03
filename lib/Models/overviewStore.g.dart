@@ -341,11 +341,22 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
-  void singleDayOccurrenceIngredients(DateTime dateTime) {
+  void singleDayOccurrenceIngredientsPeriod(DateTime dateTime) {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
-        name: '_OverviewBase.singleDayOccurrenceIngredients');
+        name: '_OverviewBase.singleDayOccurrenceIngredientsPeriod');
     try {
-      return super.singleDayOccurrenceIngredients(dateTime);
+      return super.singleDayOccurrenceIngredientsPeriod(dateTime);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void singleDayOccurrenceIngredientsDay(MealTime mealTime) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.singleDayOccurrenceIngredientsDay');
+    try {
+      return super.singleDayOccurrenceIngredientsDay(mealTime);
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }
@@ -374,11 +385,22 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
-  void initializeOverviewValue(DateTime dateTime, String symptomId) {
+  void initializeOverviewValueDay(String symptomId) {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
-        name: '_OverviewBase.initializeOverviewValue');
+        name: '_OverviewBase.initializeOverviewValueDay');
     try {
-      return super.initializeOverviewValue(dateTime, symptomId);
+      return super.initializeOverviewValueDay(symptomId);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void initializeOverviewValuePeriod(DateTime dateTime, String symptomId) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.initializeOverviewValuePeriod');
+    try {
+      return super.initializeOverviewValuePeriod(dateTime, symptomId);
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }

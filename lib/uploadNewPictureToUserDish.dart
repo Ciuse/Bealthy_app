@@ -3,15 +3,18 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
+import 'package:provider/provider.dart';
 
 import 'Database/dish.dart';
+import 'Models/ingredientStore.dart';
 
 
 
 class UploadNewPictureToUserDish extends StatefulWidget {
   final CameraDescription camera;
-  final Dish dish;
-  UploadNewPictureToUserDish({@required this.camera,@required this.dish});
+  final String dishId;
+  final bool uploadingOnFirebase;
+  UploadNewPictureToUserDish({@required this.camera,@required this.dishId,@required this.uploadingOnFirebase});
 
   @override
   _UploadNewPictureToUserDishState createState() =>
@@ -23,12 +26,38 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
   final Color yellow = Color(0xfffbc31b);
   final Color orange = Color(0xfffb6900);
   final picker = ImagePicker();
+  void initState() {
+    super.initState();
 
-  Future pickImage() async {
+  }
+
+  Future pickImageWithCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     if(pickedFile!=null){
       setState(() {
         _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future pickImageFromGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if(pickedFile!=null){
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }}
+
+
+  Future uploadImageToFirebase(BuildContext context) async {
+    if(widget.uploadingOnFirebase){
+      String fileName = widget.dishId+".jpg";
+      var firebaseStorageRef = FirebaseStorage.instance.ref().child('DishImage/$fileName');
+      var uploadTask = firebaseStorageRef.putFile(_imageFile);
+      await uploadTask.whenComplete(() async{
+        await firebaseStorageRef.getDownloadURL().then(
+              (value) => Navigator.pop(context,_imageFile),
+        );
       });
     }
 
@@ -36,18 +65,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
 
 
 
-  Future uploadImageToFirebase(BuildContext context) async {
-    String fileName = widget.dish.id+".jpg";
-    var firebaseStorageRef = FirebaseStorage.instance.ref().child('DishImage/$fileName');
-    var uploadTask = firebaseStorageRef.putFile(_imageFile);
-    await uploadTask.whenComplete(() async{
-          await firebaseStorageRef.getDownloadURL().then(
 
-                (value) => Navigator.pop(context,value),
-          );
-    });
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,22 +111,27 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
                       Container(
                         height:_imageFile != null
                             ? null
-                            :100,
+                            :200,
                         width: _imageFile != null
                             ? null
-                            :100,
+                            :200,
                         margin: const EdgeInsets.only(top: 25.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(60.0),
                           child: _imageFile != null
                               ? Image.file(_imageFile)
-                              : FlatButton(
-                            child: Icon(
-                              Icons.add_a_photo,
-                              size: 55,
+                              : Row(
+                                    children: [
+                                      FlatButton(
+                                        child: Icon(Icons.add_a_photo, size: 55,),
+                                        onPressed: pickImageWithCamera,
+                                    ),
+                                      FlatButton(
+                                        child: Icon(Icons.image_search, size: 55,),
+                                        onPressed: pickImageFromGallery,
                             ),
-                            onPressed: pickImage,
-                          ),
+                          ],
+                          )
                         ),
                       ),
                     ],
@@ -137,7 +160,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
                 ),
                 borderRadius: BorderRadius.circular(30.0)),
             child: FlatButton(
-              onPressed: () => uploadImageToFirebase(context),
+              onPressed: _imageFile == null? null :  () => uploadImageToFirebase(context),
               child: Text(
                 "Upload Image",
                 style: TextStyle(fontSize: 20),
@@ -149,9 +172,6 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
     );
   }
 
-  String nameOfPicture(String path) {
-    return "";
-  }
 }
 
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
@@ -13,7 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'Database/dish.dart';
 import 'Models/foodStore.dart';
 import 'package:camera/camera.dart';
-
+import 'package:app_settings/app_settings.dart';
 import 'uploadNewPictureToUserDish.dart';
 
 
@@ -41,7 +43,7 @@ class _DishPageState extends State<DishPage>{
     initializeCameras();
     quantityList= getQuantityName();
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
-    ingredientStore.rebuiltDishImage="";
+    ingredientStore.rebuiltDishImage=null;
     ingredientStore.ingredientListOfDish.clear();
     if(widget.createdByUser){
       ingredientStore.getIngredientsFromUserDish(widget.dish);
@@ -97,22 +99,60 @@ class _DishPageState extends State<DishPage>{
 
   void checkPermissionOpenCamera() async{
     var cameraStatus = await Permission.camera.status;
+    var galleryStatus = await Permission.storage.status;
 
+    print(galleryStatus);
     if (!cameraStatus.isGranted)
-      await Permission.camera.request();
+      {await Permission.camera.request();}
+
+    if(!galleryStatus.isGranted){
+      print("richiesta permessi");
+      await Permission.storage.request();
+    }
 
     if(await Permission.camera.isGranted){
+      if(await Permission.storage.isGranted){
         openCamera();
+      }else{
+        showToast("Camera needs to access your Storage, please provide permission", position: ToastPosition.bottom);
+        openAppSettings();
+      }
     }else{
       showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
+      openAppSettings();
     }
+
+
+  }
+
+  openAppSettings(){
+    return showDialog(
+        context: context,
+        builder: (_) =>  new AlertDialog(
+          title: new Text("Bealthy"),
+          content: new Text("Bealthy needs to access to your memory in order to upload new image"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Settings'),
+              onPressed: () {
+                AppSettings.openAppSettings();
+              },
+            ),
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ));
   }
 
   openCamera() async {
     ingredientStore.rebuiltDishImage = await Navigator.push(
       context,
-      MaterialPageRoute<String>(
-        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dish: widget.dish,),
+      MaterialPageRoute<File>(
+        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dishId: widget.dish.id,uploadingOnFirebase: true,),
       ),
     );
     print(ingredientStore.rebuiltDishImage);
@@ -125,7 +165,8 @@ class _DishPageState extends State<DishPage>{
     IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
     DateStore dateStore = Provider.of<DateStore>(context);
     foodStore.isFoodFavourite(widget.dish);
-    return Scaffold(
+    return   OKToast(
+        child:Scaffold(
       appBar: AppBar(
         title: Text(widget.dish.name),
         actions: <Widget>[
@@ -216,16 +257,16 @@ class _DishPageState extends State<DishPage>{
                               return Text("Image not found");
                             }
                             else {
-                              return Container(
-                                alignment: Alignment.center ,
+                              return Observer(builder: (_) =>Container(
+                                  alignment: Alignment.center ,
                                   child: Stack(
                                       children: [
                                         Container
                                           (width: 150,
                                             height: 150,
                                             child: ClipOval(
-                                          child: ingredientStore.rebuiltDishImage==""? Image.network(remoteString.data, fit: BoxFit.fill):
-                                          Image.network(ingredientStore.rebuiltDishImage, fit: BoxFit.fill),)),
+                                              child: ingredientStore.rebuiltDishImage==null? Image.network(remoteString.data, fit: BoxFit.fill):
+                                              Image.file(ingredientStore.rebuiltDishImage),)),
 
                                         Stack(
                                             children:  <Widget>[
@@ -237,7 +278,7 @@ class _DishPageState extends State<DishPage>{
                                         )
                                       ])
 
-                              );
+                              ));
                             }
                           }
                           else {
@@ -384,7 +425,7 @@ class _DishPageState extends State<DishPage>{
           backgroundColor: widget.canBeAddToADay ? Colors.green : Colors.redAccent
       ),
 
-    );
+    ));
   }
 }
 

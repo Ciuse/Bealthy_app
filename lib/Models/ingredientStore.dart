@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:Bealthy_app/Database/dish.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ abstract class _IngredientStoreBase with Store {
   var ingredientList = new ObservableList<Ingredient>();
 
   @observable
-  String rebuiltDishImage = "";
+  File rebuiltDishImage;
 
   @observable
   var ingredientListOfDish = new ObservableList<Ingredient>();

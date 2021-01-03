@@ -25,6 +25,22 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     });
   }
 
+  final _$rebuiltDishImageAtom =
+      Atom(name: '_IngredientStoreBase.rebuiltDishImage');
+
+  @override
+  File get rebuiltDishImage {
+    _$rebuiltDishImageAtom.reportRead();
+    return super.rebuiltDishImage;
+  }
+
+  @override
+  set rebuiltDishImage(File value) {
+    _$rebuiltDishImageAtom.reportWrite(value, super.rebuiltDishImage, () {
+      super.rebuiltDishImage = value;
+    });
+  }
+
   final _$ingredientListOfDishAtom =
       Atom(name: '_IngredientStoreBase.ingredientListOfDish');
 
@@ -168,6 +184,7 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   String toString() {
     return '''
 ingredientList: ${ingredientList},
+rebuiltDishImage: ${rebuiltDishImage},
 ingredientListOfDish: ${ingredientListOfDish},
 ingredientsName: ${ingredientsName},
 loadInitIngredientList: ${loadInitIngredientList}

@@ -27,7 +27,7 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
     dateStore = Provider.of<DateStore>(context, listen: false);
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
     dateStore.rangeDays.forEach((dateTime) {
-      overviewStore.initializeOverviewValue(dateTime, widget.symptomId);
+      overviewStore.initializeOverviewValuePeriod(dateTime, widget.symptomId);
     });
   }
 
@@ -38,11 +38,55 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
           title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+"\n"+"Overview"),
         ),
         body:Column(
-            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId)
+            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId),
+              Observer(builder: (_) =>Expanded(
+                  child: buildIngredientRow() ))
             ]
         )
     );
   }
+
+  Widget buildIngredientRow(){
+
+    SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
+    return graphStore.touchedIndex==-1?
+    ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for(var ingredient in overviewStore.totalOccurrenceIngredient.keys )
+            Column(children: [ Container(
+                width: 50,
+                height: 50,
+                child:  ClipOval(
+                    child: Image(
+                      image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                    )
+                )),
+              Text(overviewStore.totalOccurrenceIngredient[ingredient].toString())
+            ])
+
+        ])
+        : overviewStore.dayOccurrenceIngredient.keys.length==0
+        ? Text("NO INGREDIENT THIS DAY")
+        :ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for(var ingredient in overviewStore.dayOccurrenceIngredient.keys )
+            Column(children: [
+              Container(
+                  width: 50,
+                  height: 50,
+                  child:  ClipOval(
+                      child: Image(
+                        image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                      )
+                  )),
+              Text(overviewStore.dayOccurrenceIngredient[ingredient].toString())
+            ],
+            )
+        ]);
+  }
+
 }
 
 
@@ -163,107 +207,10 @@ class BarChartSymptomState extends State<BarChartSymptom> {
         touchTooltipData: BarTouchTooltipData(
             tooltipBgColor: Colors.blueGrey,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
-              String weekDay;
-              switch (group.x.toInt()) {
-                case 0:
-                  weekDay = 'Monday';
-                  break;
-                case 1:
-                  weekDay = 'Tuesday';
-                  break;
-                case 2:
-                  weekDay = 'Wednesday';
-                  break;
-                case 3:
-                  weekDay = 'Thursday';
-                  break;
-                case 4:
-                  weekDay = 'Friday';
-                  break;
-                case 5:
-                  weekDay = 'Saturday';
-                  break;
-                case 6:
-                  weekDay = 'Sunday';
-                  break;
-                case 7:
-                  weekDay = 'Sunday';
-                  break;
-                  case 8:
-                    weekDay = 'Sunday';
-                    break;
-                case 9:
-                  weekDay = 'Sunday';
-                  break;
-                case 10:
-                  weekDay = 'Sunday';
-                  break;
-                case 11:
-                  weekDay = 'Sunday';
-                  break;
-                case 12:
-                  weekDay = 'Sunday';
-                  break;
-                case 13:
-                  weekDay = 'Sunday';
-                  break;
-                case 14:
-                  weekDay = 'Sunday';
-                  break;
-                case 15:
-                  weekDay = 'Sunday';
-                  break;
-                case 16:
-                  weekDay = 'Sunday';
-                  break;
-                case 17:
-                  weekDay = 'Sunday';
-                  break;
-                case 18:
-                  weekDay = 'Sunday';
-                  break;
-                case 19:
-                  weekDay = 'Sunday';
-                  break;
-                case 20:
-                  weekDay = 'Sunday';
-                  break;
-                case 21:
-                  weekDay = 'Sunday';
-                  break;
-                case 22:
-                  weekDay = 'Sunday';
-                  break;
-                case 23:
-                  weekDay = 'Sunday';
-                  break;
-                case 24:
-                  weekDay = 'Sunday';
-                  break;
-                case 25:
-                  weekDay = 'Sunday';
-                  break;
-                case 26:
-                  weekDay = 'Sunday';
-                  break;
-                case 27:
-                  weekDay = 'Sunday';
-                  break;
-                case 28:
-                  weekDay = 'Sunday';
-                  break;
-                case 29:
-                  weekDay = 'Sunday';
-                  break;
-                case 30:
-                  weekDay = 'Sunday';
-                  break;
-                case 31:
-                  weekDay = 'Sunday';
-                  break;
-              }
+              String monthDay;
+              monthDay = overviewStore.fixDate(dateStore.rangeDays[group.x.toInt()]);
               return BarTooltipItem(
-                  weekDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
+                  monthDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
             }),
         allowTouchBarBackDraw: true,
         touchExtraThreshold: EdgeInsets.all(2),
@@ -272,7 +219,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           if(barTouchResponse.touchInput is FlPanStart) {
             if (barTouchResponse.spot != null) {
               graphStore.touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-              overviewStore.singleDayOccurrenceIngredients(dateStore.rangeDays[graphStore.touchedIndex]);
+              overviewStore.singleDayOccurrenceIngredientsPeriod(dateStore.rangeDays[graphStore.touchedIndex]);
             }
             else{
               graphStore.touchedIndex = -1;
@@ -289,20 +236,20 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           margin: 8,
           getTitles: (double value) {
             switch (value.toInt()) {
-              case 0:
-                return '1';
-              case 4:
-                return '5';
-              case 9:
-                return '10';
-              case 14:
-                return '15';
-              case 19:
-                return '20';
-              case 24:
-                return '25';
-              case 29:
-                return '30';
+            case 0:
+                return dateStore.rangeDays[0].day.toString();
+              case 5:
+                return dateStore.rangeDays[5].day.toString();
+              case 10:
+                return dateStore.rangeDays[10].day.toString();
+              case 15:
+                return dateStore.rangeDays[15].day.toString();
+              case 20:
+                return dateStore.rangeDays[20].day.toString();
+              case 25:
+                return dateStore.rangeDays[25].day.toString();
+              case 30:
+                return dateStore.rangeDays[30].day.toString();
               default:
                 return '';
             }
