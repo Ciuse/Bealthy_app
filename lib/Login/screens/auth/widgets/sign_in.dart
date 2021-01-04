@@ -23,12 +23,11 @@ class SignIn extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-
             children: [
               Align(
                 alignment: Alignment.centerLeft,
                 child: LoginTitle(
-                  title: 'Welcome\nBack',
+                  title: 'Bealthy',
                 ),
               ),
               Padding(
@@ -73,7 +72,7 @@ class SignIn extends StatelessWidget {
                   ),
                   ProviderButton(
                     context: context,
-                    signInType: "apple",
+                    signInType: "github",
                   ),
                   ProviderButton(
                     context: context,

@@ -35,7 +35,7 @@ class _ProviderButtonState extends State<ProviderButton> {
         );
 
         break;
-      case "apple":
+      case "github":
         return InkWell(
           onTap: () => context.signInWithGithub(),
           child: Container(

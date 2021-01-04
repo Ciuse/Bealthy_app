@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
 
 
@@ -110,9 +111,16 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
 
 
   Future uploadImageToFirebase(BuildContext context) async {
+    String userUid;
+    final litUser = context.getSignedInUser();
+    litUser.when(
+          (user) => userUid=user.uid,
+      empty: () => Text('Not signed in'),
+      initializing: () => Text('Loading'),
+    );
 
-      String fileName = "userProfileImage.jpg";
-      var firebaseStorageRef = FirebaseStorage.instance.ref().child('UserProfileImage/$fileName');
+      String fileName = "UserProfileImage.jpg";
+      var firebaseStorageRef = FirebaseStorage.instance.ref().child(userUid+'/UserProfileImage/$fileName');
       var uploadTask = firebaseStorageRef.putFile(_imageFile);
       await uploadTask.whenComplete(() async{
         await firebaseStorageRef.getDownloadURL().then(

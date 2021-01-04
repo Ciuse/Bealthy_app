@@ -53,8 +53,15 @@ class _PersonalPageState extends State<PersonalPage>{
   }
 
   Future getImage() async {
+    String userUid;
+    final litUser = context.getSignedInUser();
+    litUser.when(
+          (user) => userUid=user.uid,
+      empty: () => Text('Not signed in'),
+      initializing: () => Text('Loading'),
+    );
     try {
-      return await storage.ref("UserProfileImage/userProfileImage.jpg").getDownloadURL();
+      return await storage.ref(userUid+"/UserProfileImage/UserProfileImage.jpg").getDownloadURL();
     }
     catch (e) {
       return await Future.error(e);

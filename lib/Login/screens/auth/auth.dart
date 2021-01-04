@@ -1,7 +1,6 @@
 import 'package:Bealthy_app/Login/config/palette.dart';
 import 'package:Bealthy_app/Login/screens/auth/widgets/register.dart';
 import 'package:Bealthy_app/Login/screens/auth/widgets/sign_in.dart';
-import 'package:Bealthy_app/Login/screens/home.dart';
 import 'package:Bealthy_app/main.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';

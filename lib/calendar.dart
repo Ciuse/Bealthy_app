@@ -89,7 +89,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format) {
-    print('CALLBACK: _onCalendarCreated');
+       print('CALLBACK: _onCalendarCreated');
     dateStore.calendarSelectedDate=DateTime.now();
     if(context.read<SymptomStore>().storeInitialized)
       context.read<SymptomStore>().getSymptomsOfADay(dateStore.calendarSelectedDate);
