@@ -15,23 +15,19 @@ class Register extends StatelessWidget {
     final isSubmitting = context.isSubmitting();
     return SignInForm(
       child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.all(22.0),
+    child: SingleChildScrollView(
+    child:Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Expanded(
-              flex: 3,
-              child: Align(
+
+            Align(
                 alignment: Alignment.centerLeft,
                 child: LoginTitle(
                   title: 'Create\nAccount',
                 ),
               ),
-            ),
-            Expanded(
-              flex: 4,
-              child: ListView(
-                children: [
+
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: EmailTextFormField(
@@ -73,14 +69,11 @@ class Register extends StatelessWidget {
                           decoration: TextDecoration.underline,
                         ),
                       ),
-                    ),
-                  ),
-                ],
               ),
             ),
           ],
         ),
       ),
-    );
+    ));
   }
 }

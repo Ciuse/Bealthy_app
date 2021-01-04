@@ -25,10 +25,10 @@ InputDecoration registerInputDecoration({String hintText}) {
 InputDecoration signInInputDecoration({String hintText}) {
   return InputDecoration(
     contentPadding: const EdgeInsets.symmetric(vertical: 18.0),
-    hintStyle: const TextStyle(fontSize: 18),
+    hintStyle: const TextStyle(fontSize: 18, color: Colors.black),
     hintText: hintText,
     focusedBorder: const UnderlineInputBorder(
-      borderSide: BorderSide(width: 2, color: Palette.darkBlue),
+      borderSide: BorderSide(width: 3, color: Palette.darkBlue),
     ),
     enabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(color: Palette.darkBlue),
