@@ -10,18 +10,16 @@ import 'package:app_settings/app_settings.dart';
 
 
 
-class UploadNewPictureToUserDish extends StatefulWidget {
+class UploadNewProfileImage extends StatefulWidget {
   final CameraDescription camera;
-  final String dishId;
-  final bool uploadingOnFirebase;
-  UploadNewPictureToUserDish({@required this.camera,@required this.dishId,@required this.uploadingOnFirebase});
+  UploadNewProfileImage({@required this.camera});
 
   @override
-  _UploadNewPictureToUserDishState createState() =>
-      _UploadNewPictureToUserDishState();
+  _UploadNewProfileImageState createState() =>
+      _UploadNewProfileImageState();
 }
 
-class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish> {
+class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
   File _imageFile;
   final Color yellow = Color(0xfffbc31b);
   final Color orange = Color(0xfffb6900);
@@ -112,23 +110,16 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
 
 
   Future uploadImageToFirebase(BuildContext context) async {
-    if(widget.uploadingOnFirebase){
-      String fileName = widget.dishId+".jpg";
-      var firebaseStorageRef = FirebaseStorage.instance.ref().child('DishImage/$fileName');
+
+      String fileName = "userProfileImage.jpg";
+      var firebaseStorageRef = FirebaseStorage.instance.ref().child('UserProfileImage/$fileName');
       var uploadTask = firebaseStorageRef.putFile(_imageFile);
       await uploadTask.whenComplete(() async{
         await firebaseStorageRef.getDownloadURL().then(
               (value) => Navigator.pop(context,_imageFile),
         );
       });
-    }else{
-      Navigator.pop(context,_imageFile);
-    }
-
   }
-
-
-
 
 
   @override
@@ -237,4 +228,3 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
   }
 
 }
-

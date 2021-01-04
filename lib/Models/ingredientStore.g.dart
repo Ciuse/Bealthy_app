@@ -41,6 +41,37 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     });
   }
 
+  final _$createNewDishImageAtom =
+      Atom(name: '_IngredientStoreBase.createNewDishImage');
+
+  @override
+  File get createNewDishImage {
+    _$createNewDishImageAtom.reportRead();
+    return super.createNewDishImage;
+  }
+
+  @override
+  set createNewDishImage(File value) {
+    _$createNewDishImageAtom.reportWrite(value, super.createNewDishImage, () {
+      super.createNewDishImage = value;
+    });
+  }
+
+  final _$profileImageAtom = Atom(name: '_IngredientStoreBase.profileImage');
+
+  @override
+  File get profileImage {
+    _$profileImageAtom.reportRead();
+    return super.profileImage;
+  }
+
+  @override
+  set profileImage(File value) {
+    _$profileImageAtom.reportWrite(value, super.profileImage, () {
+      super.profileImage = value;
+    });
+  }
+
   final _$ingredientListOfDishAtom =
       Atom(name: '_IngredientStoreBase.ingredientListOfDish');
 
@@ -185,6 +216,8 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     return '''
 ingredientList: ${ingredientList},
 rebuiltDishImage: ${rebuiltDishImage},
+createNewDishImage: ${createNewDishImage},
+profileImage: ${profileImage},
 ingredientListOfDish: ${ingredientListOfDish},
 ingredientsName: ${ingredientsName},
 loadInitIngredientList: ${loadInitIngredientList}
