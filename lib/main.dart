@@ -1,6 +1,11 @@
 import 'package:Bealthy_app/Database/symptomOverviewGraphStore.dart';
 import 'package:Bealthy_app/treatmentPage.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:move_to_background/move_to_background.dart';
+import 'Login/config/palette.dart';
+import 'Login/screens/home.dart';
+import 'Login/screens/splash.dart';
 import 'Models/mealTimeStore.dart';
 import 'Models/overviewStore.dart';
 import 'Models/symptomStore.dart';
@@ -61,37 +66,54 @@ class MyApp extends StatelessWidget {
       onWillPop: () async {
         MoveToBackground.moveTaskToBack();
         return false;},
+      child: LitAuthInit(
+        authProviders: const AuthProviders(
+          emailAndPassword: true,
+          // google: true,
+          // apple: true,
+          // twitter: true,
+        ),
       child:
       MaterialApp(
       theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            textTheme: GoogleFonts.redHatDisplayTextTheme(),
+            accentColor: Palette.darkOrange,
+            appBarTheme: const AppBarTheme(
+              brightness: Brightness.dark,
+              color: Palette.teal,
+            ),
           buttonBarTheme: ButtonBarThemeData(
             alignment: MainAxisAlignment.spaceEvenly,
           )),
       title: _title,
-      home: FirstLoadingPage(),
-    ));
+        home: LitAuthState(
+          authenticated: HomePage(),
+          unauthenticated: SplashScreen(),
+        ),
+    )));
   }
 }
 
-class FirstLoadingPage extends StatefulWidget{
-  @override
-  _FirstLoadingPageState createState() => _FirstLoadingPageState();
-
-}
-
-class _FirstLoadingPageState extends State<FirstLoadingPage> {
-  @override
-  Widget build(BuildContext context) {
-    if(auth.currentUser!=null){
-      print("A");
-      return HomePage();
-    }
-    else{
-      print("B");
-      return LoginPage();
-    }
-  }
-}
+// class FirstLoadingPage extends StatefulWidget{
+//   @override
+//   _FirstLoadingPageState createState() => _FirstLoadingPageState();
+//
+// }
+//
+// class _FirstLoadingPageState extends State<FirstLoadingPage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     if(auth.currentUser!=null){
+//       print("A");
+//       return HomePage();
+//     }
+//     else{
+//       print("B");
+//       return LoginPage();
+//     }
+//   }
+// }
 
 class LoginPage extends StatefulWidget{
   @override
@@ -344,7 +366,11 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
 
 /// This is the stateful widget that the main application instantiates.
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
+
+  static MaterialPageRoute get route => MaterialPageRoute(
+    builder: (context) => const HomePage(),
+  );
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -358,6 +384,7 @@ class _MyHomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   void initState() {
+    super.initState();
    overviewStore = Provider.of<OverviewStore>(context, listen: false);
    dateStore = Provider.of<DateStore>(context, listen: false);
   }
