@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
@@ -24,8 +23,7 @@ class DishPage extends StatefulWidget {
 
   final Dish dish;
   final bool createdByUser;
-  final bool canBeAddToADay;
-  DishPage({@required this.dish, @required this.createdByUser, @required this.canBeAddToADay});
+  DishPage({@required this.dish, @required this.createdByUser});
 
   @override
   _DishPageState createState() => _DishPageState();
@@ -170,60 +168,6 @@ class _DishPageState extends State<DishPage>{
       appBar: AppBar(
         title: Text(widget.dish.name),
         actions: <Widget>[
-          IconButton(
-              icon: Icon(
-                Icons.mode_rounded,
-              ),
-              onPressed: () {
-                return showDialog(
-                  context: context,
-                  builder: (_) =>  new AlertDialog(
-                      title: Center(child: Text("Modify the quantity of ${widget.dish.name}")),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children : <Widget>[
-                          Expanded(
-                            child: Text(
-                              "Indicate the quantity eaten! ",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.red,
-
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      actions: <Widget> [
-                        for(String qty in quantityList) RaisedButton(
-                            onPressed:  () {
-
-                              widget.dish.qty = qty;
-                              mealTimeStore.updateDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
-                                  .then((value) => Navigator.of(context).pop()
-                              );
-                            },
-                            textColor: Colors.white,
-                            padding: const EdgeInsets.all(0.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: <Color>[
-                                    Color(0xFF0D47A1),
-                                    Color(0xFF1976D2),
-                                    Color(0xFF42A5F5),
-                                  ],
-                                ),
-                              ),
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(qty , style: TextStyle(fontSize: 20)),)
-                        ),
-                      ]
-                  ),
-                );
-              }
-          ),
           Observer(builder: (_) =>IconButton(
               icon: Icon(
                 widget.dish.isFavourite ? Icons.favorite : Icons.favorite_border,
@@ -257,28 +201,11 @@ class _DishPageState extends State<DishPage>{
                               return Text("Image not found");
                             }
                             else {
-                              return Observer(builder: (_) =>Container(
-                                  alignment: Alignment.center ,
-                                  child: Stack(
-                                      children: [
-                                        Container
-                                          (width: 150,
-                                            height: 150,
-                                            child: ClipOval(
-                                              child: ingredientStore.rebuiltDishImage==null? Image.network(remoteString.data, fit: BoxFit.fill):
-                                              Image.file(ingredientStore.rebuiltDishImage),)),
-
-                                        Stack(
-                                            children:  <Widget>[
-                                              Container(
-                                                  margin: const EdgeInsets.only(left: 125,top:125),
-                                                  child:IconButton(padding: EdgeInsets.all(2),onPressed: checkPermissionOpenCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                                    color: Colors.black,)),]
-
-                                        )
-                                      ])
-
-                              ));
+                              return Container
+                                (width: 150,
+                                  height: 150,
+                                  child: ClipOval(
+                                    child: Image.network(remoteString.data, fit: BoxFit.fill),));
                             }
                           }
                           else {
@@ -335,7 +262,7 @@ class _DishPageState extends State<DishPage>{
 
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            if (widget.canBeAddToADay) {
+
               return showDialog(
                   context: context,
                   builder: (_) =>  new AlertDialog(
@@ -382,32 +309,11 @@ class _DishPageState extends State<DishPage>{
                           ]
                       ),
                   );
-            }
 
-            else {
 
-              return showDialog(
-                  context: context,
-                  builder: (_) =>  new AlertDialog(
-                    title: new Text(widget.dish.name),
-                    content: new Text("Are you sure to remove it?"),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('Remove it!'),
-                        onPressed: () {
-
-                          mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getEnumIndex(widget.dish.mealTime), widget.dish, dateStore.calendarSelectedDate)
-                              .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
-
-                        },
-                      )
-                    ],
-                  ));
-            }
           },
-          child: Icon(widget.canBeAddToADay ? Icons.add : Icons.auto_delete,
-              color: widget.canBeAddToADay ? Colors.white : Colors.white),
-          backgroundColor: widget.canBeAddToADay ? Colors.green : Colors.redAccent
+          child: Icon(Icons.add , color:  Colors.white ),
+          backgroundColor:  Colors.green
       ),
 
     ));

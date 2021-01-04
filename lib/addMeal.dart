@@ -146,7 +146,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => DishPage(dish: dish,
-                        createdByUser: foodStore.isSubstring("User", dish.id,), canBeAddToADay: true,),
+                        createdByUser: foodStore.isSubstring("User", dish.id,)),
                           ))
                         },
                         color: Colors.orange,
@@ -245,7 +245,7 @@ class _CategoryDishListState extends State<CategoryDishList> {
                         onPressed: () => {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DishPage(dish: item, createdByUser: false,canBeAddToADay: true)),
+                            MaterialPageRoute(builder: (context) => DishPage(dish: item, createdByUser: false,)),
                           )
                         },
                         color: Colors.orange,
@@ -303,7 +303,7 @@ class _YourDishListState extends State<YourDishList> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
-                                    DishPage(dish: item, createdByUser: true, canBeAddToADay: true),
+                                    DishPage(dish: item, createdByUser: true),
                                 )
                               )
                             },

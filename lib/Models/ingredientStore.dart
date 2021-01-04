@@ -29,6 +29,12 @@ abstract class _IngredientStoreBase with Store {
   File rebuiltDishImage;
 
   @observable
+  File createNewDishImage;
+
+  @observable
+  File profileImage;
+
+  @observable
   var ingredientListOfDish = new ObservableList<Ingredient>();
 
   @observable

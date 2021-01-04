@@ -60,12 +60,16 @@ class IngredientOverviewState extends State {
                               alignment: Alignment.center,
                               color: Colors.transparent,
                               child: RawMaterialButton(
-                                onPressed: () =>
-                                {
-                                },
                                 elevation: 5.0,
                                 fillColor: Colors.white,
-                                child:  Icon(Icons.fastfood),
+                                child:  Container(
+                                    width: 50,
+                                    height: 50,
+                                    child:  ClipOval(
+                                        child: Image(
+                                          image: AssetImage("images/ingredients/" + overviewStore.totalOccurrenceIngredient.keys.elementAt(index) + ".png"),
+                                        )
+                                    )),
                                 padding: EdgeInsets.all(15.0),
                                 shape: CircleBorder(),
 

@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:Bealthy_app/uploadNewPictureToUserDish.dart';
+import 'package:camera/camera.dart';
 import 'package:dropdownfield/dropdownfield.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -44,10 +48,16 @@ class _CreateNewDishState extends State<CreateNewDish> {
 
   List<String> ingredientsSelectedList = new List<String>();
   List<String> ingredientsQuantityList = new List<String>();
+  IngredientStore ingredientStore;
+  List<CameraDescription> cameras;
+  int randomNumber=0;
 
   @override
   void initState() {
     super.initState();
+    initializeCameras();
+    Random random = new Random();
+    randomNumber = random.nextInt(100);
     _keyboardState = _keyboardVisibility.isKeyboardVisible;
     _controller = ScrollController();
 
@@ -62,7 +72,8 @@ class _CreateNewDishState extends State<CreateNewDish> {
       },
     );
 
-
+    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
+    ingredientStore.createNewDishImage=null;
     categoryList= getCategoryName();
     quantityList= getQuantityName();
     super.initState();
@@ -75,6 +86,13 @@ class _CreateNewDishState extends State<CreateNewDish> {
     _keyboardVisibility.removeListener(_keyboardVisibilitySubscriberId);
     super.dispose();
   }
+
+  Future<void> initializeCameras() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    cameras = await availableCameras();
+
+  }
+
   List<String> getCategoryName(){
 
     List<String> listToReturn = new List<String>();
@@ -101,8 +119,6 @@ class _CreateNewDishState extends State<CreateNewDish> {
   void addDishToUser() {
     if (nameCt.text != "" && categoryDishCreated != "" && ingredientsSelectedList.length>0 &&
         ingredientsQuantityList.length==ingredientsSelectedList.length) {
-      Random random = new Random();
-      int randomNumber = random.nextInt(100);
       Dish dish = new Dish(
           id: "Dish_User_" + randomNumber.toString(),
           name: nameCt.text,
@@ -121,9 +137,29 @@ class _CreateNewDishState extends State<CreateNewDish> {
       }
 
       context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
-
+      if(context.read<IngredientStore>().createNewDishImage!=null){
+        uploadImageToFirebase(context.read<IngredientStore>().createNewDishImage);
+      }
       Navigator.pop(context);
     }
+  }
+
+  void uploadImageToFirebase(File imageFile) {
+
+      String fileName = "Dish_User_" + randomNumber.toString()+".jpg";
+      var firebaseStorageRef = FirebaseStorage.instance.ref().child('DishImage/$fileName');
+      firebaseStorageRef.putFile(imageFile);
+
+  }
+
+  openCamera() async {
+    ingredientStore.createNewDishImage = await Navigator.push(
+      context,
+      MaterialPageRoute<File>(
+        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dishId: "Dish_User_" + randomNumber.toString(),uploadingOnFirebase: false,),
+      ),
+    );
+    print(ingredientStore.createNewDishImage);
   }
 
 
@@ -148,11 +184,37 @@ class _CreateNewDishState extends State<CreateNewDish> {
             Container(
               width: 200,
               height: 200,
-              child: ClipOval(
-                  child: Image(
-                    image: AssetImage("images/Dish_1.png"),
-                  )
-              ),
+              child: Observer(builder: (_) =>Container(
+                  alignment: Alignment.center ,
+                  child: Stack(
+                      children: [
+                        Container
+                          (width: 150,
+                            height: 150,
+                            decoration: new BoxDecoration(
+                              borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                              border: new Border.all(
+                                color: Colors.black,
+                                width: 4.0,
+                              ),
+                            ),
+                            child: ClipOval(
+                              child: ingredientStore.createNewDishImage==null? null:
+                              Image.file(ingredientStore.createNewDishImage),
+                            )
+                        ),
+
+                        Stack(
+                            children:  <Widget>[
+                              Container(
+                                  margin: const EdgeInsets.only(left: 125,top:125),
+                                  child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                    color: Colors.black,)),]
+
+                        )
+                      ])
+
+              )),
             ),
 
 

@@ -1,6 +1,7 @@
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:Bealthy_app/addMeal.dart';
 import 'package:Bealthy_app/dishPage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'Database/enumerators.dart';
+import 'eatenDishPage.dart';
 
 
 class ListDishesOfDay extends StatefulWidget {
@@ -22,6 +24,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   List<String> dishListChoices = ["information","modify"];
   List<String> quantityList;
+  var storage = FirebaseStorage.instance;
   @override
   void initState() {
     super.initState();
@@ -164,6 +167,14 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     return toReturn;
   }
 
+  Future getImage(String dishId) async {
+    try {
+      return await storage.ref("DishImage/" + dishId + ".jpg").getDownloadURL();
+    }
+    catch (e) {
+      return await Future.error(e);
+    }
+  }
 
   Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore ){
     return Column(
@@ -188,14 +199,36 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                     print(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index]),
                       Navigator.push(
                       context, MaterialPageRoute(builder: (context) =>
-                        DishPage(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
-                            createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),canBeAddToADay:false)
+                          EatenDishPage(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
+                            createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id))
                     ),
                     )
                     },
                     title: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name,style: TextStyle(fontSize: 22.0)),
                     subtitle: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].category,style: TextStyle(fontSize: 18.0)),
-                    leading: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id)? FlutterLogo():
+                    leading: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id)?
+                    FutureBuilder(
+                        future: getImage(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),
+                    builder: (context, remoteString) {
+                      if (remoteString.connectionState != ConnectionState.waiting) {
+                        if (remoteString.hasError) {
+                          return Text("Image not found");
+                        }
+                        else {
+                          return Container
+                            (width: 50,
+                              height: 50,
+                              child: ClipOval(
+                                child: Image.network(remoteString.data, fit: BoxFit.fill),));
+                        }
+                      }
+                      else {
+                        return CircularProgressIndicator();
+                      }
+                    }
+                )
+
+                     :
                     Container(
                         width: 50,
                         height: 50,
@@ -213,9 +246,9 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) =>
-                                          DishPage(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
+                                          EatenDishPage(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
 
-                                              createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),canBeAddToADay:false)));
+                                              createdByUser: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id))));
                                 }
                                 if(choice=="modify"){
                                      return showDialog(

@@ -106,7 +106,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                       onTap: ()=> { Navigator.push(
                                         context, MaterialPageRoute(builder: (context) =>
                                           DishPage(dish: foodStore.resultsList[index],
-                                              createdByUser: foodStore.isSubstring("User", foodStore.resultsList[index].id),canBeAddToADay:true)
+                                              createdByUser: foodStore.isSubstring("User", foodStore.resultsList[index].id))
                                       ),
                                       )
                                       },
