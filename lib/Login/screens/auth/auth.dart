@@ -7,6 +7,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
+import 'package:move_to_background/move_to_background.dart';
 
 import 'widgets/background_painter.dart';
 
@@ -42,7 +43,11 @@ class _AuthScreenState extends State<AuthScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        MoveToBackground.moveTaskToBack();
+        return false;},
+      child: Scaffold(
       body: LitAuth.custom(
         errorNotification: const NotificationConfig(
           backgroundColor: Palette.darkBlue,
@@ -111,6 +116,6 @@ class _AuthScreenState extends State<AuthScreen>
           ],
         ),
       ),
-    );
+    ));
   }
 }

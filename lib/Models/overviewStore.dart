@@ -134,9 +134,10 @@ abstract class _OverviewBase with Store {
           }
         });
         mapIngredientsOverviewDay.putIfAbsent(mealTime, () => mealTimeList.toList());
-        totalOccurrenceIngredientsDay();
         mealTimeList.clear();
       });
+      totalOccurrenceIngredientsDay();
+
       overviewDishList.clear();
       overviewIngredientList.clear();
     }else{
@@ -226,6 +227,7 @@ abstract class _OverviewBase with Store {
           totalOccurrenceIngredient.putIfAbsent(ingredient.id, () => 1);
         }else{
           totalOccurrenceIngredient.update(ingredient.id, (value) => value+1);
+          print(totalOccurrenceIngredient[ingredient.id]);
         }
       });
     });
@@ -375,7 +377,6 @@ abstract class _OverviewBase with Store {
       Symptom toUpdate = mapSymptomsOverviewPeriod[dateTime].firstWhere((element) => element.id==symptomId);
       toUpdate.overviewValue = toUpdate.intensity*toUpdate.frequency*mealTimeValueSymptom(toUpdate);
       toUpdate.overviewValue = toUpdate.overviewValue.roundToDouble();
-      print(toUpdate.overviewValue);
     }else{
       Symptom symptomNotPresent = new Symptom(id: symptomId, intensity: 0,frequency: 0,mealTime: []);
       mapSymptomsOverviewPeriod[dateTime].add(symptomNotPresent);

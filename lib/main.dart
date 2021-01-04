@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'Login/config/palette.dart';
-import 'Login/screens/home.dart';
 import 'Login/screens/splash.dart';
 import 'Models/mealTimeStore.dart';
 import 'Models/overviewStore.dart';
@@ -66,14 +65,14 @@ class MyApp extends StatelessWidget {
       onWillPop: () async {
         MoveToBackground.moveTaskToBack();
         return false;},
-      child: LitAuthInit(
-        authProviders: const AuthProviders(
-          emailAndPassword: true,
-          // google: true,
-          // apple: true,
-          // twitter: true,
-        ),
-      child:
+        child: LitAuthInit(
+            authProviders: const AuthProviders(
+              emailAndPassword: true,
+              google: true,
+              github: true,
+              twitter: true,
+            ),
+            child:
       MaterialApp(
       theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
