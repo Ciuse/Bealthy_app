@@ -303,22 +303,7 @@ class _DishPageState extends State<DishPage>{
               }
           )
     ),
-      Divider(
-        height: 5,
-        thickness: 2.5,
-        color: Colors.black87,
-      ),
-      Container(
-        width: 300,
-        height: 50,
-        alignment: Alignment.center,
-        child:Observer(builder: (_) =>Text("The quantity you eat today is:"+ " " +widget.dish.qty)),
-      ),
-      Divider(
-        height: 5,
-        thickness: 2.5,
-        color: Colors.black87,
-      ),
+
       Expanded(
           child:
           Observer(builder: (_) =>new ListView.builder
