@@ -14,8 +14,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.teal,
-          title: const Text('Treatment', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+          title: const Text('Treatment'),
         ),
         body: Center(
             child: Column(

@@ -25,8 +25,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
     final dateModel = Provider.of<DateStore>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: const Text('Bealthy', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+        title: const Text('Bealthy'),
       ),
       body: Column(children: [
         CalendarHomePage(),

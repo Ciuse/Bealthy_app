@@ -72,8 +72,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return DefaultTabController(length: 2, child: Scaffold(
         appBar: AppBar(
-          title: Text("Statistics",
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+          title: Text("Statistics",),
           actions: <Widget>[
             PopupMenuButton(
                 onSelected: choiceAction,
@@ -88,8 +87,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                 }
             )
         ],
-        backgroundColor: Colors.teal,
-        bottom: TabBar(
+          bottom: TabBar(
           labelColor: Colors.black,
           indicatorColor: Colors.black,
           tabs: [
