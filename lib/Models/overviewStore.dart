@@ -227,7 +227,6 @@ abstract class _OverviewBase with Store {
           totalOccurrenceIngredient.putIfAbsent(ingredient.id, () => 1);
         }else{
           totalOccurrenceIngredient.update(ingredient.id, (value) => value+1);
-          print(totalOccurrenceIngredient[ingredient.id]);
         }
       });
     });
