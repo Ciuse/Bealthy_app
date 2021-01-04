@@ -1,16 +1,12 @@
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:Bealthy_app/addMeal.dart';
-import 'package:Bealthy_app/dishPage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import 'Database/enumerators.dart';
 import 'eatenDishPage.dart';
-
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
 class ListDishesOfDay extends StatefulWidget {
   final DateTime day;
@@ -168,8 +164,15 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   }
 
   Future getImage(String dishId) async {
+    String userUid;
+    final litUser = context.getSignedInUser();
+    litUser.when(
+          (user) => userUid=user.uid,
+      empty: () => Text('Not signed in'),
+      initializing: () => Text('Loading'),
+    );
     try {
-      return await storage.ref("DishImage/" + dishId + ".jpg").getDownloadURL();
+      return await storage.ref(userUid+"/DishImage/" + dishId + ".jpg").getDownloadURL();
     }
     catch (e) {
       return await Future.error(e);
@@ -234,7 +237,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                         height: 50,
                         child:  ClipOval(
                             child: Image(
-                              image: AssetImage("images/" +mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id+".png" ),
+                              image: AssetImage("images/Dishes/" +mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id+".png" ),
                             )
                         )),
                     trailing: Row (

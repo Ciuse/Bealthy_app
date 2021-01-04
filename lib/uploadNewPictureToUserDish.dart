@@ -6,7 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:app_settings/app_settings.dart';
-
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
 
 
@@ -113,8 +113,15 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
 
   Future uploadImageToFirebase(BuildContext context) async {
     if(widget.uploadingOnFirebase){
+      String userUid;
+      final litUser = context.getSignedInUser();
+      litUser.when(
+            (user) => userUid=user.uid,
+        empty: () => Text('Not signed in'),
+        initializing: () => Text('Loading'),
+      );
       String fileName = widget.dishId+".jpg";
-      var firebaseStorageRef = FirebaseStorage.instance.ref().child('DishImage/$fileName');
+      var firebaseStorageRef = FirebaseStorage.instance.ref().child(userUid+'/DishImage/$fileName');
       var uploadTask = firebaseStorageRef.putFile(_imageFile);
       await uploadTask.whenComplete(() async{
         await firebaseStorageRef.getDownloadURL().then(

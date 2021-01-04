@@ -14,6 +14,7 @@ import 'Database/dish.dart';
 import 'Models/foodStore.dart';
 import 'package:camera/camera.dart';
 import 'uploadNewPictureToUserDish.dart';
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
 
 
@@ -75,8 +76,15 @@ class _EatenDishPageState extends State<EatenDishPage>{
   }
 
   Future getImage() async {
+      String userUid;
+      final litUser = context.getSignedInUser();
+      litUser.when(
+            (user) => userUid=user.uid,
+        empty: () => Text('Not signed in'),
+        initializing: () => Text('Loading'),
+      );
     try {
-      return await storage.ref("DishImage/" + widget.dish.id + ".jpg").getDownloadURL();
+      return await storage.ref(userUid+"/DishImage/" + widget.dish.id + ".jpg").getDownloadURL();
     }
     catch (e) {
       return await Future.error(e);
@@ -84,7 +92,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
   }
 
   Future findIfLocal() {
-    return rootBundle.load("images/"+widget.dish.id+".png");
+    return rootBundle.load("images/Dishes/"+widget.dish.id+".png");
   }
 
   void setQuantityAndMealTimeToDish(String qty){
@@ -238,7 +246,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                   height: 200,
                                   child:  ClipOval(
                                       child: Image(
-                                        image: AssetImage("images/" + widget.dish.id + ".png"),
+                                        image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
                                       )
                                   ));
                             }

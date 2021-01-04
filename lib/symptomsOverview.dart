@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-
 import 'Models/overviewStore.dart';
 import 'Models/symptomStore.dart';
 
@@ -54,7 +53,7 @@ class SymptomsOverviewState extends State {
                             elevation: 5.0,
                             fillColor: Colors.white,
                             child: ImageIcon(
-                              AssetImage("images/" +
+                              AssetImage("images/Symptoms/" +
                                   overviewStore.totalOccurrenceSymptom.keys.elementAt(index) + ".png"),
                               size: 28.0,
                             ),

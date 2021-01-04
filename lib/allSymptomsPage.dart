@@ -156,7 +156,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
                     key: Key(symptom.id),
                     title: Text(symptom.name, style: TextStyle(fontSize: 22.0)),
                     leading: ImageIcon(
-                      AssetImage("images/" +symptomStore.symptomList[symptomStore.getIndexFromSymptomsList(symptom, symptomStore.symptomList)].id+".png" ),
+                      AssetImage("images/Symptoms/" +symptomStore.symptomList[symptomStore.getIndexFromSymptomsList(symptom, symptomStore.symptomList)].id+".png" ),
                       color: symptomStore.symptomList[symptomStore.getIndexFromSymptomsList(symptom, symptomStore.symptomList)].isSymptomSelectDay ? Colors.pinkAccent : null,
                       size: 28.0,
                     ),

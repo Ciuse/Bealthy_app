@@ -79,7 +79,7 @@ class _PersonalPageState extends State<PersonalPage>{
           elevation: 5.0,
           fillColor: Colors.white,
           child: ImageIcon(
-            AssetImage("images/" +symptomStore.symptomList[index].id+".png" ),
+            AssetImage("images/Symptoms" +symptomStore.symptomList[index].id+".png" ),
             color: Colors.black,
             size: 28.0,
           ),

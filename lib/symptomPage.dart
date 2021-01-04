@@ -53,14 +53,6 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return TabController(length: 2, vsync: this);
   }
 
-  Future getImage() async {
-    try {
-      return await storage.ref("SymptomImage/" + widget.symptom.id + ".png").getDownloadURL();
-    }
-    catch (e) {
-      return await Future.error(e);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,28 +84,13 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return Column(
         children: [
           Container(
-            padding: EdgeInsets.all(10.0),
-            child: FutureBuilder(
-                future: getImage(),
-                builder: (context, remoteString) {
-                  if (remoteString.connectionState != ConnectionState.waiting) {
-                    if (remoteString.hasError) {
-                      return Text("Image not found");
-                    }
-                    else {
-                      return Container(
-                        width: 200,
-                        height: 200,
-                        child: ClipOval(
-                          child: Image.network(remoteString.data, fit: BoxFit.fill),),
-                      );
-                    }
-                  }
-                  else {
-                    return CircularProgressIndicator();
-                  }
-                }
-            )),
+              width: 50,
+              height: 50,
+              child:  ClipOval(
+                  child: Image(
+                    image: AssetImage("images/Symptoms/" +widget.symptom.id+".png" ),
+                  )
+              )),
           Divider(height: 30),
           Text("Description",style: TextStyle(fontWeight: FontWeight.bold),),
         ]);
