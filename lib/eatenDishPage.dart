@@ -34,13 +34,13 @@ class _EatenDishPageState extends State<EatenDishPage>{
   List<String> quantityList;
   List<CameraDescription> cameras;
   IngredientStore ingredientStore;
+  File imageFile;
 
   void initState() {
     super.initState();
     initializeCameras();
     quantityList= getQuantityName();
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
-    ingredientStore.rebuiltDishImage=null;
     ingredientStore.ingredientListOfDish.clear();
     if(widget.createdByUser){
       ingredientStore.getIngredientsFromUserDish(widget.dish);
@@ -101,14 +101,13 @@ class _EatenDishPageState extends State<EatenDishPage>{
     widget.dish.qty = qty;
   }
 
-  openCamera() async {
-    ingredientStore.rebuiltDishImage = await Navigator.push(
+  openCamera()  {
+    Navigator.push(
       context,
-      MaterialPageRoute<File>(
-        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dishId: widget.dish.id,uploadingOnFirebase: true,),
+      MaterialPageRoute(
+        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dish: widget.dish,uploadingOnFirebase: true,),
       ),
     );
-    print(ingredientStore.rebuiltDishImage);
   }
 
   @override
@@ -197,17 +196,40 @@ class _EatenDishPageState extends State<EatenDishPage>{
               children: [
                 Container(
                     padding: EdgeInsets.all(10.0),
-                    child: FutureBuilder (
-                        future: findIfLocal(),
-                        builder: (context,  AsyncSnapshot localData) {
-                          if(localData.connectionState != ConnectionState.waiting ) {
-                            if (localData.hasError) {
-                              return FutureBuilder(
+                    child: widget.createdByUser? FutureBuilder(
                                   future: getImage(),
                                   builder: (context, remoteString) {
                                     if (remoteString.connectionState != ConnectionState.waiting) {
                                       if (remoteString.hasError) {
-                                        return Text("Image not found");
+                                        return Observer(builder: (_) =>Container(
+                                            alignment: Alignment.center ,
+                                            child: Stack(
+                                                children: [
+                                                  Container
+                                                    (width: 150,
+                                                      height: 150,
+                                                      decoration: new BoxDecoration(
+                                                        borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                        border: new Border.all(
+                                                          color: Colors.black,
+                                                          width: 4.0,
+                                                        ),
+                                                      ),
+                                                      child: ClipOval(
+                                                        child: widget.dish.imageFile==null? null:
+                                                        Image.file(widget.dish.imageFile),)),
+
+                                                  Stack(
+                                                      children:  <Widget>[
+                                                        Container(
+                                                            margin: const EdgeInsets.only(left: 125,top:125),
+                                                            child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                                              color: Colors.black,)),]
+
+                                                  )
+                                                ])
+
+                                        ));
                                       }
                                       else {
                                         return Observer(builder: (_) =>Container(
@@ -218,8 +240,8 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                     (width: 150,
                                                       height: 150,
                                                       child: ClipOval(
-                                                        child: ingredientStore.rebuiltDishImage==null? Image.network(remoteString.data, fit: BoxFit.fill):
-                                                        Image.file(ingredientStore.rebuiltDishImage),)),
+                                                        child: widget.dish.imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill):
+                                                        Image.file(widget.dish.imageFile),)),
 
                                                   Stack(
                                                       children:  <Widget>[
@@ -238,7 +260,14 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                       return CircularProgressIndicator();
                                     }
                                   }
-                              );
+                              )
+                             :
+                    FutureBuilder (
+                        future: findIfLocal(),
+                        builder: (context,  AsyncSnapshot localData) {
+                          if(localData.connectionState != ConnectionState.waiting ) {
+                            if (localData.hasError) {
+                              return Text("Image not found");
                             }
                             else {
                               return Container(
@@ -254,7 +283,8 @@ class _EatenDishPageState extends State<EatenDishPage>{
                             return CircularProgressIndicator();
                           }
                         }
-                    )
+                    ),
+
                 ),
                 Divider(
                   height: 5,
@@ -290,7 +320,6 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                         image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
                                       )
                                   )),
-
                             ),
                           );
                         }

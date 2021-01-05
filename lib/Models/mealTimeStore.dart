@@ -88,6 +88,15 @@ abstract class _MealTimeStoreBase with Store {
     }
   }
 
+  void changeImageToAllSameDishes(Dish dish){
+    MealTime.values.forEach((element) {
+      getDishesOfMealTimeList(MealTime.values.indexOf(element)).forEach((dishToChange) {
+        if(dishToChange.id==dish.id){
+          dishToChange.imageFile = dish.imageFile;
+        }
+      });
+    });
+  }
 
 
 

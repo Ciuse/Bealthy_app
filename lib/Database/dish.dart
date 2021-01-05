@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:mobx/mobx.dart';
+import 'dart:io';
 
 part 'dish.g.dart';
 
@@ -35,7 +36,8 @@ abstract class _DishBase with Store {
   String qty;
   @observable
   String mealTime;
-
+  @observable
+  File imageFile = null;
   @observable
   bool isFavourite= false;
 

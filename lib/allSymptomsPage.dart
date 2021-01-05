@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'Database/enumerators.dart';
 import 'headerScrollStyle.dart';
+import 'overviewPage.dart';
 
 
 
@@ -108,7 +109,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
 
   Widget _buildHeader(DateTime day) {
     final children = [
-      _CustomIconButton(
+      CustomIconButtonOur(
         icon: widget.headerScrollStyle.leftChevronIcon,
         onTap: selectPrevious,
         margin: widget.headerScrollStyle.leftChevronMargin,
@@ -126,7 +127,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
           ),
         ),
       ),
-      _CustomIconButton(
+      CustomIconButtonOur(
         icon: widget.headerScrollStyle.rightChevronIcon,
         onTap: selectNext,
         margin: widget.headerScrollStyle.leftChevronMargin,
@@ -189,36 +190,3 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
     context.read<DateStore>().nextDayCalendar();
   }
 }
-
-class _CustomIconButton extends StatelessWidget {
-  final Icon icon;
-  final VoidCallback onTap;
-  final EdgeInsets margin;
-  final EdgeInsets padding;
-
-  const _CustomIconButton({
-    Key key,
-    @required this.icon,
-    @required this.onTap,
-    this.margin,
-    this.padding,
-  })  : assert(icon != null),
-        assert(onTap != null),
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: margin,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(100.0),
-        child: Padding(
-          padding: padding,
-          child: icon,
-        ),
-      ),
-    );
-  }
-}
-

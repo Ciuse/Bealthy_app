@@ -149,7 +149,7 @@ class PieChartIngredientState extends State {
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
                 for(var ingredientId in overviewStore.totalOccurrenceIngredient.keys)
-                  Indicator(
+                  Indicator2(
                     color: ingredientStore.colorIngredientMap[ingredientId],
                     text: ingredientStore.getSymptomFromList(ingredientId).name,
                     isSquare: true,

@@ -84,6 +84,21 @@ mixin _$Dish on _DishBase, Store {
     });
   }
 
+  final _$imageFileAtom = Atom(name: '_DishBase.imageFile');
+
+  @override
+  File get imageFile {
+    _$imageFileAtom.reportRead();
+    return super.imageFile;
+  }
+
+  @override
+  set imageFile(File value) {
+    _$imageFileAtom.reportWrite(value, super.imageFile, () {
+      super.imageFile = value;
+    });
+  }
+
   final _$isFavouriteAtom = Atom(name: '_DishBase.isFavourite');
 
   @override
@@ -120,6 +135,7 @@ name: ${name},
 category: ${category},
 qty: ${qty},
 mealTime: ${mealTime},
+imageFile: ${imageFile},
 isFavourite: ${isFavourite}
     ''';
   }

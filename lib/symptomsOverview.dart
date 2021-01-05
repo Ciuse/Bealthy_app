@@ -31,7 +31,7 @@ class SymptomsOverviewState extends State {
   Widget symptomsWidget() {
     return Column(children: [
       Divider(height: 30),
-      PieChartSample2(),
+      PieChartSample3(),
       SizedBox( // Horizontal ListView
           height: 80,
           child: Observer(builder: (_) =>
@@ -115,10 +115,10 @@ class Indicator extends StatelessWidget {
   }
 }
 
-class PieChartSample2 extends StatefulWidget {
+class PieChartSample3 extends StatefulWidget {
 
 
-  PieChartSample2();
+  PieChartSample3();
 
   @override
   State<StatefulWidget> createState() => PieChart2State();

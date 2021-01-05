@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'Database/enumerators.dart';
+import 'Database/fileImageDish.dart';
 import 'eatenDishPage.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
+import 'package:Bealthy_app/Models/ingredientStore.dart';
 
 class ListDishesOfDay extends StatefulWidget {
   final DateTime day;
@@ -40,11 +42,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   @override
   Widget build(BuildContext context) {
     final mealTimeStore = Provider.of<MealTimeStore>(context);
+    final ingredientStore = Provider.of<IngredientStore>(context);
     return Expanded(
         child: ListView(
           children:<Widget>[
             for( var element in MealTime.values )
-        Observer(builder: (_) => listViewForAMealTime(element, mealTimeStore))
+        Observer(builder: (_) => listViewForAMealTime(element, mealTimeStore,ingredientStore))
           ],
         )
     );
@@ -179,7 +182,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     }
   }
 
-  Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore ){
+  Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore,IngredientStore ingredientStore ){
     return Column(
         children:[
       dynamicListTile(mealTime.index), // per ogni meal time setto un testo e un'icona diversa
@@ -198,8 +201,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
                 child: Card(
                   child: ListTile(
-                    onTap: ()=> {
-                    print(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index]),
+                    onTap: ()  => {
                       Navigator.push(
                       context, MaterialPageRoute(builder: (context) =>
                           EatenDishPage(dish: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index],
@@ -218,11 +220,13 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                           return Text("Image not found");
                         }
                         else {
-                          return Container
+                          return Observer(builder: (_) =>Container
                             (width: 50,
                               height: 50,
                               child: ClipOval(
-                                child: Image.network(remoteString.data, fit: BoxFit.fill),));
+                                child: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill)
+                                    :Image.file(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile)
+                              )));
                         }
                       }
                       else {

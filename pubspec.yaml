@@ -51,7 +51,6 @@ dependencies:
   location_permissions: ^3.0.0+1
   camera: ^0.6.3+2
   oktoast: ^2.3.2
-  app_settings: ^4.0.4
   lit_firebase_auth: ^0.3.0
   font_awesome_flutter: ^8.11.0
   animations: ^1.1.2

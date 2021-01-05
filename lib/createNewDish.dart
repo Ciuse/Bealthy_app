@@ -51,6 +51,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
   IngredientStore ingredientStore;
   List<CameraDescription> cameras;
   int randomNumber=0;
+  Dish dish = new Dish();
 
   @override
   void initState() {
@@ -58,6 +59,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
     initializeCameras();
     Random random = new Random();
     randomNumber = random.nextInt(100);
+    dish.id = "Dish_User_" + randomNumber.toString();
     _keyboardState = _keyboardVisibility.isKeyboardVisible;
     _controller = ScrollController();
 
@@ -71,9 +73,6 @@ class _CreateNewDishState extends State<CreateNewDish> {
         });
       },
     );
-
-    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
-    ingredientStore.createNewDishImage=null;
     categoryList= getCategoryName();
     quantityList= getQuantityName();
     super.initState();
@@ -119,11 +118,9 @@ class _CreateNewDishState extends State<CreateNewDish> {
   void addDishToUser() {
     if (nameCt.text != "" && categoryDishCreated != "" && ingredientsSelectedList.length>0 &&
         ingredientsQuantityList.length==ingredientsSelectedList.length) {
-      Dish dish = new Dish(
-          id: "Dish_User_" + randomNumber.toString(),
-          name: nameCt.text,
-          category: categoryDishCreated
-      );
+      dish.name=nameCt.text;
+      dish.category=categoryDishCreated;
+
       List<Ingredient> ingredients = new List<Ingredient>();
 
       for (int i = 0; i < ingredientsSelectedList.length; i++) {
@@ -137,8 +134,8 @@ class _CreateNewDishState extends State<CreateNewDish> {
       }
 
       context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
-      if(context.read<IngredientStore>().createNewDishImage!=null){
-        uploadImageToFirebase(context.read<IngredientStore>().createNewDishImage);
+      if(dish.imageFile!=null){
+        uploadImageToFirebase(dish.imageFile);
       }
       Navigator.pop(context);
     }
@@ -152,14 +149,13 @@ class _CreateNewDishState extends State<CreateNewDish> {
 
   }
 
-  openCamera() async {
-    ingredientStore.createNewDishImage = await Navigator.push(
+  openCamera() {
+    Navigator.push(
       context,
-      MaterialPageRoute<File>(
-        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dishId: "Dish_User_" + randomNumber.toString(),uploadingOnFirebase: false,),
+      MaterialPageRoute(
+        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dish: dish,uploadingOnFirebase: false,),
       ),
     );
-    print(ingredientStore.createNewDishImage);
   }
 
 
@@ -199,8 +195,8 @@ class _CreateNewDishState extends State<CreateNewDish> {
                               ),
                             ),
                             child: ClipOval(
-                              child: ingredientStore.createNewDishImage==null? null:
-                              Image.file(ingredientStore.createNewDishImage),
+                              child: dish.imageFile==null? null:
+                              Image.file(dish.imageFile),
                             )
                         ),
 

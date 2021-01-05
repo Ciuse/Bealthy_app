@@ -244,7 +244,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   Widget _buildHeaderDay(DateTime day) {
     final children = [
-      _CustomIconButton(
+      CustomIconButtonOur(
         icon: widget.headerScrollStyle.leftChevronIcon,
         onTap: selectPreviousDay,
         margin: widget.headerScrollStyle.leftChevronMargin,
@@ -262,7 +262,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           ),
         ),
       ),
-      _CustomIconButton(
+      CustomIconButtonOur(
         icon: widget.headerScrollStyle.rightChevronIcon,
         onTap: selectNextDay,
         margin: widget.headerScrollStyle.leftChevronMargin,
@@ -284,7 +284,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   Widget _buildHeaderWeek(DateTime firstDay, DateTime lastDay) {
     final children = [
-      _CustomIconButton(
+      CustomIconButtonOur(
         icon: widget.headerScrollStyle.leftChevronIcon,
         onTap: selectPreviousWeek,
         margin: widget.headerScrollStyle.leftChevronMargin,
@@ -302,7 +302,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           ),
         ),
       ),
-      _CustomIconButton(
+      CustomIconButtonOur(
         icon: widget.headerScrollStyle.rightChevronIcon,
         onTap: selectNextWeek,
         margin: widget.headerScrollStyle.leftChevronMargin,
@@ -324,7 +324,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   Widget _buildHeaderMonth(DateTime firstDay, DateTime lastDay) {
     final children = [
-      _CustomIconButton(
+      CustomIconButtonOur(
         icon: widget.headerScrollStyle.leftChevronIcon,
         onTap: selectPreviousMonth,
         margin: widget.headerScrollStyle.leftChevronMargin,
@@ -342,7 +342,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           ),
         ),
       ),
-      _CustomIconButton(
+      CustomIconButtonOur(
         icon: widget.headerScrollStyle.rightChevronIcon,
         onTap: selectNextMonth,
         margin: widget.headerScrollStyle.leftChevronMargin,
@@ -414,14 +414,14 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
 }
 
-class Indicator extends StatelessWidget {
+class Indicator2 extends StatelessWidget {
   final Color color;
   final String text;
   final bool isSquare;
   final double size;
   final Color textColor;
 
-  const Indicator({
+  const Indicator2({
     Key key,
     this.color,
     this.text,
@@ -516,7 +516,7 @@ class PieChart2State extends State {
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
                 for(String symptomId in overviewStore.totalOccurrenceSymptom.keys)
-                  Indicator(
+                  Indicator2(
                     color: symptomStore.colorSymptomsMap[symptomId],
                     text: symptomStore.getSymptomFromList(symptomId).name,
                     isSquare: true,
@@ -558,13 +558,13 @@ class PieChart2State extends State {
 
 
 
-class _CustomIconButton extends StatelessWidget {
+class CustomIconButtonOur extends StatelessWidget {
   final Icon icon;
   final VoidCallback onTap;
   final EdgeInsets margin;
   final EdgeInsets padding;
 
-  const _CustomIconButton({
+  const CustomIconButtonOur({
     Key key,
     @required this.icon,
     @required this.onTap,

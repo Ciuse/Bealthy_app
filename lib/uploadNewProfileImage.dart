@@ -5,10 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:app_settings/app_settings.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
-
-
 
 
 class UploadNewProfileImage extends StatefulWidget {
@@ -46,7 +43,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
       pickImageFromGallery();
     }else{
       showToast("Bealthy needs to access your Gallery, please provide permission", position: ToastPosition.bottom);
-      openAppSettings();
+      openAppSettings2();
     }
 
   }
@@ -63,13 +60,13 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
       pickImageWithCamera();
     }else{
       showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
-      openAppSettings();
+      openAppSettings2();
     }
 
   }
 
 
-  openAppSettings(){
+  openAppSettings2(){
     return showDialog(
         context: context,
         builder: (_) =>  new AlertDialog(
@@ -79,7 +76,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
             FlatButton(
               child: Text('Settings'),
               onPressed: () {
-                AppSettings.openAppSettings();
+                openAppSettings();
               },
             ),
             FlatButton(
@@ -133,7 +130,8 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
   @override
   Widget build(BuildContext context) {
     print("open uploading page");
-    return Scaffold(
+    return OKToast(
+        child:Scaffold(
       appBar: AppBar(
         title: Text("Upload new picture"),
       ),
@@ -206,7 +204,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
           ),
         ],
       ),
-    );
+    ));
   }
   Widget uploadImageButton(BuildContext context) {
     return Container(

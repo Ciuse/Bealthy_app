@@ -5,16 +5,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:app_settings/app_settings.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
-
+import 'Database/dish.dart';
+import 'package:Bealthy_app/Models/mealTimeStore.dart';
+import 'package:provider/provider.dart';
 
 
 class UploadNewPictureToUserDish extends StatefulWidget {
   final CameraDescription camera;
-  final String dishId;
+  final Dish dish;
   final bool uploadingOnFirebase;
-  UploadNewPictureToUserDish({@required this.camera,@required this.dishId,@required this.uploadingOnFirebase});
+  UploadNewPictureToUserDish({@required this.camera,@required this.dish,@required this.uploadingOnFirebase});
 
   @override
   _UploadNewPictureToUserDishState createState() =>
@@ -26,11 +27,11 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
   final Color yellow = Color(0xfffbc31b);
   final Color orange = Color(0xfffb6900);
   final picker = ImagePicker();
-
+  MealTimeStore mealTimeStore;
 
   void initState() {
     super.initState();
-
+    mealTimeStore = Provider.of<MealTimeStore>(context, listen: false);
   }
 
 
@@ -47,7 +48,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
       pickImageFromGallery();
     }else{
       showToast("Bealthy needs to access your Gallery, please provide permission", position: ToastPosition.bottom);
-      openAppSettings();
+      openAppSettings2();
     }
 
   }
@@ -64,13 +65,13 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
       pickImageWithCamera();
     }else{
       showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
-      openAppSettings();
+      openAppSettings2();
     }
 
   }
 
 
-  openAppSettings(){
+  openAppSettings2(){
     return showDialog(
         context: context,
         builder: (_) =>  new AlertDialog(
@@ -80,7 +81,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
             FlatButton(
               child: Text('Settings'),
               onPressed: () {
-                AppSettings.openAppSettings();
+                openAppSettings();
               },
             ),
             FlatButton(
@@ -98,6 +99,8 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
     if(pickedFile!=null){
       setState(() {
         _imageFile = File(pickedFile.path);
+        widget.dish.imageFile = _imageFile;
+        mealTimeStore.changeImageToAllSameDishes(widget.dish);
       });
     }
   }
@@ -107,6 +110,8 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
     if(pickedFile!=null){
       setState(() {
         _imageFile = File(pickedFile.path);
+        widget.dish.imageFile = _imageFile;
+        mealTimeStore.changeImageToAllSameDishes(widget.dish);
       });
     }}
 
@@ -120,16 +125,12 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
         empty: () => Text('Not signed in'),
         initializing: () => Text('Loading'),
       );
-      String fileName = widget.dishId+".jpg";
+      String fileName = widget.dish.id+".jpg";
       var firebaseStorageRef = FirebaseStorage.instance.ref().child(userUid+'/DishImage/$fileName');
-      var uploadTask = firebaseStorageRef.putFile(_imageFile);
-      await uploadTask.whenComplete(() async{
-        await firebaseStorageRef.getDownloadURL().then(
-              (value) => Navigator.pop(context,_imageFile),
-        );
-      });
+      firebaseStorageRef.putFile(_imageFile);
+      Navigator.pop(context);
     }else{
-      Navigator.pop(context,_imageFile);
+      Navigator.pop(context);
     }
 
   }
@@ -141,7 +142,8 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
   @override
   Widget build(BuildContext context) {
     print("open uploading page");
-    return Scaffold(
+    return OKToast(
+        child:Scaffold(
       appBar: AppBar(
         title: Text("Upload new picture"),
       ),
@@ -214,7 +216,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
           ),
         ],
       ),
-    );
+    ));
   }
   Widget uploadImageButton(BuildContext context) {
     return Container(

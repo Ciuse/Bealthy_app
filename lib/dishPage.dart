@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
@@ -14,7 +13,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'Database/dish.dart';
 import 'Models/foodStore.dart';
 import 'package:camera/camera.dart';
-import 'package:app_settings/app_settings.dart';
 import 'uploadNewPictureToUserDish.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
@@ -41,7 +39,6 @@ class _DishPageState extends State<DishPage>{
     initializeCameras();
     quantityList= getQuantityName();
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
-    ingredientStore.rebuiltDishImage=null;
     ingredientStore.ingredientListOfDish.clear();
     if(widget.createdByUser){
       ingredientStore.getIngredientsFromUserDish(widget.dish);
@@ -120,17 +117,17 @@ class _DishPageState extends State<DishPage>{
         openCamera();
       }else{
         showToast("Camera needs to access your Storage, please provide permission", position: ToastPosition.bottom);
-        openAppSettings();
+        openAppSettings2();
       }
     }else{
       showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
-      openAppSettings();
+      openAppSettings2();
     }
 
 
   }
 
-  openAppSettings(){
+  openAppSettings2(){
     return showDialog(
         context: context,
         builder: (_) =>  new AlertDialog(
@@ -140,7 +137,7 @@ class _DishPageState extends State<DishPage>{
             FlatButton(
               child: Text('Settings'),
               onPressed: () {
-                AppSettings.openAppSettings();
+                openAppSettings();
               },
             ),
             FlatButton(
@@ -153,14 +150,13 @@ class _DishPageState extends State<DishPage>{
         ));
   }
 
-  openCamera() async {
-    ingredientStore.rebuiltDishImage = await Navigator.push(
+  openCamera() {
+    Navigator.push(
       context,
-      MaterialPageRoute<File>(
-        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dishId: widget.dish.id,uploadingOnFirebase: true,),
+      MaterialPageRoute(
+        builder: (context) => UploadNewPictureToUserDish(camera: cameras.first,dish: widget.dish,uploadingOnFirebase: true,),
       ),
     );
-    print(ingredientStore.rebuiltDishImage);
   }
 
   @override
@@ -170,8 +166,7 @@ class _DishPageState extends State<DishPage>{
     IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
     DateStore dateStore = Provider.of<DateStore>(context);
     foodStore.isFoodFavourite(widget.dish);
-    return   OKToast(
-        child:Scaffold(
+    return   Scaffold(
       appBar: AppBar(
         title: Text(widget.dish.name),
         actions: <Widget>[
@@ -194,49 +189,97 @@ class _DishPageState extends State<DishPage>{
       body: Column(
     children: [
       Container(
-          padding: EdgeInsets.all(10.0),
-          child: FutureBuilder (
-              future: findIfLocal(),
-              builder: (context,  AsyncSnapshot localData) {
-                if(localData.connectionState != ConnectionState.waiting ) {
-                  if (localData.hasError) {
-                    return FutureBuilder(
-                        future: getImage(),
-                        builder: (context, remoteString) {
-                          if (remoteString.connectionState != ConnectionState.waiting) {
-                            if (remoteString.hasError) {
-                              return Text("Image not found");
-                            }
-                            else {
-                              return Container
-                                (width: 150,
-                                  height: 150,
-                                  child: ClipOval(
-                                    child: Image.network(remoteString.data, fit: BoxFit.fill),));
-                            }
-                          }
-                          else {
-                            return CircularProgressIndicator();
-                          }
-                        }
-                    );
-                  }
-                  else {
-                    return Container(
-                        width: 200,
-                        height: 200,
-                        child:  ClipOval(
-                            child: Image(
-                              image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
+        padding: EdgeInsets.all(10.0),
+        child: widget.createdByUser? FutureBuilder(
+            future: getImage(),
+            builder: (context, remoteString) {
+              if (remoteString.connectionState != ConnectionState.waiting) {
+                if (remoteString.hasError) {
+                  return Observer(builder: (_) =>Container(
+                      alignment: Alignment.center ,
+                      child: Stack(
+                          children: [
+                            Container
+                              (width: 150,
+                                height: 150,
+                                decoration: new BoxDecoration(
+                                  borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                  border: new Border.all(
+                                    color: Colors.black,
+                                    width: 4.0,
+                                  ),
+                                ),
+                                child: ClipOval(
+                                  child: widget.dish.imageFile==null? null:
+                                  Image.file(widget.dish.imageFile),)),
+
+                            Stack(
+                                children:  <Widget>[
+                                  Container(
+                                      margin: const EdgeInsets.only(left: 125,top:125),
+                                      child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                        color: Colors.black,)),]
+
                             )
-                        ));
-                  }
-                } else{
-                  return CircularProgressIndicator();
+                          ])
+
+                  ));
+                }
+                else {
+                  return Observer(builder: (_) =>Container(
+                      alignment: Alignment.center ,
+                      child: Stack(
+                          children: [
+                            Container
+                              (width: 150,
+                                height: 150,
+                                child: ClipOval(
+                                  child: widget.dish.imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill):
+                                  Image.file(widget.dish.imageFile),)),
+
+                            Stack(
+                                children:  <Widget>[
+                                  Container(
+                                      margin: const EdgeInsets.only(left: 125,top:125),
+                                      child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                        color: Colors.black,)),]
+
+                            )
+                          ])
+
+                  ));
                 }
               }
-          )
-    ),
+              else {
+                return CircularProgressIndicator();
+              }
+            }
+        )
+            :
+        FutureBuilder (
+            future: findIfLocal(),
+            builder: (context,  AsyncSnapshot localData) {
+              if(localData.connectionState != ConnectionState.waiting ) {
+                if (localData.hasError) {
+                  return Text("Image not found");
+                }
+                else {
+                  return Container(
+                      width: 200,
+                      height: 200,
+                      child:  ClipOval(
+                          child: Image(
+                            image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
+                          )
+                      ));
+                }
+              } else{
+                return CircularProgressIndicator();
+              }
+            }
+        ),
+
+      ),
 
       Expanded(
           child:
@@ -323,7 +366,7 @@ class _DishPageState extends State<DishPage>{
           backgroundColor:  Colors.green
       ),
 
-    ));
+    );
   }
 }
 
