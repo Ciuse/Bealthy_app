@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import 'Login/config/palette.dart';
+
 
 
 class SymptomsBar extends StatefulWidget {
@@ -34,69 +36,92 @@ class _SymptomsBarState extends State<SymptomsBar>{
   Widget build(BuildContext context) {
     final symptomStore = Provider.of<SymptomStore>(context);
 
-    return SizedBox( // Horizontal ListView
-      height: 80,
-      child:  Observer(builder: (_) => ListView(
-          scrollDirection: Axis.horizontal,
-          children:[
-            Container(
-                width: 70,
-                alignment: Alignment.center,
-                color: Colors.transparent,
-                child:  RawMaterialButton(
-                  onPressed: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AllSymptomsPage())).then((value) =>
-                    {})
-                  },
-                  elevation: 5.0,
-                  fillColor: Colors.white,
-                  child: Icon(
-                    Icons.apps_rounded,
-                    size: 28.0,
-                  ),
-                  padding: EdgeInsets.all(15.0),
-                  shape: CircleBorder(),
+    return
+      Container(
+        padding: EdgeInsets.all(0),
+          color: Colors.white,
+          child:Column(
 
-                )),
-            ListView.builder(
-              itemCount: symptomStore.symptomList.length,
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Observer(builder: (_) => Container(
-                    width: 70,
-                    alignment: Alignment.center,
-                    color: Colors.transparent,
-                    child:  RawMaterialButton(
-                      onPressed: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomList[index])
+            children: [
+              Divider(
+                height: 2.5,
+                thickness: 0.5,
+                color: Colors.black87,
+              ),
+              Text("Symptoms",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                  color: Colors.white,
+                  child: SizedBox(// Horizontal ListView
+                    height: 70,
+                    child:  Observer(builder: (_) => ListView(
+                        scrollDirection: Axis.horizontal,
+                        children:[
+                          Container(
+                              width: 70,
+                              alignment: Alignment.center,
+                              color: Colors.transparent,
+                              child:  RawMaterialButton(
+                                onPressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => AllSymptomsPage())).then((value) =>
+                                  {})
+                                },
+                                elevation: 5.0,
+                                fillColor: Colors.white,
+                                child: Icon(
+                                  Icons.apps_rounded,
+                                  size: 24.0,
+                                ),
+                                padding: EdgeInsets.all(15.0),
+                                shape: CircleBorder(),
+
+                              )),
+                          ListView.builder(
+                            itemCount: symptomStore.symptomList.length,
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Observer(builder: (_) => Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 4),
+                                  width: 70,
+                                  alignment: Alignment.center,
+                                  color: Colors.transparent,
+                                  child:  RawMaterialButton(
+                                    onPressed: () => {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomList[index])
+                                          )
+                                      )//todo inserire qui il salvataggio
+                                    },
+                                    elevation: 5.0,
+                                    fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.teal : Colors.white,
+                                    child: ImageIcon(
+                                      AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
+                                      color: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.black87 : null,
+                                      size: 24.0,
+                                    ),
+                                    padding: EdgeInsets.all(15.0),
+                                    shape: CircleBorder(),
+
+                                  )),
+                              );
+                            },
                           )
-                        )//todo inserire qui il salvataggio
-                      },
-                      elevation: 5.0,
-                      fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.blue : Colors.white,
-                      child: ImageIcon(
-                        AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
-                        color: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.pinkAccent : null,
-                        size: 28.0,
-                      ),
-                      padding: EdgeInsets.all(15.0),
-                      shape: CircleBorder(),
-
-                    )),
-                  );
-                },
-              )
-      ]
-      )
-      ),
-
-    );
+                        ]
+                    )
+                    ),
+                  )),
+              Divider(
+                height: 2.5,
+                thickness: 0.5,
+                color: Colors.black87,
+              ),
+            ],
+          ));
   }
 }
 
