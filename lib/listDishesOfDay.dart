@@ -43,13 +43,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   Widget build(BuildContext context) {
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     final ingredientStore = Provider.of<IngredientStore>(context);
-    return Expanded(
-        child: ListView(
+    return Column(
           children:<Widget>[
             for( var element in MealTime.values )
         Observer(builder: (_) => listViewForAMealTime(element, mealTimeStore,ingredientStore))
           ],
-        )
+
     );
 
 
@@ -60,7 +59,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     switch(index) {
       case 0: {
         return  ListTile(
-          title: Text(MealTime.Breakfast.toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
+          title: Text(MealTime.Breakfast.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
           leading: Icon(Icons.breakfast_dining),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
@@ -83,7 +82,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
       case 1: {
         return ListTile(
-          title: Text(MealTime.Lunch.toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
+          title: Text(MealTime.Lunch.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
           leading: Icon(Icons.lunch_dining),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
@@ -99,13 +98,14 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                     );
                   },
                 ),
+
               ]),
         );
       }
       break;
       case 2: {
         return ListTile(
-          title: Text(MealTime.Snack.toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
+          title: Text(MealTime.Snack.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
           leading: Icon(Icons.fastfood_rounded),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
@@ -127,7 +127,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       break;
       case 3: {
         return ListTile(
-          title: Text(MealTime.Dinner.toString().split('.').last,style: TextStyle(fontSize:18,fontStyle: FontStyle.italic)),
+          title: Text(MealTime.Dinner.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
           leading: Icon(Icons.dinner_dining),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
@@ -198,7 +198,6 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                 color: Colors.red,
                 child: Icon(Icons.delete, color: Colors.white),
               ),
-
                 child: Card(
                   child: ListTile(
                     onTap: ()  => {
@@ -209,8 +208,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                     ),
                     )
                     },
-                    title: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name,style: TextStyle(fontSize: 22.0)),
-                    subtitle: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].category,style: TextStyle(fontSize: 18.0)),
+                    title: Text(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name,style: TextStyle(fontSize: 18.0)),
                     leading: mealTimeStore.isSubstring("User", mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id)?
                     FutureBuilder(
                         future: getImage(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id),

@@ -1,14 +1,16 @@
+import 'dart:math' as math;
+
+import 'package:Bealthy_app/Database/scrollControllerStore.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
-import 'package:move_to_background/move_to_background.dart';
-
-import 'symptomsBar.dart';
-import 'calendar.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'addMeal.dart';
-import 'listDishesOfDay.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
+import 'addMeal.dart';
+import 'calendar.dart';
+import 'listDishesOfDay.dart';
+import 'symptomsBar.dart';
 
 class HomePageWidget extends StatefulWidget {
   final Color color;
@@ -19,6 +21,32 @@ class HomePageWidget extends StatefulWidget {
 }
 class _HomePageWidgetState extends State<HomePageWidget>{
 
+  ScrollControllerStore scrollControllerStore;
+
+  @override
+  void dispose() {
+    scrollControllerStore.scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    scrollControllerStore = new ScrollControllerStore();
+    scrollControllerStore.scrollController.addListener(() {
+      if (scrollControllerStore.scrollController.hasClients) {
+        scrollControllerStore.scale = scrollControllerStore.scrollController.offset / 300;
+        scrollControllerStore.scale = scrollControllerStore.scale * 2;
+        if (scrollControllerStore.scale > 1) {
+          scrollControllerStore.scale = 1.0;
+        }
+      } else {
+        scrollControllerStore.scale = 0.0;
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final mealTimeStore = Provider.of<MealTimeStore>(context);
@@ -26,29 +54,54 @@ class _HomePageWidgetState extends State<HomePageWidget>{
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bealthy'),
+        actions: <Widget>[
+          new Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Observer(builder: (_) => _buildActions()),
+          ),
+        ],
       ),
-      body: Column(children: [
-        CalendarHomePage(),
-        Divider(
-          height: 2.5,
-          thickness: 2.5,
-          color: Colors.black87,
-        ),
-        SymptomsBar(day: dateModel.calendarSelectedDate),
-        Divider(
-          height: 2.5,
-          thickness: 2.5,
-          color: Colors.black87,
-        ),
-        ListDishesOfDay(day: dateModel.calendarSelectedDate),
+      body:
 
-      ]),
+      CustomScrollView(
+        controller: scrollControllerStore.scrollController,
+          slivers: <Widget>[
+            SliverAppBar(
+              iconTheme: IconThemeData(
+                color: Colors.black,
+              ),
+              backgroundColor: Colors.white,
+              expandedHeight: 260,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.pin,
+                stretchModes: [StretchMode.blurBackground],
+                background: CalendarHomePage(),
+
+              ),
+            ),
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _SliverAppBarDelegate(
+                minHeight: 107.0,
+                maxHeight: 107.0,
+                child: SymptomsBar(day: dateModel.calendarSelectedDate),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                ListDishesOfDay(day: dateModel.calendarSelectedDate),
+              ]),
+            )
+          ],
+        ),
+
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
-            context: context,
-            barrierColor: Colors.white10.withOpacity(0.85), // background color
-            barrierDismissible: false, // should dialog be dismissed when tapped outside
+              context: context,
+              barrierColor: Colors.white10.withOpacity(0.85), // background color
+              barrierDismissible: false, // should dialog be dismissed when tapped outside
               builder: (_) =>  new AlertDialog(
                   content:GestureDetector(
                       behavior: HitTestBehavior.opaque,
@@ -209,7 +262,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
                       )
 
                   )
-                      )
+              )
 
           );
           // Add your onPressed code here!
@@ -218,7 +271,57 @@ class _HomePageWidgetState extends State<HomePageWidget>{
         child: Icon(Icons.add, color:Colors.white),
         backgroundColor: widget.color,
       ),
+      );
+    }
+
+  Widget _buildActions() {
+    Widget profile = new GestureDetector(
+      child: new Container(
+        height: 45.0,
+        width: 45.0,
+        child:IconButton(
+          onPressed: () => scrollControllerStore.scrollController.animateTo(0.0, duration:new Duration(milliseconds: 700), curve: Curves.easeInQuad),
+          icon: Icon(Icons.calendar_today_outlined),)
+      ),
     );
+
+
+
+    if(   scrollControllerStore.scale <0.5){
+      return Container();
+    }
+    else{
+      return new Transform(
+
+        transform: new Matrix4.identity()..scale(scrollControllerStore.scale, scrollControllerStore.scale),
+        alignment: Alignment.center,
+        child: profile,
+      );
+    }
+
   }
 
+}
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    @required this.minHeight,
+    @required this.maxHeight,
+    @required this.child,
+  });  final double minHeight;
+  final double maxHeight;
+  final Widget child;  @override
+  double get minExtent => minHeight;  @override
+  double get maxExtent => math.max(maxHeight, minHeight);  @override
+  Widget build(
+      BuildContext context,
+      double shrinkOffset,
+      bool overlapsContent)
+  {
+    return new SizedBox.expand(child: child);
+  }  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
+  }
 }
