@@ -5,7 +5,6 @@ import 'package:Bealthy_app/symptomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-
 import 'Login/config/palette.dart';
 
 
@@ -39,7 +38,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
     return
       Container(
         padding: EdgeInsets.all(0),
-          color: Colors.white,
+          color: Palette.tealDoubleMoreLight,
           child:Column(
 
             children: [
@@ -48,10 +47,13 @@ class _SymptomsBarState extends State<SymptomsBar>{
                 thickness: 0.5,
                 color: Colors.black87,
               ),
-              Text("Symptoms",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+              ListTile(
+                title: Text("Symptoms",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+                leading: Icon(Icons.sick,color: Colors.black),
+              ),
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  color: Colors.white,
+                  color: Palette.tealDoubleMoreLight,
                   child: SizedBox(// Horizontal ListView
                     height: 70,
                     child:  Observer(builder: (_) => ListView(
@@ -98,7 +100,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                       )//todo inserire qui il salvataggio
                                     },
                                     elevation: 5.0,
-                                    fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.teal : Colors.white,
+                                    fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.tealDark : Colors.white,
                                     child: ImageIcon(
                                       AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
                                       color: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.black87 : null,

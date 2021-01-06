@@ -15,6 +15,7 @@ import 'Models/foodStore.dart';
 import 'package:camera/camera.dart';
 import 'uploadNewPictureToUserDish.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
+import 'Login/config/palette.dart';
 
 
 
@@ -130,7 +131,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                     return showDialog(
                       context: context,
                       builder: (_) =>  new AlertDialog(
-                          title: Center(child: Text("Modify the quantity of ${widget.dish.name}")),
+                          title: Center(child: Text("Modify the quantity of ${widget.dish.name}",style: TextStyle(fontWeight: FontWeight.bold,),)),
                           content: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,8 +141,8 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                   "Indicate the quantity eaten! ",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: Colors.red,
-
+                                    color: Palette.tealDark,
+                                      fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               )
@@ -162,9 +163,9 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                   decoration: const BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: <Color>[
-                                        Color(0xFF0D47A1),
-                                        Color(0xFF1976D2),
-                                        Color(0xFF42A5F5),
+                                        Palette.tealDark,
+                                        Palette.tealLight,
+                                        Palette.tealMoreLight,
                                       ],
                                     ),
                                   ),
@@ -192,9 +193,12 @@ class _EatenDishPageState extends State<EatenDishPage>{
               ))
             ],
           ),
-          body: Column(
+          body: Container(
+              color: Palette.tealThreeMoreLight,
+              child:Column(
               children: [
                 Container(
+                  color: Palette.tealThreeMoreLight,
                     padding: EdgeInsets.all(10.0),
                     child: widget.createdByUser? FutureBuilder(
                                   future: getImage(),
@@ -309,6 +313,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                         itemCount: ingredientStore.ingredientListOfDish.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
+                            margin: EdgeInsets.all(10.0),
                             child: ListTile(
                               title: Text(ingredientStore.ingredientListOfDish[index].name),
                               subtitle: Text(ingredientStore.ingredientListOfDish[index].qty),
@@ -328,7 +333,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
 
               ]
 
-          ),
+          )),
 
           floatingActionButton: FloatingActionButton(
               onPressed: () {

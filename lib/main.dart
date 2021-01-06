@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
             accentColor: Palette.darkOrange,
             appBarTheme: const AppBarTheme(
               brightness: Brightness.dark,
-              color: Palette.teal,
+              color: Palette.tealDark,
             ),
           buttonBarTheme: ButtonBarThemeData(
             alignment: MainAxisAlignment.spaceEvenly,

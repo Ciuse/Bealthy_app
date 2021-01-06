@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-
+import 'Login/config/palette.dart';
 import 'package:Bealthy_app/Database/scrollControllerStore.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
@@ -61,8 +61,9 @@ class _HomePageWidgetState extends State<HomePageWidget>{
           ),
         ],
       ),
-      body:
-
+      body: Container(
+        color: Palette.tealThreeMoreLight,
+          child:
       CustomScrollView(
         controller: scrollControllerStore.scrollController,
           slivers: <Widget>[
@@ -82,8 +83,8 @@ class _HomePageWidgetState extends State<HomePageWidget>{
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
-                minHeight: 107.0,
-                maxHeight: 107.0,
+                minHeight: 133.0,
+                maxHeight: 133.0,
                 child: SymptomsBar(day: dateModel.calendarSelectedDate),
               ),
             ),
@@ -93,7 +94,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
               ]),
             )
           ],
-        ),
+        )),
 
 
       floatingActionButton: FloatingActionButton(
@@ -269,7 +270,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
 
         },
         child: Icon(Icons.add, color:Colors.white),
-        backgroundColor: widget.color,
+        backgroundColor: Palette.tealDark,
       ),
       );
     }

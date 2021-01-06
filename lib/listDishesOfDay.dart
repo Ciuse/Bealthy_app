@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'Database/enumerators.dart';
-import 'Database/fileImageDish.dart';
+import 'Login/config/palette.dart';
 import 'eatenDishPage.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
@@ -43,13 +43,15 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   Widget build(BuildContext context) {
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     final ingredientStore = Provider.of<IngredientStore>(context);
-    return Column(
+    return Container(
+        color: Palette.tealThreeMoreLight,
+        child:Column(
           children:<Widget>[
             for( var element in MealTime.values )
         Observer(builder: (_) => listViewForAMealTime(element, mealTimeStore,ingredientStore))
           ],
 
-    );
+    ));
 
 
   }
@@ -60,12 +62,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       case 0: {
         return  ListTile(
           title: Text(MealTime.Breakfast.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-          leading: Icon(Icons.breakfast_dining),
+          leading: Icon(Icons.breakfast_dining,color: Colors.black),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Colors.green,size: 30,),
+                  icon: Icon(Icons.add,color: Palette.tealDark,size: 30,),
                   tooltip: 'Add new dish to Breakfast',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -83,12 +85,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       case 1: {
         return ListTile(
           title: Text(MealTime.Lunch.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-          leading: Icon(Icons.lunch_dining),
+          leading: Icon(Icons.lunch_dining,color: Colors.black ),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Colors.green,size: 30,),
+                  icon: Icon(Icons.add,color: Palette.tealDark,size: 30,),
                   tooltip: 'Add new dish to Lunch',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -106,12 +108,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       case 2: {
         return ListTile(
           title: Text(MealTime.Snack.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-          leading: Icon(Icons.fastfood_rounded),
+          leading: Icon(Icons.fastfood_rounded,color: Colors.black),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Colors.green,size: 30,),
+                  icon: Icon(Icons.add,color: Palette.tealDark,size: 30,),
                   tooltip: 'Add new dish to Snack',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -128,12 +130,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       case 3: {
         return ListTile(
           title: Text(MealTime.Dinner.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-          leading: Icon(Icons.dinner_dining),
+          leading: Icon(Icons.dinner_dining,color: Colors.black),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Colors.green,size: 30,),
+                  icon: Icon(Icons.add,color:Palette.tealDark,size: 30,),
                   tooltip: 'Add new dish to Dinner',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -199,6 +201,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                 child: Icon(Icons.delete, color: Colors.white),
               ),
                 child: Card(
+                  margin: EdgeInsets.all(10.0),
                   child: ListTile(
                     onTap: ()  => {
                       Navigator.push(
@@ -219,8 +222,15 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                         }
                         else {
                           return Observer(builder: (_) =>Container
-                            (width: 50,
-                              height: 50,
+                            (width: 25,
+                              height: 25,
+                              decoration: new BoxDecoration(
+                                borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                border: new Border.all(
+                                  color: Colors.black,
+                                  width: 1.0,
+                                ),
+                              ),
                               child: ClipOval(
                                 child: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill)
                                     :Image.file(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile)
@@ -234,9 +244,16 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                 )
 
                      :
-                    Container(
-                        width: 50,
+                    Container
+                      (width: 50,
                         height: 50,
+                        decoration: new BoxDecoration(
+                          borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                          border: new Border.all(
+                            color: Colors.black,
+                            width: 4.0,
+                          ),
+                        ),
                         child:  ClipOval(
                             child: Image(
                               image: AssetImage("images/Dishes/" +mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id+".png" ),

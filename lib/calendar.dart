@@ -4,7 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'Models/dateStore.dart';
 import 'package:provider/provider.dart';
-
+import 'Login/config/palette.dart';
 import 'Models/mealTimeStore.dart';
 
 
@@ -110,6 +110,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   Widget build(BuildContext context) {
     reactToDataChange();
     return Container(
+
       child: new ListView(
 
         shrinkWrap: true,
@@ -174,7 +175,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
               alignment: Alignment.center,
               margin: EdgeInsets.symmetric(vertical: 1,horizontal: 10),
                decoration: new BoxDecoration(
-                   color: Colors.blue[300],
+                   color: Palette.tealLight,
                    shape: BoxShape.circle,
                  ),
               child: Text(
@@ -189,11 +190,11 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
             alignment: Alignment.center,
             margin:  EdgeInsets.symmetric(vertical: 1,horizontal: 10),
             decoration: new BoxDecoration(
-              border: Border.all(color:Colors.blue),
+              border: Border.all(color:Palette.tealDark),
               shape: BoxShape.circle,),
             child: Text(
               '${date.day}',
-              style: TextStyle().copyWith(fontSize: 16.0, color: Colors.blue),
+              style: TextStyle().copyWith(fontSize: 16.0, color: Palette.tealDark),
             ),
           );
         },
@@ -230,7 +231,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         shape: BoxShape.rectangle,
         color: _calendarController.isSelected(date)
             ? Colors.brown[500]
-            : _calendarController.isToday(date) ? Colors.brown[300] : Colors.blue[400],
+            : _calendarController.isToday(date) ? Colors.brown[300] : Palette.tealDark,
       ),
       width: 16.0,
       height: 16.0,
@@ -251,8 +252,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
       Icons.add_circle_outline,
       size: 15.0,
       color: _calendarController.isSelected(date)
-          ? Colors.blue[700]
-          : _calendarController.isToday(date) ? Colors.blue[700] : Colors.grey[900],
+          ? Palette.tealDark
+          : _calendarController.isToday(date) ? Palette.tealDark : Colors.grey[900],
     );
   }
 
