@@ -83,8 +83,8 @@ class _HomePageWidgetState extends State<HomePageWidget>{
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
-                minHeight: 133.0,
-                maxHeight: 133.0,
+                minHeight: 143.0,
+                maxHeight: 143.0,
                 child: SymptomsBar(day: dateModel.calendarSelectedDate),
               ),
             ),
@@ -97,181 +97,181 @@ class _HomePageWidgetState extends State<HomePageWidget>{
         )),
 
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              barrierColor: Colors.white10.withOpacity(0.85), // background color
-              barrierDismissible: false, // should dialog be dismissed when tapped outside
-              builder: (_) =>  new AlertDialog(
-                  content:GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  RawMaterialButton(
-
-                                    onPressed: () {
-                                      mealTimeStore.changeCurrentMealTime(0);
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last)),
-                                      );
-                                    },
-                                    elevation: 2.0,
-                                    fillColor: Colors.white,
-                                    child: Icon(
-                                      Icons.breakfast_dining,
-                                      size: 35.0,
-                                    ),
-                                    padding: EdgeInsets.all(15.0),
-                                    shape: CircleBorder(),
-                                  ),
-                                  Text("Breakfast",style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Open Sans',
-                                    decoration: TextDecoration.none,
-                                    letterSpacing: 1.0,
-                                    wordSpacing: 5.0,
-                                    color: Colors.black,
-                                  ),)
-                                ],
-                              ),
-
-                              Padding(padding: EdgeInsets.all(15)),
-
-                              Column(
-                                children: [
-                                  RawMaterialButton(
-
-                                    onPressed: () {
-                                      mealTimeStore.changeCurrentMealTime(1);
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last,)),
-                                      );
-                                    },
-                                    elevation: 2.0,
-                                    fillColor: Colors.white,
-
-                                    child: Icon(
-                                      Icons.lunch_dining,
-                                      size: 35.0,
-                                    ),
-                                    padding: EdgeInsets.all(15.0),
-                                    shape: CircleBorder(),
-                                  ),
-                                  Text("Lunch",style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Open Sans',
-                                    decoration: TextDecoration.none,
-                                    letterSpacing: 1.0,
-                                    wordSpacing: 5.0,
-                                    color: Colors.black,
-                                  ),)
-                                ],
-                              )],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  RawMaterialButton(
-
-                                    onPressed: () {
-                                      mealTimeStore.changeCurrentMealTime(2);
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last,)),
-                                      );
-                                    },
-                                    elevation: 2.0,
-                                    fillColor: Colors.white,
-                                    child: Icon(
-                                      Icons.fastfood_rounded,
-                                      size: 35.0,
-                                    ),
-                                    padding: EdgeInsets.all(15.0),
-                                    shape: CircleBorder(),
-                                  ),
-                                  Text("Snack",style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Open Sans',
-                                    decoration: TextDecoration.none,
-                                    letterSpacing: 1.0,
-                                    wordSpacing: 5.0,
-                                    color: Colors.black,
-                                  ),)
-                                ],
-                              ),
-
-                              Padding(padding: EdgeInsets.all(15)),
-
-                              Column(
-                                children: [
-                                  RawMaterialButton(
-
-                                    onPressed: () {
-                                      mealTimeStore.changeCurrentMealTime(3);
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last)),
-                                      );
-                                    },
-                                    elevation: 2.0,
-                                    fillColor: Colors.white,
-
-                                    child: Icon(
-                                      Icons.dinner_dining,
-                                      size: 35.0,
-                                    ),
-                                    padding: EdgeInsets.all(15.0),
-                                    shape: CircleBorder(),
-                                  ),
-                                  Text("Dinner",style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.normal,
-                                    fontFamily: 'Open Sans',
-                                    decoration: TextDecoration.none,
-                                    letterSpacing: 1.0,
-                                    wordSpacing: 5.0,
-                                    color: Colors.black,
-                                  ),)
-                                ],
-                              )],
-                          )
-                        ],
-                      )
-
-                  )
-              )
-
-          );
-          // Add your onPressed code here!
-
-        },
-        child: Icon(Icons.add, color:Colors.white),
-        backgroundColor: Palette.tealDark,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     showDialog(
+      //         context: context,
+      //         barrierColor: Colors.white10.withOpacity(0.85), // background color
+      //         barrierDismissible: false, // should dialog be dismissed when tapped outside
+      //         builder: (_) =>  new AlertDialog(
+      //             content:GestureDetector(
+      //                 behavior: HitTestBehavior.opaque,
+      //                 onTap: () {
+      //                   Navigator.pop(context);
+      //                 },
+      //                 child: Column(
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   crossAxisAlignment: CrossAxisAlignment.center,
+      //                   children: [
+      //                     Row(
+      //                       mainAxisAlignment: MainAxisAlignment.center,
+      //                       crossAxisAlignment: CrossAxisAlignment.center,
+      //                       children: [
+      //                         Column(
+      //                           children: [
+      //                             RawMaterialButton(
+      //
+      //                               onPressed: () {
+      //                                 mealTimeStore.changeCurrentMealTime(0);
+      //                                 Navigator.pop(context);
+      //                                 Navigator.push(
+      //                                   context,
+      //                                   MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last)),
+      //                                 );
+      //                               },
+      //                               elevation: 2.0,
+      //                               fillColor: Colors.white,
+      //                               child: Icon(
+      //                                 Icons.breakfast_dining,
+      //                                 size: 35.0,
+      //                               ),
+      //                               padding: EdgeInsets.all(15.0),
+      //                               shape: CircleBorder(),
+      //                             ),
+      //                             Text("Breakfast",style: TextStyle(
+      //                               fontSize: 25,
+      //                               fontWeight: FontWeight.normal,
+      //                               fontFamily: 'Open Sans',
+      //                               decoration: TextDecoration.none,
+      //                               letterSpacing: 1.0,
+      //                               wordSpacing: 5.0,
+      //                               color: Colors.black,
+      //                             ),)
+      //                           ],
+      //                         ),
+      //
+      //                         Padding(padding: EdgeInsets.all(15)),
+      //
+      //                         Column(
+      //                           children: [
+      //                             RawMaterialButton(
+      //
+      //                               onPressed: () {
+      //                                 mealTimeStore.changeCurrentMealTime(1);
+      //                                 Navigator.pop(context);
+      //                                 Navigator.push(
+      //                                   context,
+      //                                   MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last,)),
+      //                                 );
+      //                               },
+      //                               elevation: 2.0,
+      //                               fillColor: Colors.white,
+      //
+      //                               child: Icon(
+      //                                 Icons.lunch_dining,
+      //                                 size: 35.0,
+      //                               ),
+      //                               padding: EdgeInsets.all(15.0),
+      //                               shape: CircleBorder(),
+      //                             ),
+      //                             Text("Lunch",style: TextStyle(
+      //                               fontSize: 25,
+      //                               fontWeight: FontWeight.normal,
+      //                               fontFamily: 'Open Sans',
+      //                               decoration: TextDecoration.none,
+      //                               letterSpacing: 1.0,
+      //                               wordSpacing: 5.0,
+      //                               color: Colors.black,
+      //                             ),)
+      //                           ],
+      //                         )],
+      //                     ),
+      //                     Row(
+      //                       mainAxisAlignment: MainAxisAlignment.center,
+      //                       crossAxisAlignment: CrossAxisAlignment.center,
+      //                       children: [
+      //                         Column(
+      //                           children: [
+      //                             RawMaterialButton(
+      //
+      //                               onPressed: () {
+      //                                 mealTimeStore.changeCurrentMealTime(2);
+      //                                 Navigator.pop(context);
+      //                                 Navigator.push(
+      //                                   context,
+      //                                   MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last,)),
+      //                                 );
+      //                               },
+      //                               elevation: 2.0,
+      //                               fillColor: Colors.white,
+      //                               child: Icon(
+      //                                 Icons.fastfood_rounded,
+      //                                 size: 35.0,
+      //                               ),
+      //                               padding: EdgeInsets.all(15.0),
+      //                               shape: CircleBorder(),
+      //                             ),
+      //                             Text("Snack",style: TextStyle(
+      //                               fontSize: 25,
+      //                               fontWeight: FontWeight.normal,
+      //                               fontFamily: 'Open Sans',
+      //                               decoration: TextDecoration.none,
+      //                               letterSpacing: 1.0,
+      //                               wordSpacing: 5.0,
+      //                               color: Colors.black,
+      //                             ),)
+      //                           ],
+      //                         ),
+      //
+      //                         Padding(padding: EdgeInsets.all(15)),
+      //
+      //                         Column(
+      //                           children: [
+      //                             RawMaterialButton(
+      //
+      //                               onPressed: () {
+      //                                 mealTimeStore.changeCurrentMealTime(3);
+      //                                 Navigator.pop(context);
+      //                                 Navigator.push(
+      //                                   context,
+      //                                   MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last)),
+      //                                 );
+      //                               },
+      //                               elevation: 2.0,
+      //                               fillColor: Colors.white,
+      //
+      //                               child: Icon(
+      //                                 Icons.dinner_dining,
+      //                                 size: 35.0,
+      //                               ),
+      //                               padding: EdgeInsets.all(15.0),
+      //                               shape: CircleBorder(),
+      //                             ),
+      //                             Text("Dinner",style: TextStyle(
+      //                               fontSize: 25,
+      //                               fontWeight: FontWeight.normal,
+      //                               fontFamily: 'Open Sans',
+      //                               decoration: TextDecoration.none,
+      //                               letterSpacing: 1.0,
+      //                               wordSpacing: 5.0,
+      //                               color: Colors.black,
+      //                             ),)
+      //                           ],
+      //                         )],
+      //                     )
+      //                   ],
+      //                 )
+      //
+      //             )
+      //         )
+      //
+      //     );
+      //     // Add your onPressed code here!
+      //
+      //   },
+      //   child: Icon(Icons.add, color:Colors.white),
+      //   backgroundColor: Palette.tealDark,
+      // ),
       );
     }
 

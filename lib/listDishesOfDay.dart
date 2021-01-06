@@ -48,7 +48,10 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
         child:Column(
           children:<Widget>[
             for( var element in MealTime.values )
-        Observer(builder: (_) => listViewForAMealTime(element, mealTimeStore,ingredientStore))
+        Observer(builder: (_) => listViewForAMealTime(element, mealTimeStore,ingredientStore)),
+            SizedBox(
+              height: 15,
+            )
           ],
 
     ));
@@ -60,7 +63,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     switch(index) {
       case 0: {
-        return  ListTile(
+        return ListTile(
           title: Text(MealTime.Breakfast.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
           leading: Icon(Icons.breakfast_dining,color: Colors.black),
           trailing: Row (
@@ -185,7 +188,26 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   }
 
   Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore,IngredientStore ingredientStore ){
-    return Column(
+    return  Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
+        width:double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20), //border corner radius
+          boxShadow:[
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.6), //color of shadow
+              spreadRadius: 4, //spread radius
+              blurRadius: 6, // blur radius
+              offset: Offset(0, 4), // changes position of shadow
+              //first paramerter of offset is left-right
+              //second parameter is top to down
+            ),
+            //you can set more BoxShadow() here
+          ],
+        ),
+    child: Column(
         children:[
       dynamicListTile(mealTime.index), // per ogni meal time setto un testo e un'icona diversa
       ListView.builder(
@@ -196,13 +218,25 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
             return Dismissible(
               key: Key(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name),
               background: Container(
+                margin:  EdgeInsets.symmetric(horizontal: 10 ),
+                padding: EdgeInsets.symmetric(horizontal: 10 ),
+                decoration: BoxDecoration(
+                  color: Color(0xffb30000),
+                  borderRadius: BorderRadius.circular(20),),
                 alignment: AlignmentDirectional.centerEnd,
-                color: Colors.red,
                 child: Icon(Icons.delete, color: Colors.white),
               ),
                 child: Card(
-                  margin: EdgeInsets.all(10.0),
+                  shape:  RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  margin: EdgeInsets.only(left: 10,right: 10, bottom: 12),
                   child: ListTile(
+                      shape:  RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.black, width: 1),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ) ,
                     onTap: ()  => {
                       Navigator.push(
                       context, MaterialPageRoute(builder: (context) =>
@@ -222,8 +256,8 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                         }
                         else {
                           return Observer(builder: (_) =>Container
-                            (width: 25,
-                              height: 25,
+                            (width: 45,
+                              height: 45,
                               decoration: new BoxDecoration(
                                 borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                 border: new Border.all(
@@ -245,13 +279,13 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
                      :
                     Container
-                      (width: 50,
-                        height: 50,
+                      (width: 45,
+                        height: 45,
                         decoration: new BoxDecoration(
                           borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                           border: new Border.all(
                             color: Colors.black,
-                            width: 4.0,
+                            width: 1.0,
                           ),
                         ),
                         child:  ClipOval(
@@ -343,12 +377,8 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
           }
 
       ),
-      Divider(
-        height: 2.5,
-        thickness: 2.5,
-        color: Colors.black87,
-      )
-    ]);
+
+    ]));
 
   }
 

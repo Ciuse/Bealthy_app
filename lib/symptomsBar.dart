@@ -37,9 +37,24 @@ class _SymptomsBarState extends State<SymptomsBar>{
 
     return
       Container(
-        padding: EdgeInsets.all(0),
-          color: Palette.tealDoubleMoreLight,
-          child:Column(
+        alignment: Alignment.center,
+        width:double.infinity,
+        decoration: BoxDecoration(
+          color: Palette.tealThreeMoreLight,
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15)), //border corner radius
+          boxShadow:[
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.8), //color of shadow
+              spreadRadius: 3, //spread radius
+              blurRadius: 3, // blur radius
+              offset: Offset(0, 4), // changes position of shadow
+              //first paramerter of offset is left-right
+              //second parameter is top to down
+            ),
+            //you can set more BoxShadow() here
+          ],
+        ),
+        child:Column(
 
             children: [
               Divider(
@@ -52,8 +67,15 @@ class _SymptomsBarState extends State<SymptomsBar>{
                 leading: Icon(Icons.sick,color: Colors.black),
               ),
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  color: Palette.tealDoubleMoreLight,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 5,right: 5 ),
+                  padding: EdgeInsets.only(left: 6,right: 6 ),
+                  width:double.infinity,
+                  decoration: BoxDecoration(
+                    color: Palette.tealDoubleMoreLight,
+                    borderRadius: BorderRadius.all(Radius.circular(15)), //border corner radius
+                    border: Border.all(color: Palette.tealDark, width: 2)
+                  ),
                   child: SizedBox(// Horizontal ListView
                     height: 70,
                     child:  Observer(builder: (_) => ListView(
@@ -103,7 +125,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                     fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.tealDark : Colors.white,
                                     child: ImageIcon(
                                       AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
-                                      color: symptomStore.symptomList[index].isSymptomSelectDay ? Colors.black87 : null,
+                                      color: symptomStore.symptomList[index].isSymptomSelectDay ? Color(0xfff0ff1f) : null,
                                       size: 24.0,
                                     ),
                                     padding: EdgeInsets.all(15.0),
@@ -117,11 +139,8 @@ class _SymptomsBarState extends State<SymptomsBar>{
                     )
                     ),
                   )),
-              Divider(
-                height: 2.5,
-                thickness: 0.5,
-                color: Colors.black87,
-              ),
+              SizedBox(height: 10)
+
             ],
           ));
   }

@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
             textTheme: GoogleFonts.redHatDisplayTextTheme(),
-            accentColor: Palette.darkOrange,
+            accentColor: Palette.tealDoubleMoreLight,
             appBarTheme: const AppBarTheme(
               brightness: Brightness.dark,
               color: Palette.tealDark,
