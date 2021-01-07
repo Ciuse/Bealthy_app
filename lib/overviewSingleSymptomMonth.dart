@@ -9,7 +9,8 @@ import 'Models/dateStore.dart';
 
 class OverviewSingleSymptomMonth extends StatefulWidget {
   final String symptomId;
-  OverviewSingleSymptomMonth({@required this.symptomId});
+  final OverviewStore overviewStore;
+  OverviewSingleSymptomMonth({@required this.symptomId,@required this.overviewStore});
 
   @override
   _OverviewSingleSymptomMonthState createState() => _OverviewSingleSymptomMonthState();
@@ -19,14 +20,14 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
 
   SymptomStore symptomStore;
   DateStore dateStore;
-  OverviewStore overviewStore;
+
   void initState() {
     super.initState();
-    overviewStore = Provider.of<OverviewStore>(context, listen: false);
+
     dateStore = Provider.of<DateStore>(context, listen: false);
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
     dateStore.rangeDays.forEach((dateTime) {
-      overviewStore.initializeOverviewValuePeriod(dateTime, widget.symptomId);
+      widget.overviewStore.initializeOverviewValuePeriod(dateTime, widget.symptomId);
     });
   }
 
@@ -37,7 +38,7 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
           title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+"\n"+"Overview"),
         ),
         body:Column(
-            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId),
+            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId,overviewStore: widget.overviewStore,),
               Observer(builder: (_) =>Expanded(
                   child: buildIngredientRow() ))
             ]
@@ -52,7 +53,7 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
     ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in overviewStore.totalOccurrenceIngredient.keys )
+          for(var ingredient in widget.overviewStore.totalOccurrenceIngredient.keys )
             Column(children: [ Container(
                 width: 50,
                 height: 50,
@@ -61,16 +62,16 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                       image: AssetImage("images/ingredients/" + ingredient + ".png"),
                     )
                 )),
-              Text(overviewStore.totalOccurrenceIngredient[ingredient].toString())
+              Text(widget.overviewStore.totalOccurrenceIngredient[ingredient].toString())
             ])
 
         ])
-        : overviewStore.dayOccurrenceIngredient.keys.length==0
+        : widget.overviewStore.dayOccurrenceIngredient.keys.length==0
         ? Text("NO INGREDIENT THIS DAY")
         :ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in overviewStore.dayOccurrenceIngredient.keys )
+          for(var ingredient in widget.overviewStore.dayOccurrenceIngredient.keys )
             Column(children: [
               Container(
                   width: 50,
@@ -80,7 +81,7 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                         image: AssetImage("images/ingredients/" + ingredient + ".png"),
                       )
                   )),
-              Text(overviewStore.dayOccurrenceIngredient[ingredient].toString())
+              Text(widget.overviewStore.dayOccurrenceIngredient[ingredient].toString())
             ],
             )
         ]);
@@ -100,7 +101,8 @@ class BarChartSymptom extends StatefulWidget {
     Colors.redAccent,
   ];
   final String symptomId;
-  BarChartSymptom({@required this.symptomId});
+  final OverviewStore overviewStore;
+  BarChartSymptom({@required this.symptomId,@required this.overviewStore});
 
   @override
   BarChartSymptomState createState() => BarChartSymptomState();
@@ -147,7 +149,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                     child: Observer(builder: (_) =>Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: BarChart(
-                        mainBarData(),
+                        mainBarData(widget.overviewStore),
                         swapAnimationDuration: animDuration,
                       ),
                     )),
@@ -197,9 +199,8 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     });
   }
 
-  BarChartData mainBarData() {
+  BarChartData mainBarData(OverviewStore overviewStore) {
     DateStore dateStore = Provider.of<DateStore>(context);
-    OverviewStore overviewStore = Provider.of<OverviewStore>(context);
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
     return BarChartData(
       barTouchData: BarTouchData(

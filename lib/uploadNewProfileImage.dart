@@ -7,6 +7,8 @@ import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
+import 'Login/config/palette.dart';
+
 
 class UploadNewProfileImage extends StatefulWidget {
   final CameraDescription camera;
@@ -144,8 +146,8 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
                     bottomLeft: Radius.circular(50.0),
                     bottomRight: Radius.circular(50.0)),
                 gradient: LinearGradient(
-                    colors: [orange, yellow],
-                    begin: Alignment.topLeft,
+                    colors: [Palette.tealDark, Palette.tealLight,Palette.tealMoreLight,],
+                    begin: Alignment.bottomLeft,
                     end: Alignment.bottomRight)),
           ),
           Container(
@@ -217,7 +219,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
                 top: 30, left: 20.0, right: 20.0, bottom: 20.0),
             decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [yellow, orange],
+                  colors: [Palette.tealDark, Palette.tealLight,Palette.tealMoreLight,],
                 ),
                 borderRadius: BorderRadius.circular(30.0)),
             child: FlatButton(

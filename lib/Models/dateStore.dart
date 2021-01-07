@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:mobx/mobx.dart';
 
 // Include generated file
@@ -21,9 +22,14 @@ abstract class _DateStoreBase with Store {
   @observable
   var rangeDays= new ObservableList<DateTime>();
 
+  @observable
+  TemporalTime timeSelected = TemporalTime.Day;
 
   @observable
   DateTime overviewFirstDate;
+
+  @observable
+  bool calculationPeriodInProgress = false;
 
   @action
   void getDaysOfAWeekOrMonth(DateTime firstDate, DateTime lastDate) {
@@ -98,14 +104,18 @@ abstract class _DateStoreBase with Store {
 
   @action
   void firstDayInWeek() {
+    calculationPeriodInProgress = true;
     overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month, overviewDefaultLastDate.day-6);
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
+
   }
 
   @action
   void firstDayInMonth() {
+    calculationPeriodInProgress = true;
     overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day-31 );
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
+
   }
 }
 

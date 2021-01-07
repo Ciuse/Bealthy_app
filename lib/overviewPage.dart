@@ -2,6 +2,7 @@ import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/headerScrollStyle.dart';
 import 'package:Bealthy_app/ingredientOverview.dart';
 import 'package:Bealthy_app/overviewSingleSymptomMonth.dart';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +34,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   List<String> temporalList = [];
 
 
-
   void initState() {
   temporalList= getTemporalName();
     super.initState();
@@ -41,9 +41,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
     dateStore.overviewDefaultLastDate=DateTime.now();
-
-    overviewStore = Provider.of<OverviewStore>(context, listen: false);
-    overviewStore.timeSelected = TemporalTime.Day;
+    dateStore.timeSelected = TemporalTime.Day;
+    overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
 
 
@@ -74,8 +73,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         appBar: AppBar(
           title: Text("Statistics",),
           actions: <Widget>[
-            PopupMenuButton(
-                onSelected: choiceAction,
+       PopupMenuButton(
+                onSelected:  choiceAction,
                 icon: Icon(Icons.calendar_today),
                 itemBuilder: (BuildContext context)
                 {
@@ -97,39 +96,45 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           controller: _tabController,
         ),
       ),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+        body:
             Observer(builder: (_) =>
-            overviewStore.timeSelected==TemporalTime.Day? _buildHeaderDay(dateStore.overviewDefaultLastDate):
-            overviewStore.timeSelected==TemporalTime.Week? _buildHeaderWeek(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate):
-            overviewStore.timeSelected==TemporalTime.Month? _buildHeaderMonth(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate): null
-            ),
-    Observer(builder: (_) =>  Expanded(child: _buildContent()))
-              //Add this to give height
-          ],
+            dateStore.timeSelected==TemporalTime.Day? dayOverviewBuild():
+            dateStore.timeSelected==TemporalTime.Week? weekOverviewBuild():
+            dateStore.timeSelected==TemporalTime.Month? monthOverviewBuild(): null
+            )
+
       )
-    ));
+    );
   }
 
   void choiceAction(String choice){
     TemporalTime.values.forEach((element) {
         if(element.toString().split('.').last==choice){
-          overviewStore.timeSelected = element;
+          dateStore.timeSelected = element;
         }
       });
     if(choice== TemporalTime.Day.toString().split('.').last){
+      overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
+
       overviewStore.initializeSymptomsMap(dateStore);
     }
     if(choice== TemporalTime.Week.toString().split('.').last){
+
+
       //calcolo il primo giorno della settimana e trovo i giorni del range
-      dateStore.firstDayInWeek();
+      context.read<DateStore>().firstDayInWeek();
+
       //trovo le statistiche di quel range di giorni
+      overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
       overviewStore.initializeSymptomsMap(dateStore);
     }
     if(choice== TemporalTime.Month.toString().split('.').last){
-      //calcolo il primo giorno del mese e trovo i giorni del range
-      dateStore.firstDayInMonth();
+
+
+    //calcolo il primo giorno del mese e trovo i giorni del range
+      context.read<DateStore>().firstDayInMonth();
+
+      overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
       //trovo le statistiche di quel range di giorni
       overviewStore.initializeSymptomsMap(dateStore);
     }
@@ -197,7 +202,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     controller: _tabController,
       children: [
         overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget(),
-        IngredientOverview(),
+        IngredientOverview(overviewStore: overviewStore,),
       ],
     );
   }
@@ -206,20 +211,27 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   }
 
   void selectPreviousDay() {
+    print("current day: ${dateStore.overviewDefaultLastDate}");
     animationStartPos= -1.2;
     context.read<DateStore>().previousDayOverview();
+    print("previous day: ${dateStore.overviewDefaultLastDate}");
+    overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectNextDay() {
+    print("current day: ${dateStore.overviewDefaultLastDate}");
     animationStartPos= 1.2;
     context.read<DateStore>().nextDayOverview();
+    print("next day: ${dateStore.overviewDefaultLastDate}");
+    overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectPreviousWeek() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousWeekOverview();
+    overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
 
   }
@@ -227,20 +239,63 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   void selectNextWeek() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextWeekOverview();
+    overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectPreviousMonth() {
     animationStartPos= -1.2;
     context.read<DateStore>().previousMonthOverview();
+    overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectNextMonth() {
     animationStartPos= 1.2;
     context.read<DateStore>().nextMonthOverview();
+    overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
   }
+
+  Widget dayOverviewBuild(){
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Observer(builder: (_) =>
+         _buildHeaderDay(dateStore.overviewDefaultLastDate)
+        ),
+        Observer(builder: (_) =>  Expanded(child: _buildContent()))
+        //Add this to give height
+      ],
+    );
+  }
+
+  Widget weekOverviewBuild(){
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Observer(builder: (_) =>
+            _buildHeaderWeek(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate)
+        ),
+        Observer(builder: (_) =>  Expanded(child: _buildContent()))
+        //Add this to give height
+      ],
+    );
+  }
+
+  Widget monthOverviewBuild(){
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Observer(builder: (_) =>
+            _buildHeaderMonth(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate)
+        ),
+        Observer(builder: (_) =>  Expanded(child: _buildContent()))
+        //Add this to give height
+      ],
+    );
+  }
+
 
   Widget _buildHeaderDay(DateTime day) {
     final children = [
@@ -366,7 +421,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return Column(
       children: [
       Divider(height: 30),
-      PieChartSample2(),
+      PieChartSample2(overviewStore: overviewStore),
       SizedBox( // Horizontal ListView
           height: 80,
           child: Observer(builder: (_) =>
@@ -387,15 +442,15 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) =>
-                                  overviewStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index)):
-                                  overviewStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index)):
-                                  overviewStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index)): null
+                                  dateStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore,):
+                                  dateStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
+                                  dateStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore): null
                                   ))
                             },
                             elevation: 5.0,
                             fillColor: Colors.white,
                             child: ImageIcon(
-                              AssetImage("images/" +
+                              AssetImage("images/Symptoms/" +
                                   overviewStore.totalOccurrenceSymptom.keys.elementAt(index) + ".png"),
                               size: 28.0,
                             ),
@@ -456,14 +511,15 @@ class Indicator2 extends StatelessWidget {
 
 class PieChartSample2 extends StatefulWidget {
 
+  final OverviewStore overviewStore;
+  PieChartSample2({@required this.overviewStore});
 
-  PieChartSample2();
 
   @override
   State<StatefulWidget> createState() => PieChart2State();
 }
 
-class PieChart2State extends State {
+class PieChart2State extends State<PieChartSample2> {
   int touchedIndex;
 
 
@@ -473,9 +529,7 @@ class PieChart2State extends State {
 
   @override
   Widget build(BuildContext context) {
-
     SymptomStore symptomStore = Provider.of<SymptomStore>(context);
-    OverviewStore overviewStore = Provider.of<OverviewStore>(context);
     return Observer(builder: (_) => AspectRatio(
       aspectRatio: 1.3,
       child: Card(
@@ -505,7 +559,7 @@ class PieChart2State extends State {
                       ),
                       sectionsSpace: 0,
                       centerSpaceRadius: 40,
-                      sections: overviewStore.totalOccurrenceSymptom.length>0 ? showingSections(overviewStore, symptomStore) : 0,
+                      sections: widget.overviewStore.totalOccurrenceSymptom.length>0 ? showingSections(widget.overviewStore, symptomStore) : 0,
                   ),
                 )),
               ),
@@ -515,7 +569,7 @@ class PieChart2State extends State {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                for(String symptomId in overviewStore.totalOccurrenceSymptom.keys)
+                for(String symptomId in widget.overviewStore.totalOccurrenceSymptom.keys)
                   Indicator2(
                     color: symptomStore.colorSymptomsMap[symptomId],
                     text: symptomStore.getSymptomFromList(symptomId).name,

@@ -35,7 +35,6 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     super.initState();
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
-    overviewStore = Provider.of<OverviewStore>(context, listen: false);
     date = dateStore.calendarSelectedDate;
     intensityFromDb = widget.symptom.intensity;
     frequencyFromDb = widget.symptom.frequency;
@@ -174,7 +173,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     if (!widget.symptom.isSymptomSelectDay) {
       if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
           widget.symptom.isPresentAtLeastOneTrue()){
-        symptomStore.updateSymptom(widget.symptom, date).then((value) => overviewStore.initializeSymptomsMap(dateStore));
+        symptomStore.updateSymptom(widget.symptom, date);
         Navigator.pop(context);
       }
     } else {
@@ -182,7 +181,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
           widget.symptom.isPresentAtLeastOneTrue()) {
         if (widget.symptom.frequency != frequencyFromDb ||
             widget.symptom.intensity != intensityFromDb || !areMealTimeBoolListsEqual()) {
-          symptomStore.updateSymptom(widget.symptom, date).then((value) => overviewStore.initializeSymptomsMap(dateStore));
+          symptomStore.updateSymptom(widget.symptom, date);
 
           Navigator.pop(context);
         }
@@ -199,8 +198,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                     child: Text('Remove it!'),
                     onPressed: () {
                       symptomStore.removeSymptomOfSpecificDay( widget.symptom, date)
-                          .then((value) => Navigator.of(context).popUntil((route) => route.isFirst))
-                          .then((value) => overviewStore.initializeSymptomsMap(dateStore));
+                          .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
                     },
                   )
                 ],
