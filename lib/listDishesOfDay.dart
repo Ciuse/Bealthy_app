@@ -310,7 +310,10 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                      return showDialog(
                                        context: context,
                                        builder: (_) =>  new AlertDialog(
-                                           title: Center(child: Text("Modify the quantity of ${mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name} to this day ")),
+                                           title: Center(child: Text("Modify the quantity of ${mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name} to this day ",style: TextStyle(
+                                             color: Colors.black,
+                                             fontWeight: FontWeight.bold,
+                                           ),)),
                                            content: Row(
                                              mainAxisAlignment: MainAxisAlignment.center,
                                              crossAxisAlignment: CrossAxisAlignment.center,
@@ -319,10 +322,10 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                                  child: Text(
                                                    "Indicate the quantity eaten! ",
                                                    textAlign: TextAlign.center,
-                                                   style: TextStyle(
-                                                     color: Colors.red,
-
-                                                   ),
+                                                     style: TextStyle(
+                                                       color: Palette.tealDark,
+                                                       fontWeight: FontWeight.bold,
+                                                     ),
                                                  ),
                                                )
                                              ],
@@ -341,9 +344,9 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                                    decoration: const BoxDecoration(
                                                      gradient: LinearGradient(
                                                        colors: <Color>[
-                                                         Color(0xFF0D47A1),
-                                                         Color(0xFF1976D2),
-                                                         Color(0xFF42A5F5),
+                                                         Palette.tealDark,
+                                                         Palette.tealLight,
+                                                         Palette.tealMoreLight,
                                                        ],
                                                      ),
                                                    ),

@@ -187,9 +187,9 @@ class _DishPageState extends State<DishPage>{
         ],
       ),
       body: Column(
-    children: [
-      Container(
-        padding: EdgeInsets.all(10.0),
+          children: [
+            Container(
+              padding: EdgeInsets.all(10.0),
         child: widget.createdByUser? FutureBuilder(
             future: getImage(),
             builder: (context, remoteString) {
@@ -280,34 +280,28 @@ class _DishPageState extends State<DishPage>{
         ),
 
       ),
-
-      Expanded(
-          child:
-          Observer(builder: (_) =>new ListView.builder
-            (
-              itemCount: ingredientStore.ingredientListOfDish.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  child: ListTile(
-                    title: Text(ingredientStore.ingredientListOfDish[index].name),
-                    subtitle: Text(ingredientStore.ingredientListOfDish[index].qty),
-                    leading: Container(
-                        width: 50,
-                        height: 50,
-                        child:  ClipOval(
-                            child: Image(
-                              image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
-                            )
-                        )),
-
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
+              width:double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20), //border corner radius
+                boxShadow:[
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.6), //color of shadow
+                    spreadRadius: 4, //spread radius
+                    blurRadius: 6, // blur radius
+                    offset: Offset(0, 4), // changes position of shadow
+                    //first paramerter of offset is left-right
+                    //second parameter is top to down
                   ),
-                );
-              }
-          ))
-      ),
-
-    ]
-
+                  //you can set more BoxShadow() here
+                ],
+              ),
+              child: ingredientsWidget(),
+            ),
+          ]
       ),
 
       floatingActionButton: FloatingActionButton(
@@ -366,6 +360,44 @@ class _DishPageState extends State<DishPage>{
           backgroundColor:  Colors.green
       ),
 
+    );
+  }
+
+  Widget ingredientsWidget(){
+    return Column(
+        children:[
+          ListTile(
+            title: Text("Ingredients:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+            leading: Icon(Icons.fastfood_outlined,color: Colors.black),
+          ),
+          Observer(builder: (_) => ListView.builder
+            (
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: ingredientStore.ingredientListOfDish.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  shape:  RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.black, width: 1),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  margin: EdgeInsets.only(left: 10,right: 10, bottom: 12, top:12),
+                  child: ListTile(
+                    title: Text(ingredientStore.ingredientListOfDish[index].name),
+                    leading: Container(
+                        width: 45,
+                        height: 45,
+                        child:  ClipOval(
+                            child: Image(
+                              image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
+                            )
+                        )),
+
+                  ),
+                );
+              }
+          ))
+        ]
     );
   }
 }

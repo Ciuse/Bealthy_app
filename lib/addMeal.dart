@@ -86,7 +86,8 @@ class _AddMealState extends State<AddMeal>{
                           //you can set more BoxShadow() here
                         ],
                       ),
-                      child: Column(children: [Container(
+                      child: Column(children: [
+                        Container(
                           alignment: Alignment.centerLeft,
                           padding: EdgeInsets.only(right: 10, top: 15),
                           child:
@@ -101,8 +102,9 @@ class _AddMealState extends State<AddMeal>{
                                   elevation: 7.0,
                                   fillColor: Colors.white,
                                   child: Icon(
-                                    Icons.add,
+                                    Icons.favorite_border,
                                     size: 24.0,
+                                    color: Colors.black,
                                   ),
                                   padding: EdgeInsets.all(15.0),
                                   shape: CircleBorder(),
@@ -112,79 +114,104 @@ class _AddMealState extends State<AddMeal>{
                               ],
                             ),
                           ),
+                        Divider(
+                          thickness: 0.5,
+                          indent: 5,
+                          endIndent: 5,
+                          color: Colors.black,
+                        ),
                         Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.only(left: 10,right: 10, top: 15),
-                            child:
-                            FlatButton(
-                              onPressed: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => CategoriesDish()),
-                                )
-                              },
-                              shape:  RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 1),
-                                borderRadius: BorderRadius.circular(15.0),
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(right: 10, top: 15),
+                          child:
+                          Row(
+                            children: <Widget>[
+                              RawMaterialButton(
+                                onPressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => CategoriesDish()))
+                                },
+                                elevation: 7.0,
+                                fillColor: Colors.white,
+                                child: Icon(
+                                  Icons.category_outlined,
+                                  size: 24.0,
+                                  color: Colors.black,
+                                ),
+                                padding: EdgeInsets.all(15.0),
+                                shape: CircleBorder(),
                               ),
-                              color: Colors.white,
-                              padding: EdgeInsets.all(10.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.add, size: 30, color: Colors.black,),
-                                  SizedBox(width: 10,),
-                                  Text("Category")
-                                ],
-                              ),
-                            )),
+                              SizedBox(width: 10,),
+                              Text("Category")
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 0.5,
+                          indent: 5,
+                          endIndent: 5,
+                          color: Colors.black,
+                        ),
                         Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.only(left: 10,right: 10, top: 15),
-                            child:FlatButton(
-                              onPressed: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => YourDishList()),
-                                )
-                              },
-                              shape:  RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 1),
-                                borderRadius: BorderRadius.circular(15.0),
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(right: 10, top: 15),
+                          child:
+                          Row(
+                            children: <Widget>[
+                              RawMaterialButton(
+                                onPressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => YourDishList()))
+                                },
+                                elevation: 7.0,
+                                fillColor: Colors.white,
+                                child: Icon(
+                                  Icons.handyman_rounded,
+                                  size: 24.0,
+                                  color: Colors.black,
+                                ),
+                                padding: EdgeInsets.all(15.0),
+                                shape: CircleBorder(),
                               ),
-                              color: Colors.white,
-                              padding: EdgeInsets.all(10.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.add, size: 30, color: Colors.black,),
-                                  SizedBox(width: 10,),
-                                  Text("Your Dish")
-                                ],
-                              ),
-                            )),
+                              SizedBox(width: 10,),
+                              Text("Your Dish")
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 0.5,
+                          indent: 5,
+                          endIndent: 5,
+                          color: Colors.black,
+                        ),
                         Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.only(left: 10,right: 10, top: 15, bottom:15),
-                            child:FlatButton(
-                              onPressed: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => CreateNewDish()),
-                                )
-                              },
-                              shape:  RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.black, width: 1),
-                                borderRadius: BorderRadius.circular(15.0),
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(right: 10, top: 15,bottom:15),
+                          child:
+                          Row(
+                            children: <Widget>[
+                              RawMaterialButton(
+                                onPressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => CreateNewDish()))
+                                },
+                                elevation: 7.0,
+                                fillColor: Colors.white,
+                                child: Icon(
+                                  Icons.create_outlined,
+                                  size: 24.0,
+                                  color: Colors.black,
+                                ),
+                                padding: EdgeInsets.all(15.0),
+                                shape: CircleBorder(),
                               ),
-                              color: Colors.white,
-                              padding: EdgeInsets.all(10.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(Icons.add, size: 30, color: Colors.black,),
-                                  SizedBox(width: 10,),
-                                  Text("Create New Dish")
-                                ],
-                              ),
-                            )
+                              SizedBox(width: 10,),
+                              Text("Create New Dish")
+                            ],
+                          ),
                         ),]
                       )
                   ),
