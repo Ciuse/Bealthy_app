@@ -10,6 +10,8 @@ import 'Database/dish.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:provider/provider.dart';
 
+import 'Login/config/palette.dart';
+
 
 class UploadNewPictureToUserDish extends StatefulWidget {
   final CameraDescription camera;
@@ -24,8 +26,6 @@ class UploadNewPictureToUserDish extends StatefulWidget {
 
 class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish> {
   File _imageFile;
-  final Color yellow = Color(0xfffbc31b);
-  final Color orange = Color(0xfffb6900);
   final picker = ImagePicker();
   MealTimeStore mealTimeStore;
 
@@ -156,8 +156,8 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
                     bottomLeft: Radius.circular(50.0),
                     bottomRight: Radius.circular(50.0)),
                 gradient: LinearGradient(
-                    colors: [orange, yellow],
-                    begin: Alignment.topLeft,
+                    colors: [Palette.tealDark, Palette.tealLight,Palette.tealMoreLight,],
+                    begin: Alignment.bottomLeft,
                     end: Alignment.bottomRight)),
           ),
           Container(
@@ -229,7 +229,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
                 top: 30, left: 20.0, right: 20.0, bottom: 20.0),
             decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [yellow, orange],
+                  colors: [Palette.tealDark, Palette.tealLight,Palette.tealMoreLight,],
                 ),
                 borderRadius: BorderRadius.circular(30.0)),
             child: FlatButton(

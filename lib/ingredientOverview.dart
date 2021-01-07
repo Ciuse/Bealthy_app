@@ -9,23 +9,22 @@ import 'Models/overviewStore.dart';
 import 'overviewPage.dart';
 
 class IngredientOverview extends StatefulWidget {
+  final OverviewStore overviewStore;
 
-
-  IngredientOverview();
+  IngredientOverview({@required this.overviewStore});
 
   @override
   State<StatefulWidget> createState() => IngredientOverviewState();
 }
 
-class IngredientOverviewState extends State {
+class IngredientOverviewState extends State<IngredientOverview> {
   DateStore dateStore;
-  OverviewStore overviewStore;
   double animationStartPos=0;
 
   void initState() {
     super.initState();
     dateStore = Provider.of<DateStore>(context, listen: false);
-    overviewStore = Provider.of<OverviewStore>(context, listen: false);
+
 
   }
 
@@ -37,19 +36,19 @@ class IngredientOverviewState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) =>overviewStore.totalOccurrenceIngredient.length>0? ingredientsWidget() : noIngredientsWidget());
+    return Observer(builder: (_) =>widget.overviewStore.totalOccurrenceIngredient.length>0? ingredientsWidget() : noIngredientsWidget());
   }
 
   Widget ingredientsWidget(){
       return Column(
         children: [
           Divider(height: 30),
-          PieChartIngredient(),
+          PieChartIngredient(overviewStore: widget.overviewStore,),
           SizedBox( // Horizontal ListView
               height: 80,
               child: Observer(builder: (_) =>
                   ListView.builder(
-                    itemCount: overviewStore.totalOccurrenceIngredient.length,
+                    itemCount: widget.overviewStore.totalOccurrenceIngredient.length,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
@@ -67,7 +66,7 @@ class IngredientOverviewState extends State {
                                     height: 50,
                                     child:  ClipOval(
                                         child: Image(
-                                          image: AssetImage("images/ingredients/" + overviewStore.totalOccurrenceIngredient.keys.elementAt(index) + ".png"),
+                                          image: AssetImage("images/ingredients/" + widget.overviewStore.totalOccurrenceIngredient.keys.elementAt(index) + ".png"),
                                         )
                                     )),
                                 padding: EdgeInsets.all(15.0),
@@ -90,14 +89,16 @@ class IngredientOverviewState extends State {
 }
 class PieChartIngredient extends StatefulWidget {
 
+  final OverviewStore overviewStore;
 
-  PieChartIngredient();
+  PieChartIngredient({@required this.overviewStore});
+
 
   @override
   State<StatefulWidget> createState() => PieChartIngredientState();
 }
 
-class PieChartIngredientState extends State {
+class PieChartIngredientState extends State<PieChartIngredient> {
   int touchedIndex;
 
 
@@ -108,7 +109,6 @@ class PieChartIngredientState extends State {
   @override
   Widget build(BuildContext context) {
     IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
-    OverviewStore overviewStore = Provider.of<OverviewStore>(context);
     return Observer(builder: (_) => AspectRatio(
       aspectRatio: 1.3,
       child: Card(
@@ -138,7 +138,7 @@ class PieChartIngredientState extends State {
                     ),
                     sectionsSpace: 0,
                     centerSpaceRadius: 40,
-                    sections: overviewStore.totalOccurrenceIngredient.length>0 ? showingSections(overviewStore,ingredientStore) : null,
+                    sections: widget.overviewStore.totalOccurrenceIngredient.length>0 ? showingSections(widget.overviewStore,ingredientStore) : null,
                   ),
                 )),
               ),
@@ -148,7 +148,7 @@ class PieChartIngredientState extends State {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                for(var ingredientId in overviewStore.totalOccurrenceIngredient.keys)
+                for(var ingredientId in widget.overviewStore.totalOccurrenceIngredient.keys)
                   Indicator2(
                     color: ingredientStore.colorIngredientMap[ingredientId],
                     text: ingredientStore.getSymptomFromList(ingredientId).name,

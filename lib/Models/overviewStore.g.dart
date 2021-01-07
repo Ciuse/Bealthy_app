@@ -9,21 +9,6 @@ part of 'overviewStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$OverviewStore on _OverviewBase, Store {
-  final _$timeSelectedAtom = Atom(name: '_OverviewBase.timeSelected');
-
-  @override
-  TemporalTime get timeSelected {
-    _$timeSelectedAtom.reportRead();
-    return super.timeSelected;
-  }
-
-  @override
-  set timeSelected(TemporalTime value) {
-    _$timeSelectedAtom.reportWrite(value, super.timeSelected, () {
-      super.timeSelected = value;
-    });
-  }
-
   final _$mapSymptomsOverviewPeriodAtom =
       Atom(name: '_OverviewBase.mapSymptomsOverviewPeriod');
 
@@ -409,7 +394,6 @@ mixin _$OverviewStore on _OverviewBase, Store {
   @override
   String toString() {
     return '''
-timeSelected: ${timeSelected},
 mapSymptomsOverviewPeriod: ${mapSymptomsOverviewPeriod},
 mapSymptomsOverviewDay: ${mapSymptomsOverviewDay},
 overviewSymptomList: ${overviewSymptomList},

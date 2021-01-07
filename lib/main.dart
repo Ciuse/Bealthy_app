@@ -46,9 +46,7 @@ void main() async {
         Provider<MealTimeStore>(
           create: (_) => MealTimeStore(),
         ),
-        Provider<OverviewStore>(
-          create: (_) => OverviewStore(),
-        ),
+
         Provider<SymptomOverviewGraphStore>(
           create: (_) => SymptomOverviewGraphStore(),
         )
@@ -110,13 +108,12 @@ class HomePage extends StatefulWidget {
 /// This is the private State class that goes with HomePage.
 class _MyHomePageState extends State<HomePage> {
 
-  OverviewStore overviewStore;
+
   DateStore dateStore;
   int _selectedIndex = 0;
 
   void initState() {
     super.initState();
-   overviewStore = Provider.of<OverviewStore>(context, listen: false);
    dateStore = Provider.of<DateStore>(context, listen: false);
   }
 
@@ -168,7 +165,7 @@ class _MyHomePageState extends State<HomePage> {
         ],
         currentIndex: _selectedIndex,
         unselectedItemColor: Colors.black,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Palette.tealDark,
         onTap: _bottomBarOnTapped,
       ),
     ));

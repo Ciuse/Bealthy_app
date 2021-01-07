@@ -5,6 +5,7 @@ import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
+import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,8 +26,13 @@ abstract class _OverviewBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
   bool storeInitialized = false;
 
-  @observable
-  TemporalTime timeSelected = TemporalTime.Day;
+  TemporalTime timeSelected;
+
+  _OverviewBase({
+    this.timeSelected,
+
+  });
+
 
   @observable
   var mapSymptomsOverviewPeriod = new ObservableMap<DateTime,List<Symptom>>();
@@ -61,6 +67,8 @@ abstract class _OverviewBase with Store {
   @observable
   var dayOccurrenceIngredient = new ObservableMap<String, int>();
 
+
+
   @action
   Future<void> initStore(DateTime day) async {
     if (!storeInitialized) {
@@ -69,8 +77,11 @@ abstract class _OverviewBase with Store {
   }
 
 
+
+
   @action
   Future<void> initializeSymptomsMap(DateStore dateStore) async {
+    print("invocato");
     initializeIngredientMap(dateStore);
     mapSymptomsOverviewDay.clear();
     mapSymptomsOverviewPeriod.clear();

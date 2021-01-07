@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'Database/enumerators.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'Database/dish.dart';
+import 'Login/config/palette.dart';
 import 'Models/foodStore.dart';
 import 'package:camera/camera.dart';
 import 'uploadNewPictureToUserDish.dart';
@@ -217,7 +218,7 @@ class _DishPageState extends State<DishPage>{
                                 children:  <Widget>[
                                   Container(
                                       margin: const EdgeInsets.only(left: 125,top:125),
-                                      child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                      child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42,
                                         color: Colors.black,)),]
 
                             )
@@ -241,7 +242,7 @@ class _DishPageState extends State<DishPage>{
                                 children:  <Widget>[
                                   Container(
                                       margin: const EdgeInsets.only(left: 125,top:125),
-                                      child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                      child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42,
                                         color: Colors.black,)),]
 
                             )
@@ -305,12 +306,13 @@ class _DishPageState extends State<DishPage>{
       ),
 
       floatingActionButton: FloatingActionButton(
+
           onPressed: () {
 
               return showDialog(
                   context: context,
                   builder: (_) =>  new AlertDialog(
-                    title: Center(child: Text("Add ${widget.dish.name} to this day ")),
+                    title: Center(child: Text("Add ${widget.dish.name} to this day ",style: TextStyle(fontWeight: FontWeight.bold,))),
                     content: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -320,8 +322,8 @@ class _DishPageState extends State<DishPage>{
                             "Indicate the quantity eaten! ",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.red,
-
+                              color: Palette.tealDark,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         )
@@ -341,9 +343,9 @@ class _DishPageState extends State<DishPage>{
                                   decoration: const BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: <Color>[
-                                        Color(0xFF0D47A1),
-                                        Color(0xFF1976D2),
-                                        Color(0xFF42A5F5),
+                                        Palette.tealDark,
+                                        Palette.tealLight,
+                                        Palette.tealMoreLight,
                                       ],
                                     ),
                                   ),
@@ -357,7 +359,7 @@ class _DishPageState extends State<DishPage>{
 
           },
           child: Icon(Icons.add , color:  Colors.white ),
-          backgroundColor:  Colors.green
+          backgroundColor:  Palette.tealDark
       ),
 
     );

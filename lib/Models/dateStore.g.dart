@@ -65,6 +65,21 @@ mixin _$DateStore on _DateStoreBase, Store {
     });
   }
 
+  final _$timeSelectedAtom = Atom(name: '_DateStoreBase.timeSelected');
+
+  @override
+  TemporalTime get timeSelected {
+    _$timeSelectedAtom.reportRead();
+    return super.timeSelected;
+  }
+
+  @override
+  set timeSelected(TemporalTime value) {
+    _$timeSelectedAtom.reportWrite(value, super.timeSelected, () {
+      super.timeSelected = value;
+    });
+  }
+
   final _$overviewFirstDateAtom =
       Atom(name: '_DateStoreBase.overviewFirstDate');
 
@@ -78,6 +93,23 @@ mixin _$DateStore on _DateStoreBase, Store {
   set overviewFirstDate(DateTime value) {
     _$overviewFirstDateAtom.reportWrite(value, super.overviewFirstDate, () {
       super.overviewFirstDate = value;
+    });
+  }
+
+  final _$calculationPeriodInProgressAtom =
+      Atom(name: '_DateStoreBase.calculationPeriodInProgress');
+
+  @override
+  bool get calculationPeriodInProgress {
+    _$calculationPeriodInProgressAtom.reportRead();
+    return super.calculationPeriodInProgress;
+  }
+
+  @override
+  set calculationPeriodInProgress(bool value) {
+    _$calculationPeriodInProgressAtom
+        .reportWrite(value, super.calculationPeriodInProgress, () {
+      super.calculationPeriodInProgress = value;
     });
   }
 
@@ -233,7 +265,9 @@ mixin _$DateStore on _DateStoreBase, Store {
 calendarSelectedDate: ${calendarSelectedDate},
 overviewDefaultLastDate: ${overviewDefaultLastDate},
 rangeDays: ${rangeDays},
+timeSelected: ${timeSelected},
 overviewFirstDate: ${overviewFirstDate},
+calculationPeriodInProgress: ${calculationPeriodInProgress},
 weekDay: ${weekDay}
     ''';
   }

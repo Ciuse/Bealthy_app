@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'Login/config/palette.dart';
 import 'Login/screens/auth/auth.dart';
 import 'Models/ingredientStore.dart';
 import 'Models/symptomStore.dart';
@@ -72,10 +73,18 @@ class _PersonalPageState extends State<PersonalPage>{
     return Row(
       children: [
         Observer(builder: (_) => Container(
-        width: 70,
-        alignment: Alignment.centerLeft,
-        color: Colors.transparent,
-        child:  RawMaterialButton(
+            padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
+            width: 70,
+            alignment: Alignment.center,
+            color: Colors.transparent,
+            child:  RawMaterialButton(
+              onPressed: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomList[index])
+                    )
+                )//todo inserire qui il salvataggio
+              },
           elevation: 5.0,
           fillColor: Colors.white,
           child: ImageIcon(
@@ -156,7 +165,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                   children:  <Widget>[
                                     Container(
                                         margin: const EdgeInsets.only(left: 125,top:125),
-                                        child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                        child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42,
                                           color: Colors.black,)),]
 
                               )
@@ -177,7 +186,7 @@ class _PersonalPageState extends State<PersonalPage>{
                             alignment: Alignment.centerLeft,
                             child: ListTile(
                               title: Text("AVERAGE SICK DAYS:",style: TextStyle(fontWeight: FontWeight.bold)),
-                              leading: Icon(Icons.sick),
+                              leading: Icon(Icons.sick, color: Colors.black,),
                             )
                         )]),
                   Divider(
@@ -198,6 +207,7 @@ class _PersonalPageState extends State<PersonalPage>{
                             symptom(0),
                             symptom(1),
                             symptom(2),
+                            SizedBox(height: 8,),
                           ],
                   ),
                   Divider(
@@ -212,7 +222,7 @@ class _PersonalPageState extends State<PersonalPage>{
                         top: 30, left: 20.0, right: 20.0, bottom: 20.0),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [lightBlue, green],
+                          colors: [Palette.tealDark, Palette.tealLight,Palette.tealMoreLight,],
                         ),
                         borderRadius: BorderRadius.circular(30.0)),
                     child: FlatButton(
