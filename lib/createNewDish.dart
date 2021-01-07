@@ -68,8 +68,8 @@ class _CreateNewDishState extends State<CreateNewDish> {
         setState(() {
           _keyboardState = visible;
           print(_keyboardState);
-          if(visible==true)
-          _controller.jumpTo(_controller.offset + 100);
+          // if(visible==true)
+          // _controller.jumpTo(_controller.offset + 100);
         });
       },
     );

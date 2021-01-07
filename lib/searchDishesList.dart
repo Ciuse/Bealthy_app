@@ -18,14 +18,14 @@ class _SearchDishesListState extends State<SearchDishesList>{
 
   TextEditingController _searchController = TextEditingController();
   var storage = FirebaseStorage.instance;
-
+  FoodStore foodStore;
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    var store = Provider.of<FoodStore>(context, listen: false);
-    store.initDishList();
-    store.resultsList.clear();
+    foodStore = Provider.of<FoodStore>(context, listen: false);
+    foodStore.initDishList();
+    foodStore.resultsList.clear();
     _onSearchChanged();
   }
 
@@ -42,11 +42,10 @@ class _SearchDishesListState extends State<SearchDishesList>{
   void searchResultList() {
 
     var showResults = [];
-    var store = Provider.of<FoodStore>(context, listen: false);
 
     if(_searchController.text != ""){
 
-      for(Dish dish in store.dishesListFromDBAndUser){
+      for(Dish dish in foodStore.dishesListFromDBAndUser){
         var name = dish.name.toLowerCase();
         if(name.contains(_searchController.text.toLowerCase())){
           showResults.add(dish);
@@ -54,11 +53,11 @@ class _SearchDishesListState extends State<SearchDishesList>{
       }
 
     }else{
-      showResults.addAll(store.dishesListFromDBAndUser);
+      showResults.addAll(foodStore.dishesListFromDBAndUser);
     }
-    store.resultsList.clear();
+    foodStore.resultsList.clear();
     showResults.forEach((element) {
-      store.resultsList.add(element);
+      foodStore.resultsList.add(element);
     });
   }
 

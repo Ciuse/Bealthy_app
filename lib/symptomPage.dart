@@ -9,6 +9,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Database/symptom.dart';
+import 'Login/config/palette.dart';
 
 class SymptomPage extends StatefulWidget {
 
@@ -250,7 +251,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             itemBuilder: (BuildContext context, int index) {
               return Observer(builder: (_) =>
                   CheckboxListTile(
-                    activeColor: Colors.green,
+                    activeColor: Palette.tealLight,
                     checkColor: Colors.black,
                     value: symptom.mealTimeBoolList[index].isSelected,
                     title: new Text(MealTime.values[index]

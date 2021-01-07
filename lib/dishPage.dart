@@ -376,24 +376,44 @@ class _DishPageState extends State<DishPage>{
               physics: ClampingScrollPhysics(),
               itemCount: ingredientStore.ingredientListOfDish.length,
               itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  shape:  RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.black, width: 1),
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  margin: EdgeInsets.only(left: 10,right: 10, bottom: 12, top:12),
-                  child: ListTile(
-                    title: Text(ingredientStore.ingredientListOfDish[index].name),
-                    leading: Container(
-                        width: 45,
-                        height: 45,
-                        child:  ClipOval(
-                            child: Image(
-                              image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
-                            )
-                        )),
+                return Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 10,right: 10, bottom: 6, top:6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                              flex:1,
+                              child: Container(
+                                  width: 55,
+                                  height: 55,
+                                  child:  ClipOval(
+                                      child: Image(
+                                        image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
+                                      )
+                                  )))
+                          ,
+                          Expanded(
+                              flex:5,
+                              child: Container(
+                                margin: EdgeInsets.only(left: 20,right: 10,),
+                                child: Text(ingredientStore.ingredientListOfDish[index].name),
+                              ))
 
-                  ),
+                        ],
+
+                      ),
+                    ),
+                    index!=ingredientStore.ingredientListOfDish.length-1?
+                    Divider(
+                      thickness: 0.5,
+                      indent: 10,
+                      endIndent: 10,
+                      color: Colors.black,
+                    ):Container(),
+                  ],
                 );
               }
           ))

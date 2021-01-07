@@ -20,7 +20,6 @@ class AddMeal extends StatefulWidget {
 
 class _AddMealState extends State<AddMeal>{
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

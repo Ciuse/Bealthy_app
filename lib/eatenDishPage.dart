@@ -240,12 +240,26 @@ class _EatenDishPageState extends State<EatenDishPage>{
                   color: Colors.black,
                 ),
                 Container(
-                  width: 300,
                   height: 50,
                   alignment: Alignment.center,
                   child:Observer(builder: (_) =>ListTile(
-                    title: Text("The quantity you eat today is:"+ " " +widget.dish.qty),
+                    title: RichText(textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: "The quantity you eat today is \n",
+                        style: TextStyle(color: Colors.black54, fontSize: 16),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: widget.dish.qty,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 22),
+                          ),
+                        ],
+                      ),
+                    ),
                   trailing:IconButton(
+                    alignment: Alignment.centerLeft,
                       icon: Icon(
                         Icons.mode_rounded,
                         color: Colors.black,
@@ -337,32 +351,53 @@ class _EatenDishPageState extends State<EatenDishPage>{
                             title: Text("Ingredients:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
                             leading: Icon(Icons.fastfood_outlined,color: Colors.black),
                           ),
-                        Observer(builder: (_) => ListView.builder
-                                (
-                               shrinkWrap: true,
-                               physics: ClampingScrollPhysics(),
-                                  itemCount: ingredientStore.ingredientListOfDish.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return Card(
-                                      shape:  RoundedRectangleBorder(
-                                        side: BorderSide(color: Colors.black, width: 1),
-                                        borderRadius: BorderRadius.circular(15.0),
+                          Observer(builder: (_) => ListView.builder
+                            (
+                              shrinkWrap: true,
+                              physics: ClampingScrollPhysics(),
+                              itemCount: ingredientStore.ingredientListOfDish.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Column(
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(left: 10,right: 10, bottom: 6, top:6),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                              flex:1,
+                                              child: Container(
+                                                  width: 55,
+                                                  height: 55,
+                                                  child:  ClipOval(
+                                                      child: Image(
+                                                        image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
+                                                      )
+                                                  )))
+                                          ,
+                                          Expanded(
+                                              flex:5,
+                                              child: Container(
+                                                margin: EdgeInsets.only(left: 20,right: 10,),
+                                                child: Text(ingredientStore.ingredientListOfDish[index].name),
+                                              ))
+
+                                        ],
+
                                       ),
-                                      margin: EdgeInsets.only(left: 10,right: 10, bottom: 12, top:12),
-                                      child: ListTile(
-                                        title: Text(ingredientStore.ingredientListOfDish[index].name),
-                                        leading: Container(
-                                            width: 45,
-                                  height: 45,
-                                  child:  ClipOval(
-                                      child: Image(
-                                        image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
-                                      )
-                                  )),
-                            ),
-                          );
-                        }
-                    ))
+                                    ),
+                                    index!=ingredientStore.ingredientListOfDish.length-1?
+                                    Divider(
+                                      thickness: 0.5,
+                                      indent: 10,
+                                      endIndent: 10,
+                                      color: Colors.black,
+                                    ):Container(),
+                                  ],
+                                );
+                              }
+                          ))
                         ]
                     )
                 ),
