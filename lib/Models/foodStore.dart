@@ -84,7 +84,6 @@ abstract class _FoodStoreBase with Store {
     if (!storeInitialized) {
       storeInitialized = true;
       await _getYourDishes();
-      await _getFavouriteDishes();
       await _addDishToCategory();
     }
   }
