@@ -156,7 +156,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
                     bottomLeft: Radius.circular(50.0),
                     bottomRight: Radius.circular(50.0)),
                 gradient: LinearGradient(
-                    colors: [Palette.tealDark, Palette.tealLight,Palette.tealMoreLight,],
+                    colors: [Palette.primaryDark, Palette.primaryLight,Palette.primaryMoreLight,],
                     begin: Alignment.bottomLeft,
                     end: Alignment.bottomRight)),
           ),
@@ -229,7 +229,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
                 top: 30, left: 20.0, right: 20.0, bottom: 20.0),
             decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Palette.tealDark, Palette.tealLight,Palette.tealMoreLight,],
+                  colors: [Palette.primaryDark, Palette.primaryLight,Palette.primaryMoreLight,],
                 ),
                 borderRadius: BorderRadius.circular(30.0)),
             child: FlatButton(

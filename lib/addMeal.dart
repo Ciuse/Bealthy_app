@@ -27,7 +27,7 @@ class _AddMealState extends State<AddMeal>{
           title: Text("Add new dish to"+" "+widget.title),
         ),
         body: Container(
-          color: Palette.tealThreeMoreLight,
+          color: Palette.primaryThreeMoreLight,
             child: Column(
                 children: [
                   GestureDetector(

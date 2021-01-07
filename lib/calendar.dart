@@ -175,7 +175,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
               alignment: Alignment.center,
               margin: EdgeInsets.symmetric(vertical: 1,horizontal: 10),
                decoration: new BoxDecoration(
-                   color: Palette.tealLight,
+                   color: Palette.primaryDoubleMoreLight,
                    shape: BoxShape.circle,
                  ),
               child: Text(
@@ -190,11 +190,11 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
             alignment: Alignment.center,
             margin:  EdgeInsets.symmetric(vertical: 1,horizontal: 10),
             decoration: new BoxDecoration(
-              border: Border.all(color:Palette.tealDark),
+              border: Border.all(color:Palette.secondaryDark),
               shape: BoxShape.circle,),
             child: Text(
               '${date.day}',
-              style: TextStyle().copyWith(fontSize: 16.0, color: Palette.tealDark),
+              style: TextStyle().copyWith(fontSize: 16.0, color: Palette.secondaryDark),
             ),
           );
         },
@@ -231,7 +231,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         shape: BoxShape.rectangle,
         color: _calendarController.isSelected(date)
             ? Colors.brown[500]
-            : _calendarController.isToday(date) ? Colors.brown[300] : Palette.tealDark,
+            : _calendarController.isToday(date) ? Colors.brown[300] : Palette.secondaryDark,
       ),
       width: 16.0,
       height: 16.0,
@@ -252,8 +252,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
       Icons.add_circle_outline,
       size: 15.0,
       color: _calendarController.isSelected(date)
-          ? Palette.tealDark
-          : _calendarController.isToday(date) ? Palette.tealDark : Colors.grey[900],
+          ? Palette.secondaryDark
+          : _calendarController.isToday(date) ? Palette.secondaryDark : Colors.grey[900],
     );
   }
 

@@ -73,15 +73,20 @@ class MyApp extends StatelessWidget {
             child:
             MaterialApp(
               theme: ThemeData(
+                  primaryTextTheme: TextTheme(
+                    headline6: GoogleFonts.roboto(fontSize: 22, fontWeight: FontWeight.w400, letterSpacing: 0.8),
+
+                  ),
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   textTheme: TextTheme(
+
                     headline1: GoogleFonts.roboto(
                         fontSize: 97, fontWeight: FontWeight.w300, letterSpacing: -1.5),
                     headline2: GoogleFonts.roboto(
                         fontSize: 61, fontWeight: FontWeight.w300, letterSpacing: -0.5),
                     headline3: GoogleFonts.roboto(fontSize: 48, fontWeight: FontWeight.w400),
                     headline4: GoogleFonts.roboto(
-                        fontSize: 34, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+                        fontSize: 70, fontWeight: FontWeight.w400, letterSpacing: 0.25),
                     headline5: GoogleFonts.roboto(fontSize: 24, fontWeight: FontWeight.w400),
                     headline6: GoogleFonts.roboto(
                         fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
@@ -100,10 +105,11 @@ class MyApp extends StatelessWidget {
                     overline: GoogleFonts.roboto(
                         fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
                   ),
-                  accentColor: Palette.tealDoubleMoreLight,
+                  accentColor: Palette.primaryDoubleMoreLight,
                   appBarTheme: const AppBarTheme(
+
                     brightness: Brightness.dark,
-                    color: Palette.tealDark,
+                    color: Palette.appBarColor,
             ),
           buttonBarTheme: ButtonBarThemeData(
             alignment: MainAxisAlignment.spaceEvenly,
@@ -190,7 +196,7 @@ class _MyHomePageState extends State<HomePage> {
         ],
         currentIndex: _selectedIndex,
         unselectedItemColor: Colors.black,
-        selectedItemColor: Palette.tealDark,
+        selectedItemColor: Palette.primaryDark,
         onTap: _bottomBarOnTapped,
       ),
     ));

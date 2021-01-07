@@ -322,7 +322,7 @@ class _DishPageState extends State<DishPage>{
                             "Indicate the quantity eaten! ",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Palette.tealDark,
+                              color: Palette.primaryDark,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -343,9 +343,9 @@ class _DishPageState extends State<DishPage>{
                                   decoration: const BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: <Color>[
-                                        Palette.tealDark,
-                                        Palette.tealLight,
-                                        Palette.tealMoreLight,
+                                        Palette.primaryDark,
+                                        Palette.primaryLight,
+                                        Palette.primaryMoreLight,
                                       ],
                                     ),
                                   ),
@@ -359,7 +359,7 @@ class _DishPageState extends State<DishPage>{
 
           },
           child: Icon(Icons.add , color:  Colors.white ),
-          backgroundColor:  Palette.tealDark
+          backgroundColor:  Palette.primaryDark
       ),
 
     );

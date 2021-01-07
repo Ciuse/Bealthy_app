@@ -59,11 +59,14 @@ class IngredientOverviewState extends State<IngredientOverview> {
                               alignment: Alignment.center,
                               color: Colors.transparent,
                               child: RawMaterialButton(
+                                onPressed: () =>
+                                {
+                                },
                                 elevation: 5.0,
                                 fillColor: Colors.white,
-                                child:  Container(
-                                    width: 50,
-                                    height: 50,
+                                child:
+                                Container(
+                                    width: 28.0,
                                     child:  ClipOval(
                                         child: Image(
                                           image: AssetImage("images/ingredients/" + widget.overviewStore.totalOccurrenceIngredient.keys.elementAt(index) + ".png"),

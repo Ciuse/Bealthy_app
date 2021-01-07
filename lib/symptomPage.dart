@@ -249,7 +249,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             itemBuilder: (BuildContext context, int index) {
               return Observer(builder: (_) =>
                   CheckboxListTile(
-                    activeColor: Palette.tealLight,
+                    activeColor: Palette.primaryLight,
                     checkColor: Colors.black,
                     value: symptom.mealTimeBoolList[index].isSelected,
                     title: new Text(MealTime.values[index]

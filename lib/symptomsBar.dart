@@ -40,7 +40,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
         alignment: Alignment.center,
         width:double.infinity,
         decoration: BoxDecoration(
-          color: Palette.tealThreeMoreLight,
+          color: Palette.primaryThreeMoreLight,
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15)), //border corner radius
           boxShadow:[
             BoxShadow(
@@ -72,9 +72,9 @@ class _SymptomsBarState extends State<SymptomsBar>{
                   padding: EdgeInsets.only(left: 6,right: 6 ),
                   width:double.infinity,
                   decoration: BoxDecoration(
-                    color: Palette.tealDoubleMoreLight,
+                    color: Palette.primaryDoubleMoreLight,
                     borderRadius: BorderRadius.all(Radius.circular(15)), //border corner radius
-                    border: Border.all(color: Palette.tealDark, width: 2)
+                    border: Border.all(color: Palette.primaryDark, width: 2)
                   ),
                   child: SizedBox(// Horizontal ListView
                     height: 70,
@@ -122,7 +122,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                       )//todo inserire qui il salvataggio
                                     },
                                     elevation: 5.0,
-                                    fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.tealDark : Colors.white,
+                                    fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.primaryDark : Colors.white,
                                     child: ImageIcon(
                                       AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
                                       color: symptomStore.symptomList[index].isSymptomSelectDay ? Color(0xfff0ff1f) : null,

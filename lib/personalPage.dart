@@ -222,7 +222,7 @@ class _PersonalPageState extends State<PersonalPage>{
                         top: 30, left: 20.0, right: 20.0, bottom: 20.0),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Palette.tealDark, Palette.tealLight,Palette.tealMoreLight,],
+                          colors: [Palette.primaryDark, Palette.primaryLight,Palette.primaryMoreLight,],
                         ),
                         borderRadius: BorderRadius.circular(30.0)),
                     child: FlatButton(

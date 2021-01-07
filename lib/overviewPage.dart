@@ -258,42 +258,37 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   }
 
   Widget dayOverviewBuild(){
-    return Column(
+    return Observer(builder: (_) =>Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Observer(builder: (_) =>
-         _buildHeaderDay(dateStore.overviewDefaultLastDate)
-        ),
-        Observer(builder: (_) =>  Expanded(child: _buildContent()))
+        _buildHeaderDay(dateStore.overviewDefaultLastDate),
+        Expanded(child: _buildContent()),
         //Add this to give height
       ],
-    );
+    ));
   }
 
   Widget weekOverviewBuild(){
-    return Column(
+    return Observer(builder: (_) =>Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Observer(builder: (_) =>
-            _buildHeaderWeek(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate)
-        ),
-        Observer(builder: (_) =>  Expanded(child: _buildContent()))
+        _buildHeaderWeek(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate),
+        Expanded(child: _buildContent())
+
         //Add this to give height
       ],
-    );
+    ));
   }
 
   Widget monthOverviewBuild(){
-    return Column(
+    return Observer(builder: (_) =>Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Observer(builder: (_) =>
-            _buildHeaderMonth(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate)
-        ),
-        Observer(builder: (_) =>  Expanded(child: _buildContent()))
+        _buildHeaderMonth(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate),
+        Expanded(child: _buildContent())
         //Add this to give height
       ],
-    );
+    ));
   }
 
 

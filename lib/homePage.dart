@@ -62,7 +62,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
         ],
       ),
       body: Container(
-        color: Palette.tealThreeMoreLight,
+        color: Palette.primaryThreeMoreLight,
           child:
       CustomScrollView(
         controller: scrollControllerStore.scrollController,

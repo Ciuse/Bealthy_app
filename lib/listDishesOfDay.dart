@@ -44,7 +44,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     final ingredientStore = Provider.of<IngredientStore>(context);
     return Container(
-        color: Palette.tealThreeMoreLight,
+        color: Palette.primaryThreeMoreLight,
         child:Column(
           children:<Widget>[
             for( var element in MealTime.values )
@@ -70,7 +70,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Palette.tealDark,size: 30,),
+                  icon: Icon(Icons.add,color: Palette.primaryDark,size: 30,),
                   tooltip: 'Add new dish to Breakfast',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -93,7 +93,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Palette.tealDark,size: 30,),
+                  icon: Icon(Icons.add,color: Palette.primaryDark,size: 30,),
                   tooltip: 'Add new dish to Lunch',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -116,7 +116,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Palette.tealDark,size: 30,),
+                  icon: Icon(Icons.add,color: Palette.primaryDark,size: 30,),
                   tooltip: 'Add new dish to Snack',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -138,7 +138,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color:Palette.tealDark,size: 30,),
+                  icon: Icon(Icons.add,color:Palette.primaryDark,size: 30,),
                   tooltip: 'Add new dish to Dinner',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -323,7 +323,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                                    "Indicate the quantity eaten! ",
                                                    textAlign: TextAlign.center,
                                                      style: TextStyle(
-                                                       color: Palette.tealDark,
+                                                       color: Palette.primaryDark,
                                                        fontWeight: FontWeight.bold,
                                                      ),
                                                  ),
@@ -344,9 +344,9 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                                    decoration: const BoxDecoration(
                                                      gradient: LinearGradient(
                                                        colors: <Color>[
-                                                         Palette.tealDark,
-                                                         Palette.tealLight,
-                                                         Palette.tealMoreLight,
+                                                         Palette.primaryDark,
+                                                         Palette.primaryLight,
+                                                         Palette.primaryMoreLight,
                                                        ],
                                                      ),
                                                    ),
