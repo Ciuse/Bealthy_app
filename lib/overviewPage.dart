@@ -437,7 +437,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) =>
-                                  dateStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore,):
+                                  dateStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
                                   dateStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
                                   dateStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore): null
                                   ))

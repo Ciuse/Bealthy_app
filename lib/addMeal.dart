@@ -2,13 +2,15 @@ import 'package:Bealthy_app/dishPage.dart';
 import 'package:Bealthy_app/searchDishesList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'Database/dish.dart';
 import 'Database/enumerators.dart';
 import 'Login/config/palette.dart';
 import 'Models/foodStore.dart';
 import 'createNewDish.dart';
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
 
 class AddMeal extends StatefulWidget {
@@ -230,11 +232,29 @@ class FavouriteDishes extends StatefulWidget {
 }
 
 class _FavouriteDishesState extends State<FavouriteDishes>{
+  var storage = FirebaseStorage.instance;
+
   @override
   void initState() {
     super.initState();
     var store = Provider.of<FoodStore>(context, listen: false);
-    store.initStore();
+    store.initFavouriteDishList();
+  }
+
+  Future getImage(String dishId) async {
+    String userUid;
+    final litUser = context.getSignedInUser();
+    litUser.when(
+          (user) => userUid=user.uid,
+      empty: () => Text('Not signed in'),
+      initializing: () => Text('Loading'),
+    );
+    try {
+      return await storage.ref(userUid+"/DishImage/" + dishId + ".jpg").getDownloadURL();
+    }
+    catch (e) {
+      return await Future.error(e);
+    }
   }
 
   @override
@@ -245,31 +265,97 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
         appBar: AppBar(
           title: Text("Favourites"),
         ),
-        body: Center(
-            child:   Observer(
-                builder: (_) => Column(
-                    children: [
-                      for(Dish dish in foodStore.yourFavouriteDishList ) FlatButton(
-                        onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => DishPage(dish: dish,
-                        createdByUser: foodStore.isSubstring("User", dish.id,)),
-                          ))
-                        },
-                        color: Colors.orange,
-                        padding: EdgeInsets.all(10.0),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.fastfood),
-                            Text(dish.name.toString())
-                          ],
-                        ),
+        body: Column(
+            children:[Container(
+              child:
+            Observer(
+              builder: (_) {
+                switch (foodStore.loadInitFavouriteDishesList.status) {
+                  case FutureStatus.rejected:
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Oops something went wrong'),
+                          RaisedButton(
+                            child: Text('Retry'),
+                            onPressed: () async {
+                              await foodStore.retryFavouriteDishesList();
+                            },
+                          ),
+                        ],
                       ),
-                    ]
-                )
-        )
-    )
+                    );
+                  case FutureStatus.fulfilled:
+                    return Expanded(child: ListView.builder(
+                        itemCount: foodStore.yourFavouriteDishList.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              onTap: ()=> { Navigator.push(
+                                context, MaterialPageRoute(builder: (context) =>
+                                  DishPage(dish: foodStore.yourFavouriteDishList[index],
+                                      createdByUser: foodStore.isSubstring("User", foodStore.yourFavouriteDishList[index].id))
+                              ),
+                              )
+                              },
+                              title: Text(foodStore.yourFavouriteDishList[index].name,style: TextStyle(fontSize: 22.0)),
+                              subtitle: Text(foodStore.yourFavouriteDishList[index].category,style: TextStyle(fontSize: 18.0)),
+                              leading: foodStore.isSubstring("User", foodStore.yourFavouriteDishList[index].id)?
+                              FutureBuilder(
+                                  future: getImage(foodStore.yourFavouriteDishList[index].id),
+                                  builder: (context, remoteString) {
+                                    if (remoteString.connectionState != ConnectionState.waiting) {
+                                      if (remoteString.hasError) {
+                                        return Text("Image not found");
+                                      }
+                                      else {
+                                        return Observer(builder: (_) =>Container
+                                          (width: 45,
+                                            height: 45,
+                                            decoration: new BoxDecoration(
+                                              borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                              border: new Border.all(
+                                                color: Colors.black,
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                            child: ClipOval(
+                                                child: foodStore.yourFavouriteDishList[index].imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill)
+                                                    :Image.file(foodStore.yourFavouriteDishList[index].imageFile)
+                                            )));
+                                      }
+                                    }
+                                    else {
+                                      return CircularProgressIndicator();
+                                    }
+                                  }
+                              )
+                                  :
+                              Container
+                                (width: 45,
+                                  height: 45,
+                                  decoration: new BoxDecoration(
+                                    borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                    border: new Border.all(
+                                      color: Colors.black,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child:  ClipOval(
+                                      child: Image(
+                                        image: AssetImage("images/Dishes/" +foodStore.yourFavouriteDishList[index].id+".png" ),
+                                      )
+                                  )),
+                            ),
+                          );
+                        }));
+                  case FutureStatus.pending:
+                  default:
+                    return CircularProgressIndicator();
+                }
+              },
+            ))])
     );
   }
 }

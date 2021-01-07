@@ -22,7 +22,9 @@ abstract class _FoodStoreBase with Store {
   final firestoreInstance = FirebaseFirestore.instance;
 
   bool storeInitialized = false;
-  bool storeDishInitialized = false;
+  bool storeSearchAllDishInitialized = false;
+  bool storeFavouriteDishInitialized = false;
+
   bool booleanQuantityDishInitialized = false;
 
   @observable
@@ -61,7 +63,21 @@ abstract class _FoodStoreBase with Store {
 
 
 
+  @observable
+  ObservableFuture loadInitFavouriteDishesList;
 
+  @action
+  Future<void> initFavouriteDishList() async {
+
+    if (!storeFavouriteDishInitialized) {
+      storeFavouriteDishInitialized = true;
+      return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes());
+    }
+  }
+  @action
+  Future<void> retryFavouriteDishesList() {
+    return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes());
+  }
 
   @action
   Future<void> initStore() async {
@@ -89,20 +105,20 @@ void setBooleanQuantityDish(){
 }
 
   @observable
-  ObservableFuture loadInitDishesList;
+  ObservableFuture loadInitSearchAllDishesList;
 
   @action
-  Future<void> initDishList() async {
+  Future<void> initSearchAllDishList() async {
 
-    if (!storeDishInitialized) {
-      storeDishInitialized = true;
-      return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
+    if (!storeSearchAllDishInitialized) {
+      storeSearchAllDishInitialized = true;
+      return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser());
     }
   }
 
   @action
-  Future<void> retryForDishesTotal() {
-    return loadInitDishesList = ObservableFuture(_getDishesFromDBAndUser());
+  Future<void> retrySearchAllDishesList() {
+    return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser());
   }
 
 

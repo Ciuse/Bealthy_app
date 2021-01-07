@@ -187,15 +187,15 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       Atom(name: '_FoodStoreBase.loadInitDishesList');
 
   @override
-  ObservableFuture<dynamic> get loadInitDishesList {
+  ObservableFuture<dynamic> get loadInitSearchAllDishesList {
     _$loadInitDishesListAtom.reportRead();
-    return super.loadInitDishesList;
+    return super.loadInitSearchAllDishesList;
   }
 
   @override
-  set loadInitDishesList(ObservableFuture<dynamic> value) {
-    _$loadInitDishesListAtom.reportWrite(value, super.loadInitDishesList, () {
-      super.loadInitDishesList = value;
+  set loadInitSearchAllDishesList(ObservableFuture<dynamic> value) {
+    _$loadInitDishesListAtom.reportWrite(value, super.loadInitSearchAllDishesList, () {
+      super.loadInitSearchAllDishesList = value;
     });
   }
 
@@ -218,8 +218,8 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   final _$initDishListAsyncAction = AsyncAction('_FoodStoreBase.initDishList');
 
   @override
-  Future<void> initDishList() {
-    return _$initDishListAsyncAction.run(() => super.initDishList());
+  Future<void> initSearchAllDishList() {
+    return _$initDishListAsyncAction.run(() => super.initSearchAllDishList());
   }
 
   final _$initFoodCategoryListsAsyncAction =
@@ -300,11 +300,11 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
-  Future<void> retryForDishesTotal() {
+  Future<void> retrySearchAllDishesList() {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.retryForDishesTotal');
     try {
-      return super.retryForDishesTotal();
+      return super.retrySearchAllDishesList();
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -346,7 +346,7 @@ drinksDishList: ${drinksDishList},
 dishesListFromDBAndUser: ${dishesListFromDBAndUser},
 resultsList: ${resultsList},
 isSelected: ${isSelected},
-loadInitDishesList: ${loadInitDishesList}
+loadInitDishesList: ${loadInitSearchAllDishesList}
     ''';
   }
 }

@@ -26,7 +26,7 @@ class _OverviewSingleSymptomDayState extends State<OverviewSingleSymptomDay>  {
   void initState() {
     super.initState();
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
-
+    widget.overviewStore.initializeOverviewValueDay(widget.symptomId);
   }
 
   @override
