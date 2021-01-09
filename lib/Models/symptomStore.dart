@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,6 +33,10 @@ abstract class _SymptomStoreBase with Store {
 
   Map colorSymptomsMap = new Map<String , Color>();
 
+  var personalPageSymptomsList = new List<Symptom>();
+
+  @observable
+  ObservableFuture loadInitOccurrenceSymptomsList;
 
   @action
   Future<void> initStore(DateTime day) async {
@@ -39,6 +46,42 @@ abstract class _SymptomStoreBase with Store {
       await getSymptomsOfADay(day);
       storeInitialized = true;
     }
+  }
+
+  @action
+  Future<void> initPersonalPage()async{
+    return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
+
+    }
+
+  @action
+  Future<void> retryForOccurrenceSymptoms() {
+    return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
+  }
+
+@action
+Future<void> occurrenceInit() async{
+  await _getSymptomListForPersonalPage()
+      .then((value) =>
+      personalPageSymptomsList.sort((a, b) => a.occurrence.compareTo(b.occurrence)));
+}
+
+
+  @action
+  Future<void> _getSymptomListForPersonalPage() async {
+    await (FirebaseFirestore.instance
+        .collection("UserSymptomsOccurrence")
+        .doc(auth.currentUser.uid)
+        .collection("Symptoms")
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        Symptom i = new Symptom(id:result.id,name:result.get("name") );
+        i.occurrence = result.get("occurrence");
+        personalPageSymptomsList.add(i);
+      }
+      );
+    }));
   }
 
   @action
@@ -118,6 +161,73 @@ abstract class _SymptomStoreBase with Store {
     symptom.mealTime = listToAdd;
   }
 
+  Future<void> decrementingOccurrenceSymptom(Symptom symptom)async{
+    int occurrence=0;
+    await (FirebaseFirestore.instance
+        .collection("UserSymptomsOccurrence")
+        .doc(auth.currentUser.uid)
+        .collection("Symptoms")
+        .doc(symptom.id)
+        .get()
+        .then((doc) {
+        occurrence= doc.get("occurrence")-1;
+        updateOccurrenceSymptom(symptom.id,occurrence);
+        }));
+  }
+
+  Future<void> incrementingOccurrenceSymptom(Symptom symptom)async{
+    int occurrence=0;
+    await (FirebaseFirestore.instance
+        .collection("UserSymptomsOccurrence")
+        .doc(auth.currentUser.uid)
+        .collection("Symptoms")
+        .doc(symptom.id)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        print(doc.data());
+        occurrence= doc.get("occurrence") +1;
+        updateOccurrenceSymptom(symptom.id,occurrence);
+      } else {
+        createOccurrenceSymptom(symptom);
+      }
+
+
+    }));
+  }
+
+
+  @action
+  Future<void> createOccurrenceSymptom(Symptom symptom) async {
+    //creo l'occorrenza del sintomo e la setto ad 1
+    await (FirebaseFirestore.instance
+        .collection("UserSymptomsOccurrence")
+        .doc(auth.currentUser.uid)
+        .collection("Symptoms")
+        .doc(symptom.id)
+        .set({"virtual": true}));
+
+      await (FirebaseFirestore.instance
+          .collection("UserSymptomsOccurrence")
+          .doc(auth.currentUser.uid)
+          .collection("Symptoms")
+          .doc(symptom.id)
+          .set({"name":symptom.name,"occurrence": 1}));
+
+  }
+
+  @action
+  Future<void> updateOccurrenceSymptom(String symptomId, int newOccurrence) async {
+
+    await (FirebaseFirestore.instance
+        .collection("UserSymptomsOccurrence")
+        .doc(auth.currentUser.uid)
+        .collection("Symptoms")
+        .doc(symptomId)
+        .update({"occurrence": newOccurrence}));
+
+  }
+
   @action
   Future<void> updateSymptom(Symptom symptom, DateTime date) async {
     String day = fixDate(date);
@@ -148,11 +258,14 @@ abstract class _SymptomStoreBase with Store {
           .doc(symptom.id)
           .set(symptom.toMapDaySymptom()));
 
+      incrementingOccurrenceSymptom(symptom);
       symptom.isSymptomSelectDay=true;
       symptomListOfSpecificDay.add(symptom);
+
     }
 
   }
+
 
   @action
   void _resetSymptomsValue ()  {
@@ -184,6 +297,7 @@ abstract class _SymptomStoreBase with Store {
 
     symptom.resetValue();
     symptomListOfSpecificDay.removeWhere((element) => symptom.id == element.id);
+    decrementingOccurrenceSymptom(symptom);
   }
 
   void initializeColorMap(){

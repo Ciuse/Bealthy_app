@@ -39,6 +39,21 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$occurrenceAtom = Atom(name: '_SymptomBase.occurrence');
+
+  @override
+  int get occurrence {
+    _$occurrenceAtom.reportRead();
+    return super.occurrence;
+  }
+
+  @override
+  set occurrence(int value) {
+    _$occurrenceAtom.reportWrite(value, super.occurrence, () {
+      super.occurrence = value;
+    });
+  }
+
   final _$intensityAtom = Atom(name: '_SymptomBase.intensity');
 
   @override
@@ -229,6 +244,17 @@ mixin _$Symptom on _SymptomBase, Store {
   }
 
   @override
+  void setOccurrence(int value) {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.setOccurrence');
+    try {
+      return super.setOccurrence(value);
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setIntensity(int value) {
     final _$actionInfo = _$_SymptomBaseActionController.startAction(
         name: '_SymptomBase.setIntensity');
@@ -277,6 +303,7 @@ mixin _$Symptom on _SymptomBase, Store {
     return '''
 id: ${id},
 name: ${name},
+occurrence: ${occurrence},
 intensity: ${intensity},
 frequency: ${frequency},
 mealTime: ${mealTime},

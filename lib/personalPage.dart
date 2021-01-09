@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Login/config/palette.dart';
 import 'Login/screens/auth/auth.dart';
@@ -34,7 +35,9 @@ class _PersonalPageState extends State<PersonalPage>{
     initializeCameras();
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
-    symptomStore.initStore(DateTime.now());
+    symptomStore.initPersonalPage();
+
+
   }
 
   Future<void> initializeCameras() async {
@@ -78,16 +81,12 @@ class _PersonalPageState extends State<PersonalPage>{
             color: Colors.transparent,
             child:  RawMaterialButton(
               onPressed: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomList[index])
-                    )
-                )//todo inserire qui il salvataggio
+                print(symptomStore.personalPageSymptomsList[index].occurrence),
               },
           elevation: 5.0,
           fillColor: Colors.white,
           child: ImageIcon(
-            AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
+            AssetImage("images/Symptoms/" +symptomStore.personalPageSymptomsList[index].id+".png" ),
             color: Colors.black,
             size: 28.0,
           ),
@@ -101,7 +100,7 @@ class _PersonalPageState extends State<PersonalPage>{
             width: 70,
             alignment: Alignment.center,
             color: Colors.transparent,
-            child: Text(symptomStore.symptomList[index].name),)
+            child: Text(symptomStore.personalPageSymptomsList[index].name),)
     ],
     );
   }
@@ -200,17 +199,43 @@ class _PersonalPageState extends State<PersonalPage>{
                     alignment: Alignment.centerLeft,
                       child:Text("THREE MOST PREVALENT SYMPTOMS:",style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  ListView(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
-                          children: [
-                            symptom(0),
-                            symptom(1),
-                            symptom(2),
-                            SizedBox(height: 8,),
-                          ],
-                  ),
+                  Container(
+                      child: Observer(
+                        builder: (_) {
+                          switch (symptomStore.loadInitOccurrenceSymptomsList.status) {
+                            case FutureStatus.rejected:
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Oops something went wrong'),
+                                    RaisedButton(
+                                      child: Text('Retry'),
+                                      onPressed: () async {
+                                        await symptomStore.retryForOccurrenceSymptoms();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            case FutureStatus.fulfilled:
+                              return ListView(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                children: [
+                                  symptomStore.personalPageSymptomsList.length>0? symptom(symptomStore.personalPageSymptomsList.length-1): Container(),
+                                  symptomStore.personalPageSymptomsList.length>1? symptom(symptomStore.personalPageSymptomsList.length-2): Container(),
+                                  symptomStore.personalPageSymptomsList.length>2? symptom(symptomStore.personalPageSymptomsList.length-3): Container(),
+                                  SizedBox(height: 8,),
+                                ],
+                              );
+                            case FutureStatus.pending:
+                            default:
+                              return CircularProgressIndicator();
+                          }
+                        },
+                      )),
                   Divider(
                     height: 2,
                     thickness: 0.5,

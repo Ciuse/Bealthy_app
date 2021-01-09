@@ -30,6 +30,8 @@ abstract class _SymptomBase with Store {
   @observable
   String name;
   @observable
+  int occurrence;
+  @observable
   int intensity;
   @observable
   int frequency;
@@ -113,6 +115,12 @@ abstract class _SymptomBase with Store {
   void setIsSymptomInADay(bool value) {
     isSymptomSelectDay = value;
   }
+
+  @action
+  void setOccurrence(int value) {
+    occurrence = value;
+  }
+
   @action
   void setIntensity(int value) {
     intensity = value;
@@ -144,6 +152,11 @@ abstract class _SymptomBase with Store {
           intensity: json["intensity"],
           frequency: json["frequency"]
       );
+
+  Map<String, dynamic> toMapOccurrenceSymptom() =>
+      {
+        "occurrence": occurrence,
+      };
 
   Map<String, dynamic> toMapSymptom() =>
       {
