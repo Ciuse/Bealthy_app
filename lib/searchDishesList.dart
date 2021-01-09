@@ -24,7 +24,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
     super.initState();
     _searchController.addListener(_onSearchChanged);
     foodStore = Provider.of<FoodStore>(context, listen: false);
-    foodStore.initDishList();
+    foodStore.initSearchAllDishList();
     foodStore.resultsList.clear();
     _onSearchChanged();
   }
@@ -97,7 +97,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                 Container(
                     child: Observer(
                       builder: (_) {
-                        switch (foodStore.loadInitDishesList.status) {
+                        switch (foodStore.loadInitSearchAllDishesList.status) {
                           case FutureStatus.rejected:
                             return Center(
                               child: Column(
@@ -107,7 +107,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                   RaisedButton(
                                     child: Text('Retry'),
                                     onPressed: () async {
-                                      await foodStore.retryForDishesTotal();
+                                      await foodStore.retrySearchAllDishesList();
                                     },
                                   ),
                                 ],

@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
             MaterialApp(
               theme: ThemeData(
                   primaryTextTheme: TextTheme(
-                    headline6: GoogleFonts.roboto(fontSize: 22, fontWeight: FontWeight.w400, letterSpacing: 0.8),
+                    headline6: GoogleFonts.roboto(fontSize: 21, fontWeight: FontWeight.w400, letterSpacing: 0.5),
 
                   ),
                   visualDensity: VisualDensity.adaptivePlatformDensity,
