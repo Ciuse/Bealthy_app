@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
@@ -23,6 +24,10 @@ abstract class _UserStoreBase with Store {
   @observable
   File profileImage;
 
+  var personalPageSymptomsList = new List<Symptom>();
+
+  @observable
+  ObservableFuture loadInitOccurrenceSymptomsList;
 
   Future<void> initUserDb() async{
     profileImage=null;
@@ -67,5 +72,42 @@ abstract class _UserStoreBase with Store {
         .collection("UserSymptomsOccurrence")
         .doc(auth.currentUser.uid)
         .set({"virtual": true});
+  }
+
+  @action
+  Future<void> initPersonalPage()async{
+    return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
+
+  }
+
+  @action
+  Future<void> retryForOccurrenceSymptoms() {
+    return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
+  }
+
+  @action
+  Future<void> occurrenceInit() async{
+    await _getSymptomListForPersonalPage()
+        .then((value) =>
+        personalPageSymptomsList.sort((a, b) => a.occurrence.compareTo(b.occurrence)));
+  }
+
+
+  @action
+  Future<void> _getSymptomListForPersonalPage() async {
+    personalPageSymptomsList.clear();
+    await (FirebaseFirestore.instance
+        .collection("UserSymptomsOccurrence")
+        .doc(auth.currentUser.uid)
+        .collection("Symptoms")
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((result) {
+        Symptom i = new Symptom(id:result.id,name:result.get("name") );
+        i.occurrence = result.get("occurrence");
+        personalPageSymptomsList.add(i);
+      }
+      );
+    }));
   }
 }

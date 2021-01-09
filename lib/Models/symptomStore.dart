@@ -33,10 +33,6 @@ abstract class _SymptomStoreBase with Store {
 
   Map colorSymptomsMap = new Map<String , Color>();
 
-  var personalPageSymptomsList = new List<Symptom>();
-
-  @observable
-  ObservableFuture loadInitOccurrenceSymptomsList;
 
   @action
   Future<void> initStore(DateTime day) async {
@@ -48,41 +44,7 @@ abstract class _SymptomStoreBase with Store {
     }
   }
 
-  @action
-  Future<void> initPersonalPage()async{
-    return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
 
-    }
-
-  @action
-  Future<void> retryForOccurrenceSymptoms() {
-    return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
-  }
-
-@action
-Future<void> occurrenceInit() async{
-  await _getSymptomListForPersonalPage()
-      .then((value) =>
-      personalPageSymptomsList.sort((a, b) => a.occurrence.compareTo(b.occurrence)));
-}
-
-
-  @action
-  Future<void> _getSymptomListForPersonalPage() async {
-    await (FirebaseFirestore.instance
-        .collection("UserSymptomsOccurrence")
-        .doc(auth.currentUser.uid)
-        .collection("Symptoms")
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        Symptom i = new Symptom(id:result.id,name:result.get("name") );
-        i.occurrence = result.get("occurrence");
-        personalPageSymptomsList.add(i);
-      }
-      );
-    }));
-  }
 
   @action
   Future<void> _getSymptomList() async {
@@ -152,6 +114,7 @@ Future<void> occurrenceInit() async{
     List<String> listToAdd = new List<String>();
     int index =0;
     symptom.mealTimeBoolList.forEach((element) {
+      print(index);
       if(element.isSelected==true){
         String toAdd = "${MealTime.values[index].toString().split('.').last}";
         listToAdd.add(toAdd);

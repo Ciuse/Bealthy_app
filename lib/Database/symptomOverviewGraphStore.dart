@@ -12,5 +12,9 @@ abstract class _SymptomOverviewGraphStoreBase with Store {
   @observable
   int touchedIndex;
 
+  @action
+  Future<void> initStore() async {
+    touchedIndex=-1;
+  }
 
 }

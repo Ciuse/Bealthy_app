@@ -87,6 +87,7 @@ abstract class _SymptomBase with Store {
 
   @action
   void setMealTimeBoolList() {
+    print(mealTime);
     //in teoria si creano nell'ordine giusto
     int index = 0;
     MealTime.values.forEach((element) {
@@ -94,11 +95,9 @@ abstract class _SymptomBase with Store {
         if(element.toString().toString().split('.').last==elem.toString()){
           mealTimeBoolList[index].setIsSelected(true);
           //mealTimeBoolListFromDb[index].setIsSelected(true);
-        return;
         }
-        index++;
       });
-      index = 0;
+      index++;
     });
   }
 

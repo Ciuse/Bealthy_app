@@ -41,53 +41,11 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
-  final _$loadInitOccurrenceSymptomsListAtom =
-      Atom(name: '_SymptomStoreBase.loadInitOccurrenceSymptomsList');
-
-  @override
-  ObservableFuture<dynamic> get loadInitOccurrenceSymptomsList {
-    _$loadInitOccurrenceSymptomsListAtom.reportRead();
-    return super.loadInitOccurrenceSymptomsList;
-  }
-
-  @override
-  set loadInitOccurrenceSymptomsList(ObservableFuture<dynamic> value) {
-    _$loadInitOccurrenceSymptomsListAtom
-        .reportWrite(value, super.loadInitOccurrenceSymptomsList, () {
-      super.loadInitOccurrenceSymptomsList = value;
-    });
-  }
-
   final _$initStoreAsyncAction = AsyncAction('_SymptomStoreBase.initStore');
 
   @override
   Future<void> initStore(DateTime day) {
     return _$initStoreAsyncAction.run(() => super.initStore(day));
-  }
-
-  final _$initPersonalPageAsyncAction =
-      AsyncAction('_SymptomStoreBase.initPersonalPage');
-
-  @override
-  Future<void> initPersonalPage() {
-    return _$initPersonalPageAsyncAction.run(() => super.initPersonalPage());
-  }
-
-  final _$occurrenceInitAsyncAction =
-      AsyncAction('_SymptomStoreBase.occurrenceInit');
-
-  @override
-  Future<void> occurrenceInit() {
-    return _$occurrenceInitAsyncAction.run(() => super.occurrenceInit());
-  }
-
-  final _$_getSymptomListForPersonalPageAsyncAction =
-      AsyncAction('_SymptomStoreBase._getSymptomListForPersonalPage');
-
-  @override
-  Future<void> _getSymptomListForPersonalPage() {
-    return _$_getSymptomListForPersonalPageAsyncAction
-        .run(() => super._getSymptomListForPersonalPage());
   }
 
   final _$_getSymptomListAsyncAction =
@@ -147,17 +105,6 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
       ActionController(name: '_SymptomStoreBase');
 
   @override
-  Future<void> retryForOccurrenceSymptoms() {
-    final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
-        name: '_SymptomStoreBase.retryForOccurrenceSymptoms');
-    try {
-      return super.retryForOccurrenceSymptoms();
-    } finally {
-      _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   Symptom getSymptomFromList(String symptomId) {
     final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
         name: '_SymptomStoreBase.getSymptomFromList');
@@ -194,8 +141,7 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   String toString() {
     return '''
 symptomList: ${symptomList},
-symptomListOfSpecificDay: ${symptomListOfSpecificDay},
-loadInitOccurrenceSymptomsList: ${loadInitOccurrenceSymptomsList}
+symptomListOfSpecificDay: ${symptomListOfSpecificDay}
     ''';
   }
 }

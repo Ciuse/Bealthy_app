@@ -8,10 +8,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Login/config/palette.dart';
 import 'Login/screens/auth/auth.dart';
-import 'Models/ingredientStore.dart';
-import 'Models/symptomStore.dart';
 import 'Models/userStore.dart';
-import 'symptomPage.dart';
 import 'uploadNewProfileImage.dart';
 
 
@@ -21,21 +18,19 @@ class PersonalPage extends StatefulWidget {
 }
 
 class _PersonalPageState extends State<PersonalPage>{
-  IngredientStore ingredientStore;
   List<CameraDescription> cameras;
   final Color yellow = Color(0xfffbc31b);
   final Color orange = Color(0xfffb6900);
   final Color green = Colors.green;
   final Color lightBlue = Colors.lightBlueAccent;
   var storage = FirebaseStorage.instance;
-  SymptomStore symptomStore;
+  UserStore userStore;
 
   void initState() {
     super.initState();
     initializeCameras();
-    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
-    symptomStore = Provider.of<SymptomStore>(context, listen: false);
-    symptomStore.initPersonalPage();
+    userStore = Provider.of<UserStore>(context, listen: false);
+    userStore.initPersonalPage();
 
 
   }
@@ -81,12 +76,12 @@ class _PersonalPageState extends State<PersonalPage>{
             color: Colors.transparent,
             child:  RawMaterialButton(
               onPressed: () => {
-                print(symptomStore.personalPageSymptomsList[index].occurrence),
+                print(userStore.personalPageSymptomsList[index].occurrence),
               },
           elevation: 5.0,
           fillColor: Colors.white,
           child: ImageIcon(
-            AssetImage("images/Symptoms/" +symptomStore.personalPageSymptomsList[index].id+".png" ),
+            AssetImage("images/Symptoms/" +userStore.personalPageSymptomsList[index].id+".png" ),
             color: Colors.black,
             size: 28.0,
           ),
@@ -100,15 +95,13 @@ class _PersonalPageState extends State<PersonalPage>{
             width: 70,
             alignment: Alignment.center,
             color: Colors.transparent,
-            child: Text(symptomStore.personalPageSymptomsList[index].name),)
+            child: Text(userStore.personalPageSymptomsList[index].name),)
     ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final ingredientStore = Provider.of<IngredientStore>(context);
-    final userStore = Provider.of<UserStore>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -202,7 +195,7 @@ class _PersonalPageState extends State<PersonalPage>{
                   Container(
                       child: Observer(
                         builder: (_) {
-                          switch (symptomStore.loadInitOccurrenceSymptomsList.status) {
+                          switch (userStore.loadInitOccurrenceSymptomsList.status) {
                             case FutureStatus.rejected:
                               return Center(
                                 child: Column(
@@ -212,7 +205,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                     RaisedButton(
                                       child: Text('Retry'),
                                       onPressed: () async {
-                                        await symptomStore.retryForOccurrenceSymptoms();
+                                        await userStore.retryForOccurrenceSymptoms();
                                       },
                                     ),
                                   ],
@@ -224,9 +217,9 @@ class _PersonalPageState extends State<PersonalPage>{
                                 shrinkWrap: true,
                                 physics: ClampingScrollPhysics(),
                                 children: [
-                                  symptomStore.personalPageSymptomsList.length>0? symptom(symptomStore.personalPageSymptomsList.length-1): Container(),
-                                  symptomStore.personalPageSymptomsList.length>1? symptom(symptomStore.personalPageSymptomsList.length-2): Container(),
-                                  symptomStore.personalPageSymptomsList.length>2? symptom(symptomStore.personalPageSymptomsList.length-3): Container(),
+                                  userStore.personalPageSymptomsList.length>0? symptom(userStore.personalPageSymptomsList.length-1): Container(),
+                                  userStore.personalPageSymptomsList.length>1? symptom(userStore.personalPageSymptomsList.length-2): Container(),
+                                  userStore.personalPageSymptomsList.length>2? symptom(userStore.personalPageSymptomsList.length-3): Container(),
                                   SizedBox(height: 8,),
                                 ],
                               );

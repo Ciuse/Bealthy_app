@@ -178,20 +178,37 @@ mixin _$OverviewStore on _OverviewBase, Store {
     });
   }
 
-  final _$dayOccurrenceIngredientAtom =
-      Atom(name: '_OverviewBase.dayOccurrenceIngredient');
+  final _$dayOccurrenceIngredientBySymptomAtom =
+      Atom(name: '_OverviewBase.dayOccurrenceIngredientBySymptom');
 
   @override
-  ObservableMap<String, int> get dayOccurrenceIngredient {
-    _$dayOccurrenceIngredientAtom.reportRead();
-    return super.dayOccurrenceIngredient;
+  ObservableMap<String, int> get dayOccurrenceIngredientBySymptom {
+    _$dayOccurrenceIngredientBySymptomAtom.reportRead();
+    return super.dayOccurrenceIngredientBySymptom;
   }
 
   @override
-  set dayOccurrenceIngredient(ObservableMap<String, int> value) {
-    _$dayOccurrenceIngredientAtom
-        .reportWrite(value, super.dayOccurrenceIngredient, () {
-      super.dayOccurrenceIngredient = value;
+  set dayOccurrenceIngredientBySymptom(ObservableMap<String, int> value) {
+    _$dayOccurrenceIngredientBySymptomAtom
+        .reportWrite(value, super.dayOccurrenceIngredientBySymptom, () {
+      super.dayOccurrenceIngredientBySymptom = value;
+    });
+  }
+
+  final _$totalOccurrenceIngredientBySymptomAtom =
+      Atom(name: '_OverviewBase.totalOccurrenceIngredientBySymptom');
+
+  @override
+  ObservableMap<String, int> get totalOccurrenceIngredientBySymptom {
+    _$totalOccurrenceIngredientBySymptomAtom.reportRead();
+    return super.totalOccurrenceIngredientBySymptom;
+  }
+
+  @override
+  set totalOccurrenceIngredientBySymptom(ObservableMap<String, int> value) {
+    _$totalOccurrenceIngredientBySymptomAtom
+        .reportWrite(value, super.totalOccurrenceIngredientBySymptom, () {
+      super.totalOccurrenceIngredientBySymptom = value;
     });
   }
 
@@ -326,22 +343,23 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
-  void singleDayOccurrenceIngredientsPeriod(DateTime dateTime) {
+  void getIngredientBySymptomDayOfAPeriod(DateTime dateTime, Symptom symptom) {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
-        name: '_OverviewBase.singleDayOccurrenceIngredientsPeriod');
+        name: '_OverviewBase.getIngredientBySymptomDayOfAPeriod');
     try {
-      return super.singleDayOccurrenceIngredientsPeriod(dateTime);
+      return super.getIngredientBySymptomDayOfAPeriod(dateTime, symptom);
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void singleDayOccurrenceIngredientsDay(MealTime mealTime) {
+  void getIngredientBySymptomMealTimeOfADay(
+      MealTime mealTime, Symptom symptom) {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
-        name: '_OverviewBase.singleDayOccurrenceIngredientsDay');
+        name: '_OverviewBase.getIngredientBySymptomMealTimeOfADay');
     try {
-      return super.singleDayOccurrenceIngredientsDay(mealTime);
+      return super.getIngredientBySymptomMealTimeOfADay(mealTime, symptom);
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }
@@ -404,7 +422,8 @@ mapIngredientsOverviewDay: ${mapIngredientsOverviewDay},
 overviewDishList: ${overviewDishList},
 overviewIngredientList: ${overviewIngredientList},
 totalOccurrenceIngredient: ${totalOccurrenceIngredient},
-dayOccurrenceIngredient: ${dayOccurrenceIngredient}
+dayOccurrenceIngredientBySymptom: ${dayOccurrenceIngredientBySymptom},
+totalOccurrenceIngredientBySymptom: ${totalOccurrenceIngredientBySymptom}
     ''';
   }
 }

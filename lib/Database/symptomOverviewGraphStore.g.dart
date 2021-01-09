@@ -25,6 +25,14 @@ mixin _$SymptomOverviewGraphStore on _SymptomOverviewGraphStoreBase, Store {
     });
   }
 
+  final _$initStoreAsyncAction =
+      AsyncAction('_SymptomOverviewGraphStoreBase.initStore');
+
+  @override
+  Future<void> initStore() {
+    return _$initStoreAsyncAction.run(() => super.initStore());
+  }
+
   @override
   String toString() {
     return '''

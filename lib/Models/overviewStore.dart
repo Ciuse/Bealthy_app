@@ -65,8 +65,10 @@ abstract class _OverviewBase with Store {
   var totalOccurrenceIngredient = new ObservableMap<String, int>();
 
   @observable
-  var dayOccurrenceIngredient = new ObservableMap<String, int>();
+  var dayOccurrenceIngredientBySymptom = new ObservableMap<String, int>();
 
+  @observable
+  var totalOccurrenceIngredientBySymptom = new ObservableMap<String, int>();
 
 
   @action
@@ -244,27 +246,48 @@ abstract class _OverviewBase with Store {
   }
 
   @action
-  void singleDayOccurrenceIngredientsPeriod(DateTime dateTime){
-    dayOccurrenceIngredient.clear();
-    mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
-      if(!dayOccurrenceIngredient.keys.contains(ingredient.id)){
-        dayOccurrenceIngredient.putIfAbsent(ingredient.id, () => 1);
-      }else{
-        dayOccurrenceIngredient.update(ingredient.id, (value) => value+1);
+  void getIngredientBySymptomDayOfAPeriod(DateTime dateTime, Symptom symptom) {
+    dayOccurrenceIngredientBySymptom.clear();
+    Symptom currentSymptom = mapSymptomsOverviewPeriod[dateTime].firstWhere((element) => element.name!=null && element.id == symptom.id,orElse: () => null);
+    if (currentSymptom!=null) {
+      print("ENTRATOO");
+
+      if(mapIngredientsOverviewPeriod[dateTime].isNotEmpty) {
+        mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
+          if (currentSymptom.mealTime.contains(ingredient.mealTime)) {
+            if (!dayOccurrenceIngredientBySymptom.keys
+                .contains(ingredient.id)) {
+              dayOccurrenceIngredientBySymptom.putIfAbsent(
+                  ingredient.id, () => 1);
+            } else {
+              dayOccurrenceIngredientBySymptom.update(
+                  ingredient.id, (value) => value + 1);
+            }
+          }
+        });
       }
-    });
+    }
   }
+
   @action
-  void singleDayOccurrenceIngredientsDay(MealTime mealTime){
-    dayOccurrenceIngredient.clear();
-    mapIngredientsOverviewDay[mealTime].forEach((ingredient) {
-      if(!dayOccurrenceIngredient.keys.contains(ingredient.id)){
-        dayOccurrenceIngredient.putIfAbsent(ingredient.id, () => 1);
-      }else{
-        dayOccurrenceIngredient.update(ingredient.id, (value) => value+1);
+  void getIngredientBySymptomMealTimeOfADay(MealTime mealTime, Symptom symptom) {
+    dayOccurrenceIngredientBySymptom.clear();
+    if (mapSymptomsOverviewDay[mealTime].firstWhere((element) => element.name!=null && element.id == symptom.id, orElse: () => null)!=null) {
+      print("entrato");
+      if(mapIngredientsOverviewDay[mealTime].isNotEmpty) {
+        mapIngredientsOverviewDay[mealTime].forEach((ingredient) {
+          if (!dayOccurrenceIngredientBySymptom.keys.contains(ingredient.id)) {
+            dayOccurrenceIngredientBySymptom.putIfAbsent(
+                ingredient.id, () => 1);
+          } else {
+            dayOccurrenceIngredientBySymptom.update(
+                ingredient.id, (value) => value + 1);
+          }
+        });
       }
-    });
+    }
   }
+
   @action
   Future<void> getSymptomsOfADay(DateTime date) async {
     await (FirebaseFirestore.instance
