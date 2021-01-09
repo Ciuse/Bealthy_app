@@ -183,20 +183,47 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
-  final _$loadInitDishesListAtom =
-      Atom(name: '_FoodStoreBase.loadInitDishesList');
+  final _$loadInitFavouriteDishesListAtom =
+      Atom(name: '_FoodStoreBase.loadInitFavouriteDishesList');
+
+  @override
+  ObservableFuture<dynamic> get loadInitFavouriteDishesList {
+    _$loadInitFavouriteDishesListAtom.reportRead();
+    return super.loadInitFavouriteDishesList;
+  }
+
+  @override
+  set loadInitFavouriteDishesList(ObservableFuture<dynamic> value) {
+    _$loadInitFavouriteDishesListAtom
+        .reportWrite(value, super.loadInitFavouriteDishesList, () {
+      super.loadInitFavouriteDishesList = value;
+    });
+  }
+
+  final _$loadInitSearchAllDishesListAtom =
+      Atom(name: '_FoodStoreBase.loadInitSearchAllDishesList');
 
   @override
   ObservableFuture<dynamic> get loadInitSearchAllDishesList {
-    _$loadInitDishesListAtom.reportRead();
+    _$loadInitSearchAllDishesListAtom.reportRead();
     return super.loadInitSearchAllDishesList;
   }
 
   @override
   set loadInitSearchAllDishesList(ObservableFuture<dynamic> value) {
-    _$loadInitDishesListAtom.reportWrite(value, super.loadInitSearchAllDishesList, () {
+    _$loadInitSearchAllDishesListAtom
+        .reportWrite(value, super.loadInitSearchAllDishesList, () {
       super.loadInitSearchAllDishesList = value;
     });
+  }
+
+  final _$initFavouriteDishListAsyncAction =
+      AsyncAction('_FoodStoreBase.initFavouriteDishList');
+
+  @override
+  Future<void> initFavouriteDishList() {
+    return _$initFavouriteDishListAsyncAction
+        .run(() => super.initFavouriteDishList());
   }
 
   final _$initStoreAsyncAction = AsyncAction('_FoodStoreBase.initStore');
@@ -215,11 +242,13 @@ mixin _$FoodStore on _FoodStoreBase, Store {
         .run(() => super.initBooleanDishQuantity());
   }
 
-  final _$initDishListAsyncAction = AsyncAction('_FoodStoreBase.initDishList');
+  final _$initSearchAllDishListAsyncAction =
+      AsyncAction('_FoodStoreBase.initSearchAllDishList');
 
   @override
   Future<void> initSearchAllDishList() {
-    return _$initDishListAsyncAction.run(() => super.initSearchAllDishList());
+    return _$initSearchAllDishListAsyncAction
+        .run(() => super.initSearchAllDishList());
   }
 
   final _$initFoodCategoryListsAsyncAction =
@@ -289,6 +318,17 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       ActionController(name: '_FoodStoreBase');
 
   @override
+  Future<void> retryFavouriteDishesList() {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.retryFavouriteDishesList');
+    try {
+      return super.retryFavouriteDishesList();
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setBooleanQuantityDish() {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.setBooleanQuantityDish');
@@ -302,7 +342,7 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   @override
   Future<void> retrySearchAllDishesList() {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
-        name: '_FoodStoreBase.retryForDishesTotal');
+        name: '_FoodStoreBase.retrySearchAllDishesList');
     try {
       return super.retrySearchAllDishesList();
     } finally {
@@ -346,7 +386,8 @@ drinksDishList: ${drinksDishList},
 dishesListFromDBAndUser: ${dishesListFromDBAndUser},
 resultsList: ${resultsList},
 isSelected: ${isSelected},
-loadInitDishesList: ${loadInitSearchAllDishesList}
+loadInitFavouriteDishesList: ${loadInitFavouriteDishesList},
+loadInitSearchAllDishesList: ${loadInitSearchAllDishesList}
     ''';
   }
 }
