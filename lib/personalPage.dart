@@ -9,6 +9,7 @@ import 'Login/config/palette.dart';
 import 'Login/screens/auth/auth.dart';
 import 'Models/ingredientStore.dart';
 import 'Models/symptomStore.dart';
+import 'Models/userStore.dart';
 import 'symptomPage.dart';
 import 'uploadNewProfileImage.dart';
 
@@ -32,7 +33,6 @@ class _PersonalPageState extends State<PersonalPage>{
     super.initState();
     initializeCameras();
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
-    ingredientStore.profileImage=null;
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
     symptomStore.initStore(DateTime.now());
   }
@@ -44,13 +44,12 @@ class _PersonalPageState extends State<PersonalPage>{
   }
 
   openCamera() async {
-    ingredientStore.profileImage = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute<File>(
         builder: (context) => UploadNewProfileImage(camera: cameras.first),
       ),
     );
-    print(ingredientStore.profileImage);
   }
 
   Future getImage() async {
@@ -110,6 +109,8 @@ class _PersonalPageState extends State<PersonalPage>{
   @override
   Widget build(BuildContext context) {
     final ingredientStore = Provider.of<IngredientStore>(context);
+    final userStore = Provider.of<UserStore>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Personal info'),
@@ -135,7 +136,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                     ),
                                   ),
                                   child: ClipOval(
-                                    child: ingredientStore.profileImage==null?
+                                    child: userStore.profileImage==null?
                                     FutureBuilder(
                                         future: getImage(),
                                         builder: (context, remoteString) {
@@ -157,7 +158,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                         }
                                     )
                                         :
-                                    Image.file(ingredientStore.profileImage),
+                                    Image.file(userStore.profileImage),
                                   )
                               ),
 

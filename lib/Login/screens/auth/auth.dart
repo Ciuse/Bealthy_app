@@ -1,12 +1,15 @@
 import 'package:Bealthy_app/Login/config/palette.dart';
 import 'package:Bealthy_app/Login/screens/auth/widgets/register.dart';
 import 'package:Bealthy_app/Login/screens/auth/widgets/sign_in.dart';
+import 'package:Bealthy_app/Models/userStore.dart';
 import 'package:Bealthy_app/main.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:move_to_background/move_to_background.dart';
+import 'package:provider/provider.dart';
 
 import 'widgets/background_painter.dart';
 
@@ -42,6 +45,8 @@ class _AuthScreenState extends State<AuthScreen>
 
   @override
   Widget build(BuildContext context) {
+
+
     return WillPopScope(
       onWillPop: () async {
         MoveToBackground.moveTaskToBack();
@@ -56,7 +61,7 @@ class _AuthScreenState extends State<AuthScreen>
             size: 32,
           ),
         ),
-        onAuthSuccess: () {
+        onAuthSuccess: (){
           Navigator.of(context).pushReplacement(HomePage.route);
         },
         child: Stack(

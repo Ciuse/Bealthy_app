@@ -24,6 +24,7 @@ abstract class _FoodStoreBase with Store {
   bool storeInitialized = false;
   bool storeSearchAllDishInitialized = false;
   bool storeFavouriteDishInitialized = false;
+  bool storeCreatedYourDishInitialized = false;
 
   bool booleanQuantityDishInitialized = false;
 
@@ -74,16 +75,32 @@ abstract class _FoodStoreBase with Store {
       return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes());
     }
   }
+
   @action
   Future<void> retryFavouriteDishesList() {
     return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes());
+  }
+
+  @observable
+  ObservableFuture loadInitCreatedYourDishesList;
+
+  @action
+  Future<void> initCreatedYourDishList() async {
+
+    if (!storeCreatedYourDishInitialized) {
+      storeCreatedYourDishInitialized = true;
+      return loadInitCreatedYourDishesList = ObservableFuture(_getYourDishes());
+    }
+  }
+  @action
+  Future<void> retryCreatedYourDishesList() {
+    return loadInitCreatedYourDishesList = ObservableFuture(_getYourDishes());
   }
 
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {
       storeInitialized = true;
-      await _getYourDishes();
       await _addDishToCategory();
     }
   }

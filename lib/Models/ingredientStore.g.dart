@@ -25,21 +25,6 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     });
   }
 
-  final _$profileImageAtom = Atom(name: '_IngredientStoreBase.profileImage');
-
-  @override
-  File get profileImage {
-    _$profileImageAtom.reportRead();
-    return super.profileImage;
-  }
-
-  @override
-  set profileImage(File value) {
-    _$profileImageAtom.reportWrite(value, super.profileImage, () {
-      super.profileImage = value;
-    });
-  }
-
   final _$ingredientListOfDishAtom =
       Atom(name: '_IngredientStoreBase.ingredientListOfDish');
 
@@ -183,7 +168,6 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   String toString() {
     return '''
 ingredientList: ${ingredientList},
-profileImage: ${profileImage},
 ingredientListOfDish: ${ingredientListOfDish},
 ingredientsName: ${ingredientsName},
 loadInitIngredientList: ${loadInitIngredientList}

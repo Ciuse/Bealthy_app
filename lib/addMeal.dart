@@ -459,62 +459,125 @@ class _CategoryDishListState extends State<CategoryDishList> {
   }
 }
 
+
+
+
 class YourDishList extends StatefulWidget {
   @override
   _YourDishListState createState() => _YourDishListState();
-
-
-
 }
 
 class _YourDishListState extends State<YourDishList> {
+  var storage = FirebaseStorage.instance;
 
   @override
   void initState() {
     super.initState();
     var store = Provider.of<FoodStore>(context, listen: false);
 
-    store.initStore();
+    store.initCreatedYourDishList();
 
+  }
+  Future getImage(String dishId) async {
+    String userUid;
+    final litUser = context.getSignedInUser();
+    litUser.when(
+          (user) => userUid=user.uid,
+      empty: () => Text('Not signed in'),
+      initializing: () => Text('Loading'),
+    );
+    try {
+      return await storage.ref(userUid+"/DishImage/" + dishId + ".jpg").getDownloadURL();
+    }
+    catch (e) {
+      return await Future.error(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<FoodStore>(context);
+    final foodStore = Provider.of<FoodStore>(context);
 
     return Scaffold(
         appBar: AppBar(
           title: Text("Your Dish"),
         ),
-        body: ListView(children:[
-          Observer(
-                builder: (_) =>
-                    Column(
-                        children: [
-                          for(Dish item in store.yourCreatedDishList) FlatButton(
-                            onPressed: () =>
-                            {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) =>
-                                    DishPage(dish: item, createdByUser: true),
-                                )
-                              )
-                            },
-                            color: Colors.orange,
-                            padding: EdgeInsets.all(10.0),
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.fastfood),
-                                Text(item.name.toString())
-                              ],
+        body: Column(children:[
+          Container(
+              child:
+              Observer(
+                builder: (_) {
+                  switch (foodStore.loadInitCreatedYourDishesList.status) {
+                    case FutureStatus.rejected:
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Oops something went wrong'),
+                            RaisedButton(
+                              child: Text('Retry'),
+                              onPressed: () async {
+                                await foodStore.retryCreatedYourDishesList();
+                              },
                             ),
-                          ),
-                        ]
-                    )
-
-            )],),
-
+                          ],
+                        ),
+                      );
+                    case FutureStatus.fulfilled:
+                      return Expanded(child: ListView.builder(
+                          itemCount: foodStore.yourCreatedDishList.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: ListTile(
+                                onTap: ()=> { Navigator.push(
+                                  context, MaterialPageRoute(builder: (context) =>
+                                    DishPage(dish: foodStore.yourCreatedDishList[index],
+                                        createdByUser: true)
+                                ),
+                                )
+                                },
+                                title: Text(foodStore.yourCreatedDishList[index].name,style: TextStyle(fontSize: 22.0)),
+                                subtitle: Text(foodStore.yourCreatedDishList[index].category,style: TextStyle(fontSize: 18.0)),
+                                leading:
+                                FutureBuilder(
+                                    future: getImage(foodStore.yourCreatedDishList[index].id),
+                                    builder: (context, remoteString) {
+                                      if (remoteString.connectionState != ConnectionState.waiting) {
+                                        if (remoteString.hasError) {
+                                          return Text("Image not found");
+                                        }
+                                        else {
+                                          return Observer(builder: (_) =>Container
+                                            (width: 45,
+                                              height: 45,
+                                              decoration: new BoxDecoration(
+                                                borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                border: new Border.all(
+                                                  color: Colors.black,
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              child: ClipOval(
+                                                  child: foodStore.yourCreatedDishList[index].imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill)
+                                                      :Image.file(foodStore.yourCreatedDishList[index].imageFile)
+                                              )));
+                                        }
+                                      }
+                                      else {
+                                        return CircularProgressIndicator();
+                                      }
+                                    }
+                                )
+                              ),
+                            );
+                          }));
+                    case FutureStatus.pending:
+                    default:
+                      return CircularProgressIndicator();
+                  }
+                },
+              )),
+          ],),
     );
   }
 }

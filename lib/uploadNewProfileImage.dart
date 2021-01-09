@@ -6,8 +6,10 @@ import 'package:camera/camera.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import 'Login/config/palette.dart';
+import 'Models/userStore.dart';
 
 
 class UploadNewProfileImage extends StatefulWidget {
@@ -24,10 +26,11 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
   final Color yellow = Color(0xfffbc31b);
   final Color orange = Color(0xfffb6900);
   final picker = ImagePicker();
-
+  UserStore userStore;
 
   void initState() {
     super.initState();
+    userStore = Provider.of<UserStore>(context, listen: false);
 
   }
 
@@ -120,12 +123,10 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
 
       String fileName = "UserProfileImage.jpg";
       var firebaseStorageRef = FirebaseStorage.instance.ref().child(userUid+'/UserProfileImage/$fileName');
-      var uploadTask = firebaseStorageRef.putFile(_imageFile);
-      await uploadTask.whenComplete(() async{
-        await firebaseStorageRef.getDownloadURL().then(
-              (value) => Navigator.pop(context,_imageFile),
-        );
-      });
+      firebaseStorageRef.putFile(_imageFile);
+      userStore.profileImage=_imageFile;
+      Navigator.pop(context);
+
   }
 
 

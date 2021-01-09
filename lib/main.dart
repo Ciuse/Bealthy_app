@@ -8,6 +8,7 @@ import 'Login/screens/splash.dart';
 import 'Models/mealTimeStore.dart';
 import 'Models/overviewStore.dart';
 import 'Models/symptomStore.dart';
+import 'Models/userStore.dart';
 import 'overviewPage.dart';
 import 'package:flutter/material.dart';
 import 'homePage.dart';
@@ -46,7 +47,9 @@ void main() async {
         Provider<MealTimeStore>(
           create: (_) => MealTimeStore(),
         ),
-
+        Provider<UserStore>(
+          create: (_) => UserStore(),
+        ),
         Provider<SymptomOverviewGraphStore>(
           create: (_) => SymptomOverviewGraphStore(),
         )
@@ -146,6 +149,8 @@ class _MyHomePageState extends State<HomePage> {
   void initState() {
     super.initState();
    dateStore = Provider.of<DateStore>(context, listen: false);
+    UserStore userStore = Provider.of<UserStore>(context, listen: false);
+    userStore.initUserDb();
   }
 
   final List<Widget> _widgetOptions = <Widget>[

@@ -27,8 +27,7 @@ abstract class _IngredientStoreBase with Store {
   var ingredientList = new ObservableList<Ingredient>();
 
 
-  @observable
-  File profileImage;
+
 
   @observable
   var ingredientListOfDish = new ObservableList<Ingredient>();
