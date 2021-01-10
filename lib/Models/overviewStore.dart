@@ -5,11 +5,10 @@ import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
-import 'package:async/async.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sortedmap/sortedmap.dart';
 
 // Include generated file
 part 'overviewStore.g.dart';
@@ -47,7 +46,7 @@ abstract class _OverviewBase with Store {
   var totalOccurrenceSymptom = new ObservableMap<String, int>();
 
   @observable
-  var dayOccurrenceSymptom = new ObservableMap<String, int>();
+  var dayOccurrenceSymptom = new SortedMap<String, int>();
 
   @observable
   var mapIngredientsOverviewPeriod = new ObservableMap<DateTime,List<Ingredient>>();
@@ -246,13 +245,60 @@ abstract class _OverviewBase with Store {
   }
 
   @action
-  void getIngredientBySymptomDayOfAPeriod(DateTime dateTime, Symptom symptom) {
-    dayOccurrenceIngredientBySymptom.clear();
-    Symptom currentSymptom = mapSymptomsOverviewPeriod[dateTime].firstWhere((element) => element.name!=null && element.id == symptom.id,orElse: () => null);
-    if (currentSymptom!=null) {
-      print("ENTRATOO");
+  void getTotalIngredientBySymptomOfAPeriod(String symptomId){
+    totalOccurrenceIngredientBySymptom.clear();
+    mapSymptomsOverviewPeriod.keys.forEach((dateTime) {
+      Symptom currentSymptom = mapSymptomsOverviewPeriod[dateTime].firstWhere((element) => element.name!=null && element.id == symptomId,orElse: () => null);
+      if (currentSymptom!=null) {
+        if (mapIngredientsOverviewPeriod.containsKey(dateTime) && mapIngredientsOverviewPeriod[dateTime].isNotEmpty) {
+          mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
+            if (currentSymptom.mealTime.contains(ingredient.mealTime)) {
+              if (!totalOccurrenceIngredientBySymptom.keys.contains(
+                  ingredient.id)) {
+                totalOccurrenceIngredientBySymptom.putIfAbsent(
+                    ingredient.id, () => 1);
+              } else {
+                totalOccurrenceIngredientBySymptom.update(
+                    ingredient.id, (value) => value + 1);
+              }
+            }
+          });
+        }
+      }
+    });
 
-      if(mapIngredientsOverviewPeriod[dateTime].isNotEmpty) {
+  }
+
+  @action
+  void getTotalIngredientBySymptomOfADay(String symptomId){
+    totalOccurrenceIngredientBySymptom.clear();
+    mapSymptomsOverviewDay.keys.forEach((mealTime) {
+      Symptom currentSymptom = mapSymptomsOverviewDay[mealTime].firstWhere((element) => element.name!=null && element.id == symptomId,orElse: () => null);
+      if (currentSymptom!=null) {
+        if (mapIngredientsOverviewDay.containsKey(mealTime) && mapIngredientsOverviewDay[mealTime].isNotEmpty) {
+          mapIngredientsOverviewDay[mealTime].forEach((ingredient) {
+            if (!totalOccurrenceIngredientBySymptom.keys.contains(
+                ingredient.id)) {
+              totalOccurrenceIngredientBySymptom.putIfAbsent(
+                  ingredient.id, () => 1);
+            } else {
+              totalOccurrenceIngredientBySymptom.update(
+                  ingredient.id, (value) => value + 1);
+            }
+          }
+          );
+        }
+      }
+    });
+  }
+
+  @action
+  void getIngredientBySymptomDayOfAPeriod(DateTime dateTime, String symptomId) {
+    dayOccurrenceIngredientBySymptom.clear();
+    Symptom currentSymptom = mapSymptomsOverviewPeriod[dateTime].firstWhere((element) => element.name!=null && element.id == symptomId,orElse: () => null);
+    if (currentSymptom!=null) {
+
+      if(mapIngredientsOverviewPeriod.containsKey(dateTime) && mapIngredientsOverviewPeriod[dateTime].isNotEmpty) {
         mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
           if (currentSymptom.mealTime.contains(ingredient.mealTime)) {
             if (!dayOccurrenceIngredientBySymptom.keys
@@ -270,11 +316,10 @@ abstract class _OverviewBase with Store {
   }
 
   @action
-  void getIngredientBySymptomMealTimeOfADay(MealTime mealTime, Symptom symptom) {
+  void getIngredientBySymptomMealTimeOfADay(MealTime mealTime, String symptomId) {
     dayOccurrenceIngredientBySymptom.clear();
-    if (mapSymptomsOverviewDay[mealTime].firstWhere((element) => element.name!=null && element.id == symptom.id, orElse: () => null)!=null) {
-      print("entrato");
-      if(mapIngredientsOverviewDay[mealTime].isNotEmpty) {
+    if (mapSymptomsOverviewDay[mealTime].firstWhere((element) => element.name!=null && element.id == symptomId, orElse: () => null)!=null) {
+      if(mapIngredientsOverviewDay.containsKey(mealTime) && mapIngredientsOverviewDay[mealTime].isNotEmpty) {
         mapIngredientsOverviewDay[mealTime].forEach((ingredient) {
           if (!dayOccurrenceIngredientBySymptom.keys.contains(ingredient.id)) {
             dayOccurrenceIngredientBySymptom.putIfAbsent(
@@ -374,13 +419,13 @@ abstract class _OverviewBase with Store {
       value = 0;
     }
     if(count==1){
-      value = 0.5;
+      value = 0.6;
     }
     if(count==2){
-      value = 0.7;
+      value = 0.8;
     }
     if(count==3){
-      value = 0.9;
+      value = 0.95;
     }
     if(count==4){
       value = 1.0;
@@ -393,7 +438,7 @@ abstract class _OverviewBase with Store {
     MealTime.values.forEach((mealTime) {
       if( mapSymptomsOverviewDay[mealTime].any((element) => element.id==symptomId)){
         Symptom toUpdate = mapSymptomsOverviewDay[mealTime].firstWhere((element) => element.id==symptomId);
-        toUpdate.overviewValue = toUpdate.intensity*toUpdate.frequency*mealTimeValueSymptom(toUpdate);
+        toUpdate.overviewValue = (toUpdate.intensity*(toUpdate.frequency*0.5)*mealTimeValueSymptom(toUpdate))/2.5;
         toUpdate.overviewValue.roundToDouble();
       }else{
         Symptom symptomNotPresent = new Symptom(id: symptomId, intensity: 0,frequency: 0,mealTime: []);
@@ -408,7 +453,7 @@ abstract class _OverviewBase with Store {
 
     if( mapSymptomsOverviewPeriod[dateTime].any((element) => element.id==symptomId)){
       Symptom toUpdate = mapSymptomsOverviewPeriod[dateTime].firstWhere((element) => element.id==symptomId);
-      toUpdate.overviewValue = toUpdate.intensity*toUpdate.frequency*mealTimeValueSymptom(toUpdate);
+      toUpdate.overviewValue = (toUpdate.intensity*(toUpdate.frequency*0.5)*mealTimeValueSymptom(toUpdate))/2.5;
       toUpdate.overviewValue = toUpdate.overviewValue.roundToDouble();
     }else{
       Symptom symptomNotPresent = new Symptom(id: symptomId, intensity: 0,frequency: 0,mealTime: []);

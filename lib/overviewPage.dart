@@ -484,6 +484,14 @@ class Indicator2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
+
+        Text(
+          text,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
+        ),
+        const SizedBox(
+          width: 4,
+        ),
         Container(
           width: size,
           height: size,
@@ -492,13 +500,6 @@ class Indicator2 extends StatelessWidget {
             color: color,
           ),
         ),
-        const SizedBox(
-          width: 4,
-        ),
-        Text(
-          text,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
-        )
       ],
     );
   }
@@ -561,8 +562,8 @@ class PieChart2State extends State<PieChartSample2> {
             ),
         Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children:[
                 for(String symptomId in widget.overviewStore.totalOccurrenceSymptom.keys)
                   Indicator2(

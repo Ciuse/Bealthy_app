@@ -19,7 +19,6 @@ class OverviewSingleSymptomWeek extends StatefulWidget {
 class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  {
   DateStore dateStore;
   SymptomStore symptomStore;
-  Symptom symptom;
   void initState() {
     super.initState();
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context, listen: false);
@@ -29,7 +28,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
     dateStore.rangeDays.forEach((dateTime) {
       widget.overviewStore.initializeOverviewValuePeriod(dateTime, widget.symptomId);
     });
-
+    widget.overviewStore.getTotalIngredientBySymptomOfAPeriod(widget.symptomId);
   }
 
   @override
@@ -55,7 +54,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
     ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in widget.overviewStore.totalOccurrenceIngredient.keys )
+          for(var ingredient in widget.overviewStore.totalOccurrenceIngredientBySymptom.keys )
             Column(children: [ Container(
                 width: 50,
                 height: 50,
@@ -64,7 +63,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                       image: AssetImage("images/ingredients/" + ingredient + ".png"),
                     )
                 )),
-              Text(widget.overviewStore.totalOccurrenceIngredient[ingredient].toString())
+              Text(widget.overviewStore.totalOccurrenceIngredientBySymptom[ingredient].toString())
             ])
 
         ])
@@ -222,7 +221,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           if(barTouchResponse.touchInput is FlPanStart) {
             if (barTouchResponse.spot != null) {
               graphStore.touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-              overviewStore.getIngredientBySymptomDayOfAPeriod(dateStore.rangeDays[graphStore.touchedIndex], symptomStore.getSymptomFromList(widget.symptomId));
+              overviewStore.getIngredientBySymptomDayOfAPeriod(dateStore.rangeDays[graphStore.touchedIndex], widget.symptomId);
             }
             else{
               graphStore.touchedIndex = -1;

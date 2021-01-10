@@ -80,13 +80,13 @@ mixin _$OverviewStore on _OverviewBase, Store {
       Atom(name: '_OverviewBase.dayOccurrenceSymptom');
 
   @override
-  ObservableMap<String, int> get dayOccurrenceSymptom {
+  SortedMap<String, int> get dayOccurrenceSymptom {
     _$dayOccurrenceSymptomAtom.reportRead();
     return super.dayOccurrenceSymptom;
   }
 
   @override
-  set dayOccurrenceSymptom(ObservableMap<String, int> value) {
+  set dayOccurrenceSymptom(SortedMap<String, int> value) {
     _$dayOccurrenceSymptomAtom.reportWrite(value, super.dayOccurrenceSymptom,
         () {
       super.dayOccurrenceSymptom = value;
@@ -343,11 +343,33 @@ mixin _$OverviewStore on _OverviewBase, Store {
   }
 
   @override
-  void getIngredientBySymptomDayOfAPeriod(DateTime dateTime, Symptom symptom) {
+  void getTotalIngredientBySymptomOfAPeriod(String symptomId) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.getTotalIngredientBySymptomOfAPeriod');
+    try {
+      return super.getTotalIngredientBySymptomOfAPeriod(symptomId);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getTotalIngredientBySymptomOfADay(String symptomId) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.getTotalIngredientBySymptomOfADay');
+    try {
+      return super.getTotalIngredientBySymptomOfADay(symptomId);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getIngredientBySymptomDayOfAPeriod(DateTime dateTime, String symptomId) {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
         name: '_OverviewBase.getIngredientBySymptomDayOfAPeriod');
     try {
-      return super.getIngredientBySymptomDayOfAPeriod(dateTime, symptom);
+      return super.getIngredientBySymptomDayOfAPeriod(dateTime, symptomId);
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }
@@ -355,11 +377,11 @@ mixin _$OverviewStore on _OverviewBase, Store {
 
   @override
   void getIngredientBySymptomMealTimeOfADay(
-      MealTime mealTime, Symptom symptom) {
+      MealTime mealTime, String symptomId) {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
         name: '_OverviewBase.getIngredientBySymptomMealTimeOfADay');
     try {
-      return super.getIngredientBySymptomMealTimeOfADay(mealTime, symptom);
+      return super.getIngredientBySymptomMealTimeOfADay(mealTime, symptomId);
     } finally {
       _$_OverviewBaseActionController.endAction(_$actionInfo);
     }

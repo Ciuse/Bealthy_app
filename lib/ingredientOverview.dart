@@ -48,7 +48,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
               height: 80,
               child: Observer(builder: (_) =>
                   ListView.builder(
-                    itemCount: widget.overviewStore.totalOccurrenceIngredient.length,
+                    itemCount: widget.overviewStore.totalOccurrenceIngredient.length<9 ? widget.overviewStore.totalOccurrenceIngredient.length : 8,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
@@ -66,9 +66,10 @@ class IngredientOverviewState extends State<IngredientOverview> {
                                 fillColor: Colors.white,
                                 child:
                                 Container(
-                                    width: 28.0,
+                                    height: 28.0,
                                     child:  ClipOval(
                                         child: Image(
+                                          fit: BoxFit.fill,
                                           image: AssetImage("images/ingredients/" + widget.overviewStore.totalOccurrenceIngredient.keys.elementAt(index) + ".png"),
                                         )
                                     )),
@@ -148,10 +149,10 @@ class PieChartIngredientState extends State<PieChartIngredient> {
             ),
             Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children:[
-                for(var ingredientId in widget.overviewStore.totalOccurrenceIngredient.keys)
+                for(var ingredientId in widget.overviewStore.totalOccurrenceIngredient.keys.take(8))
                   Indicator2(
                     color: ingredientStore.colorIngredientMap[ingredientId],
                     text: ingredientStore.getSymptomFromList(ingredientId).name,
@@ -173,7 +174,7 @@ class PieChartIngredientState extends State<PieChartIngredient> {
 
   List<PieChartSectionData> showingSections(OverviewStore overviewStore,IngredientStore ingredientStore ) {
 
-    return List.generate(overviewStore.totalOccurrenceIngredient.length, (i) {
+    return List.generate(widget.overviewStore.totalOccurrenceIngredient.length<9 ? widget.overviewStore.totalOccurrenceIngredient.length : 8, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;

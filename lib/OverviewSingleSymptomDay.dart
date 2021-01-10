@@ -29,6 +29,7 @@ class _OverviewSingleSymptomDayState extends State<OverviewSingleSymptomDay>  {
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context, listen: false);
     graphStore.initStore();
     widget.overviewStore.initializeOverviewValueDay(widget.symptomId);
+    widget.overviewStore.getTotalIngredientBySymptomOfADay(widget.symptomId);
   }
 
   @override
@@ -53,7 +54,7 @@ class _OverviewSingleSymptomDayState extends State<OverviewSingleSymptomDay>  {
     ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in widget.overviewStore.totalOccurrenceIngredient.keys )
+          for(var ingredient in widget.overviewStore.totalOccurrenceIngredientBySymptom.keys )
             Column(children: [ Container(
                 width: 50,
                 height: 50,
@@ -62,7 +63,7 @@ class _OverviewSingleSymptomDayState extends State<OverviewSingleSymptomDay>  {
                       image: AssetImage("images/ingredients/" + ingredient + ".png"),
                     )
                 )),
-              Text(widget.overviewStore.totalOccurrenceIngredient[ingredient].toString())
+              Text(widget.overviewStore.totalOccurrenceIngredientBySymptom[ingredient].toString())
             ])
 
         ])
@@ -195,7 +196,6 @@ class BarChartSymptomState extends State<BarChartSymptom> {
 
   BarChartData mainBarData(OverviewStore overviewStore) {
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
-    SymptomStore symptomStore = Provider.of<SymptomStore>(context);
 
     return BarChartData(
       barTouchData: BarTouchData(
@@ -215,7 +215,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           if(barTouchResponse.touchInput is FlPanStart) {
             if (barTouchResponse.spot != null) {
               graphStore.touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-              overviewStore.getIngredientBySymptomMealTimeOfADay(MealTime.values[graphStore.touchedIndex],symptomStore.getSymptomFromList(widget.symptomId));
+              overviewStore.getIngredientBySymptomMealTimeOfADay(MealTime.values[graphStore.touchedIndex],widget.symptomId);
             }
             else{
               graphStore.touchedIndex = -1;

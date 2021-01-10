@@ -87,7 +87,6 @@ abstract class _SymptomBase with Store {
 
   @action
   void setMealTimeBoolList() {
-    print(mealTime);
     //in teoria si creano nell'ordine giusto
     int index = 0;
     MealTime.values.forEach((element) {
