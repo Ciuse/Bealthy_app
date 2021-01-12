@@ -28,7 +28,9 @@ class _AddMealState extends State<AddMeal>{
         appBar: AppBar(
           title: Text("Add new dish to"+" "+widget.title),
         ),
-        body: Container(
+        body: SingleChildScrollView(
+
+        child:Container(
           color: Palette.primaryThreeMoreLight,
             child: Column(
                 children: [
@@ -219,7 +221,7 @@ class _AddMealState extends State<AddMeal>{
 
                 ]
             )
-        )
+        ))
     );
   }
 }

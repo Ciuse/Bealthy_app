@@ -114,7 +114,6 @@ abstract class _SymptomStoreBase with Store {
     List<String> listToAdd = new List<String>();
     int index =0;
     symptom.mealTimeBoolList.forEach((element) {
-      print(index);
       if(element.isSelected==true){
         String toAdd = "${MealTime.values[index].toString().split('.').last}";
         listToAdd.add(toAdd);

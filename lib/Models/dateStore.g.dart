@@ -128,6 +128,18 @@ mixin _$DateStore on _DateStoreBase, Store {
   }
 
   @override
+  List<DateTime> returnDaysOfAWeekOrMonth(
+      DateTime firstDate, DateTime lastDate) {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.returnDaysOfAWeekOrMonth');
+    try {
+      return super.returnDaysOfAWeekOrMonth(firstDate, lastDate);
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void changeCurrentDate(DateTime date) {
     final _$actionInfo = _$_DateStoreBaseActionController.startAction(
         name: '_DateStoreBase.changeCurrentDate');

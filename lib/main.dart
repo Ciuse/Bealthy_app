@@ -8,6 +8,7 @@ import 'Login/screens/splash.dart';
 import 'Models/mealTimeStore.dart';
 import 'Models/overviewStore.dart';
 import 'Models/symptomStore.dart';
+import 'Models/treatmentStore.dart';
 import 'Models/userStore.dart';
 import 'overviewPage.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,9 @@ void main() async {
         ),
         Provider<SymptomOverviewGraphStore>(
           create: (_) => SymptomOverviewGraphStore(),
+        ),
+        Provider<TreatmentStore>(
+          create: (_) => TreatmentStore(),
         )
       ], child:MyApp())));
 }

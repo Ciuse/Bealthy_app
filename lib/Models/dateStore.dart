@@ -40,6 +40,14 @@ abstract class _DateStoreBase with Store {
 
   }
 
+  @action
+  List<DateTime> returnDaysOfAWeekOrMonth(DateTime firstDate, DateTime lastDate) {
+    List<DateTime> dates = new List<DateTime>();
+    for (int i = 0; i <= lastDate.difference(firstDate).inDays; i++) {
+      dates.add(firstDate.add(Duration(days: i)));
+    }
+    return dates;
+  }
 
   @action
   void changeCurrentDate(DateTime date) {

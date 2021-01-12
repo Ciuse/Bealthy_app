@@ -25,9 +25,15 @@ abstract class _UserStoreBase with Store {
   File profileImage;
 
   var personalPageSymptomsList = new List<Symptom>();
+  var totalSymptomsOccurrence;
+  var numOfSickDaysInMonth;
+  var sickDays = new List<DateTime>();
 
   @observable
   ObservableFuture loadInitOccurrenceSymptomsList;
+
+  @observable
+  ObservableFuture loadSickDayMonth;
 
   Future<void> initUserDb() async{
     profileImage=null;
@@ -36,6 +42,7 @@ abstract class _UserStoreBase with Store {
       _initUserSymptom(),
       _initUserDish(),
       _initUserSymptomsOccurrence(),
+      _initUserTreatment(),
     ]);
   }
 
@@ -67,6 +74,13 @@ abstract class _UserStoreBase with Store {
         .set({"virtual": true});
   }
 
+  Future<void> _initUserTreatment() async{
+    await  FirebaseFirestore.instance
+        .collection("UserTreatments")
+        .doc(auth.currentUser.uid)
+        .set({"virtual": true});
+  }
+
   Future<void> _initUserSymptomsOccurrence() async{
     await  FirebaseFirestore.instance
         .collection("UserSymptomsOccurrence")
@@ -81,6 +95,17 @@ abstract class _UserStoreBase with Store {
   }
 
   @action
+  Future<void> initSickDaysMonth(List<DateTime> dates)async{
+    return loadSickDayMonth = ObservableFuture(_getAverageSickDays(dates));
+
+  }
+
+  @action
+  Future<void> retrySickDaysMonth(List<DateTime> dates) {
+    return loadSickDayMonth = ObservableFuture(_getAverageSickDays(dates));
+  }
+
+  @action
   Future<void> retryForOccurrenceSymptoms() {
     return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
   }
@@ -92,10 +117,16 @@ abstract class _UserStoreBase with Store {
         personalPageSymptomsList.sort((a, b) => a.occurrence.compareTo(b.occurrence)));
   }
 
+@action
+double calculatePercentageSymptom(Symptom symptom){
+  return   (symptom.occurrence/totalSymptomsOccurrence)*100;
+}
+
 
   @action
   Future<void> _getSymptomListForPersonalPage() async {
     personalPageSymptomsList.clear();
+    totalSymptomsOccurrence = 0;
     await (FirebaseFirestore.instance
         .collection("UserSymptomsOccurrence")
         .doc(auth.currentUser.uid)
@@ -106,8 +137,78 @@ abstract class _UserStoreBase with Store {
         Symptom i = new Symptom(id:result.id,name:result.get("name") );
         i.occurrence = result.get("occurrence");
         personalPageSymptomsList.add(i);
+        totalSymptomsOccurrence = totalSymptomsOccurrence + result.get("occurrence");
       }
       );
     }));
   }
+
+
+  @action
+  Future<void> _getAverageSickDays(List<DateTime> dateTimeList ) async {
+    numOfSickDaysInMonth=0;
+    sickDays.clear();
+    await  Future.wait(dateTimeList.map(getSickDay));
+
+  }
+  @action
+  String fixDate(DateTime date){
+    return "${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
+  }
+
+  @action
+  double mealTimeValueSymptom(Symptom symptom){
+    double value;
+    int count=0;
+    symptom.mealTimeBoolList.forEach((element) {
+      if(element.isSelected==true){
+        count=count+1;
+      }
+    });
+    if(count==0){
+      value = 0;
+    }
+    if(count==1){
+      value = 0.6;
+    }
+    if(count==2){
+      value = 0.8;
+    }
+    if(count==3){
+      value = 0.95;
+    }
+    if(count==4){
+      value = 1.0;
+    }
+    return value;
+  }
+
+  @action
+  Future<void> getSickDay(DateTime dateTime) async{
+    await (FirebaseFirestore.instance
+        .collection("UserSymptoms")
+        .doc(auth.currentUser.uid)
+        .collection("DaySymptoms")
+        .doc(fixDate(dateTime))
+        .collection("Symptoms")
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((symptom) {
+        Symptom symptomCreated = new Symptom(id: symptom.id, intensity: symptom.get("intensity"),frequency: symptom.get("frequency"));
+        symptomCreated.initStore();
+        symptomCreated.setMealTime(symptom.get("mealTime"));
+        symptomCreated.setMealTimeBoolList();
+        symptomCreated.overviewValue = (symptomCreated.intensity*(symptomCreated.frequency*0.5)*mealTimeValueSymptom(symptomCreated))/2.5;
+        symptomCreated.overviewValue.roundToDouble();
+        if(symptomCreated.overviewValue>=4){
+          if(!sickDays.contains(dateTime)){
+            sickDays.add(dateTime);
+          }
+        }
+      }
+      );
+    }
+    ));
+  }
+
 }

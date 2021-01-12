@@ -8,6 +8,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Login/config/palette.dart';
 import 'Login/screens/auth/auth.dart';
+import 'Models/dateStore.dart';
 import 'Models/userStore.dart';
 import 'uploadNewProfileImage.dart';
 
@@ -25,12 +26,15 @@ class _PersonalPageState extends State<PersonalPage>{
   final Color lightBlue = Colors.lightBlueAccent;
   var storage = FirebaseStorage.instance;
   UserStore userStore;
+  DateStore dateStore;
 
   void initState() {
     super.initState();
     initializeCameras();
+    dateStore = Provider.of<DateStore>(context, listen: false);
     userStore = Provider.of<UserStore>(context, listen: false);
     userStore.initPersonalPage();
+    userStore.initSickDaysMonth(dateStore.returnDaysOfAWeekOrMonth(DateTime(DateTime.now().year, DateTime.now().month,DateTime.now().day-31 ), DateTime.now()));
 
 
   }
@@ -95,7 +99,12 @@ class _PersonalPageState extends State<PersonalPage>{
             width: 70,
             alignment: Alignment.center,
             color: Colors.transparent,
-            child: Text(userStore.personalPageSymptomsList[index].name),)
+            child: Text(userStore.personalPageSymptomsList[index].name),),
+        Container(
+          width: 70,
+          alignment: Alignment.center,
+          color: Colors.transparent,
+          child: Text(userStore.calculatePercentageSymptom(userStore.personalPageSymptomsList[index]).toStringAsFixed(2)+"%"),)
     ],
     );
   }
@@ -171,17 +180,42 @@ class _PersonalPageState extends State<PersonalPage>{
                     thickness: 0.5,
                     color: Colors.black87,
                   ),
-                  Row(
+                  Container(
+                    height: 50,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
                       children: [
-                        Container(
-                            width: 300,
-                            height: 50,
-                            alignment: Alignment.centerLeft,
-                            child: ListTile(
-                              title: Text("AVERAGE SICK DAYS:",style: TextStyle(fontWeight: FontWeight.bold)),
-                              leading: Icon(Icons.sick, color: Colors.black,),
+                        Expanded(
+                            child: Observer(
+                              builder: (_) {
+                                switch (userStore.loadSickDayMonth.status) {
+                                  case FutureStatus.rejected:
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text('Oops something went wrong'),
+                                          RaisedButton(
+                                            child: Text('Retry'),
+                                            onPressed: () async {
+                                              await userStore.retrySickDaysMonth(dateStore.returnDaysOfAWeekOrMonth(DateTime(DateTime.now().year, DateTime.now().month,DateTime.now().day-31 ), DateTime.now()));
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  case FutureStatus.fulfilled:
+                                    return ListTile(
+                                      title: Text("Average sick days in the last month: "+ userStore.sickDays.length.toString()),
+                                      leading: Icon(Icons.sick, color: Colors.black,),
+                                    );
+                                  case FutureStatus.pending:
+                                  default:
+                                    return CircularProgressIndicator();
+                                }
+                              },
                             )
-                        )]),
+                        )])),
                   Divider(
                     height: 2,
                     thickness: 0.5,
@@ -190,7 +224,7 @@ class _PersonalPageState extends State<PersonalPage>{
                   Container(
                     padding: EdgeInsets.all(15.0),
                     alignment: Alignment.centerLeft,
-                      child:Text("THREE MOST PREVALENT SYMPTOMS:",style: TextStyle(fontWeight: FontWeight.bold)),
+                      child:Text("THREE MOST RELEVANT SYMPTOMS:",style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                   Container(
                       child: Observer(

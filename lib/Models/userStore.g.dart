@@ -41,12 +41,36 @@ mixin _$UserStore on _UserStoreBase, Store {
     });
   }
 
+  final _$loadSickDayMonthAtom = Atom(name: '_UserStoreBase.loadSickDayMonth');
+
+  @override
+  ObservableFuture<dynamic> get loadSickDayMonth {
+    _$loadSickDayMonthAtom.reportRead();
+    return super.loadSickDayMonth;
+  }
+
+  @override
+  set loadSickDayMonth(ObservableFuture<dynamic> value) {
+    _$loadSickDayMonthAtom.reportWrite(value, super.loadSickDayMonth, () {
+      super.loadSickDayMonth = value;
+    });
+  }
+
   final _$initPersonalPageAsyncAction =
       AsyncAction('_UserStoreBase.initPersonalPage');
 
   @override
   Future<void> initPersonalPage() {
     return _$initPersonalPageAsyncAction.run(() => super.initPersonalPage());
+  }
+
+  final _$initSickDaysMonthAsyncAction =
+      AsyncAction('_UserStoreBase.initSickDaysMonth');
+
+  @override
+  Future<void> initSickDaysMonth(List<DateTime> dates) {
+    return _$initSickDaysMonthAsyncAction
+        .run(() => super.initSickDaysMonth(dates));
   }
 
   final _$occurrenceInitAsyncAction =
@@ -66,8 +90,35 @@ mixin _$UserStore on _UserStoreBase, Store {
         .run(() => super._getSymptomListForPersonalPage());
   }
 
+  final _$_getAverageSickDaysAsyncAction =
+      AsyncAction('_UserStoreBase._getAverageSickDays');
+
+  @override
+  Future<void> _getAverageSickDays(List<DateTime> dateTimeList) {
+    return _$_getAverageSickDaysAsyncAction
+        .run(() => super._getAverageSickDays(dateTimeList));
+  }
+
+  final _$getSickDayAsyncAction = AsyncAction('_UserStoreBase.getSickDay');
+
+  @override
+  Future<void> getSickDay(DateTime dateTime) {
+    return _$getSickDayAsyncAction.run(() => super.getSickDay(dateTime));
+  }
+
   final _$_UserStoreBaseActionController =
       ActionController(name: '_UserStoreBase');
+
+  @override
+  Future<void> retrySickDaysMonth(List<DateTime> dates) {
+    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
+        name: '_UserStoreBase.retrySickDaysMonth');
+    try {
+      return super.retrySickDaysMonth(dates);
+    } finally {
+      _$_UserStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   Future<void> retryForOccurrenceSymptoms() {
@@ -81,10 +132,44 @@ mixin _$UserStore on _UserStoreBase, Store {
   }
 
   @override
+  double calculatePercentageSymptom(Symptom symptom) {
+    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
+        name: '_UserStoreBase.calculatePercentageSymptom');
+    try {
+      return super.calculatePercentageSymptom(symptom);
+    } finally {
+      _$_UserStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  String fixDate(DateTime date) {
+    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
+        name: '_UserStoreBase.fixDate');
+    try {
+      return super.fixDate(date);
+    } finally {
+      _$_UserStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  double mealTimeValueSymptom(Symptom symptom) {
+    final _$actionInfo = _$_UserStoreBaseActionController.startAction(
+        name: '_UserStoreBase.mealTimeValueSymptom');
+    try {
+      return super.mealTimeValueSymptom(symptom);
+    } finally {
+      _$_UserStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 profileImage: ${profileImage},
-loadInitOccurrenceSymptomsList: ${loadInitOccurrenceSymptomsList}
+loadInitOccurrenceSymptomsList: ${loadInitOccurrenceSymptomsList},
+loadSickDayMonth: ${loadSickDayMonth}
     ''';
   }
 }
