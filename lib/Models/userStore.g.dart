@@ -73,12 +73,12 @@ mixin _$UserStore on _UserStoreBase, Store {
         .run(() => super.initSickDaysMonth(dates));
   }
 
-  final _$occurrenceInitAsyncAction =
-      AsyncAction('_UserStoreBase.occurrenceInit');
+  final _$_occurrenceInitAsyncAction =
+      AsyncAction('_UserStoreBase._occurrenceInit');
 
   @override
-  Future<void> occurrenceInit() {
-    return _$occurrenceInitAsyncAction.run(() => super.occurrenceInit());
+  Future<void> _occurrenceInit() {
+    return _$_occurrenceInitAsyncAction.run(() => super._occurrenceInit());
   }
 
   final _$_getSymptomListForPersonalPageAsyncAction =

@@ -2,6 +2,7 @@ import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import 'Models/dateStore.dart';
@@ -36,7 +37,32 @@ class IngredientOverviewState extends State<IngredientOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) =>widget.overviewStore.totalOccurrenceIngredient.length>0? ingredientsWidget() : noIngredientsWidget());
+    return Observer(
+      builder: (_) {
+        switch (widget.overviewStore.loadInitIngredientGraph.status) {
+          case FutureStatus.rejected:
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Oops something went wrong'),
+                  RaisedButton(
+                    child: Text('Retry'),
+                    onPressed: () async {
+                    },
+                  ),
+                ],
+              ),
+            );
+          case FutureStatus.fulfilled:
+            return widget.overviewStore.totalOccurrenceIngredient.length>0? ingredientsWidget() : noIngredientsWidget();
+          case FutureStatus.pending:
+          default:
+            return Center(
+                child:CircularProgressIndicator());
+        }
+      },
+    );
   }
 
   Widget ingredientsWidget(){
@@ -88,7 +114,8 @@ class IngredientOverviewState extends State<IngredientOverview> {
 
 
   Widget noIngredientsWidget(){
-    return Text("no ingredients");
+    return Center(child:Text("No Ingredients")
+    );
   }
 }
 class PieChartIngredient extends StatefulWidget {

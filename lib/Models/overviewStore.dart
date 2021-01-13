@@ -70,6 +70,12 @@ abstract class _OverviewBase with Store {
   var totalOccurrenceIngredientBySymptom = new ObservableMap<String, int>();
 
 
+  @observable
+  ObservableFuture loadInitSymptomGraph;
+
+  @observable
+  ObservableFuture loadInitIngredientGraph;
+
   @action
   Future<void> initStore(DateTime day) async {
     if (!storeInitialized) {
@@ -82,22 +88,20 @@ abstract class _OverviewBase with Store {
 
   @action
   Future<void> initializeSymptomsMap(DateStore dateStore) async {
-    print("invocato");
     initializeIngredientMap(dateStore);
     mapSymptomsOverviewDay.clear();
     mapSymptomsOverviewPeriod.clear();
     totalOccurrenceSymptom.clear();
     overviewSymptomList.clear();
     switch(timeSelected.index){
-      case 0: await getSymptomsOfADay(dateStore.overviewDefaultLastDate)
+      case 0: loadInitSymptomGraph =  ObservableFuture(getSymptomsOfADay(dateStore.overviewDefaultLastDate)
           .then((value) => setMealTimeSymptomMap())
-          .then((value) => totalOccurrenceSymptomsDay()); break;
-      case 1:
-        await Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
-            .then((value) =>  totalOccurrenceSymptomsPeriod());
+          .then((value) => totalOccurrenceSymptomsDay())); break;
+      case 1:loadInitSymptomGraph =  ObservableFuture(Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
+            .then((value) =>  totalOccurrenceSymptomsPeriod()));
         break;
-      case 2: await Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
-          .then((value) =>  totalOccurrenceSymptomsPeriod());
+      case 2: loadInitSymptomGraph =  ObservableFuture(Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
+          .then((value) =>  totalOccurrenceSymptomsPeriod()));
       break;
     }
 
@@ -111,32 +115,32 @@ abstract class _OverviewBase with Store {
     totalOccurrenceIngredient.clear();
     overviewDishList.clear();
     switch(timeSelected.index){
-      case 0: await asyncGetDish(dateStore.overviewDefaultLastDate);
-        break;
-      case 1: await initializePeriodIngredientAsync(dateStore);
+      case 0: loadInitIngredientGraph =  ObservableFuture(asyncGetDish(dateStore.overviewDefaultLastDate));
       break;
-      case 2: await initializePeriodIngredientAsync(dateStore);
+      case 1: loadInitIngredientGraph =  ObservableFuture(initializePeriodIngredientAsync(dateStore));
+      break;
+      case 2: loadInitIngredientGraph =  ObservableFuture(initializePeriodIngredientAsync(dateStore));
       break;
     }
 
   }
 
-  initializePeriodIngredientAsync(DateStore dateStore) async {
-    await  Future.forEach(dateStore.rangeDays, (day) async {await asyncGetDish(day);}).then((value) => totalOccurrenceIngredientsPeriod());
+  Future<void>initializePeriodIngredientAsync(DateStore dateStore) async {
+    await  Future.forEach(dateStore.rangeDays, (day) async
+    {await asyncGetDish(day);}).then((value) => totalOccurrenceIngredientsPeriod());
   }
 
-  asyncGetDish(DateTime day) async {
-    await Future.forEach(MealTime.values, (mealTime) async {
-      await getDishMealTime(mealTime, day);
-    }).then((value) => asyncGetIngredient(day));
+  Future<void>asyncGetDish(DateTime day) async {
+    await Future.wait(MealTime.values.map((e) => getDishMealTime(e, day)))
+        .then((value) => asyncGetIngredient(day));
   }
 
-  asyncGetIngredient(DateTime day) async
+  Future<void>asyncGetIngredient(DateTime day) async
   {
-        await Future.forEach(overviewDishList, (dish) async {await getIngredientOfADish(dish);}).then((value) => asyncMapIngredient(day));
+    await Future.wait(overviewDishList.map(getIngredientOfADish)).then((value) => asyncMapIngredient(day));
   }
 
-  asyncMapIngredient(DateTime day)async{
+  Future<void>asyncMapIngredient(DateTime day)async{
     if(timeSelected==TemporalTime.Day){
       List<Ingredient> mealTimeList = new List<Ingredient>();
       MealTime.values.forEach((mealTime) {

@@ -6,6 +6,7 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'Database/enumerators.dart';
@@ -150,8 +151,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         vsync: this,
         alignment: Alignment(0, -1),
         child: _buildHorizontalSwipeWrapper(
-            child: Observer(builder: (_) => overviewContent())
-        ),
+            child: overviewContent())
       );
     } else {
       return AnimatedSwitcher(
@@ -166,8 +166,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           );
         },
         child: _buildHorizontalSwipeWrapper(
-            child: Observer(builder: (_) => overviewContent())
-        ),
+            child: overviewContent())
       );
     }
   }
@@ -201,13 +200,39 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return TabBarView(
     controller: _tabController,
       children: [
-        overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget(),
+        Container(
+            child: Observer(
+              builder: (_) {
+                switch (overviewStore.loadInitSymptomGraph.status) {
+                  case FutureStatus.rejected:
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Oops something went wrong'),
+                          RaisedButton(
+                            child: Text('Retry'),
+                            onPressed: () async {
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  case FutureStatus.fulfilled:
+                    return overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget();
+                  case FutureStatus.pending:
+                  default:
+                    return Center(
+                        child:CircularProgressIndicator());
+                }
+              },
+            )),
         IngredientOverview(overviewStore: overviewStore,),
       ],
     );
   }
   Widget noSymptomsWidget() {
-    return Container(child: Text("No symptoms present"));
+    return Center(child: Text("No Symptoms"));
   }
 
   void selectPreviousDay() {

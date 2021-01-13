@@ -179,7 +179,8 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                 }));
                           case FutureStatus.pending:
                           default:
-                            return CircularProgressIndicator();
+                            return Center(
+                                child:CircularProgressIndicator());
                         }
                       },
                     ))

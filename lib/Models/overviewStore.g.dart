@@ -212,6 +212,40 @@ mixin _$OverviewStore on _OverviewBase, Store {
     });
   }
 
+  final _$loadInitSymptomGraphAtom =
+      Atom(name: '_OverviewBase.loadInitSymptomGraph');
+
+  @override
+  ObservableFuture<dynamic> get loadInitSymptomGraph {
+    _$loadInitSymptomGraphAtom.reportRead();
+    return super.loadInitSymptomGraph;
+  }
+
+  @override
+  set loadInitSymptomGraph(ObservableFuture<dynamic> value) {
+    _$loadInitSymptomGraphAtom.reportWrite(value, super.loadInitSymptomGraph,
+        () {
+      super.loadInitSymptomGraph = value;
+    });
+  }
+
+  final _$loadInitIngredientGraphAtom =
+      Atom(name: '_OverviewBase.loadInitIngredientGraph');
+
+  @override
+  ObservableFuture<dynamic> get loadInitIngredientGraph {
+    _$loadInitIngredientGraphAtom.reportRead();
+    return super.loadInitIngredientGraph;
+  }
+
+  @override
+  set loadInitIngredientGraph(ObservableFuture<dynamic> value) {
+    _$loadInitIngredientGraphAtom
+        .reportWrite(value, super.loadInitIngredientGraph, () {
+      super.loadInitIngredientGraph = value;
+    });
+  }
+
   final _$initStoreAsyncAction = AsyncAction('_OverviewBase.initStore');
 
   @override
@@ -445,7 +479,9 @@ overviewDishList: ${overviewDishList},
 overviewIngredientList: ${overviewIngredientList},
 totalOccurrenceIngredient: ${totalOccurrenceIngredient},
 dayOccurrenceIngredientBySymptom: ${dayOccurrenceIngredientBySymptom},
-totalOccurrenceIngredientBySymptom: ${totalOccurrenceIngredientBySymptom}
+totalOccurrenceIngredientBySymptom: ${totalOccurrenceIngredientBySymptom},
+loadInitSymptomGraph: ${loadInitSymptomGraph},
+loadInitIngredientGraph: ${loadInitIngredientGraph}
     ''';
   }
 }

@@ -252,7 +252,8 @@ class _DishPageState extends State<DishPage>{
                 }
               }
               else {
-                return CircularProgressIndicator();
+                return Center(
+                    child:CircularProgressIndicator());
               }
             }
         )
@@ -275,7 +276,8 @@ class _DishPageState extends State<DishPage>{
                       ));
                 }
               } else{
-                return CircularProgressIndicator();
+                return Center(
+                    child:CircularProgressIndicator());
               }
             }
         ),

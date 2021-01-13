@@ -90,7 +90,7 @@ abstract class _UserStoreBase with Store {
 
   @action
   Future<void> initPersonalPage()async{
-    return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
+    return loadInitOccurrenceSymptomsList = ObservableFuture(_occurrenceInit());
 
   }
 
@@ -107,11 +107,11 @@ abstract class _UserStoreBase with Store {
 
   @action
   Future<void> retryForOccurrenceSymptoms() {
-    return loadInitOccurrenceSymptomsList = ObservableFuture(occurrenceInit());
+    return loadInitOccurrenceSymptomsList = ObservableFuture(_occurrenceInit());
   }
 
   @action
-  Future<void> occurrenceInit() async{
+  Future<void> _occurrenceInit() async{
     await _getSymptomListForPersonalPage()
         .then((value) =>
         personalPageSymptomsList.sort((a, b) => a.occurrence.compareTo(b.occurrence)));

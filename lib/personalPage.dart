@@ -154,7 +154,8 @@ class _PersonalPageState extends State<PersonalPage>{
                                             }
                                           }
                                           else {
-                                            return CircularProgressIndicator();
+                                            return Center(
+                                                child:CircularProgressIndicator());
                                           }
                                         }
                                     )
@@ -211,7 +212,8 @@ class _PersonalPageState extends State<PersonalPage>{
                                     );
                                   case FutureStatus.pending:
                                   default:
-                                    return CircularProgressIndicator();
+                                    return Center(
+                                        child:CircularProgressIndicator());
                                 }
                               },
                             )
@@ -259,7 +261,8 @@ class _PersonalPageState extends State<PersonalPage>{
                               );
                             case FutureStatus.pending:
                             default:
-                              return CircularProgressIndicator();
+                              return Center(
+                                  child:CircularProgressIndicator());
                           }
                         },
                       )),

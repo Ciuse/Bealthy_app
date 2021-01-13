@@ -204,7 +204,8 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                       }
                                     }
                                     else {
-                                      return CircularProgressIndicator();
+                                      return Center(
+                                          child:CircularProgressIndicator());
                                     }
                                   }
                               )
@@ -227,7 +228,8 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                   ));
                             }
                           } else{
-                            return CircularProgressIndicator();
+                            return Center(
+                                child:CircularProgressIndicator());
                           }
                         }
                     ),
