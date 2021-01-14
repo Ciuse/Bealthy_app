@@ -30,4 +30,26 @@ abstract class _TreatmentStoreBase with Store {
 
   }
 
+  Future<int> getLastTreatmentId() async {
+    return await FirebaseFirestore.instance .collection("UserTreatments")
+        .doc(auth.currentUser.uid)
+        .collection("Treatments")
+        .orderBy("number")
+        .limitToLast(1)
+        .get()
+        .then((querySnapshot) {
+      int toReturn;
+      if(querySnapshot.size>0){
+        querySnapshot.docs.forEach((treatment) {
+          toReturn = treatment.get("number")+1;
+        });
+      }
+      else{
+        toReturn = 0;
+      }
+      return toReturn;
+    });
+
+  }
+
 }

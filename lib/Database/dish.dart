@@ -29,6 +29,8 @@ abstract class _DishBase with Store {
   @observable
   String id;
   @observable
+  int number;
+  @observable
   String name;
   @observable
   String category;
@@ -85,5 +87,6 @@ abstract class _DishBase with Store {
       {
         "name": name,
         "category": category,
+        "number":number,
       };
 }
