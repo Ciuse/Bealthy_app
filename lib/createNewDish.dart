@@ -49,17 +49,17 @@ class _CreateNewDishState extends State<CreateNewDish> {
   List<String> ingredientsSelectedList = new List<String>();
   List<String> ingredientsQuantityList = new List<String>();
   IngredientStore ingredientStore;
+  FoodStore foodStore;
   List<CameraDescription> cameras;
-  int randomNumber=0;
   Dish dish = new Dish();
 
   @override
   void initState() {
     super.initState();
     initializeCameras();
-    Random random = new Random();
-    randomNumber = random.nextInt(100);
-    dish.id = "Dish_User_" + randomNumber.toString();
+    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
+    foodStore = Provider.of<FoodStore>(context, listen: false);
+    getLastNumber().then((value) =>dish.id="Dish_User_" + dish.number.toString());
     _keyboardState = _keyboardVisibility.isKeyboardVisible;
     _controller = ScrollController();
 
@@ -75,11 +75,14 @@ class _CreateNewDishState extends State<CreateNewDish> {
     );
     categoryList= getCategoryName();
     quantityList= getQuantityName();
-    super.initState();
-    var store = Provider.of<IngredientStore>(context, listen: false);
-    store.ingredientsName.clear();
-    store.getIngredientsName();
+    ingredientStore.ingredientsName.clear();
+    ingredientStore.getIngredientsName();
   }
+
+  Future<void> getLastNumber() async {
+    dish.number = await foodStore.getLastCreatedDishId();
+  }
+
   @override
   void dispose() {
     _keyboardVisibility.removeListener(_keyboardVisibilitySubscriberId);
@@ -132,8 +135,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
             qty: ingredientsQuantityList[i]);
         ingredients.add(ingredient);
       }
-
-      context.read<FoodStore>().addNewDishCreatedByUser(dish, ingredients);
+      foodStore.addNewDishCreatedByUser(dish, ingredients);
       if(dish.imageFile!=null){
         uploadImageToFirebase(dish.imageFile);
       }
@@ -143,7 +145,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
 
   void uploadImageToFirebase(File imageFile) {
 
-      String fileName = "Dish_User_" + randomNumber.toString()+".jpg";
+      String fileName = "Dish_User_" + dish.number.toString()+".jpg";
       var firebaseStorageRef = FirebaseStorage.instance.ref().child('DishImage/$fileName');
       firebaseStorageRef.putFile(imageFile);
 

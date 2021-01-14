@@ -325,6 +325,27 @@ void setBooleanQuantityDish(){
     );
   }
 
+  Future<int> getLastCreatedDishId() async {
+    return await FirebaseFirestore.instance.collection('DishesCreatedByUsers')
+        .doc(auth.currentUser.uid).collection("Dishes")
+        .orderBy("number")
+        .limitToLast(1)
+        .get()
+        .then((querySnapshot) {
+          int toReturn=0;
+          if(querySnapshot.size>0){
+            querySnapshot.docs.forEach((dish) {
+              toReturn = dish.get("number")+1;
+            });
+          }
+          else{
+            toReturn = 0;
+          }
+          return toReturn;
+    });
+
+  }
+
   @action
   Future<void> _getFavouriteDishes() async {
     await (FirebaseFirestore.instance

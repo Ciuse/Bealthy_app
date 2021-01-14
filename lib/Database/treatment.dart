@@ -16,6 +16,7 @@ class Treatment = _TreatmentBase with _$Treatment;
 abstract class _TreatmentBase with Store {
   _TreatmentBase({
     this.id,
+    this.number,
     this.title,
     this.startingDay,
     this.endingDay,
@@ -26,6 +27,8 @@ abstract class _TreatmentBase with Store {
 
   @observable
   String id;
+  @observable
+  int number;
   @observable
   String title;
   @observable
@@ -60,6 +63,7 @@ abstract class _TreatmentBase with Store {
         "descriptionText": descriptionText,
         "dietInfoText": dietInfoText,
         "medicalInfoText": medicalInfoText,
+        "number": number,
       };
 
 

@@ -23,6 +23,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
   final endingDateCt = TextEditingController();
   DateStore dateStore;
   TreatmentStore treatmentStore;
+  int lastTreatmentNumber;
 
   ScrollController _controller;
   @override
@@ -30,12 +31,19 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
     _controller = ScrollController();
     var dateStore = Provider.of<DateStore>(context, listen: false);
     treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
+    getLastNumber();
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
+  Future<void> getLastNumber() async {
+    lastTreatmentNumber = await treatmentStore.getLastTreatmentId();
+  }
+
+
 
   String fixDate(DateTime date){
     return "${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
@@ -48,7 +56,8 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
       Random random = new Random();
       int randomNumber = random.nextInt(100);
       Treatment treatment = new Treatment(
-        id: "Treatment_"+randomNumber.toString(),
+        id: "Treatment_"+ lastTreatmentNumber.toString(),
+        number: lastTreatmentNumber,
         title: titleCt.text,
         startingDay: startingDateCt.text,
         endingDay: endingDateCt.text,
@@ -56,7 +65,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
         dietInfoText: dietInfoCt.text,
         medicalInfoText: medicalInfoCt.text,
       );
-      context.read<TreatmentStore>().addNewTreatmentCreatedByUser(treatment);
+      treatmentStore.addNewTreatmentCreatedByUser(treatment);
       Navigator.pop(context);
     }
 
