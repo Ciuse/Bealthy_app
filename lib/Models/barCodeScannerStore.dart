@@ -1,9 +1,16 @@
+
+import 'dart:io';
+import 'dart:math';
+import 'package:Bealthy_app/Models/foodStore.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mobx/mobx.dart';
 import 'package:openfoodfacts/openfoodfacts.dart' as OFF;
 import 'package:Bealthy_app/Database/dish.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
+import 'package:path_provider/path_provider.dart';
 import '../Database/ingredient.dart';
 
 // Include generated file
@@ -21,6 +28,9 @@ abstract class _BarCodeScannerStoreBase with Store {
    @observable
    String scanBarcode = 'Unknown';
 
+   @observable
+   List<Ingredient> ingredients = new ObservableList<Ingredient>();
+
 
    @action
    Future<OFF.Product> getProductFromOpenFoodDB(String barcode) async {
@@ -29,7 +39,8 @@ abstract class _BarCodeScannerStoreBase with Store {
       await OFF.OpenFoodAPIClient.getProduct(configuration);
 
       if (result.status == 1) {
-
+         print(result.product.images);
+            print(result.product.imgSmallUrl);
          return result.product;
       } else {
          return null;
@@ -37,19 +48,41 @@ abstract class _BarCodeScannerStoreBase with Store {
    }
 
    @action
-   void createNewDishFromScan(OFF.Product product, IngredientStore ingredientStore){
-      List<Ingredient> ingredientsSelectedList = new List<Ingredient>();
-      Dish dishToFill = new Dish();
-      dishToFill.name = product.productName;
-      getLastNumber(dishToFill).then((value) =>dishToFill.id="Dish_User_" + dishToFill.number.toString());
+   Future<void> getIngredients(OFF.Product product, IngredientStore ingredientStore, FoodStore foodStore) async {
+
 
       product.ingredients.forEach((productIngredient) {
          ingredientStore.ingredientList.forEach((ingredient) {
+            print("entrato");
             if(isSubstring(ingredient.name, productIngredient.id) || isSubstring(ingredient.it_Name, productIngredient.id)){
-               ingredientsSelectedList.add(ingredient);
+               if(!ingredients.contains(ingredient)){
+                  ingredients.add(ingredient);
+
+               }
+
             }
             });
       });
+
+   }
+
+
+   Future<File> urlToFile(String imageUrl) async {
+// generate random number.
+      var rng = new Random();
+// get temporary directory of device.
+      Directory tempDir = await getTemporaryDirectory();
+// get temporary path from temporary directory.
+      String tempPath = tempDir.path;
+// create a new file in temporary path with random file name.
+      File file = new File('$tempPath'+ (rng.nextInt(100)).toString() +'.png');
+// call http.get method and pass imageUrl into it to get response.
+      http.Response response = await http.get(imageUrl);
+// write bodyBytes received in response to file.
+      await file.writeAsBytes(response.bodyBytes);
+// now return the file which is created with random name in
+// temporary directory and image bytes from response is written to // that file.
+      return file;
    }
 
    Future<void> getLastNumber(Dish dish) async {

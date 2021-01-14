@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/DishPageFromScan.dart';
 import 'package:Bealthy_app/Models/barCodeScannerStore.dart';
 import 'package:Bealthy_app/dishPage.dart';
 import 'package:Bealthy_app/searchDishesList.dart';
@@ -13,6 +14,7 @@ import 'Database/dish.dart';
 import 'Database/enumerators.dart';
 import 'Login/config/palette.dart';
 import 'Models/foodStore.dart';
+import 'Models/ingredientStore.dart';
 import 'createNewDish.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -27,10 +29,16 @@ class AddMeal extends StatefulWidget {
 
 class _AddMealState extends State<AddMeal>{
   BarCodeScannerStore barCodeScannerStore;
+  IngredientStore ingredientStore;
+  FoodStore foodStore;
+
   void initState() {
     super.initState();
     barCodeScannerStore = Provider.of<BarCodeScannerStore>(context, listen: false);
+    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
+    foodStore = Provider.of<FoodStore>(context, listen: false);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,8 +247,7 @@ class _AddMealState extends State<AddMeal>{
                             children: <Widget>[
                               RawMaterialButton(
                                 onPressed: () async => {
-                                  //scanBarCodeAndCheckPermission(),
-                                  await barCodeScannerStore.getProductFromOpenFoodDB("8003000162015"),
+                                  scanBarCodeAndCheckPermission(),
                                 },
                                 elevation: 7.0,
                                 fillColor: Colors.white,
@@ -325,10 +332,12 @@ class _AddMealState extends State<AddMeal>{
       await barCodeScannerStore.getProductFromOpenFoodDB(barCodeScannerStore.scanBarcode)
           .then((value) => {
         if(value!=null){
-          print(value)
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(builder: (context) => ))
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,)),
+        )
+
         }
         else{
           showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom)
