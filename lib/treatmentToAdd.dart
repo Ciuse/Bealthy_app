@@ -22,12 +22,14 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
   final startingDateCt = TextEditingController();
   final endingDateCt = TextEditingController();
   DateStore dateStore;
+  TreatmentStore treatmentStore;
 
   ScrollController _controller;
   @override
   void initState() {
     _controller = ScrollController();
     var dateStore = Provider.of<DateStore>(context, listen: false);
+    treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
   }
 
   @override
@@ -40,7 +42,9 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
   }
 
   void addTreatmentToUser() {
-    if (titleCt.text != "" && startingDateCt!=null && endingDateCt!=null) {
+    if (titleCt.text != "" && startingDateCt!=null && endingDateCt!=null && treatmentStore.setDateFromString(startingDateCt.text)
+        .isBefore(treatmentStore.setDateFromString(endingDateCt.text))&& (DateTime.now().isBefore(treatmentStore.setDateFromString(startingDateCt.text))||
+        DateTime.now().isAtSameMomentAs(treatmentStore.setDateFromString(startingDateCt.text)))) {
       Random random = new Random();
       int randomNumber = random.nextInt(100);
       Treatment treatment = new Treatment(

@@ -1,4 +1,5 @@
 import 'package:Bealthy_app/Models/symptomStore.dart';
+import 'package:Bealthy_app/Models/treatmentStore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -94,6 +95,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
     if(context.read<SymptomStore>().storeInitialized)
       context.read<SymptomStore>().getSymptomsOfADay(dateStore.calendarSelectedDate);
     context.read<MealTimeStore>().initDishesOfMealTimeList(dateStore.calendarSelectedDate);
+    context.read<TreatmentStore>().initTreatmentsList( dateStore.calendarSelectedDate);
   }
 
   void reactToDataChange(){

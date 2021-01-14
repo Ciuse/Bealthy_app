@@ -1,5 +1,10 @@
+import 'package:Bealthy_app/detailsOfSpecificTreatmentPage.dart';
 import 'package:Bealthy_app/treatmentToAdd.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+
+import 'Models/treatmentStore.dart';
 
 
 
@@ -10,6 +15,15 @@ class TreatmentPage extends StatefulWidget {
 }
 
 class _TreatmentPageState extends State<TreatmentPage>{
+  TreatmentStore treatmentStore;
+
+  @override
+  void initState() {
+
+    super.initState();
+    treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +62,54 @@ class _TreatmentPageState extends State<TreatmentPage>{
                     title: Text("Treatment in progress",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
                     leading: Icon(Icons.medical_services_outlined,color: Colors.black),
                   ),
+            Observer(builder: (_) =>ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: treatmentStore.treatmentsInProgressList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Dismissible(
+                          key: Key(treatmentStore.treatmentsInProgressList[index].id),
+                          background: Container(
+                            margin:  EdgeInsets.symmetric(horizontal: 10 ),
+                            padding: EdgeInsets.symmetric(horizontal: 10 ),
+                            decoration: BoxDecoration(
+                              color: Color(0xffb30000),
+                              borderRadius: BorderRadius.circular(20),),
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: Icon(Icons.delete, color: Colors.white),
+                          ),
+                          child: Card(
+                            shape:  RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.black, width: 1),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            margin: EdgeInsets.only(left: 10,right: 10, bottom: 12),
+                            child: ListTile(
+                              shape:  RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.black, width: 1),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ) ,
+                              onTap: ()  => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailsOfSpecificTreatmentPage(treatment: treatmentStore.treatmentsInProgressList[index]),
+                                  ),
+                                )
+                              },
+                              title: Text(treatmentStore.treatmentsInProgressList[index].title,style: TextStyle(fontSize: 18.0)),
+                            ),
+
+                          ),
+                          onDismissed: (direction){
+                            treatmentStore.removeTreatmentCreatedByUser(treatmentStore.treatmentsInProgressList[index])
+                                .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+                          },
+                        );
+
+                      }
+
+                  )),
                   FloatingActionButton(
                     child: Icon(Icons.add),
                     onPressed:(){
@@ -84,6 +146,54 @@ class _TreatmentPageState extends State<TreatmentPage>{
                           title: Text("Treatment completed",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
                           leading: Icon(Icons.medical_services,color: Colors.blueGrey),
                         ),
+                        Observer(builder: (_) =>ListView.builder(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemCount: treatmentStore.treatmentsCompletedList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Dismissible(
+                                key: Key(treatmentStore.treatmentsCompletedList[index].id),
+                                background: Container(
+                                  margin:  EdgeInsets.symmetric(horizontal: 10 ),
+                                  padding: EdgeInsets.symmetric(horizontal: 10 ),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffb30000),
+                                    borderRadius: BorderRadius.circular(20),),
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  child: Icon(Icons.delete, color: Colors.white),
+                                ),
+                                child: Card(
+                                  shape:  RoundedRectangleBorder(
+                                    side: BorderSide(color: Colors.black, width: 1),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  margin: EdgeInsets.only(left: 10,right: 10, bottom: 12),
+                                  child: ListTile(
+                                    shape:  RoundedRectangleBorder(
+                                      side: BorderSide(color: Colors.black, width: 1),
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ) ,
+                                    onTap: ()  => {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailsOfSpecificTreatmentPage(treatment: treatmentStore.treatmentsCompletedList[index]),
+                                        ),
+                                      )
+                                    },
+                                    title: Text(treatmentStore.treatmentsCompletedList[index].title,style: TextStyle(fontSize: 18.0)),
+                                  ),
+
+                                ),
+                                onDismissed: (direction){
+                                  treatmentStore.removeTreatmentCreatedByUser(treatmentStore.treatmentsCompletedList[index])
+                                      .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+                                },
+                              );
+
+                            }
+
+                        )),
                       ])
               ),
 
