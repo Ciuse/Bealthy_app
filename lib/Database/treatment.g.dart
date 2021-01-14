@@ -24,6 +24,21 @@ mixin _$Treatment on _TreatmentBase, Store {
     });
   }
 
+  final _$numberAtom = Atom(name: '_TreatmentBase.number');
+
+  @override
+  int get number {
+    _$numberAtom.reportRead();
+    return super.number;
+  }
+
+  @override
+  set number(int value) {
+    _$numberAtom.reportWrite(value, super.number, () {
+      super.number = value;
+    });
+  }
+
   final _$titleAtom = Atom(name: '_TreatmentBase.title');
 
   @override
@@ -143,6 +158,7 @@ mixin _$Treatment on _TreatmentBase, Store {
   String toString() {
     return '''
 id: ${id},
+number: ${number},
 title: ${title},
 startingDay: ${startingDay},
 endingDay: ${endingDay},

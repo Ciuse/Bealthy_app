@@ -24,6 +24,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
   DateStore dateStore;
   TreatmentStore treatmentStore;
   int lastTreatmentNumber;
+  final _formKey = GlobalKey<FormState>();
 
   ScrollController _controller;
   @override
@@ -50,11 +51,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
   }
 
   void addTreatmentToUser() {
-    if (titleCt.text != "" && startingDateCt!=null && endingDateCt!=null && treatmentStore.setDateFromString(startingDateCt.text)
-        .isBefore(treatmentStore.setDateFromString(endingDateCt.text))&& (DateTime.now().isBefore(treatmentStore.setDateFromString(startingDateCt.text))||
-        DateTime.now().isAtSameMomentAs(treatmentStore.setDateFromString(startingDateCt.text)))) {
-      Random random = new Random();
-      int randomNumber = random.nextInt(100);
+
       Treatment treatment = new Treatment(
         id: "Treatment_"+ lastTreatmentNumber.toString(),
         number: lastTreatmentNumber,
@@ -67,7 +64,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
       );
       treatmentStore.addNewTreatmentCreatedByUser(treatment);
       Navigator.pop(context);
-    }
+
 
   }
 
@@ -82,105 +79,224 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
             controller: _controller,
             child: Column(
               children: [
-                TextField(
-                  controller: titleCt,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Name',
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                 ),
-                TextField(
-                  controller: descriptionTextCt,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Description',
-                  ),
-                ),
-                TextField(
-                  controller: dietInfoCt,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Diet',
-                  ),
-                ),
-                TextField(
-                  controller: medicalInfoCt,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Medical Cure',
-                  ),
-                ),
-            Row(children: [
-              Expanded( flex: 4,
-                  child: TextField(
-                controller: startingDateCt,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Starting Date',
-                ),
-              )),
-              Expanded(
-                  flex: 1,
-                  child:
-              IconButton(
-                  icon: Icon(Icons.calendar_today,color: Colors.black,),
-                  onPressed: (){
-                    showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2019, 1),
-                        lastDate: DateTime(2021,12),
-                        builder: (BuildContext context, Widget picker){
-                          return Theme(
-                            data: ThemeData.light(),
-                            child: picker,);
-                        })
-                        .then((selectedDate) {
-                      //TODO: handle selected date
-                      if(selectedDate!=null){
-                        startingDateCt.text = fixDate(selectedDate);
-                      }
-                    });
-                  })),
-            ],),
-                Row(children: [
-                  Expanded( flex: 4,
-                      child: TextField(
-                        controller: endingDateCt,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Ending Date',
+                Form(
+                    key: this._formKey,
+                    child:
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        TextFormField(
+                          autovalidateMode: AutovalidateMode.disabled,
+                          controller: titleCt,
+                          decoration: new InputDecoration(
+                            labelText: 'Name',
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                            //fillColor: Colors.green
+                          ),
+                          validator: (val) {
+                            if(val.length==0) {
+                              return "Name cannot be empty";
+                            }else{
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.text,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
                         ),
-                      )),
-                  Expanded(
-                      flex: 1,
-                      child:
-                      IconButton(
-                          icon: Icon(Icons.calendar_today,color: Colors.black,),
-                          onPressed: (){
-                            showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2019, 1),
-                                lastDate: DateTime(2021,12),
-                                builder: (BuildContext context, Widget picker){
-                                  return Theme(
-                                    data: ThemeData.light(),
-                                    child: picker,);
-                                })
-                                .then((selectedDate) {
-                              //TODO: handle selected date
-                              if(selectedDate!=null){
-                                endingDateCt.text = fixDate(selectedDate);
-                              }
-                            });
-                          })),
-                ],),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        ),
+                        TextFormField(
+                          autovalidateMode: AutovalidateMode.disabled,
+                          controller: descriptionTextCt,
+                          decoration: new InputDecoration(
+                            labelText: 'Description',
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                            //fillColor: Colors.green
+                          ),
+                          keyboardType: TextInputType.text,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        ),
+                        TextFormField(
+                          autovalidateMode: AutovalidateMode.disabled,
+                          controller: dietInfoCt,
+                          decoration: new InputDecoration(
+                            labelText: 'Diet',
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                            //fillColor: Colors.green
+                          ),
+                          keyboardType: TextInputType.text,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        ),
+                        TextFormField(
+                          autovalidateMode: AutovalidateMode.disabled,
+                          controller: medicalInfoCt,
+                          decoration: new InputDecoration(
+                            labelText: 'Medical Cure',
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                            //fillColor: Colors.green
+                          ),
+                          keyboardType: TextInputType.text,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        ),
+                        TextFormField(
+                              onTap: (){
+                                FocusScope.of(context).requestFocus(new FocusNode());
+                                showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2019, 1),
+                                    lastDate: DateTime(2030,12),
+                                    builder: (BuildContext context, Widget picker){
+                                      return Theme(
+                                        data: ThemeData.light(),
+                                        child: picker,);
+                                    })
+                                    .then((selectedDate) {
+                                  //TODO: handle selected date
+                                  if(selectedDate!=null){
+                                    startingDateCt.text = fixDate(selectedDate);
+                                  }
+                                });
+                              },
+                              autovalidateMode: AutovalidateMode.disabled,
+                              controller: startingDateCt,
+                              decoration: new InputDecoration(
+                                labelText: "Enter Starting date of treatment",
+                                fillColor: Colors.white,
+                                border: new OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(25.0),
+                                  borderSide: new BorderSide(
+                                  ),
+                                ),
+                              ),
+                              validator: (val) {
+                                if(val.length==0) {
+                                  return "Starting Date of treatment cannot be empty";
+                                }else{
+                                  if(treatmentStore.setDateFromString(val)!=null){
+                                    return null;
+                                  }else{
+                                    return "Insert a valid Date of starting treatment date";
+                                  }
+
+                                }
+                              },
+                              keyboardType: TextInputType.datetime,
+                              style: new TextStyle(
+                                fontFamily: "Poppins",
+                              ),
+                            ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        ),
+                  TextFormField(
+                              onTap: (){
+                                FocusScope.of(context).requestFocus(new FocusNode());
+                                showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2019, 1),
+                                    lastDate: DateTime(2030,12),
+                                    builder: (BuildContext context, Widget picker){
+                                      return Theme(
+                                        data: ThemeData.light(),
+                                        child: picker,);
+                                    })
+                                    .then((selectedDate) {
+                                  //TODO: handle selected date
+                                  if(selectedDate!=null){
+                                    endingDateCt.text = fixDate(selectedDate);
+                                  }
+                                });
+                              },
+                              autovalidateMode: AutovalidateMode.disabled,
+                              controller: endingDateCt,
+                              decoration: new InputDecoration(
+                                labelText: "Enter Ending date of treatment",
+                                fillColor: Colors.white,
+                                border: new OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(25.0),
+                                  borderSide: new BorderSide(
+                                  ),
+                                ),
+                              ),
+                              validator: (val) {
+                                if(val.length==0) {
+                                  return "Ending Date of treatment cannot be empty";
+                                }else{
+                                  if(treatmentStore.setDateFromString(val)!=null && treatmentStore.setDateFromString(startingDateCt.text).isBefore(treatmentStore.setDateFromString(val))){
+                                    return null;
+                                  }else{
+                                    return "Insert a valid Date of ending treatment date";
+                                  }
+
+                                }
+                              },
+                              keyboardType: TextInputType.datetime,
+                              style: new TextStyle(
+                                fontFamily: "Poppins",
+                              ),
+                            ),
+                      ]))
+                ),
+
+
+
+
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      addTreatmentToUser();
+                      if (this._formKey.currentState.validate()) {
+                        setState(() {
+                          this._formKey.currentState.save();
+                        });
+                        addTreatmentToUser();
+                      }
+
                     },
                     child: Text('Create'),
                   ),

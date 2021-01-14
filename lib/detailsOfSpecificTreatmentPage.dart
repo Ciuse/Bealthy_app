@@ -1,5 +1,8 @@
 import 'package:Bealthy_app/Database/treatment.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'Models/treatmentStore.dart';
 
 
 
@@ -12,13 +15,26 @@ class DetailsOfSpecificTreatmentPage extends StatefulWidget {
 }
 
 class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatmentPage> {
+  TreatmentStore treatmentStore;
+
+  @override
+  void initState() {
+
+    super.initState();
+    treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
         title: Text(widget.treatment.title),
     ),
-    body:Container(
+    body:Container(child:
+    Column(
+    children: [
+    Container(
       alignment: Alignment.center,
       margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
       width:double.infinity,
@@ -39,6 +55,17 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
       ),
       child: treatmentDescriptionWidget(),
     ),
+      IconButton(
+          icon: Icon(
+            Icons.delete
+          ),
+          onPressed: () {
+            treatmentStore.removeTreatmentCreatedByUser(widget.treatment)
+                .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+          }
+      )
+
+    ])),
 
     );
   }

@@ -38,8 +38,13 @@ abstract class _TreatmentStoreBase with Store {
 
   @action
   DateTime setDateFromString(String dateTime){
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
-    return dateFormat.parse(dateTime);
+    try{
+      DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+      DateTime toCheck = dateFormat.parse(dateTime);
+      return toCheck;
+    }catch (e){
+      return null;
+    }
   }
 
   @action
@@ -81,7 +86,12 @@ abstract class _TreatmentStoreBase with Store {
         .collection("Treatments")
         .doc(treatment.id)
         .set(treatment.toMapTreatment()));
-    treatmentsInProgressList.add(treatment);
+    DateTime endingDay = setDateFromString(treatment.endingDay);
+    if(DateTime.now().isBefore(endingDay)){
+      treatmentsInProgressList.add(treatment);
+    }else{
+      treatmentsCompletedList.add(treatment);
+    }
   }
 
   @action
@@ -93,6 +103,7 @@ abstract class _TreatmentStoreBase with Store {
         .doc(treatment.id)
         .delete());
     treatmentsInProgressList.removeWhere((element) => element.id == treatment.id);
+    treatmentsCompletedList.removeWhere((element) => element.id == treatment.id);
   }
 
   Future<int> getLastTreatmentId() async {

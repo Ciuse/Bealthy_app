@@ -33,12 +33,11 @@ class _TreatmentPageState extends State<TreatmentPage>{
       ),
         body: SingleChildScrollView(
 
-      child:
+      child:Container(child:
       Column(
         children: [
               Container(
             alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height / 2.2,
             margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
             width:double.infinity,
             decoration: BoxDecoration(
@@ -63,22 +62,11 @@ class _TreatmentPageState extends State<TreatmentPage>{
                     leading: Icon(Icons.medical_services_outlined,color: Colors.black),
                   ),
             Observer(builder: (_) =>ListView.builder(
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
                       itemCount: treatmentStore.treatmentsInProgressList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Dismissible(
-                          key: Key(treatmentStore.treatmentsInProgressList[index].id),
-                          background: Container(
-                            margin:  EdgeInsets.symmetric(horizontal: 10 ),
-                            padding: EdgeInsets.symmetric(horizontal: 10 ),
-                            decoration: BoxDecoration(
-                              color: Color(0xffb30000),
-                              borderRadius: BorderRadius.circular(20),),
-                            alignment: AlignmentDirectional.centerEnd,
-                            child: Icon(Icons.delete, color: Colors.white),
-                          ),
-                          child: Card(
+                        return Card(
                             shape:  RoundedRectangleBorder(
                               side: BorderSide(color: Colors.black, width: 1),
                               borderRadius: BorderRadius.circular(15.0),
@@ -100,12 +88,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                               title: Text(treatmentStore.treatmentsInProgressList[index].title,style: TextStyle(fontSize: 18.0)),
                             ),
 
-                          ),
-                          onDismissed: (direction){
-                            treatmentStore.removeTreatmentCreatedByUser(treatmentStore.treatmentsInProgressList[index])
-                                .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
-                          },
-                        );
+                          );
 
                       }
 
@@ -151,18 +134,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                             physics: ClampingScrollPhysics(),
                             itemCount: treatmentStore.treatmentsCompletedList.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return Dismissible(
-                                key: Key(treatmentStore.treatmentsCompletedList[index].id),
-                                background: Container(
-                                  margin:  EdgeInsets.symmetric(horizontal: 10 ),
-                                  padding: EdgeInsets.symmetric(horizontal: 10 ),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xffb30000),
-                                    borderRadius: BorderRadius.circular(20),),
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: Icon(Icons.delete, color: Colors.white),
-                                ),
-                                child: Card(
+                              return Card(
                                   shape:  RoundedRectangleBorder(
                                     side: BorderSide(color: Colors.black, width: 1),
                                     borderRadius: BorderRadius.circular(15.0),
@@ -184,12 +156,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                                     title: Text(treatmentStore.treatmentsCompletedList[index].title,style: TextStyle(fontSize: 18.0)),
                                   ),
 
-                                ),
-                                onDismissed: (direction){
-                                  treatmentStore.removeTreatmentCreatedByUser(treatmentStore.treatmentsCompletedList[index])
-                                      .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
-                                },
-                              );
+                                );
 
                             }
 
@@ -198,7 +165,10 @@ class _TreatmentPageState extends State<TreatmentPage>{
               ),
 
 
-            ])));
+            ]
+      ))
+        )
+    );
   }
 
 }

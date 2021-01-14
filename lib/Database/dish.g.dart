@@ -24,6 +24,21 @@ mixin _$Dish on _DishBase, Store {
     });
   }
 
+  final _$numberAtom = Atom(name: '_DishBase.number');
+
+  @override
+  int get number {
+    _$numberAtom.reportRead();
+    return super.number;
+  }
+
+  @override
+  set number(int value) {
+    _$numberAtom.reportWrite(value, super.number, () {
+      super.number = value;
+    });
+  }
+
   final _$nameAtom = Atom(name: '_DishBase.name');
 
   @override
@@ -131,6 +146,7 @@ mixin _$Dish on _DishBase, Store {
   String toString() {
     return '''
 id: ${id},
+number: ${number},
 name: ${name},
 category: ${category},
 qty: ${qty},
