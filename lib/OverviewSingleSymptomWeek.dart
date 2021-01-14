@@ -180,7 +180,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 20,
+            y: 10,
             colors: [barBackgroundColor],
           ),
         ),
