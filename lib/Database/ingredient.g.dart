@@ -39,6 +39,21 @@ mixin _$Ingredient on _IngredientBase, Store {
     });
   }
 
+  final _$it_NameAtom = Atom(name: '_IngredientBase.it_Name');
+
+  @override
+  String get it_Name {
+    _$it_NameAtom.reportRead();
+    return super.it_Name;
+  }
+
+  @override
+  set it_Name(String value) {
+    _$it_NameAtom.reportWrite(value, super.it_Name, () {
+      super.it_Name = value;
+    });
+  }
+
   final _$qtyAtom = Atom(name: '_IngredientBase.qty');
 
   @override
@@ -89,6 +104,7 @@ mixin _$Ingredient on _IngredientBase, Store {
     return '''
 id: ${id},
 name: ${name},
+it_Name: ${it_Name},
 qty: ${qty},
 mealTime: ${mealTime},
 totalQuantity: ${totalQuantity}

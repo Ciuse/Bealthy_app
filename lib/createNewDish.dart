@@ -129,7 +129,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
       for (int i = 0; i < ingredientsSelectedList.length; i++) {
         Ingredient ingredient =
         new Ingredient(
-            id: context.read<IngredientStore>().getIngredientIdFromName(
+            id: ingredientStore.getIngredientIdFromName(
                 ingredientsSelectedList[i]),
             name: ingredientsSelectedList[i],
             qty: ingredientsQuantityList[i]);

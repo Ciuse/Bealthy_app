@@ -5,6 +5,7 @@ import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'Login/config/palette.dart';
 import 'Login/screens/splash.dart';
+import 'Models/barCodeScannerStore.dart';
 import 'Models/mealTimeStore.dart';
 import 'Models/overviewStore.dart';
 import 'Models/symptomStore.dart';
@@ -56,7 +57,10 @@ void main() async {
         ),
         Provider<TreatmentStore>(
           create: (_) => TreatmentStore(),
-        )
+        ),
+        Provider<BarCodeScannerStore>(
+          create: (_) => BarCodeScannerStore(),
+        ),
       ], child:MyApp())));
 }
 

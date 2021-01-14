@@ -16,6 +16,7 @@ abstract class _IngredientBase with Store {
   _IngredientBase({
     this.id,
     this.name,
+    this.it_Name,
     this.qty,
     this.mealTime,
     this.totalQuantity,
@@ -25,6 +26,8 @@ abstract class _IngredientBase with Store {
   String id;
   @observable
   String name;
+  @observable
+  String it_Name;
   @observable
   String qty;
 

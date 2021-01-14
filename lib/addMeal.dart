@@ -1,8 +1,12 @@
+import 'package:Bealthy_app/Models/barCodeScannerStore.dart';
 import 'package:Bealthy_app/dishPage.dart';
 import 'package:Bealthy_app/searchDishesList.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'Database/dish.dart';
@@ -11,7 +15,8 @@ import 'Login/config/palette.dart';
 import 'Models/foodStore.dart';
 import 'createNewDish.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
-
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
 
 class AddMeal extends StatefulWidget {
   final String title;
@@ -21,14 +26,18 @@ class AddMeal extends StatefulWidget {
 }
 
 class _AddMealState extends State<AddMeal>{
-
+  BarCodeScannerStore barCodeScannerStore;
+  void initState() {
+    super.initState();
+    barCodeScannerStore = Provider.of<BarCodeScannerStore>(context, listen: false);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("Add new dish to"+" "+widget.title),
         ),
-        body: SingleChildScrollView(
+        body: OKToast( child: SingleChildScrollView(
 
         child:Container(
           color: Palette.primaryThreeMoreLight,
@@ -215,17 +224,123 @@ class _AddMealState extends State<AddMeal>{
                               Text("Create New Dish")
                             ],
                           ),
-                        ),]
+                        ),
+                        Divider(
+                          thickness: 0.5,
+                          indent: 5,
+                          endIndent: 5,
+                          color: Colors.black,
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(right: 10, top: 15,bottom:15),
+                          child:
+                          Row(
+                            children: <Widget>[
+                              RawMaterialButton(
+                                onPressed: () async => {
+                                  //scanBarCodeAndCheckPermission(),
+                                  await barCodeScannerStore.getProductFromOpenFoodDB("8003000162015"),
+                                },
+                                elevation: 7.0,
+                                fillColor: Colors.white,
+                                child: Icon(
+                                  Icons.create_outlined,
+                                  size: 24.0,
+                                  color: Colors.black,
+                                ),
+                                padding: EdgeInsets.all(15.0),
+                                shape: CircleBorder(),
+                              ),
+                              SizedBox(width: 10,),
+                              Text("BarCodeScanner")
+                            ],
+                          ),
+                        )]
                       )
                   ),
-
+                  Observer(
+              builder: (_) => Text(barCodeScannerStore.scanBarcode),)
                 ]
             )
-        ))
+        )))
     );
   }
-}
 
+  void scanBarCodeAndCheckPermission() async{
+    var cameraStatus = await Permission.camera.status;
+
+    print(cameraStatus);
+    if (!cameraStatus.isGranted)
+    {await Permission.camera.request();}
+
+    if(await Permission.camera.isGranted){
+      scanBarcodeNormal();
+
+    }else{
+      showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
+      openAppSettings2();
+    }
+
+  }
+
+
+  openAppSettings2(){
+    return showDialog(
+        context: context,
+        builder: (_) =>  new AlertDialog(
+          title: new Text("Bealthy"),
+          content: new Text("Bealthy needs to access to your memory in order to upload new image"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Settings'),
+              onPressed: () {
+                openAppSettings();
+              },
+            ),
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ));
+  }
+
+  Future<void> scanBarcodeNormal() async {
+    String barcodeScanRes;
+    bool errorPlatform = false;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#ff6666", "Cancel", true, ScanMode.BARCODE);
+      print(barcodeScanRes);
+    } on PlatformException {
+      errorPlatform=true;
+    }
+    barCodeScannerStore.scanBarcode = barcodeScanRes;
+    if(barCodeScannerStore.scanBarcode != "-1" && errorPlatform!=true){
+      print(barCodeScannerStore.scanBarcode);
+      await barCodeScannerStore.getProductFromOpenFoodDB(barCodeScannerStore.scanBarcode)
+          .then((value) => {
+        if(value!=null){
+          print(value)
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => ))
+        }
+        else{
+          showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom)
+        }
+      });
+
+    }else{
+      showToast("Failed To scan Barcode", position: ToastPosition.bottom);
+    }
+  }
+
+}
 
 class FavouriteDishes extends StatefulWidget {
   @override
