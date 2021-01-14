@@ -24,6 +24,21 @@ mixin _$BarCodeScannerStore on _BarCodeScannerStoreBase, Store {
     });
   }
 
+  final _$ingredientsAtom = Atom(name: '_BarCodeScannerStoreBase.ingredients');
+
+  @override
+  List<Ingredient> get ingredients {
+    _$ingredientsAtom.reportRead();
+    return super.ingredients;
+  }
+
+  @override
+  set ingredients(List<Ingredient> value) {
+    _$ingredientsAtom.reportWrite(value, super.ingredients, () {
+      super.ingredients = value;
+    });
+  }
+
   final _$getProductFromOpenFoodDBAsyncAction =
       AsyncAction('_BarCodeScannerStoreBase.getProductFromOpenFoodDB');
 
@@ -33,25 +48,21 @@ mixin _$BarCodeScannerStore on _BarCodeScannerStoreBase, Store {
         .run(() => super.getProductFromOpenFoodDB(barcode));
   }
 
-  final _$_BarCodeScannerStoreBaseActionController =
-      ActionController(name: '_BarCodeScannerStoreBase');
+  final _$getIngredientsAsyncAction =
+      AsyncAction('_BarCodeScannerStoreBase.getIngredients');
 
   @override
-  void createNewDishFromScan(
-      OFF.Product product, IngredientStore ingredientStore) {
-    final _$actionInfo = _$_BarCodeScannerStoreBaseActionController.startAction(
-        name: '_BarCodeScannerStoreBase.createNewDishFromScan');
-    try {
-      return super.createNewDishFromScan(product, ingredientStore);
-    } finally {
-      _$_BarCodeScannerStoreBaseActionController.endAction(_$actionInfo);
-    }
+  Future<void> getIngredients(OFF.Product product,
+      IngredientStore ingredientStore, FoodStore foodStore) {
+    return _$getIngredientsAsyncAction
+        .run(() => super.getIngredients(product, ingredientStore, foodStore));
   }
 
   @override
   String toString() {
     return '''
-scanBarcode: ${scanBarcode}
+scanBarcode: ${scanBarcode},
+ingredients: ${ingredients}
     ''';
   }
 }
