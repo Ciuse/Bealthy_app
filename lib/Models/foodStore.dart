@@ -97,13 +97,7 @@ abstract class _FoodStoreBase with Store {
     return loadInitCreatedYourDishesList = ObservableFuture(_getYourDishes());
   }
 
-  @action
-  Future<void> initStore() async {
-    if (!storeInitialized) {
-      storeInitialized = true;
-      await _addDishToCategory();
-    }
-  }
+
 
   @action
   Future<void> initBooleanDishQuantity() async {
@@ -138,98 +132,6 @@ void setBooleanQuantityDish(){
   }
 
 
-  @action
-  Future<void> initFoodCategoryLists(int categoryIndex) async {
-    switch (categoryIndex) {
-      case 0:
-        {
-          if (firstCourseDishList.length <= 0) {
-            _getCategoryDishes(categoryIndex, firstCourseDishList);
-          }
-        }
-        break;
-      case 1:
-        {
-          if (mainCourseDishList.length <= 0) {
-            _getCategoryDishes(categoryIndex, mainCourseDishList);
-          }
-        }
-        break;
-      case 2:
-        {
-          if (secondCourseDishList.length <= 0) {
-            _getCategoryDishes(categoryIndex, secondCourseDishList);
-          }
-        }
-        break;
-      case 3:
-        {
-          if (sideDishList.length <= 0) {
-            _getCategoryDishes(categoryIndex, sideDishList);
-          }
-        }
-        break;
-      case 4:
-        {
-          if (dessertsDishList.length <= 0) {
-            _getCategoryDishes(categoryIndex, dessertsDishList);
-          }
-        }
-        break;
-      case 5:
-        {
-          if (drinksDishList.length <= 0) {
-            _getCategoryDishes(categoryIndex, drinksDishList);
-          }
-        }
-        break;
-      default:
-        {
-          print("Swtich case no category found");
-        }
-        break;
-    }
-  }
-
-  ObservableList getCategoryList(int categoryIndex) {
-    switch (categoryIndex) {
-      case 0:
-        {
-          return firstCourseDishList;
-        }
-        break;
-      case 1:
-        {
-          return mainCourseDishList;
-        }
-        break;
-      case 2:
-        {
-          return secondCourseDishList;
-        }
-        break;
-      case 3:
-        {
-          return sideDishList;
-        }
-        break;
-      case 4:
-        {
-          return dessertsDishList;
-        }
-        break;
-      case 5:
-        {
-          return drinksDishList;
-        }
-        break;
-      default:
-        {
-          print("Swtich case no category found");
-          return null;
-        }
-    }
-  }
 
 
   @action
@@ -272,30 +174,6 @@ void setBooleanQuantityDish(){
     yourCreatedDishList.add(dish);
   }
 
-  @action
-  Future<void> _getCategoryDishes(int categoryIndex,
-      ObservableList list) async {
-    await (FirebaseFirestore.instance
-        .collection('DishesCategory')
-        .doc(Category.values[categoryIndex]
-        .toString()
-        .split('.')
-        .last)
-        .collection("Dishes").get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((dish) {
-        Dish toAdd = new Dish(id: dish.id,
-            name: dish.get("name"),
-            category: Category.values[categoryIndex]
-                .toString()
-                .split('.')
-                .last,
-            qty: null,);
-        list.add(toAdd);
-      });
-    })
-    );
-  }
 
   @action
   Future<void> _getDishesFromDBAndUser() async {
@@ -306,7 +184,7 @@ void setBooleanQuantityDish(){
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
 
-        Dish i = new Dish(id:result.id,name:result.get("name"),category:result.get("category") ,qty: "",);
+        Dish i = new Dish(id:result.id,name:result.get("name") ,qty: "",);
         dishesListFromDBAndUser.add(i);
       }
       );
@@ -318,7 +196,6 @@ void setBooleanQuantityDish(){
       querySnapshot.docs.forEach((dish) {
         Dish toAdd = new Dish(id: dish.id,
             name: dish.get("name"),
-            category: dish.get("category"),
             qty: null,
             );
         dishesListFromDBAndUser.add(toAdd);
@@ -336,7 +213,6 @@ void setBooleanQuantityDish(){
       querySnapshot.docs.forEach((dish) {
         Dish toAdd = new Dish(id: dish.id,
             name: dish.get("name"),
-            category: dish.get("category"),
             qty: null,
             );
         yourCreatedDishList.add(toAdd);
@@ -375,7 +251,6 @@ void setBooleanQuantityDish(){
       querySnapshot.docs.forEach((dish) {
         Dish toAdd = new Dish(id: dish.id,
             name: dish.get("name"),
-            category: dish.get("category"),
             qty: null,
             );
         toAdd.setIsFavourite(true);
@@ -428,27 +303,6 @@ void setBooleanQuantityDish(){
     yourFavouriteDishList.add(dish);
   }
 
-  //Inizializza il database online dividendo i cibi nelle varie categorie
-  //Metodo che una volta inseriti tutti i cibi si puo cancellare
-  Future<void> _addDishToCategory() async {
-    await (FirebaseFirestore.instance
-        .collection('Dishes')
-        .get().then((querySnapshot) {
-      querySnapshot.docs.forEach((dish) {
-        firestoreInstance
-            .collection("DishesCategory")
-            .doc(dish.get("category"))
-            .collection("Dishes")
-            .doc(dish.id)
-            .set(Dish(id: dish.id,
-            name: dish.get("name"),
-            qty: null,
-            category: dish.get("category"),
-            ).toMapDishesCategory());
-      });
-    })
-    );
-  }
 
 
   bool isSubstring(String s1, String s2) {

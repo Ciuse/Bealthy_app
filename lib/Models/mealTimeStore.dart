@@ -120,7 +120,6 @@ abstract class _MealTimeStoreBase with Store {
 
           Dish toAdd = new Dish(id: dish.id,
             name: dish.get("name"),
-            category: dish.get("category"),
             qty: dish.get("qty"),
             mealTime: dish.get("mealTime"),
           );

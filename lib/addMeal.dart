@@ -134,39 +134,7 @@ class _AddMealState extends State<AddMeal>{
                               ],
                             ),
                           ),
-                        Divider(
-                          thickness: 0.5,
-                          indent: 5,
-                          endIndent: 5,
-                          color: Colors.black,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(right: 10, top: 15),
-                          child:
-                          Row(
-                            children: <Widget>[
-                              RawMaterialButton(
-                                onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => CategoriesDish()))
-                                },
-                                elevation: 7.0,
-                                fillColor: Colors.white,
-                                child: Icon(
-                                  Icons.category_outlined,
-                                  size: 24.0,
-                                  color: Colors.black,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
-                              ),
-                              SizedBox(width: 10,),
-                              Text("Category")
-                            ],
-                          ),
-                        ),
+
                         Divider(
                           thickness: 0.5,
                           indent: 5,
@@ -439,7 +407,6 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                               )
                               },
                               title: Text(foodStore.yourFavouriteDishList[index].name,style: TextStyle(fontSize: 22.0)),
-                              subtitle: Text(foodStore.yourFavouriteDishList[index].category,style: TextStyle(fontSize: 18.0)),
                               leading: foodStore.isSubstring("User", foodStore.yourFavouriteDishList[index].id)?
                               FutureBuilder(
                                   future: getImage(foodStore.yourFavouriteDishList[index].id),
@@ -499,104 +466,6 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
   }
 }
 
-
-class CategoriesDish extends StatefulWidget {
-  @override
-  _CategoriesDishState createState() => _CategoriesDishState();
-}
-
-class _CategoriesDishState extends State<CategoriesDish>{
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Category"),
-        ),
-        body: Center(
-            child: Column(
-                children: [
-                  for(var item in Category.values ) FlatButton(
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => CategoryDishList(category: item)),
-                      )
-                    },
-                    color: Colors.orange,
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.fastfood),
-                        Text(item.toString().split('.').last)
-                      ],
-                    ),
-                  ),
-                ]
-            )
-        )
-    );
-  }
-
-}
-
-
-class CategoryDishList extends StatefulWidget {
-  final Category category;
-
-  // In the constructor, require a Category.
-  CategoryDishList({@required this.category});
-
-  @override
-  _CategoryDishListState createState() => _CategoryDishListState();
-}
-
-class _CategoryDishListState extends State<CategoryDishList> {
-  
-  void initState() {
-    super.initState();
-    var store = Provider.of<FoodStore>(context, listen: false);
-    store.initFoodCategoryLists(widget.category.index);
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    final store = Provider.of<FoodStore>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.category
-            .toString()
-            .split('.')
-            .last),
-      ),
-        body: Center(
-            child:   Observer(
-                builder: (_) => Column(
-                    children: [
-                      for(Dish item in store.getCategoryList(widget.category.index) ) FlatButton(
-                        onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => DishPage(dish: item, createdByUser: false,)),
-                          )
-                        },
-                        color: Colors.orange,
-                        padding: EdgeInsets.all(10.0),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.fastfood),
-                            Text(item.name.toString())
-                          ],
-                        ),
-                      ),
-                    ]
-                )
-            )
-        )
-    );
-  }
-}
 
 
 
@@ -676,7 +545,6 @@ class _YourDishListState extends State<YourDishList> {
                                 )
                                 },
                                 title: Text(foodStore.yourCreatedDishList[index].name,style: TextStyle(fontSize: 22.0)),
-                                subtitle: Text(foodStore.yourCreatedDishList[index].category,style: TextStyle(fontSize: 18.0)),
                                 leading:
                                 FutureBuilder(
                                     future: getImage(foodStore.yourCreatedDishList[index].id),

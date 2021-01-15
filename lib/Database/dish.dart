@@ -6,7 +6,7 @@ part 'dish.g.dart';
 
 Dish clientFromMap(String str) => _DishBase.fromMap(json.decode(str));
 
-String clientToMap1(_DishBase data) => json.encode(data.toMapDishesCategory());
+
 String clientToMap2(_DishBase data) => json.encode(data.toMapDishes());
 String clientToMap3(_DishBase data) => json.encode(data.toMapDayDishes());
 String clientToMap4(_DishBase data) => json.encode(data.toMapDishesCreatedByUser());
@@ -21,7 +21,6 @@ abstract class _DishBase with Store {
   _DishBase({
     this.id,
     this.name,
-    this.category,
     this.qty,
     this.mealTime,
     this.barcode,
@@ -33,8 +32,6 @@ abstract class _DishBase with Store {
   int number;
   @observable
   String name;
-  @observable
-  String category;
   @observable
   String qty;
   @observable
@@ -56,26 +53,18 @@ abstract class _DishBase with Store {
       Dish(
         id: json["id"],
         name: json["name"],
-        category: json["category"],
         qty:json["qty"],
         mealTime: json["mealTime"],
       );
 
-  Map<String, dynamic> toMapDishesCategory() =>
-      {
-        "id": id,
-        "name": name,
-      };
 
   Map<String, dynamic> toMapDishes() =>
       {
         "name": name,
-        "category": category,
       };
 
   Map<String, dynamic> toMapDayDishes() =>
       {
-        "category": category,
         "name": name,
         "qty": qty,
         "mealTime":mealTime
@@ -89,14 +78,12 @@ abstract class _DishBase with Store {
   Map<String, dynamic> toMapDishesCreatedByUser() =>
       {
         "name": name,
-        "category": category,
         "number":number,
       };
 
   Map<String, dynamic> toMapDishesScannedByUser() =>
       {
         "name": name,
-        "category": category,
         "number":number,
         "barcode": barcode,
       };
