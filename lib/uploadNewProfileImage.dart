@@ -216,22 +216,15 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
   }
 
   Future<Null> _cropImage() async {
-    print("entrato");
     File croppedFile = await ImageCropper.cropImage(
         sourcePath: _imageFile.path,
-        aspectRatioPresets:
-        [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
+        aspectRatio: CropAspectRatio(ratioX:1, ratioY:1),
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
+            toolbarColor: Palette.appBarColor,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
+            showCropGrid: false,
             lockAspectRatio: true),
         );
     if(croppedFile!=null){

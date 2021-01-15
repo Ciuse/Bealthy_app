@@ -250,11 +250,9 @@ class _CreateNewDishState extends State<CreateNewDish> {
                             onValueChanged: (value){
                               setState(() {
                                 FocusScopeNode currentFocus = FocusScope.of(context);
-
                                 if (!currentFocus.hasPrimaryFocus) {
                                   currentFocus.unfocus();
                                 }
-
                                 selectIngredient = value;
                                 addIngredientsToListView(value);
                                 ingredientStore.ingredientsName.remove(value);
