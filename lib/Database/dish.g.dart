@@ -54,21 +54,6 @@ mixin _$Dish on _DishBase, Store {
     });
   }
 
-  final _$categoryAtom = Atom(name: '_DishBase.category');
-
-  @override
-  String get category {
-    _$categoryAtom.reportRead();
-    return super.category;
-  }
-
-  @override
-  set category(String value) {
-    _$categoryAtom.reportWrite(value, super.category, () {
-      super.category = value;
-    });
-  }
-
   final _$qtyAtom = Atom(name: '_DishBase.qty');
 
   @override
@@ -163,7 +148,6 @@ mixin _$Dish on _DishBase, Store {
 id: ${id},
 number: ${number},
 name: ${name},
-category: ${category},
 qty: ${qty},
 mealTime: ${mealTime},
 barcode: ${barcode},

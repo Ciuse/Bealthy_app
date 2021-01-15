@@ -127,7 +127,6 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                       )
                                       },
                                       title: Text(foodStore.resultsList[index].name,style: TextStyle(fontSize: 22.0)),
-                                      subtitle: Text(foodStore.resultsList[index].category,style: TextStyle(fontSize: 18.0)),
                                       leading: foodStore.isSubstring("User", foodStore.resultsList[index].id)?
                                       FutureBuilder(
                                           future: getImage(foodStore.resultsList[index].id),

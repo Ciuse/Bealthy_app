@@ -26,7 +26,6 @@ class _CreateNewDishState extends State<CreateNewDish> {
   bool _keyboardState;
 
   final nameCt = TextEditingController();
-  final categoryCt = TextEditingController();
   final ingredientsCt = TextEditingController();
   final ingredientsQty = TextEditingController();
   final ingredientSelected = TextEditingController();
@@ -36,9 +35,9 @@ class _CreateNewDishState extends State<CreateNewDish> {
   String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
 
   List<String> quantityList = [];
-  List<String> categoryList = [];
 
-  String categoryDishCreated = "";
+
+
 
   String selectIngredient = "";  //by default we are not providing any of the ingredients
 
@@ -56,7 +55,6 @@ class _CreateNewDishState extends State<CreateNewDish> {
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
     foodStore = Provider.of<FoodStore>(context, listen: false);
     getLastNumber().then((value) =>dish.id="Dish_User_" + dish.number.toString());
-    categoryList= getCategoryName();
     quantityList= getQuantityName();
     ingredientStore.ingredientsName.clear();
     ingredientStore.getIngredientsName();
@@ -77,14 +75,6 @@ class _CreateNewDishState extends State<CreateNewDish> {
 
   }
 
-  List<String> getCategoryName(){
-
-    List<String> listToReturn = new List<String>();
-    Category.values.forEach((element) {
-      listToReturn.add(element.toString().split('.').last);
-    });
-    return listToReturn;
-  }
 
   List<String> getQuantityName(){
 
@@ -101,10 +91,9 @@ class _CreateNewDishState extends State<CreateNewDish> {
   }
 
   void addDishToUser() {
-    if (nameCt.text != "" && categoryDishCreated != "" && ingredientsSelectedList.length>0 &&
+    if (nameCt.text != "" && ingredientsSelectedList.length>0 &&
         ingredientsQuantityList.length==ingredientsSelectedList.length) {
       dish.name=nameCt.text;
-      dish.category=categoryDishCreated;
 
       List<Ingredient> ingredients = new List<Ingredient>();
 
@@ -213,31 +202,6 @@ class _CreateNewDishState extends State<CreateNewDish> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                           ),
-
-                          DropDownField(
-                            controller: categoryCt,
-                            hintText: "Select Category",
-                            enabled: true,
-                            itemsVisibleInDropdown: 3,
-                            items: categoryList,
-
-                            strict: false,
-                            onValueChanged: (value){
-                              setState(() {
-                                FocusScopeNode currentFocus = FocusScope.of(context);
-
-                                if (!currentFocus.hasPrimaryFocus) {
-                                  currentFocus.unfocus();
-                                }
-                                categoryDishCreated = value;
-
-                              });
-                            } ,
-
-                          ),
-
-
-                          Divider(height: 30, color: Colors.black,),
 
                           DropDownField(
 

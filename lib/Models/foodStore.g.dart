@@ -252,13 +252,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
         .run(() => super.initCreatedYourDishList());
   }
 
-  final _$initStoreAsyncAction = AsyncAction('_FoodStoreBase.initStore');
-
-  @override
-  Future<void> initStore() {
-    return _$initStoreAsyncAction.run(() => super.initStore());
-  }
-
   final _$initBooleanDishQuantityAsyncAction =
       AsyncAction('_FoodStoreBase.initBooleanDishQuantity');
 
@@ -275,25 +268,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   Future<void> initSearchAllDishList() {
     return _$initSearchAllDishListAsyncAction
         .run(() => super.initSearchAllDishList());
-  }
-
-  final _$initFoodCategoryListsAsyncAction =
-      AsyncAction('_FoodStoreBase.initFoodCategoryLists');
-
-  @override
-  Future<void> initFoodCategoryLists(int categoryIndex) {
-    return _$initFoodCategoryListsAsyncAction
-        .run(() => super.initFoodCategoryLists(categoryIndex));
-  }
-
-  final _$_getCategoryDishesAsyncAction =
-      AsyncAction('_FoodStoreBase._getCategoryDishes');
-
-  @override
-  Future<void> _getCategoryDishes(
-      int categoryIndex, ObservableList<dynamic> list) {
-    return _$_getCategoryDishesAsyncAction
-        .run(() => super._getCategoryDishes(categoryIndex, list));
   }
 
   final _$_getDishesFromDBAndUserAsyncAction =
