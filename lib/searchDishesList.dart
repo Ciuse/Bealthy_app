@@ -147,8 +147,8 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                                       ),
                                                     ),
                                                     child: ClipOval(
-                                                        child: foodStore.resultsList[index].imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill)
-                                                            :Image.file(foodStore.resultsList[index].imageFile)
+                                                        child: foodStore.resultsList[index].imageFile==null? Image.network(remoteString.data, fit:BoxFit.cover)
+                                                            :Image.file(foodStore.resultsList[index].imageFile, fit:BoxFit.cover)
                                                     )));
                                               }
                                             }
@@ -171,6 +171,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                           child:  ClipOval(
                                               child: Image(
                                                 image: AssetImage("images/Dishes/" +foodStore.resultsList[index].id+".png" ),
+                                                  fit:BoxFit.cover
                                               )
                                           )),
                                     ),

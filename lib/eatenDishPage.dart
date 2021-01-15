@@ -164,7 +164,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                       ),
                                                       child: ClipOval(
                                                         child: widget.dish.imageFile==null? null:
-                                                        Image.file(widget.dish.imageFile),)),
+                                                        Image.file(widget.dish.imageFile,  fit: BoxFit.cover,),)),
 
                                                   Stack(
                                                       children:  <Widget>[
@@ -187,8 +187,8 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                     (width: 150,
                                                       height: 150,
                                                       child: ClipOval(
-                                                        child: widget.dish.imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill):
-                                                        Image.file(widget.dish.imageFile),)),
+                                                        child: widget.dish.imageFile==null? Image.network(remoteString.data, fit: BoxFit.cover):
+                                                        Image.file(widget.dish.imageFile, fit: BoxFit.cover),)),
 
                                                   Stack(
                                                       children:  <Widget>[
@@ -219,10 +219,11 @@ class _EatenDishPageState extends State<EatenDishPage>{
                             }
                             else {
                               return Container(
-                                  width: 200,
-                                  height: 200,
+                                  width: 150,
+                                  height: 150,
                                   child:  ClipOval(
                                       child: Image(
+                                          fit: BoxFit.cover,
                                         image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
                                       )
                                   ));

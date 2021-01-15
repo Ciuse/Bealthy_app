@@ -427,8 +427,8 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                                               ),
                                             ),
                                             child: ClipOval(
-                                                child: foodStore.yourFavouriteDishList[index].imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill)
-                                                    :Image.file(foodStore.yourFavouriteDishList[index].imageFile)
+                                                child: foodStore.yourFavouriteDishList[index].imageFile==null? Image.network(remoteString.data, fit:BoxFit.cover)
+                                                    :Image.file(foodStore.yourFavouriteDishList[index].imageFile, fit:BoxFit.cover)
                                             )));
                                       }
                                     }
@@ -450,7 +450,8 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                                   ),
                                   child:  ClipOval(
                                       child: Image(
-                                        image: AssetImage("images/Dishes/" +foodStore.yourFavouriteDishList[index].id+".png" ),
+                                        image: AssetImage("images/Dishes/" +foodStore.yourFavouriteDishList[index].id+".png" )
+                                          , fit:BoxFit.cover
                                       )
                                   )),
                             ),
@@ -565,8 +566,8 @@ class _YourDishListState extends State<YourDishList> {
                                                 ),
                                               ),
                                               child: ClipOval(
-                                                  child: foodStore.yourCreatedDishList[index].imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill)
-                                                      :Image.file(foodStore.yourCreatedDishList[index].imageFile)
+                                                  child: foodStore.yourCreatedDishList[index].imageFile==null? Image.network(remoteString.data, fit:BoxFit.cover)
+                                                      :Image.file(foodStore.yourCreatedDishList[index].imageFile, fit:BoxFit.cover)
                                               )));
                                         }
                                       }

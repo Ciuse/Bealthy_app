@@ -266,8 +266,8 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                 ),
                               ),
                               child: ClipOval(
-                                child: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill)
-                                    :Image.file(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile)
+                                child: mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile==null? Image.network(remoteString.data, fit:BoxFit.cover)
+                                    :Image.file(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile, fit:BoxFit.cover)
                               )));
                         }
                       }
@@ -290,7 +290,8 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                         ),
                         child:  ClipOval(
                             child: Image(
-                              image: AssetImage("images/Dishes/" +mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id+".png" ),
+                                image: AssetImage("images/Dishes/" +mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].id+".png" )
+                                , fit:BoxFit.cover
                             )
                         )),
                     trailing: Row (

@@ -173,7 +173,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                                           ),
                                           child: ClipOval(
                                             child: dish.imageFile==null? null:
-                                            Image.file(dish.imageFile),
+                                            Image.file(dish.imageFile, fit:BoxFit.cover),
                                           )
                                       ),
 

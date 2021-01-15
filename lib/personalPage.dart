@@ -143,14 +143,14 @@ class _PersonalPageState extends State<PersonalPage>{
                                         builder: (context, remoteString) {
                                           if (remoteString.connectionState != ConnectionState.waiting) {
                                             if (remoteString.hasError) {
-                                              return Image(image:AssetImage("images/defaultImageProfile.png"));
+                                              return Image(image:AssetImage("images/defaultImageProfile.png"), fit:BoxFit.cover);
                                             }
                                             else {
                                               return Container
                                                 (width: 50,
                                                   height: 50,
                                                   child: ClipOval(
-                                                    child: Image.network(remoteString.data, fit: BoxFit.fill),));
+                                                    child: Image.network(remoteString.data, fit:BoxFit.cover),));
                                             }
                                           }
                                           else {
