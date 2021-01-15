@@ -6,6 +6,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'Models/dateStore.dart';
 import 'package:provider/provider.dart';
 import 'Login/config/palette.dart';
+import 'Models/ingredientStore.dart';
 import 'Models/mealTimeStore.dart';
 
 
@@ -96,6 +97,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
       context.read<SymptomStore>().getSymptomsOfADay(dateStore.calendarSelectedDate);
     context.read<MealTimeStore>().initDishesOfMealTimeList(dateStore.calendarSelectedDate);
     context.read<TreatmentStore>().initTreatmentsList( dateStore.calendarSelectedDate);
+
   }
 
   void reactToDataChange(){

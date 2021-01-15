@@ -1,6 +1,7 @@
 
 import 'dart:io';
 import 'dart:math';
+import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
@@ -53,9 +54,9 @@ abstract class _BarCodeScannerStoreBase with Store {
 
       product.ingredients.forEach((productIngredient) {
          ingredientStore.ingredientList.forEach((ingredient) {
-            print("entrato");
             if(isSubstring(ingredient.name, productIngredient.id) || isSubstring(ingredient.it_Name, productIngredient.id)){
                if(!ingredients.contains(ingredient)){
+                  ingredient.qty= Quantity.Normal.toString().split('.').last;
                   ingredients.add(ingredient);
 
                }
@@ -110,6 +111,35 @@ abstract class _BarCodeScannerStoreBase with Store {
 
    }
 
+   @action
+   double rankValueIngredient(int count){
+      double value;
+      if(count==1){
+         value = 1.0;
+      }
+      if(count==2){
+         value = 0.95;
+      }
+      if(count==3){
+         value = 0.8;
+      }
+      if(count==4){
+         value = 0.65;
+      }
+      if(count==5){
+         value = 0.5;
+      }
+      if(count==6){
+         value = 0.3;
+      }
+      if(count==7){
+         value = 0.25;
+      }
+      if(count==8){
+         value = 0.15;
+      }
+      return value;
+   }
 
    bool isSubstring(String s1, String s2) {
       s1=s1.toLowerCase();

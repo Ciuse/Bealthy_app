@@ -24,6 +24,7 @@ abstract class _DishBase with Store {
     this.category,
     this.qty,
     this.mealTime,
+    this.barcode,
   });
 
   @observable
@@ -38,6 +39,8 @@ abstract class _DishBase with Store {
   String qty;
   @observable
   String mealTime;
+  @observable
+  String barcode;
   @observable
   File imageFile = null;
   @observable
@@ -88,5 +91,13 @@ abstract class _DishBase with Store {
         "name": name,
         "category": category,
         "number":number,
+      };
+
+  Map<String, dynamic> toMapDishesScannedByUser() =>
+      {
+        "name": name,
+        "category": category,
+        "number":number,
+        "barcode": barcode,
       };
 }

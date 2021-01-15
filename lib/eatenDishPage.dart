@@ -370,8 +370,8 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                           Expanded(
                                               flex:1,
                                               child: Container(
-                                                  width: 55,
-                                                  height: 55,
+                                                  width: 35,
+                                                  height: 35,
                                                   child:  ClipOval(
                                                       child: Image(
                                                         image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),

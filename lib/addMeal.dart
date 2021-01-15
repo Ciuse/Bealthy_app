@@ -248,11 +248,26 @@ class _AddMealState extends State<AddMeal>{
                               RawMaterialButton(
                                 onPressed: () async => {
                                   scanBarCodeAndCheckPermission(),
+                                  // barCodeScannerStore.scanBarcode="8076809513753",
+                                  // await barCodeScannerStore.getProductFromOpenFoodDB("8076809513753")
+                                  //     .then((value) => {
+                                  //   if(value!=null){
+                                  //
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,barcode: barCodeScannerStore.scanBarcode)),
+                                  //     )
+                                  //
+                                  //   }
+                                  //   else{
+                                  //     showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom)
+                                  //   }
+                                  // })
                                 },
                                 elevation: 7.0,
                                 fillColor: Colors.white,
                                 child: Icon(
-                                  Icons.create_outlined,
+                                  Icons.scanner,
                                   size: 24.0,
                                   color: Colors.black,
                                 ),
@@ -266,8 +281,6 @@ class _AddMealState extends State<AddMeal>{
                         )]
                       )
                   ),
-                  Observer(
-              builder: (_) => Text(barCodeScannerStore.scanBarcode),)
                 ]
             )
         )))
@@ -335,7 +348,7 @@ class _AddMealState extends State<AddMeal>{
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,)),
+          MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,barcode: barCodeScannerStore.scanBarcode)),
         )
 
         }

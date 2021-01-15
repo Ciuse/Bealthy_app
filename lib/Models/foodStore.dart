@@ -253,6 +253,26 @@ void setBooleanQuantityDish(){
   }
 
   @action
+  void addNewDishScannedByUser(Dish dish, List<Ingredient> ingredients) {
+    firestoreInstance
+        .collection("DishesCreatedByUsers")
+        .doc(auth.currentUser.uid)
+        .collection("Dishes")
+        .doc(dish.id)
+        .set(dish.toMapDishesScannedByUser());
+
+    ingredients.forEach((element) {
+      firestoreInstance
+          .collection("DishesCreatedByUsers")
+          .doc(auth.currentUser.uid)
+          .collection("Dishes")
+          .doc(dish.id)
+          .collection("Ingredients").doc(element.id).set(element.toMap());
+    });
+    yourCreatedDishList.add(dish);
+  }
+
+  @action
   Future<void> _getCategoryDishes(int categoryIndex,
       ObservableList list) async {
     await (FirebaseFirestore.instance

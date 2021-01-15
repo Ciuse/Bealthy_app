@@ -99,6 +99,21 @@ mixin _$Dish on _DishBase, Store {
     });
   }
 
+  final _$barcodeAtom = Atom(name: '_DishBase.barcode');
+
+  @override
+  String get barcode {
+    _$barcodeAtom.reportRead();
+    return super.barcode;
+  }
+
+  @override
+  set barcode(String value) {
+    _$barcodeAtom.reportWrite(value, super.barcode, () {
+      super.barcode = value;
+    });
+  }
+
   final _$imageFileAtom = Atom(name: '_DishBase.imageFile');
 
   @override
@@ -151,6 +166,7 @@ name: ${name},
 category: ${category},
 qty: ${qty},
 mealTime: ${mealTime},
+barcode: ${barcode},
 imageFile: ${imageFile},
 isFavourite: ${isFavourite}
     ''';

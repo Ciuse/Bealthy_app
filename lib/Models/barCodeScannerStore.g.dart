@@ -58,6 +58,20 @@ mixin _$BarCodeScannerStore on _BarCodeScannerStoreBase, Store {
         .run(() => super.getIngredients(product, ingredientStore, foodStore));
   }
 
+  final _$_BarCodeScannerStoreBaseActionController =
+      ActionController(name: '_BarCodeScannerStoreBase');
+
+  @override
+  double rankValueIngredient(int count) {
+    final _$actionInfo = _$_BarCodeScannerStoreBaseActionController.startAction(
+        name: '_BarCodeScannerStoreBase.rankValueIngredient');
+    try {
+      return super.rankValueIngredient(count);
+    } finally {
+      _$_BarCodeScannerStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

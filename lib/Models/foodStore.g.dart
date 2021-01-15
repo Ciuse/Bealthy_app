@@ -399,6 +399,17 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
+  void addNewDishScannedByUser(Dish dish, List<Ingredient> ingredients) {
+    final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
+        name: '_FoodStoreBase.addNewDishScannedByUser');
+    try {
+      return super.addNewDishScannedByUser(dish, ingredients);
+    } finally {
+      _$_FoodStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void isFoodFavourite(Dish dish) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.isFoodFavourite');

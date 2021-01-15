@@ -64,6 +64,7 @@ abstract class _IngredientStoreBase with Store {
         .get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         Ingredient i = new Ingredient(id:result.id,name:result.get("name"),it_Name:result.get("it_Name"), qty: "" );
+        print(i);
         ingredientList.add(i);
       }
       );
@@ -77,7 +78,7 @@ abstract class _IngredientStoreBase with Store {
         .collection('Dishes').doc(dish.id).collection("Ingredients")
         .get().then((querySnapshot) {
       querySnapshot.docs.forEach((ingredient) {
-        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),it_Name:ingredient.get("it_Name"),qty:ingredient.get("qty") );
+        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
         ingredientListOfDish.add(i);
       }
       );
@@ -92,13 +93,14 @@ abstract class _IngredientStoreBase with Store {
         .collection("Dishes").doc(dish.id).collection("Ingredients")
         .get().then((querySnapshot) {
       querySnapshot.docs.forEach((ingredient) {
-        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),it_Name:ingredient.get("it_Name"),qty:ingredient.get("qty") );
+        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
         ingredientListOfDish.add(i);
 
       }
       );
     }));
   }
+
 
   @action
   Future<void> getIngredientsName() async {

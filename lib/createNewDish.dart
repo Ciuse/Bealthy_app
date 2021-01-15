@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:ui';
-
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:Bealthy_app/uploadNewPictureToUserDish.dart';
 import 'package:camera/camera.dart';
 import 'package:dropdownfield/dropdownfield.dart';
@@ -143,12 +142,17 @@ class _CreateNewDishState extends State<CreateNewDish> {
     }
   }
 
-  void uploadImageToFirebase(File imageFile) {
-
-      String fileName = "Dish_User_" + dish.number.toString()+".jpg";
-      var firebaseStorageRef = FirebaseStorage.instance.ref().child('DishImage/$fileName');
-      firebaseStorageRef.putFile(imageFile);
-
+  Future uploadImageToFirebase(File imageFile) async {
+    String userUid;
+    final litUser = context.getSignedInUser();
+    litUser.when(
+          (user) => userUid=user.uid,
+      empty: () => Text('Not signed in'),
+      initializing: () => Text('Loading'),
+    );
+    String fileName = dish.id+".jpg";
+    var firebaseStorageRef = FirebaseStorage.instance.ref().child(userUid+'/DishImage/$fileName');
+    firebaseStorageRef.putFile(imageFile);
   }
 
   openCamera() {
