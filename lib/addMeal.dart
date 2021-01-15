@@ -39,6 +39,7 @@ class _AddMealState extends State<AddMeal>{
     foodStore = Provider.of<FoodStore>(context, listen: false);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,21 +217,29 @@ class _AddMealState extends State<AddMeal>{
                               RawMaterialButton(
                                 onPressed: () async => {
                                   scanBarCodeAndCheckPermission(),
-                                  // barCodeScannerStore.scanBarcode="8076809513753",
-                                  // await barCodeScannerStore.getProductFromOpenFoodDB("8076809513753")
-                                  //     .then((value) => {
-                                  //   if(value!=null){
+                                   //barCodeScannerStore.scanBarcode="8076800195057",
+                                  // await barCodeScannerStore.getProductFromOpenFoodDB("8076800195057")
+                                  //     .then((value) async => {
+                                  //    if(value!=null){
+                                  //      await barCodeScannerStore.getScannedDishes(barCodeScannerStore.scanBarcode).then((dishDB) {
+                                  //        if(dishDB.id!=null){
+                                  //          Navigator.push(
+                                  //            context,
+                                  //            MaterialPageRoute(builder: (context) => DishPage(dish: dishDB,createdByUser: true,)),
+                                  //          );
+                                  //        }else{
+                                  //          Navigator.push(
+                                  //            context,
+                                  //            MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,barcode: barCodeScannerStore.scanBarcode)),
+                                  //          );
                                   //
-                                  //     Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,barcode: barCodeScannerStore.scanBarcode)),
-                                  //     )
-                                  //
+                                  //        }
+                                  //      }),
                                   //   }
-                                  //   else{
-                                  //     showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom)
+                                  //    else{
+                                  //      showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom)
                                   //   }
-                                  // })
+                                  //  })
                                 },
                                 elevation: 7.0,
                                 fillColor: Colors.white,
@@ -313,11 +322,20 @@ class _AddMealState extends State<AddMeal>{
       await barCodeScannerStore.getProductFromOpenFoodDB(barCodeScannerStore.scanBarcode)
           .then((value) => {
         if(value!=null){
+          barCodeScannerStore.getScannedDishes(barCodeScannerStore.scanBarcode).then((dishDB) {
+            if(dishDB.id!=null){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DishPage(dish: dishDB,createdByUser: true,)),
+              );
+            }else{
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,barcode: barCodeScannerStore.scanBarcode)),
+              );
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,barcode: barCodeScannerStore.scanBarcode)),
-        )
+            }
+          }),
 
         }
         else{

@@ -123,6 +123,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
   }
 
 
+
   @override
   Widget build(BuildContext context) {
     MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context);

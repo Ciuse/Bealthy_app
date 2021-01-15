@@ -1,10 +1,8 @@
-
 import 'dart:io';
 import 'dart:math';
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Models/foodStore.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mobx/mobx.dart';
 import 'package:openfoodfacts/openfoodfacts.dart' as OFF;
 import 'package:Bealthy_app/Database/dish.dart';
@@ -13,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:path_provider/path_provider.dart';
 import '../Database/ingredient.dart';
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
 // Include generated file
 part 'barCodeScannerStore.g.dart';
@@ -67,6 +66,28 @@ abstract class _BarCodeScannerStoreBase with Store {
 
    }
 
+   @action
+   Future<Dish> getScannedDishes(String barcode) async {
+      Dish toReturn = new Dish();
+      await (FirebaseFirestore.instance
+          .collection('DishesCreatedByUsers')
+          .doc(auth.currentUser.uid).collection("Dishes")
+          .where('barcode', isEqualTo: barcode)
+          .get()
+          .then((querySnapshot) {
+         querySnapshot.docs.forEach((dish) {
+
+               toReturn.id = dish.id;
+               toReturn.name = dish.get("name");
+               toReturn.barcode =dish.get("barcode");
+
+         });
+      })
+      );
+      return toReturn;
+   }
+
+
 
    Future<File> urlToFile(String imageUrl) async {
 // generate random number.
@@ -111,35 +132,7 @@ abstract class _BarCodeScannerStoreBase with Store {
 
    }
 
-   @action
-   double rankValueIngredient(int count){
-      double value;
-      if(count==1){
-         value = 1.0;
-      }
-      if(count==2){
-         value = 0.95;
-      }
-      if(count==3){
-         value = 0.8;
-      }
-      if(count==4){
-         value = 0.65;
-      }
-      if(count==5){
-         value = 0.5;
-      }
-      if(count==6){
-         value = 0.3;
-      }
-      if(count==7){
-         value = 0.25;
-      }
-      if(count==8){
-         value = 0.15;
-      }
-      return value;
-   }
+
 
    bool isSubstring(String s1, String s2) {
       s1=s1.toLowerCase();

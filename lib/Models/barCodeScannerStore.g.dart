@@ -58,18 +58,13 @@ mixin _$BarCodeScannerStore on _BarCodeScannerStoreBase, Store {
         .run(() => super.getIngredients(product, ingredientStore, foodStore));
   }
 
-  final _$_BarCodeScannerStoreBaseActionController =
-      ActionController(name: '_BarCodeScannerStoreBase');
+  final _$getScannedDishesAsyncAction =
+      AsyncAction('_BarCodeScannerStoreBase.getScannedDishes');
 
   @override
-  double rankValueIngredient(int count) {
-    final _$actionInfo = _$_BarCodeScannerStoreBaseActionController.startAction(
-        name: '_BarCodeScannerStoreBase.rankValueIngredient');
-    try {
-      return super.rankValueIngredient(count);
-    } finally {
-      _$_BarCodeScannerStoreBaseActionController.endAction(_$actionInfo);
-    }
+  Future<Dish> getScannedDishes(String barcode) {
+    return _$getScannedDishesAsyncAction
+        .run(() => super.getScannedDishes(barcode));
   }
 
   @override
