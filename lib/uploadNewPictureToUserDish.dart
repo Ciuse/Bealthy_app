@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 import 'package:oktoast/oktoast.dart';
@@ -45,7 +46,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
     }
 
     if(await Permission.storage.isGranted){
-      pickImageFromGallery();
+      pickImageFromGallery().then((value) => _cropImage());
     }else{
       showToast("Bealthy needs to access your Gallery, please provide permission", position: ToastPosition.bottom);
       openAppSettings2();
@@ -62,7 +63,7 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
 
 
     if(await Permission.camera.isGranted){
-      pickImageWithCamera();
+      await pickImageWithCamera().then((value) => _cropImage());
     }else{
       showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
       openAppSettings2();
@@ -220,8 +221,25 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
           ),
         ));
   }
-
-
+  Future<Null> _cropImage() async {
+    File croppedFile = await ImageCropper.cropImage(
+      sourcePath: _imageFile.path,
+      aspectRatio: CropAspectRatio(ratioX:1, ratioY:1),
+      androidUiSettings: AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Palette.appBarColor,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          showCropGrid: false,
+          lockAspectRatio: true),
+    );
+    if(croppedFile!=null){
+      setState(() {
+        _imageFile = File(croppedFile.path);
+      });
+    }
+  }
+  
   Widget uploadImageButton(BuildContext context) {
     return Container(
       child: Stack(

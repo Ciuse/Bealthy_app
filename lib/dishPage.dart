@@ -212,7 +212,7 @@ class _DishPageState extends State<DishPage>{
                                 ),
                                 child: ClipOval(
                                   child: widget.dish.imageFile==null? null:
-                                  Image.file(widget.dish.imageFile),)),
+                                  Image.file(widget.dish.imageFile,  fit: BoxFit.cover,),)),
 
                             Stack(
                                 children:  <Widget>[
@@ -235,8 +235,8 @@ class _DishPageState extends State<DishPage>{
                               (width: 150,
                                 height: 150,
                                 child: ClipOval(
-                                  child: widget.dish.imageFile==null? Image.network(remoteString.data, fit: BoxFit.fill):
-                                  Image.file(widget.dish.imageFile),)),
+                                  child: widget.dish.imageFile==null? Image.network(remoteString.data,  fit: BoxFit.cover):
+                                  Image.file(widget.dish.imageFile,  fit: BoxFit.cover),)),
 
                             Stack(
                                 children:  <Widget>[
@@ -267,12 +267,14 @@ class _DishPageState extends State<DishPage>{
                 }
                 else {
                   return Container(
-                      width: 200,
-                      height: 200,
+                      width: 150,
+                      height: 150,
                       child:  ClipOval(
                           child: Image(
                             image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
+                              fit: BoxFit.cover
                           )
+
                       ));
                 }
               } else{

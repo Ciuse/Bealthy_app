@@ -173,7 +173,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                                           ),
                                           child: ClipOval(
                                             child: dish.imageFile==null? null:
-                                            Image.file(dish.imageFile),
+                                            Image.file(dish.imageFile, fit:BoxFit.cover),
                                           )
                                       ),
 
@@ -214,11 +214,9 @@ class _CreateNewDishState extends State<CreateNewDish> {
                             onValueChanged: (value){
                               setState(() {
                                 FocusScopeNode currentFocus = FocusScope.of(context);
-
                                 if (!currentFocus.hasPrimaryFocus) {
                                   currentFocus.unfocus();
                                 }
-
                                 selectIngredient = value;
                                 addIngredientsToListView(value);
                                 ingredientStore.ingredientsName.remove(value);

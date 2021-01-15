@@ -298,7 +298,7 @@ void setBooleanQuantityDish(){
         .doc(auth.currentUser.uid)
         .collection("Dishes")
         .doc(dish.id)
-        .set(dish.toMapDishesCreatedByUser());
+        .set(dish.toMapDishes());
 
     yourFavouriteDishList.add(dish);
   }
