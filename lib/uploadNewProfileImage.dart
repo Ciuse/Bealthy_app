@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 import 'package:oktoast/oktoast.dart';
@@ -45,7 +46,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
     }
 
     if(await Permission.storage.isGranted){
-      pickImageFromGallery();
+      pickImageFromGallery().then((value) => _cropImage());
     }else{
       showToast("Bealthy needs to access your Gallery, please provide permission", position: ToastPosition.bottom);
       openAppSettings2();
@@ -62,7 +63,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
 
 
     if(await Permission.camera.isGranted){
-      pickImageWithCamera();
+      await pickImageWithCamera().then((value) => _cropImage());
     }else{
       showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
       openAppSettings2();
@@ -129,85 +130,115 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
 
   }
 
-
-  @override
   Widget build(BuildContext context) {
-    print("open uploading page");
     return OKToast(
         child:Scaffold(
-      appBar: AppBar(
-        title: Text("Upload new picture"),
-      ),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            height: 360,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(50.0),
-                    bottomRight: Radius.circular(50.0)),
-                gradient: LinearGradient(
-                    colors: [Palette.primaryDark, Palette.primaryLight,Palette.primaryMoreLight,],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.bottomRight)),
+          appBar: AppBar(
+            title: Text("Add Profile Picture"),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 80),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                      "Uploading Image to Firebase Storage",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                Expanded(
-                  child: Stack(
-                    alignment: AlignmentDirectional.center,
-                    children: <Widget>[
-                      Container(
-                        height:_imageFile != null
-                            ? null
-                            :200,
-                        width: _imageFile != null
-                            ? null
-                            :200,
-                        margin: const EdgeInsets.only(top: 25.0),
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(60.0),
-                            child: _imageFile != null
-                                ? Image.file(_imageFile)
-                                : Row(
-                              children: [
-                                FlatButton(
-                                  child: Icon(Icons.add_a_photo, size: 55,),
-                                  onPressed: checkPermissionOpenCamera,
-                                ),
-                                FlatButton(
-                                  child: Icon(Icons.image_search, size: 55,),
-                                  onPressed: checkPermissionOpenGallery,
-                                ),
-                              ],
-                            )
+          body: Stack(
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height/5,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(50.0),
+                        bottomRight: Radius.circular(50.0)),
+                    gradient: LinearGradient(
+                        colors: [Palette.primaryDark, Palette.primaryLight,Palette.primaryMoreLight,],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.bottomRight)),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 50),
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          "Take or load a picture",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontStyle: FontStyle.italic),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 40.0),
+                    Expanded(
+                      child: Stack(
+                        alignment: AlignmentDirectional.topCenter,
+                        children: <Widget>[
+                          Container(
+                            margin: const EdgeInsets.only(top: 15.0),
+                            child:Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                        flex: 1,
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            FlatButton(
+                                              child: Icon(Icons.add_a_photo, size: 55,),
+                                              onPressed: checkPermissionOpenCamera,
+                                            ),
+                                            SizedBox(width: 30.0),
+                                            FlatButton(
+                                              child: Icon(Icons.image_search, size: 55,),
+                                              onPressed: checkPermissionOpenGallery,
+                                            ),
+
+                                          ],
+                                        )),
+                                    SizedBox(height: 10.0),
+                                    Flexible(
+                                      flex: 4,
+                                      child: _imageFile != null
+                                          ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(40.0),
+                                          child:Image.file(_imageFile,)) : Container(),)
+                                  ],)
+                          ),
+                        ],
+                      ),
+                    ),
+                    uploadImageButton(context),
+                  ],
                 ),
-                uploadImageButton(context),
-              ],
-            ),
+              ),
+            ],
           ),
+        ));
+  }
+
+  Future<Null> _cropImage() async {
+    print("entrato");
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: _imageFile.path,
+        aspectRatioPresets:
+        [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
         ],
-      ),
-    ));
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: true),
+        );
+    if(croppedFile!=null){
+      setState(() {
+        _imageFile = File(croppedFile.path);
+      });
+    }
   }
   Widget uploadImageButton(BuildContext context) {
     return Container(

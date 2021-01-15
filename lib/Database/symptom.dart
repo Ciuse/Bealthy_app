@@ -23,6 +23,7 @@ abstract class _SymptomBase with Store {
     this.intensity,
     this.frequency,
     this.mealTime,
+    this.overviewValue,
   });
 
   @observable

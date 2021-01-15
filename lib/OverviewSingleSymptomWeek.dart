@@ -180,7 +180,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            y: 20,
+            y: 10,
             colors: [barBackgroundColor],
           ),
         ),
@@ -194,7 +194,9 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     {
       return makeGroupData(
           i, overviewStore.mapSymptomsOverviewPeriod[dateStore.rangeDays[i]]
-          .firstWhere((element) => element.id == widget.symptomId)
+          .firstWhere((element) => element.id == widget.symptomId,
+          orElse: () {
+            return Symptom(id: widget.symptomId, intensity: 0, frequency: 0, mealTime: [], overviewValue: 0);})
           .overviewValue, isTouched: i == graphStore.touchedIndex);
     });
   }

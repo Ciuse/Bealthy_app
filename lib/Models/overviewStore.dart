@@ -442,12 +442,8 @@ abstract class _OverviewBase with Store {
     MealTime.values.forEach((mealTime) {
       if( mapSymptomsOverviewDay[mealTime].any((element) => element.id==symptomId)){
         Symptom toUpdate = mapSymptomsOverviewDay[mealTime].firstWhere((element) => element.id==symptomId);
-        toUpdate.overviewValue = (toUpdate.intensity*(toUpdate.frequency*0.5)*mealTimeValueSymptom(toUpdate))/2.5;
-        toUpdate.overviewValue.roundToDouble();
-      }else{
-        Symptom symptomNotPresent = new Symptom(id: symptomId, intensity: 0,frequency: 0,mealTime: []);
-        mapSymptomsOverviewDay[mealTime].add(symptomNotPresent);
-        symptomNotPresent.overviewValue = 0;
+        toUpdate.overviewValue = ((toUpdate.intensity)*(toUpdate.frequency)*mealTimeValueSymptom(toUpdate))*0.4;
+        toUpdate.overviewValue = toUpdate.overviewValue.roundToDouble();
       }
     });
   }
@@ -457,12 +453,8 @@ abstract class _OverviewBase with Store {
 
     if( mapSymptomsOverviewPeriod[dateTime].any((element) => element.id==symptomId)){
       Symptom toUpdate = mapSymptomsOverviewPeriod[dateTime].firstWhere((element) => element.id==symptomId);
-      toUpdate.overviewValue = (toUpdate.intensity*(toUpdate.frequency*0.5)*mealTimeValueSymptom(toUpdate))/2.5;
+      toUpdate.overviewValue = ((toUpdate.intensity*1.25)*(toUpdate.frequency*0.75)*mealTimeValueSymptom(toUpdate))*0.4;
       toUpdate.overviewValue = toUpdate.overviewValue.roundToDouble();
-    }else{
-      Symptom symptomNotPresent = new Symptom(id: symptomId, intensity: 0,frequency: 0,mealTime: []);
-      mapSymptomsOverviewPeriod[dateTime].add(symptomNotPresent);
-      symptomNotPresent.overviewValue = 0;
     }
   }
 

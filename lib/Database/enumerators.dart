@@ -27,11 +27,23 @@ enum MealTime{
 }
 
 enum Intensity{
-  Breakfast,
-  Lunch,
-  Snack,
-  Dinner
+  None,
+  Slight,
+  Mild,
+  Moderate,
+  Severe,
+  Extreme
 }
+
+enum Frequency{
+  None,
+  Sporadic,
+  Shooting,
+  Swinging,
+  Constant,
+  Permanent
+}
+
 
 enum FormatAnimation
 {
