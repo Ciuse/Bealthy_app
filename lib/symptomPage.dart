@@ -106,7 +106,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                 Slider(
                   divisions: 5,
                   value: widget.symptom.intensity.toDouble(),
-                  label: Intensity.values[widget.symptom.intensity].toString(),
+                  label: Intensity.values[widget.symptom.intensity].toString().split('.').last,
                   min: 0,
                   max: 5,
                   onChanged: (val) {
@@ -119,7 +119,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                 Slider(
                   divisions: 5,
                   value: widget.symptom.frequency.toDouble(),
-                  label: Frequency.values[widget.symptom.frequency].toString(),
+                  label: Frequency.values[widget.symptom.frequency].toString().split('.').last,
                   min: 0,
                   max: 5,
                   onChanged: (val) {

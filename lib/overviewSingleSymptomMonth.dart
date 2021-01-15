@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'Database/symptom.dart';
 import 'Database/symptomOverviewGraphStore.dart';
 import 'Models/dateStore.dart';
 
@@ -197,7 +198,9 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     {
       return makeGroupData(
           i, overviewStore.mapSymptomsOverviewPeriod[dateStore.rangeDays[i]]
-          .firstWhere((element) => element.id == widget.symptomId)
+          .firstWhere((element) => element.id == widget.symptomId,
+          orElse: () {
+            return Symptom(id: widget.symptomId, intensity: 0, frequency: 0, mealTime: [], overviewValue: 0);})
           .overviewValue, isTouched: i == graphStore.touchedIndex);
     });
   }
@@ -205,7 +208,6 @@ class BarChartSymptomState extends State<BarChartSymptom> {
   BarChartData mainBarData(OverviewStore overviewStore) {
     DateStore dateStore = Provider.of<DateStore>(context);
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
-    SymptomStore symptomStore = Provider.of<SymptomStore>(context);
 
     return BarChartData(
       barTouchData: BarTouchData(
