@@ -16,11 +16,11 @@ import 'OverviewSingleSymptomDay.dart';
 import 'OverviewSingleSymptomWeek.dart';
 
 
-
-
 class OverviewPage extends StatefulWidget {
   final headerScrollStyle = const HeaderScrollStyle();
   final formatAnimation = FormatAnimation.slide;
+  DateTime lastDayOfWeek;
+  OverviewPage({this.lastDayOfWeek});
 
   @override
   _OverviewPageState createState() => _OverviewPageState();
@@ -41,8 +41,18 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
+    //trovo l'ultimo giorno della settimana
+  if(widget.lastDayOfWeek==null){
     dateStore.overviewDefaultLastDate=DateTime.now();
-    dateStore.timeSelected = TemporalTime.Day;
+  }else{
+    dateStore.overviewDefaultLastDate=widget.lastDayOfWeek;
+  }
+
+
+    //trovo il primo giorno della settimana
+    dateStore.firstDayInWeek();
+    dateStore.timeSelected = TemporalTime.Week;
+
     overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
 
@@ -52,9 +62,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   List<String> getTemporalName(){
 
     List<String> listToReturn = new List<String>();
-    TemporalTime.values.forEach((element) {
-      listToReturn.add(element.toString().split('.').last);
-    });
+    listToReturn.add(TemporalTime.Week.toString().split('.').last);
+    listToReturn.add(TemporalTime.Month.toString().split('.').last);
     return listToReturn;
   }
 

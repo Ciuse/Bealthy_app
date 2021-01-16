@@ -205,7 +205,9 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
           ),
         ],
       ),
-      body: Container(child:
+      body: SingleChildScrollView(
+    physics: ScrollPhysics(),
+    child: Container(child:
       Column(
           children: [
             Container(
@@ -227,7 +229,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                             ),
                             child: ClipOval(
                               child: widget.dish.imageFile==null? null:
-                              Image.file(widget.dish.imageFile),
+                              Image.file(widget.dish.imageFile, fit: BoxFit.cover,),
                             )
                         ),
 
@@ -244,8 +246,10 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
               )),
             ),
             ingredientsWidget(),
+            SizedBox(height: 20,)
+
           ]
-      )
+      ))
       ),
       floatingActionButton: FloatingActionButton(
 

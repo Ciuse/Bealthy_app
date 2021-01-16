@@ -118,6 +118,7 @@ class MyApp extends StatelessWidget {
                   ),
                   accentColor: Palette.primaryDoubleMoreLight,
                   appBarTheme: const AppBarTheme(
+                    elevation: 10,
 
                     brightness: Brightness.dark,
                     color: Palette.appBarColor,
@@ -127,6 +128,8 @@ class MyApp extends StatelessWidget {
                   )
                   ,
                   tabBarTheme: TabBarTheme(
+                    labelPadding: EdgeInsets.all(0),
+                    indicatorSize: TabBarIndicatorSize.tab,
                     indicator: BoxDecoration(
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),

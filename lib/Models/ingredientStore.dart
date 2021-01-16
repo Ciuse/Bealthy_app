@@ -60,7 +60,7 @@ abstract class _IngredientStoreBase with Store {
   @action
   Future<void> getIngredients() async {
     await (FirebaseFirestore.instance
-        .collection('Ingredients')
+        .collection('Ingredients').orderBy("name")
         .get().then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
         Ingredient i = new Ingredient(id:result.id,name:result.get("name"),it_Name:result.get("it_Name"), qty: "" );
@@ -74,7 +74,7 @@ abstract class _IngredientStoreBase with Store {
   @action
   Future<void> getIngredientsFromDatabaseDish(Dish dish) async {
     await (FirebaseFirestore.instance
-        .collection('Dishes').doc(dish.id).collection("Ingredients")
+        .collection('Dishes').doc(dish.id).collection("Ingredients").orderBy("name")
         .get().then((querySnapshot) {
       querySnapshot.docs.forEach((ingredient) {
         Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
@@ -89,7 +89,7 @@ abstract class _IngredientStoreBase with Store {
     await (FirebaseFirestore.instance
         .collection("DishesCreatedByUsers")
         .doc(auth.currentUser.uid)
-        .collection("Dishes").doc(dish.id).collection("Ingredients")
+        .collection("Dishes").doc(dish.id).collection("Ingredients").orderBy("name")
         .get().then((querySnapshot) {
       querySnapshot.docs.forEach((ingredient) {
         Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
@@ -140,9 +140,14 @@ abstract class _IngredientStoreBase with Store {
     ingredientList.forEach((element) {
       keys.add(element.id);
     });
-    List<Color> colorsOfChart = [Colors.red,Colors.cyanAccent, Colors.purple,Colors.deepOrange,Colors.blueAccent,
-      Colors.green,Colors.teal,Colors.pinkAccent,Colors.blueGrey,Colors.black,Colors.orangeAccent,
-      Colors.yellowAccent,Colors.grey,Colors.lightBlueAccent];
+    List<Color> colorsOfChart = [Colors.red,Colors.cyanAccent, Colors.purple,Colors.deepOrange,
+      Colors.blueAccent, Colors.green,Colors.teal,Colors.pinkAccent,
+      Colors.blueGrey,Colors.black,Colors.orangeAccent, Colors.yellowAccent,
+      Colors.grey,Colors.lightBlueAccent,Colors.red,Colors.cyanAccent,
+      Colors.purple,Colors.deepOrange,Colors.blueAccent, Colors.green,
+      Colors.teal,Colors.pinkAccent,Colors.blueGrey,Colors.black,
+      Colors.orangeAccent, Colors.yellowAccent,Colors.red,Colors.cyanAccent,
+      Colors.purple,Colors.deepOrange,];
 
 
     colorIngredientMap=Map.fromIterables(keys, colorsOfChart);

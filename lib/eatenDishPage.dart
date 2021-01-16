@@ -139,7 +139,9 @@ class _EatenDishPageState extends State<EatenDishPage>{
               ))
             ],
           ),
-          body: Column(
+          body: SingleChildScrollView(
+    physics: ScrollPhysics(),
+    child: Column(
               children: [
                 Container(
                     padding: EdgeInsets.all(10.0),
@@ -404,10 +406,11 @@ class _EatenDishPageState extends State<EatenDishPage>{
                         ]
                     )
                 ),
+                SizedBox(height: 20,)
 
               ]
 
-          ),
+          )),
 
           floatingActionButton: FloatingActionButton(
               onPressed: () {

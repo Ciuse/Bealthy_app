@@ -10,6 +10,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Database/symptom.dart';
 import 'Login/config/palette.dart';
+import 'overviewPage.dart';
 
 class SymptomPage extends StatefulWidget {
 
@@ -57,7 +58,19 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
         title: Text(widget.symptom.name),
+        actions: [
+          Container(
+              width: 50,
+              height: 50,
+              child:  ClipOval(
+                  child: Image(
+                    image: AssetImage("images/Symptoms/" +widget.symptom.id+".png" ),
+                  )
+              ))
+        ],
+
         bottom: TabBar(
+
           tabs: [
             Tab(text: "Modify"),
             Tab(text: "Description")
@@ -80,18 +93,18 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return SingleChildScrollView(child: 
       Column(
         children: [
-          Container(
-              width: 50,
-              height: 50,
-              child:  ClipOval(
-                  child: Image(
-                    image: AssetImage("images/Symptoms/" +widget.symptom.id+".png" ),
-                  )
-              )),
           Divider(height: 30),
           descriptionText(),
           Divider(height: 30),
           symptomsText(),
+          Divider(height: 30),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push<void>(context,
+                  MaterialPageRoute(builder: (context) => OverviewPage(lastDayOfWeek: date,)));
+            },
+            child: Text('See overview'),
+          )
         ]));
   }
 

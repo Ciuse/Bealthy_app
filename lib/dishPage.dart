@@ -164,7 +164,6 @@ class _DishPageState extends State<DishPage>{
   Widget build(BuildContext context) {
     FoodStore foodStore = Provider.of<FoodStore>(context);
     MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context);
-    IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
     DateStore dateStore = Provider.of<DateStore>(context);
     foodStore.isFoodFavourite(widget.dish);
     return   Scaffold(
@@ -187,7 +186,9 @@ class _DishPageState extends State<DishPage>{
           ))
         ],
       ),
-      body: Column(
+      body: SingleChildScrollView(
+    physics: ScrollPhysics(),
+    child: Column(
           children: [
             Container(
               padding: EdgeInsets.all(10.0),
@@ -306,8 +307,9 @@ class _DishPageState extends State<DishPage>{
               ),
               child: ingredientsWidget(),
             ),
+            SizedBox(height: 20,)
           ]
-      ),
+      )),
 
       floatingActionButton: FloatingActionButton(
 
@@ -378,8 +380,9 @@ class _DishPageState extends State<DishPage>{
           ),
           Observer(builder: (_) => ListView.builder
             (
+            scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               itemCount: ingredientStore.ingredientListOfDish.length,
               itemBuilder: (BuildContext context, int index) {
                 return Column(
@@ -422,7 +425,7 @@ class _DishPageState extends State<DishPage>{
                   ],
                 );
               }
-          ))
+    ))
         ]
     );
   }
