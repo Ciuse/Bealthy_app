@@ -88,8 +88,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
             )
         ],
           bottom: TabBar(
-          labelColor: Colors.black,
-          indicatorColor: Colors.black,
           tabs: [
             Tab(text: "Symptoms"),
             Tab(text: "Ingredients")

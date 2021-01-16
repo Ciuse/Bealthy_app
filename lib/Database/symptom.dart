@@ -63,6 +63,13 @@ abstract class _SymptomBase with Store {
   var mealTimeBoolList = new List<MealTimeBool>();
 
 
+  @observable
+  int intensityTemp;
+  @observable
+  int frequencyTemp;
+  @observable
+  var mealTimeBoolListTemp = new List<MealTimeBool>();
+
   @action
   Future<void> initStore() async {
     if (!storeInitialized) {
@@ -74,7 +81,7 @@ abstract class _SymptomBase with Store {
   @action
   bool isPresentAtLeastOneTrue(){
     int count = 0;
-    mealTimeBoolList.forEach((element) {
+    mealTimeBoolListTemp.forEach((element) {
       if(element.isSelected){
         count = count+1;
       }
@@ -89,8 +96,28 @@ abstract class _SymptomBase with Store {
     MealTime.values.forEach((element) {
       MealTimeBool mealTimeBool = new MealTimeBool(isSelected: false);
       mealTimeBoolList.add(mealTimeBool);
+      MealTimeBool mealTimeBoolTemp = new MealTimeBool(isSelected: false);
+      mealTimeBoolListTemp.add(mealTimeBoolTemp);
     });
   }
+
+  void copyOriginalToTempMealtime() {
+    int index =0;
+    mealTimeBoolList.forEach((original) {
+      mealTimeBoolListTemp[index].setIsSelected(original.isSelected);
+      index++;
+    });
+  }
+
+
+  void copyTempToOriginalMealTime() {
+    int index =0;
+    mealTimeBoolListTemp.forEach((original) {
+      mealTimeBoolList[index].setIsSelected(original.isSelected);
+      index++;
+    });
+  }
+
 
   @action
   void setMealTimeBoolList() {

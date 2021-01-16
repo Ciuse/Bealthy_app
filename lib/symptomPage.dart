@@ -24,10 +24,8 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   var storage = FirebaseStorage.instance;
   final FirebaseFirestore fb = FirebaseFirestore.instance;
   TabController _tabController;
-  int intensityFromDb;
-  int frequencyFromDb;
   DateTime date;
-  var mealTimeBoolListFromDb = new List<bool>();
+
   OverviewStore overviewStore;
   DateStore dateStore;
 
@@ -36,11 +34,9 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
     date = dateStore.calendarSelectedDate;
-    intensityFromDb = widget.symptom.intensity;
-    frequencyFromDb = widget.symptom.frequency;
-    widget.symptom.mealTimeBoolList.forEach((element) {
-      mealTimeBoolListFromDb.add(element.isSelected);
-    });
+    widget.symptom.intensityTemp = widget.symptom.intensity;
+    widget.symptom.frequencyTemp = widget.symptom.frequency;
+    widget.symptom.copyOriginalToTempMealtime();
   }
 
   @override
@@ -81,7 +77,8 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
 
   Widget descriptionWidget() {
-    return Column(
+    return SingleChildScrollView(child: 
+      Column(
         children: [
           Container(
               width: 50,
@@ -95,13 +92,14 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
           descriptionText(),
           Divider(height: 30),
           symptomsText(),
-        ]);
+        ]));
   }
 
   Widget descriptionText(){
     return  Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
+        padding: EdgeInsets.all(15),
+        margin: EdgeInsets.only(top: 15, left: 10,right: 10, bottom: 5 ),
         width:double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -120,8 +118,10 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
         ),
         child: Column(
             children:[
-              Text("Description",style: TextStyle(fontWeight: FontWeight.bold),),
-              Text(widget.symptom.description),
+              Text("Description",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+              SizedBox(height: 10,),
+
+              Text(widget.symptom.description,textAlign: TextAlign.justify,),
             ]
         )
     );
@@ -130,7 +130,8 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   Widget symptomsText(){
     return  Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
+        padding: EdgeInsets.all(15),
+        margin: EdgeInsets.only(top: 5, left: 10,right: 10, bottom: 5 ),
         width:double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -149,8 +150,9 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
         ),
         child: Column(
             children:[
-              Text("Related Symptoms & Signs",style: TextStyle(fontWeight: FontWeight.bold),),
-              Text(widget.symptom.symptoms),
+              Text("Related Symptoms & Signs",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+              SizedBox(height: 10,),
+              Text(widget.symptom.symptoms,textAlign: TextAlign.justify),
             ]
         )
     );
@@ -165,12 +167,12 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             Observer(builder: (_) =>
                 Slider(
                   divisions: 5,
-                  value: widget.symptom.intensity.toDouble(),
-                  label: Intensity.values[widget.symptom.intensity].toString().split('.').last,
+                  value: widget.symptom.intensityTemp.toDouble(),
+                  label: Intensity.values[widget.symptom.intensityTemp].toString().split('.').last,
                   min: 0,
                   max: 5,
                   onChanged: (val) {
-                    widget.symptom.intensity = val.toInt();
+                    widget.symptom.intensityTemp = val.toInt();
                   },
                 )),
             Divider(height: 30),
@@ -178,12 +180,12 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             Observer(builder: (_) =>
                 Slider(
                   divisions: 5,
-                  value: widget.symptom.frequency.toDouble(),
-                  label: Frequency.values[widget.symptom.frequency].toString().split('.').last,
+                  value: widget.symptom.frequencyTemp.toDouble(),
+                  label: Frequency.values[widget.symptom.frequencyTemp].toString().split('.').last,
                   min: 0,
                   max: 5,
                   onChanged: (val) {
-                    widget.symptom.frequency = val.toInt();
+                    widget.symptom.frequencyTemp = val.toInt();
                   },
                 )),
             Divider(height: 30),
@@ -207,7 +209,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   bool areMealTimeBoolListsEqual(){
     int count = 0;
     for(int i = 0; i<MealTime.values.length; i++){
-      if(widget.symptom.mealTimeBoolList[i].isSelected== mealTimeBoolListFromDb[i]){
+      if(widget.symptom.mealTimeBoolList[i].isSelected== widget.symptom.mealTimeBoolListTemp[i].isSelected){
         count = count + 1;
       }
     }
@@ -228,25 +230,33 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return listToReturn;
   }
 
+  void saveTempValueToRealSymptom(){
+    widget.symptom.intensity=widget.symptom.intensityTemp;
+    widget.symptom.frequency=widget.symptom.frequencyTemp;
+    widget.symptom.copyTempToOriginalMealTime();
+
+  }
 
   buttonActivated(SymptomStore symptomStore){
     if (!widget.symptom.isSymptomSelectDay) {
-      if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
+      if ((widget.symptom.frequencyTemp > 0 && widget.symptom.intensityTemp > 0) &&
           widget.symptom.isPresentAtLeastOneTrue()){
+        saveTempValueToRealSymptom();
         symptomStore.updateSymptom(widget.symptom, date);
         Navigator.pop(context);
       }
     } else {
-      if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
+      if ((widget.symptom.frequencyTemp > 0 && widget.symptom.intensityTemp > 0) &&
           widget.symptom.isPresentAtLeastOneTrue()) {
-        if (widget.symptom.frequency != frequencyFromDb ||
-            widget.symptom.intensity != intensityFromDb || !areMealTimeBoolListsEqual()) {
+        if (widget.symptom.frequency != widget.symptom.frequencyTemp ||
+            widget.symptom.intensity != widget.symptom.intensityTemp || !areMealTimeBoolListsEqual()) {
+          saveTempValueToRealSymptom();
           symptomStore.updateSymptom(widget.symptom, date);
-
           Navigator.pop(context);
+
         }
       }else{
-        if((widget.symptom.frequency == 0 && widget.symptom.intensity == 0) &&
+        if((widget.symptom.frequencyTemp == 0 && widget.symptom.intensityTemp == 0) &&
             !widget.symptom.isPresentAtLeastOneTrue()){
           return showDialog(
               context: context,
@@ -269,27 +279,27 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   }
 
   void reactButtonEnabled(){
-    reaction((_) => {widget.symptom.frequency, widget.symptom.intensity,
-      widget.symptom.mealTimeBoolList.forEach((element) {
+    reaction((_) => {widget.symptom.frequencyTemp, widget.symptom.intensityTemp,
+      widget.symptom.mealTimeBoolListTemp.forEach((element) {
         element.isSelected;
       })}, (_) => {
       if (!widget.symptom.isSymptomSelectDay) {
-        if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0) &&
+        if ((widget.symptom.frequencyTemp > 0 && widget.symptom.intensityTemp > 0) &&
             widget.symptom.isPresentAtLeastOneTrue()){
           widget.symptom.isModifyButtonActive = true
         }else{ widget.symptom.isModifyButtonActive = false}
       } else
         {
-          if ((widget.symptom.frequency > 0 && widget.symptom.intensity > 0 &&
+          if ((widget.symptom.frequencyTemp > 0 && widget.symptom.intensityTemp > 0 &&
               widget.symptom.isPresentAtLeastOneTrue()) &&
-              (widget.symptom.frequency != frequencyFromDb ||
-                  widget.symptom.intensity != intensityFromDb ||
+              (widget.symptom.frequency != widget.symptom.frequencyTemp ||
+                  widget.symptom.intensity != widget.symptom.intensityTemp ||
                   !areMealTimeBoolListsEqual())) {
             widget.symptom.isModifyButtonActive = true
           } else
             {
-              if((widget.symptom.frequency == 0 &&
-                  widget.symptom.intensity == 0) &&
+              if((widget.symptom.frequencyTemp == 0 &&
+                  widget.symptom.intensityTemp == 0) &&
                   !widget.symptom.isPresentAtLeastOneTrue()){
                 widget.symptom.isModifyButtonActive = true
               }else{
@@ -305,20 +315,20 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return Expanded(child:
     Observer(builder: (_) =>
         ListView.builder(
-            itemCount: symptom.mealTimeBoolList.length,
+            itemCount: symptom.mealTimeBoolListTemp.length,
             itemBuilder: (BuildContext context, int index) {
               return Observer(builder: (_) =>
                   CheckboxListTile(
                     activeColor: Palette.primaryLight,
                     checkColor: Colors.black,
-                    value: symptom.mealTimeBoolList[index].isSelected,
+                    value: symptom.mealTimeBoolListTemp[index].isSelected,
                     title: new Text(MealTime.values[index]
                         .toString()
                         .split('.')
                         .last),
                     controlAffinity: ListTileControlAffinity.leading,
                     onChanged: (bool val) {
-                      symptom.mealTimeBoolList[index].setIsSelected(val);
+                      symptom.mealTimeBoolListTemp[index].setIsSelected(val);
                     },
 
                   ));

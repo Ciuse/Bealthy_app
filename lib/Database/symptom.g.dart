@@ -209,6 +209,53 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$intensityTempAtom = Atom(name: '_SymptomBase.intensityTemp');
+
+  @override
+  int get intensityTemp {
+    _$intensityTempAtom.reportRead();
+    return super.intensityTemp;
+  }
+
+  @override
+  set intensityTemp(int value) {
+    _$intensityTempAtom.reportWrite(value, super.intensityTemp, () {
+      super.intensityTemp = value;
+    });
+  }
+
+  final _$frequencyTempAtom = Atom(name: '_SymptomBase.frequencyTemp');
+
+  @override
+  int get frequencyTemp {
+    _$frequencyTempAtom.reportRead();
+    return super.frequencyTemp;
+  }
+
+  @override
+  set frequencyTemp(int value) {
+    _$frequencyTempAtom.reportWrite(value, super.frequencyTemp, () {
+      super.frequencyTemp = value;
+    });
+  }
+
+  final _$mealTimeBoolListTempAtom =
+      Atom(name: '_SymptomBase.mealTimeBoolListTemp');
+
+  @override
+  List<MealTimeBool> get mealTimeBoolListTemp {
+    _$mealTimeBoolListTempAtom.reportRead();
+    return super.mealTimeBoolListTemp;
+  }
+
+  @override
+  set mealTimeBoolListTemp(List<MealTimeBool> value) {
+    _$mealTimeBoolListTempAtom.reportWrite(value, super.mealTimeBoolListTemp,
+        () {
+      super.mealTimeBoolListTemp = value;
+    });
+  }
+
   final _$initStoreAsyncAction = AsyncAction('_SymptomBase.initStore');
 
   @override
@@ -343,7 +390,10 @@ overviewValue: ${overviewValue},
 isSymptomSelectDay: ${isSymptomSelectDay},
 isModifyButtonActive: ${isModifyButtonActive},
 isPresentAtLeastOneMeal: ${isPresentAtLeastOneMeal},
-mealTimeBoolList: ${mealTimeBoolList}
+mealTimeBoolList: ${mealTimeBoolList},
+intensityTemp: ${intensityTemp},
+frequencyTemp: ${frequencyTemp},
+mealTimeBoolListTemp: ${mealTimeBoolListTemp}
     ''';
   }
 }

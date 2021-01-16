@@ -71,9 +71,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        MoveToBackground.moveTaskToBack();
-        return false;},
+        onWillPop: () async {
+          MoveToBackground.moveTaskToBack();
+          return false;},
         child: LitAuthInit(
             authProviders: const AuthProviders(
               emailAndPassword: true,
@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
                         fontSize: 61, fontWeight: FontWeight.w300, letterSpacing: -0.5),
                     headline3: GoogleFonts.roboto(fontSize: 48, fontWeight: FontWeight.w400),
                     headline4: GoogleFonts.roboto(
-                        fontSize: 70, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+                        fontSize: 70, fontWeight: FontWeight.w400, letterSpacing: 0.3),
                     headline5: GoogleFonts.roboto(fontSize: 24, fontWeight: FontWeight.w400),
                     headline6: GoogleFonts.roboto(
                         fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
@@ -106,9 +106,9 @@ class MyApp extends StatelessWidget {
                     subtitle2: GoogleFonts.roboto(
                         fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
                     bodyText1: GoogleFonts.roboto(
-                        fontSize: 18, fontWeight: FontWeight.w400, letterSpacing: 0.5),
+                        fontSize: 18, fontWeight: FontWeight.w400, letterSpacing: 0.5, height: 1.3),
                     bodyText2: GoogleFonts.roboto(
-                        fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.25),
+                        fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.3, height: 1.3),
                     button: GoogleFonts.roboto(
                         fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
                     caption: GoogleFonts.roboto(
@@ -121,16 +121,30 @@ class MyApp extends StatelessWidget {
 
                     brightness: Brightness.dark,
                     color: Palette.appBarColor,
-            ),
-          buttonBarTheme: ButtonBarThemeData(
-            alignment: MainAxisAlignment.spaceEvenly,
-          )),
-      title: _title,
-        home: LitAuthState(
-          authenticated: HomePage(),
-          unauthenticated: SplashScreen(),
-        ),
-    )));
+                  ),
+                  buttonBarTheme: ButtonBarThemeData(
+                    alignment: MainAxisAlignment.spaceEvenly,
+                  )
+                  ,
+                  tabBarTheme: TabBarTheme(
+                    indicator: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10)),
+                        color: Colors.white),
+                    labelColor: Colors.black,
+                    unselectedLabelColor:Colors.black ,
+
+                    unselectedLabelStyle:GoogleFonts.roboto(
+                        fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.25, height: 1),
+                    labelStyle: GoogleFonts.roboto(
+                        fontSize: 18, fontWeight: FontWeight.w400, letterSpacing: 0.25, height: 1),)),
+              title: _title,
+              home: LitAuthState(
+                authenticated: HomePage(),
+                unauthenticated: SplashScreen(),
+              ),
+            )));
   }
 }
 
