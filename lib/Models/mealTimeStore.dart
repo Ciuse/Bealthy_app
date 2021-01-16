@@ -144,7 +144,7 @@ abstract class _MealTimeStoreBase with Store {
         .doc(dish.id)
         .delete());
 
-    getDishesOfMealTimeList(index).removeWhere((element) => element.id == dish.id); //todo sembra non rimuoverlo3
+    getDishesOfMealTimeList(index).removeWhere((element) => element.id == dish.id);
 
   }
 
