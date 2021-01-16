@@ -92,8 +92,68 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                   )
               )),
           Divider(height: 30),
-          Text("Description",style: TextStyle(fontWeight: FontWeight.bold),),
+          descriptionText(),
+          Divider(height: 30),
+          symptomsText(),
         ]);
+  }
+
+  Widget descriptionText(){
+    return  Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
+        width:double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20), //border corner radius
+          boxShadow:[
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.6), //color of shadow
+              spreadRadius: 4, //spread radius
+              blurRadius: 6, // blur radius
+              offset: Offset(0, 4), // changes position of shadow
+              //first paramerter of offset is left-right
+              //second parameter is top to down
+            ),
+            //you can set more BoxShadow() here
+          ],
+        ),
+        child: Column(
+            children:[
+              Text("Description",style: TextStyle(fontWeight: FontWeight.bold),),
+              Text(widget.symptom.description),
+            ]
+        )
+    );
+  }
+
+  Widget symptomsText(){
+    return  Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
+        width:double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20), //border corner radius
+          boxShadow:[
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.6), //color of shadow
+              spreadRadius: 4, //spread radius
+              blurRadius: 6, // blur radius
+              offset: Offset(0, 4), // changes position of shadow
+              //first paramerter of offset is left-right
+              //second parameter is top to down
+            ),
+            //you can set more BoxShadow() here
+          ],
+        ),
+        child: Column(
+            children:[
+              Text("Related Symptoms & Signs",style: TextStyle(fontWeight: FontWeight.bold),),
+              Text(widget.symptom.symptoms),
+            ]
+        )
+    );
   }
 
   Widget modifyWidget(SymptomStore symptomStore) {

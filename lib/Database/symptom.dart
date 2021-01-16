@@ -20,6 +20,8 @@ abstract class _SymptomBase with Store {
   {
     this.id,
     this.name,
+    this.description,
+    this.symptoms,
     this.intensity,
     this.frequency,
     this.mealTime,
@@ -30,6 +32,10 @@ abstract class _SymptomBase with Store {
   String id;
   @observable
   String name;
+  @observable
+  String description;
+  @observable
+  String symptoms;
   @observable
   int occurrence;
   @observable

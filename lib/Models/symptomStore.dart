@@ -54,7 +54,7 @@ abstract class _SymptomStoreBase with Store {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
 
-        Symptom i = new Symptom(id:result.id,name:result.get("name"));
+        Symptom i = new Symptom(id:result.id,name:result.get("name"),description:result.get("description"),symptoms: result.get("symptoms") );
         i.initStore();
         symptomList.add(i);
       }

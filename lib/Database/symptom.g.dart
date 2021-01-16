@@ -39,6 +39,36 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$descriptionAtom = Atom(name: '_SymptomBase.description');
+
+  @override
+  String get description {
+    _$descriptionAtom.reportRead();
+    return super.description;
+  }
+
+  @override
+  set description(String value) {
+    _$descriptionAtom.reportWrite(value, super.description, () {
+      super.description = value;
+    });
+  }
+
+  final _$symptomsAtom = Atom(name: '_SymptomBase.symptoms');
+
+  @override
+  String get symptoms {
+    _$symptomsAtom.reportRead();
+    return super.symptoms;
+  }
+
+  @override
+  set symptoms(String value) {
+    _$symptomsAtom.reportWrite(value, super.symptoms, () {
+      super.symptoms = value;
+    });
+  }
+
   final _$occurrenceAtom = Atom(name: '_SymptomBase.occurrence');
 
   @override
@@ -303,6 +333,8 @@ mixin _$Symptom on _SymptomBase, Store {
     return '''
 id: ${id},
 name: ${name},
+description: ${description},
+symptoms: ${symptoms},
 occurrence: ${occurrence},
 intensity: ${intensity},
 frequency: ${frequency},
