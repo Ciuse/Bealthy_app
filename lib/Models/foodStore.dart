@@ -179,7 +179,7 @@ void setBooleanQuantityDish(){
   Future<void> _getDishesFromDBAndUser() async {
 
     await (FirebaseFirestore.instance
-        .collection('Dishes')
+        .collection('Dishes').orderBy("name")
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
@@ -191,7 +191,7 @@ void setBooleanQuantityDish(){
     }));
     await (FirebaseFirestore.instance
         .collection('DishesCreatedByUsers')
-        .doc(auth.currentUser.uid).collection("Dishes").get()
+        .doc(auth.currentUser.uid).collection("Dishes").orderBy("name").get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((dish) {
         Dish toAdd = new Dish(id: dish.id,
@@ -208,7 +208,7 @@ void setBooleanQuantityDish(){
   Future<void> _getYourDishes() async {
     await (FirebaseFirestore.instance
         .collection('DishesCreatedByUsers')
-        .doc(auth.currentUser.uid).collection("Dishes").get()
+        .doc(auth.currentUser.uid).collection("Dishes").orderBy("name").get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((dish) {
         Dish toAdd = new Dish(id: dish.id,
@@ -246,7 +246,7 @@ void setBooleanQuantityDish(){
   Future<void> _getFavouriteDishes() async {
     await (FirebaseFirestore.instance
         .collection('DishesFavouriteByUsers')
-        .doc(auth.currentUser.uid).collection("Dishes").get()
+        .doc(auth.currentUser.uid).collection("Dishes").orderBy("name").get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((dish) {
         Dish toAdd = new Dish(id: dish.id,
