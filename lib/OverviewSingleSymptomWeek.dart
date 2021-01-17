@@ -33,18 +33,78 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
 
   @override
   Widget build(BuildContext context) {
+    SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+"\n"+"Overview"),
+          title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+" Overview"),
         ),
-        body:Column(
-            children: <Widget>[BarChartSymptom(symptomId: widget.symptomId,overviewStore: widget.overviewStore,),
-        Observer(builder: (_) =>Expanded(
-                  child: buildIngredientRow() ))
-            ]
-        )
-    );
+        body:SingleChildScrollView(
+            child:Container(
+                margin: EdgeInsets.all(8),
+                child:
+                Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.only(top: 10,bottom: 10 ),
+                          width:double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow:[
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.6), //color of shadow
+                                spreadRadius: 2, //spread radius
+                                blurRadius: 3, // blur radius
+                                offset: Offset(0, 4), // changes position of shadow
+                                //first paramerter of offset is left-right
+                                //second parameter is top to down
+                              )],
+                            borderRadius: BorderRadius.all(Radius.circular(5)), //border corner radius
+                          ),
+                          child: BarChartSymptom(symptomId: widget.symptomId,overviewStore: widget.overviewStore,)),
+                      Observer(builder: (_) =>Container(
+                          height: 120,
+                          margin: EdgeInsets.only(top: 10,bottom: 10 ),
+                          padding: EdgeInsets.only(top:5,left: 6,right: 6 , bottom: 5 ),
+                          width:double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow:[
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.6), //color of shadow
+                                spreadRadius: 2, //spread radius
+                                blurRadius: 3, // blur radius
+                                offset: Offset(0, 4), // changes position of shadow
+                                //first paramerter of offset is left-right
+                                //second parameter is top to down
+                              )],
+                            borderRadius: BorderRadius.all(Radius.circular(15)), //border corner radius
+                          ),
+                          child:
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
+                              SizedBox(height: 10),
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  child: buildIngredientRow()),
+                            ],)
+                      )),
+                      Container(
+                          alignment: Alignment.centerRight,
+                          child:
+                          OutlinedButton(
+                            child:Text("Show All"),
+                            onPressed: () {
+                              graphStore.touchedIndex = -1;
+
+                            },)),
+                    ]
+                ))
+        ));
   }
 
   Widget buildIngredientRow(){
@@ -52,6 +112,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
     return graphStore.touchedIndex==-1?
     ListView(
+
         scrollDirection: Axis.horizontal,
         children: [
           for(var ingredient in widget.overviewStore.totalOccurrenceIngredientBySymptom.keys )
@@ -125,7 +186,8 @@ class BarChartSymptomState extends State<BarChartSymptom> {
     return AspectRatio(
       aspectRatio: 1,
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        margin: EdgeInsets.all(0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         color: Colors.lightBlue,
         child: Stack(
           children: <Widget>[
@@ -136,9 +198,9 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  Text("Dicembre" ,style: TextStyle(
-                      color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),),
-
+                  Container(
+                      padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
+                      child:Text("Severity Trend", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)),
                   const SizedBox(
                     height: 12,
                   ),
@@ -224,9 +286,6 @@ class BarChartSymptomState extends State<BarChartSymptom> {
             if (barTouchResponse.spot != null) {
               graphStore.touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
               overviewStore.getIngredientBySymptomDayOfAPeriod(dateStore.rangeDays[graphStore.touchedIndex], widget.symptomId);
-            }
-            else{
-              graphStore.touchedIndex = -1;
             }
           }
         },

@@ -213,11 +213,11 @@ class _MyHomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.stacked_bar_chart),
-            label: 'Overview',
+            label: 'Statistics',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.medical_services_outlined),
-            label: 'Treatment',
+            label: 'Treatments',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),

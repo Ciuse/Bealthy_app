@@ -116,7 +116,7 @@ class _PersonalPageState extends State<PersonalPage>{
         appBar: AppBar(
           title: const Text('Personal info'),
         ),
-        body: Center(
+        body: SingleChildScrollView(child: Center(
             child: Column(
                 children: [
                   Container(
@@ -293,7 +293,7 @@ class _PersonalPageState extends State<PersonalPage>{
                 ]
             )
         )
-    );
+    ));
   }
 
 }

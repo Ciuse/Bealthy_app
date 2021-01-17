@@ -29,7 +29,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Treatment'),
+        title: const Text('Treatments'),
       ),
         body: SingleChildScrollView(
 

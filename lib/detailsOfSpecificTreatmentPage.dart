@@ -28,35 +28,35 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title: Text(widget.treatment.title),
-    ),
-    body:Container(child:
-    Column(
-    children: [
-    Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
-      width:double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20), //border corner radius
-        boxShadow:[
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.6), //color of shadow
-            spreadRadius: 4, //spread radius
-            blurRadius: 6, // blur radius
-            offset: Offset(0, 4), // changes position of shadow
-            //first paramerter of offset is left-right
-            //second parameter is top to down
-          ),
-          //you can set more BoxShadow() here
-        ],
       ),
-      child: treatmentDescriptionWidget(),
-    ),
+      body: SingleChildScrollView(child: Container(child:
+      Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
+              width:double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20), //border corner radius
+                boxShadow:[
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.6), //color of shadow
+                    spreadRadius: 4, //spread radius
+                    blurRadius: 6, // blur radius
+                    offset: Offset(0, 4), // changes position of shadow
+                    //first paramerter of offset is left-right
+                    //second parameter is top to down
+                  ),
+                  //you can set more BoxShadow() here
+                ],
+              ),
+              child: treatmentDescriptionWidget(),
+            ),
 
-    ])),
+          ]))),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             return showDialog(
@@ -122,15 +122,15 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
             title: Text("Details:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
             leading: Icon(Icons.medical_services,color: Colors.black),
           ),
-         ListView
+          ListView
             (
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              children: [
-                widget.treatment.descriptionText!=null ? textWidget("Description of this treatment: ",widget.treatment.descriptionText) : Container(),
-                widget.treatment.medicalInfoText!=null ? textWidget("Medical information: ",widget.treatment.medicalInfoText) : Container(),
-                widget.treatment.dietInfoText!=null ? textWidget("Diet information: ",widget.treatment.dietInfoText) : Container(),
-              ],
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
+            children: [
+              widget.treatment.descriptionText!=null ? textWidget("Description of this treatment: ",widget.treatment.descriptionText) : Container(),
+              widget.treatment.medicalInfoText!=null ? textWidget("Medical information: ",widget.treatment.medicalInfoText) : Container(),
+              widget.treatment.dietInfoText!=null ? textWidget("Diet information: ",widget.treatment.dietInfoText) : Container(),
+            ],
           )
         ]
     );

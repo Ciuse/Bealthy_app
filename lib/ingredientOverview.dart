@@ -146,9 +146,7 @@ class PieChartIngredientState extends State<PieChartIngredient> {
         color: Colors.white,
         child: Row(
           children: <Widget>[
-            const SizedBox(
-              height: 18,
-            ),
+
             Expanded(
               child: AspectRatio(
                 aspectRatio: 1,
@@ -167,8 +165,8 @@ class PieChartIngredientState extends State<PieChartIngredient> {
                     borderData: FlBorderData(
                       show: false,
                     ),
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 40,
+                    sectionsSpace: 5,
+                    centerSpaceRadius: 45,
                     sections: widget.overviewStore.totalOccurrenceIngredient.length>0 ? showingSections(widget.overviewStore,ingredientStore) : null,
                   ),
                 )),

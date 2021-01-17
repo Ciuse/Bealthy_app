@@ -104,14 +104,16 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           controller: _tabController,
         ),
       ),
-        body:
+        body:Container(
+    margin: EdgeInsets.all(8),
+    child:
             Observer(builder: (_) =>
             dateStore.timeSelected==TemporalTime.Day? dayOverviewBuild():
             dateStore.timeSelected==TemporalTime.Week? weekOverviewBuild():
             dateStore.timeSelected==TemporalTime.Month? monthOverviewBuild(): null
             )
 
-      )
+      ))
     );
   }
 
@@ -207,7 +209,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return TabBarView(
     controller: _tabController,
       children: [
-        Container(
+    SingleChildScrollView(child: Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
             child: Observer(
               builder: (_) {
                 switch (overviewStore.loadInitSymptomGraph.status) {
@@ -233,8 +236,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                         child:CircularProgressIndicator());
                 }
               },
-            )),
-        IngredientOverview(overviewStore: overviewStore,),
+            ))),
+            SingleChildScrollView(child: IngredientOverview(overviewStore: overviewStore,)),
       ],
     );
   }
@@ -447,7 +450,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   Widget symptomsWidget() {
     return Column(
       children: [
-      Divider(height: 30),
       PieChartSample2(overviewStore: overviewStore),
       SizedBox( // Horizontal ListView
           height: 80,
@@ -489,7 +491,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                 },
               ),
           )),
-      Divider(height: 30),
     ],
     );
   }
@@ -558,18 +559,17 @@ class PieChart2State extends State<PieChartSample2> {
   @override
   Widget build(BuildContext context) {
     SymptomStore symptomStore = Provider.of<SymptomStore>(context);
-    return Observer(builder: (_) => AspectRatio(
-      aspectRatio: 1.3,
-      child: Card(
-        color: Colors.white,
-        child: Row(
+    return Observer(builder: (_) => Card(
+
+        elevation: 1,
+        margin: EdgeInsets.all(4),
+        child: Column(children: [
+          ListTile(
+            title: const Text('% Symptoms experienced'),
+          ),
+        Row(
           children: <Widget>[
-            const SizedBox(
-              height: 18,
-            ),
-        Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
+            Expanded(
                 child: Observer(builder: (_) =>PieChart(
                   PieChartData(
                       pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
@@ -582,16 +582,18 @@ class PieChart2State extends State<PieChartSample2> {
                           }
                         });
                       }),
+
                       borderData: FlBorderData(
                         show: false,
                       ),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: 40,
-                      sections: widget.overviewStore.totalOccurrenceSymptom.length>0 ? showingSections(widget.overviewStore, symptomStore) : 0,
+                      sectionsSpace: 5,
+                      centerSpaceRadius: 45,
+
+
+                    sections: widget.overviewStore.totalOccurrenceSymptom.length>0 ? showingSections(widget.overviewStore, symptomStore) : 0,
                   ),
                 )),
               ),
-            ),
         Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -603,18 +605,15 @@ class PieChart2State extends State<PieChartSample2> {
                     text: symptomStore.getSymptomFromList(symptomId).name,
                     isSquare: true,
                   ),
-                SizedBox(
-                  height: 4,
-                ),
               ],
-            ),
-            const SizedBox(
+            ),  const SizedBox(
               width: 28,
             ),
+
           ],
-        ),
+        ),]),
       ),
-    ));
+    );
   }
 
   List<PieChartSectionData> showingSections(OverviewStore overviewStore, SymptomStore symptomStore) {
