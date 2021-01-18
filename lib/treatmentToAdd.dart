@@ -131,7 +131,8 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                             ),
                             //fillColor: Colors.green
                           ),
-                          keyboardType: TextInputType.text,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
                           style: new TextStyle(
                             fontFamily: "Poppins",
                           ),
@@ -142,6 +143,8 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                         TextFormField(
                           autovalidateMode: AutovalidateMode.disabled,
                           controller: dietInfoCt,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
                           decoration: new InputDecoration(
                             labelText: 'Diet',
                             fillColor: Colors.white,
@@ -152,7 +155,6 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                             ),
                             //fillColor: Colors.green
                           ),
-                          keyboardType: TextInputType.text,
                           style: new TextStyle(
                             fontFamily: "Poppins",
                           ),
@@ -173,7 +175,8 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                             ),
                             //fillColor: Colors.green
                           ),
-                          keyboardType: TextInputType.text,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
                           style: new TextStyle(
                             fontFamily: "Poppins",
                           ),

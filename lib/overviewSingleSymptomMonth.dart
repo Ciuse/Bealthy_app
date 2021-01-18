@@ -197,7 +197,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       child: Card(
         margin: EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        color: Colors.lightBlue,
+        color: Theme.of(context).primaryColor,
         child: Stack(
           children: <Widget>[
             Padding(
@@ -209,7 +209,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                 children: <Widget>[
                     Container(
                       padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
-                        child:Text("Severity Trend", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)),
+                        child:Text("Severity Trend", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
 
                   const SizedBox(
                     height: 12,

@@ -58,8 +58,23 @@ class _TreatmentPageState extends State<TreatmentPage>{
             child: Column(
                 children:[
                   ListTile(
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => TreatmentToAdd()),
+                      );
+                    } ,
                     title: Text("Treatment in progress",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
                     leading: Icon(Icons.medical_services_outlined,color: Colors.black),
+                    trailing: IconButton(
+                      icon: Icon(Icons.add,color: Theme.of(context).accentColor,size: 30,),
+                      onPressed:(){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TreatmentToAdd()),
+                        );
+                      } ,
+                    ),
                   ),
             Observer(builder: (_) =>ListView.builder(
                 shrinkWrap: true,
@@ -93,15 +108,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                       }
 
                   )),
-                  FloatingActionButton(
-                    child: Icon(Icons.add),
-                    onPressed:(){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TreatmentToAdd()),
-                      );
-                    } ,
-                  ),
+
                 ])
         ),
                Container(

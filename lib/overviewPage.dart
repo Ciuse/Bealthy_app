@@ -237,7 +237,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                 }
               },
             ))),
-            SingleChildScrollView(child: IngredientOverview(overviewStore: overviewStore,)),
+        SingleChildScrollView(child: Container(
+            margin: EdgeInsets.symmetric(vertical: 5),
+            child: IngredientOverview(overviewStore: overviewStore,))),
       ],
     );
   }
@@ -611,9 +613,9 @@ class PieChart2State extends State<PieChartSample2> {
             ),
 
           ],
-        ),]),
-      ),
-    );
+        ),
+    ]),
+    ));
   }
 
   List<PieChartSectionData> showingSections(OverviewStore overviewStore, SymptomStore symptomStore) {

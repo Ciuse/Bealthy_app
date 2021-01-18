@@ -198,7 +198,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                   case FutureStatus.fulfilled:
                                     return ListTile(
                                       title: Text("Average sick days in the last month: "+ userStore.sickDays.length.toString()),
-                                      leading: Icon(Icons.sick,),
+                                      leading: Icon(Icons.sick,color: Colors.black,),
                                     );
                                   case FutureStatus.pending:
                                   default:
@@ -266,18 +266,12 @@ class _PersonalPageState extends State<PersonalPage>{
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
                     margin: const EdgeInsets.only(
                         top: 30, left: 20.0, right: 20.0, bottom: 20.0),
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Palette.primaryDark, Palette.primaryLight,Palette.primaryMoreLight,],
-                        ),
-                        borderRadius: BorderRadius.circular(30.0)),
-                    child: FlatButton(
-                      child: const Text('Sign out'),
-                      textColor: Colors.black,
-                      onPressed: () async {
+                    child: ElevatedButton(
+                      onPressed: () {
                         context.signOut();
                         Navigator.of(context).pushReplacement(AuthScreen.route);
                       },
+                      child: Text('Sign out'),
                     ),
                   ),
                 ]

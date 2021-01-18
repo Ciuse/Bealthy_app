@@ -63,13 +63,20 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     switch(index) {
       case 0: {
         return ListTile(
+          onTap: () {
+            mealTimeStore.changeCurrentMealTime(index);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Dinner.toString().split('.').last,)),
+            );
+          },
           title: Text(MealTime.Breakfast.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
           leading: Icon(Icons.breakfast_dining,color: Colors.black),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,size: 30,),
+                  icon: Icon(Icons.add,color: Theme.of(context).accentColor,size: 30,),
                   tooltip: 'Add new dish to Breakfast',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -86,13 +93,20 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
       case 1: {
         return ListTile(
+          onTap: () {
+            mealTimeStore.changeCurrentMealTime(index);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Dinner.toString().split('.').last,)),
+            );
+          },
           title: Text(MealTime.Lunch.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-          leading: Icon(Icons.lunch_dining),
+          leading: Icon(Icons.lunch_dining,color: Colors.black),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add, size: 30,),
+                  icon: Icon(Icons.add,color: Theme.of(context).accentColor, size: 30,),
                   tooltip: 'Add new dish to Lunch',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -109,13 +123,20 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       break;
       case 2: {
         return ListTile(
+          onTap: () {
+            mealTimeStore.changeCurrentMealTime(index);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Dinner.toString().split('.').last,)),
+            );
+          },
           title: Text(MealTime.Snack.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
           leading: Icon(Icons.fastfood_rounded,color: Colors.black),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Palette.primaryDark,size: 30,),
+                  icon: Icon(Icons.add,color: Theme.of(context).accentColor,size: 30,),
                   tooltip: 'Add new dish to Snack',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -131,13 +152,20 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       break;
       case 3: {
         return ListTile(
+          onTap: () {
+            mealTimeStore.changeCurrentMealTime(index);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Dinner.toString().split('.').last,)),
+            );
+          },
           title: Text(MealTime.Dinner.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
           leading: Icon(Icons.dinner_dining,color: Colors.black),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color:Palette.primaryDark,size: 30,),
+                  icon: Icon(Icons.add,color: Theme.of(context).accentColor,size: 30,),
                   tooltip: 'Add new dish to Dinner',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);

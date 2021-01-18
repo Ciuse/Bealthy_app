@@ -68,7 +68,6 @@ class IngredientOverviewState extends State<IngredientOverview> {
   Widget ingredientsWidget(){
       return Column(
         children: [
-          Divider(height: 30),
           PieChartIngredient(overviewStore: widget.overviewStore,),
           SizedBox( // Horizontal ListView
               height: 80,
@@ -106,7 +105,6 @@ class IngredientOverviewState extends State<IngredientOverview> {
                     },
                   ),
               )),
-          Divider(height: 30),
         ],
       );
     }
@@ -140,16 +138,17 @@ class PieChartIngredientState extends State<PieChartIngredient> {
   @override
   Widget build(BuildContext context) {
     IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
-    return Observer(builder: (_) => AspectRatio(
-      aspectRatio: 1.3,
-      child: Card(
-        color: Colors.white,
-        child: Row(
+    return Observer(builder: (_) => Card(
+      elevation: 1,
+      margin: EdgeInsets.all(4),
+      child: Column(children: [
+      ListTile(
+      title: const Text('% Ingredients eaten'),
+    ),
+         Row(
           children: <Widget>[
 
             Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
                 child: Observer(builder: (_) =>PieChart(
                   PieChartData(
                     pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
@@ -171,7 +170,6 @@ class PieChartIngredientState extends State<PieChartIngredient> {
                   ),
                 )),
               ),
-            ),
             Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -191,9 +189,10 @@ class PieChartIngredientState extends State<PieChartIngredient> {
             const SizedBox(
               width: 28,
             ),
+
           ],
-        ),
-      ),
+         ),
+      ]),
     ));
   }
 

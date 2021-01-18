@@ -188,7 +188,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       child: Card(
         margin: EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        color: Colors.lightBlue,
+        color: Theme.of(context).primaryColor,
         child: Stack(
           children: <Widget>[
             Padding(

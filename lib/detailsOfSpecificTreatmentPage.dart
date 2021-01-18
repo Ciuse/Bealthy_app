@@ -1,5 +1,6 @@
 import 'package:Bealthy_app/Database/treatment.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'Models/treatmentStore.dart';
@@ -29,33 +30,12 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.treatment.title),
+        title: Text("Details:"),
       ),
       body: SingleChildScrollView(child: Container(child:
       Column(
           children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
-              width:double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20), //border corner radius
-                boxShadow:[
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.6), //color of shadow
-                    spreadRadius: 4, //spread radius
-                    blurRadius: 6, // blur radius
-                    offset: Offset(0, 4), // changes position of shadow
-                    //first paramerter of offset is left-right
-                    //second parameter is top to down
-                  ),
-                  //you can set more BoxShadow() here
-                ],
-              ),
-              child: treatmentDescriptionWidget(),
-            ),
-
+            treatmentDescriptionWidget(),
           ]))),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -83,53 +63,115 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
     );
   }
 
-  Widget textWidget(String title,String text){
-    return  Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.all(15),
-        margin: EdgeInsets.only(top: 15, left: 10,right: 10, bottom: 5 ),
-        width:double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20), //border corner radius
-          boxShadow:[
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.6), //color of shadow
-              spreadRadius: 4, //spread radius
-              blurRadius: 6, // blur radius
-              offset: Offset(0, 4), // changes position of shadow
-              //first paramerter of offset is left-right
-              //second parameter is top to down
+  Widget descriptionWidget(){
+    return  Card(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(Icons.description),
+            title: Text("Description of this treatment: "),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              widget.treatment.descriptionText,
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
             ),
-            //you can set more BoxShadow() here
-          ],
-        ),
-        child: Column(
-            children:[
-              Text(title,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-              SizedBox(height: 10,),
-
-              Text(text,textAlign: TextAlign.justify,),
-            ]
-        )
+          ),
+        ],
+      ),
     );
   }
+
+  Widget medicalWidget(){
+    return  Card(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(FontAwesomeIcons.capsules),
+            title: Text("Medical information: "),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              widget.treatment.medicalInfoText,
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget dietWidget(){
+    return  Card(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(Icons.restaurant_outlined),
+            title: Text("Diet information: "),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              widget.treatment.dietInfoText,
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  Widget datesWidget(){
+    return  Card(
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(FontAwesomeIcons.calendarDay),
+            title: Text('Treatment dates: '),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Starting date: '+ widget.treatment.startingDay,
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Ending date: '+ widget.treatment.endingDay,
+              textAlign: TextAlign.left,
+              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Widget treatmentDescriptionWidget(){
     return Column(
         children:[
-          ListTile(
-            title: Text("Details:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-            leading: Icon(Icons.medical_services,color: Colors.black),
-          ),
           ListView
             (
             shrinkWrap: true,
             physics: ClampingScrollPhysics(),
             children: [
-              widget.treatment.descriptionText!=null ? textWidget("Description of this treatment: ",widget.treatment.descriptionText) : Container(),
-              widget.treatment.medicalInfoText!=null ? textWidget("Medical information: ",widget.treatment.medicalInfoText) : Container(),
-              widget.treatment.dietInfoText!=null ? textWidget("Diet information: ",widget.treatment.dietInfoText) : Container(),
+              datesWidget(),
+              widget.treatment.descriptionText!="" ? descriptionWidget() : Container(),
+              widget.treatment.medicalInfoText!="" ? medicalWidget() : Container(),
+              widget.treatment.dietInfoText!="" ? dietWidget() : Container(),
             ],
           )
         ]
