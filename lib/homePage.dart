@@ -91,7 +91,8 @@ class _HomePageWidgetState extends State<HomePageWidget>{
               delegate: SliverChildListDelegate([
                 ListDishesOfDay(day: dateModel.calendarSelectedDate),
               ]),
-            )
+            ),
+
           ],
         )),
 

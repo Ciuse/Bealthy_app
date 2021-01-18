@@ -209,7 +209,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                 children: <Widget>[
                     Container(
                       padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
-                        child:Text("Severity Trend", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+                        child:Text("Severity Trend", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,))),
 
                   const SizedBox(
                     height: 12,
@@ -245,7 +245,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       barRods: [
         BarChartRodData(
           y: isTouched ? y + 1 : y+0.01, //todo: il 0.01 permette di cliccare quelli a 0-> lasciarlo o no?
-          colors: isTouched ? [Colors.yellow] : [barColor],
+          colors: isTouched ? [Theme.of(context).accentColor] : [barColor],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,

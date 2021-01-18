@@ -1,3 +1,4 @@
+import 'package:Bealthy_app/Login/config/palette.dart';
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -238,7 +239,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       barRods: [
         BarChartRodData(
           y: isTouched ? y + 1 : y+0.01, //todo: il 0.01 permette di cliccare quelli a 0-> lasciarlo o no?
-          colors: isTouched ? [Colors.green] : [barColor],
+          colors: isTouched ? [Theme.of(context).accentColor] : [barColor],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
             show: true,

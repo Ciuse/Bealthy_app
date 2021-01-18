@@ -85,7 +85,16 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           actions: <Widget>[
        PopupMenuButton(
                 onSelected:  choiceAction,
-                icon: Icon(Icons.calendar_today),
+                child: Container(
+                  padding: EdgeInsets.only(right: 15),
+                  alignment: Alignment.centerLeft,
+                  child: Observer(builder: (_) =>
+
+                      Text(dateStore.timeSelected.toString().split('.').last,textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20,),),
+
+                )
+                ),
                 itemBuilder: (BuildContext context)
                 {
                   return temporalList.map((String choice) {
