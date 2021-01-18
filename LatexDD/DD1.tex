@@ -77,13 +77,28 @@
 \subsection{Goals}
 \begin{enumerate}
 \item[(G1)]Allow the user of the application to create a personal account and modify his information.
+\item[(G2)]Allow the user to change the current day with an interactive calendar.
+\item[(G3)]Allow the user to add a dish to a specific mealtime of the selected day(Breakfast, Lunch, Snack, Dinner), setting the eaten quantity.
+\item[(G4)]Allow the user to search a dish.
+\item[(G5)]Allow the user to scanning a bar code with the camera application.
+\item[(G6)]Allow the user to create a new dish with a specific image and a lists of ingredients. 
+\item[(G7)]Allow the user to add a symptom in a specific day, setting the intensity, frequency, mealtime occurrences.
+\item[(G8)]Allow the user to delete the inserted dishes.
+\item[(G9)]Allow the user to delete the inserted symptoms.
+\item[(G10)]Allow the user to visualize the percentage of symptoms occurrences and ingredients eaten in a days range (weekly or monthly).
+\item[(G11)]Allow the user to visualize the correlation between the symptoms occurrences and the eaten ingredients.
+\item[(G12)]Allow the user to add a new treatment specifying the diet and medical cure.
+\item[(G13)]Allow the user to remove a treatment.
+\item[(G14)]Allow the user to visualize the in progress treatments and the completed ones.
+\item[(G15)]Allow the user to change the profile image.
 
 
 \end{enumerate}
 \subsection{Functional Requirement}
 \begin{description}
+\item[(G1)]Allow the user of the application to create a personal account with an email and password, or with an external services (Google, Github, Twitter).
 
-\item[(G1)]Allow the user of the application to create a personal account and modify his information.
+
 \end{description}
 \begin{itemize}
 \item The user should be able to register through the mobile application.\\
@@ -94,6 +109,15 @@ Then he can accept or modify the default limits about them.\\
 \item The user must be able to modify all the option even after he finished the registration process.\\
 \end{itemize}
 \subsection{Scope}
+Bealthy is an application that allows the user to enter the dishes they consume and monitor the symptoms they experience on a daily basis. 
+The entry of dishes can be done by: searching a predefined list of foods known to our application, scanning a barcode with the camera, or manually entering the information of the dish.
+The purpose of the application is to collect the data entered by the user, process it and reorganize it in the form of a graph to show the user the correlation between the symptoms experienced and the individual ingredients consumed.
+The application implements three types of graphs:
+The first consists of showing which symptoms/ingredients have a higher percentage of the total in a specific period of days.
+The second type shows which ingredients affect a particular symptom in the selected time period.
+The third shows of an ingredient what is the likelihood of causing one or more symptoms.
+In addition, the system allows the user to enter his or her medical treatments that he or she is following and shows past treatments.
+The system compares the previous month's symptom data with that of the days under treatment to show the effectiveness of the treatment taken.
 
 \subsection{Acronyms}
 \begin{itemize}
