@@ -78,21 +78,11 @@ class _PersonalPageState extends State<PersonalPage>{
             width: 70,
             alignment: Alignment.center,
             color: Colors.transparent,
-            child:  RawMaterialButton(
-              onPressed: () => {
-                print(userStore.personalPageSymptomsList[index].occurrence),
-              },
-          elevation: 5.0,
-          fillColor: Colors.white,
-          child: ImageIcon(
+            child:  ImageIcon(
             AssetImage("images/Symptoms/" +userStore.personalPageSymptomsList[index].id+".png" ),
-            color: Colors.black,
             size: 28.0,
           ),
-          padding: EdgeInsets.all(15.0),
-          shape: CircleBorder(),
-
-        )),
+        ),
 
     ),
         Container(
@@ -208,7 +198,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                   case FutureStatus.fulfilled:
                                     return ListTile(
                                       title: Text("Average sick days in the last month: "+ userStore.sickDays.length.toString()),
-                                      leading: Icon(Icons.sick, color: Colors.black,),
+                                      leading: Icon(Icons.sick,),
                                     );
                                   case FutureStatus.pending:
                                   default:

@@ -49,7 +49,6 @@ class _HomePageWidgetState extends State<HomePageWidget>{
 
   @override
   Widget build(BuildContext context) {
-    final mealTimeStore = Provider.of<MealTimeStore>(context);
     final dateModel = Provider.of<DateStore>(context);
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +61,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
         ],
       ),
       body: Container(
-        color: Palette.primaryThreeMoreLight,
+        padding: EdgeInsets.all(8),
           child:
       CustomScrollView(
         controller: scrollControllerStore.scrollController,

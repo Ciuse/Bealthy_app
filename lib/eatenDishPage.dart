@@ -433,7 +433,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                       ));
               },
               child: Icon(Icons.auto_delete, color: Colors.white),
-              backgroundColor: Colors.redAccent
+              backgroundColor: Palette.bealthyColorScheme.error
           ),
 
         ));

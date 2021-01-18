@@ -80,7 +80,7 @@ class HeaderScrollStyle {
           right: BorderSide()),
       borderRadius: const BorderRadius.all(Radius.circular(12.0)),
     ),
-    this.headerMargin,
+    this.headerMargin= const EdgeInsets.symmetric(horizontal: 4.0),
     this.headerPadding = const EdgeInsets.symmetric(vertical: 8.0),
     this.formatButtonPadding =
     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
@@ -91,7 +91,19 @@ class HeaderScrollStyle {
     this.leftChevronIcon = const Icon(Icons.chevron_left, color: Colors.black),
     this.rightChevronIcon =
     const Icon(Icons.chevron_right, color: Colors.black),
-    this.decoration = const BoxDecoration(),
+    this.decoration = const BoxDecoration(
+      color: Colors.white,
+      borderRadius: const BorderRadius.all(const Radius.circular(5)),
+      boxShadow:[
+        BoxShadow(
+            spreadRadius: 0.3, //spread radius
+            blurRadius: 1.4, //
+            color:  const Color(0x66a6a6a6),
+            offset: const Offset(0, 2)
+        )
+        //you can set more BoxShadow() here
+      ],
+    ),
   });
 
 

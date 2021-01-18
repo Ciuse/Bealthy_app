@@ -37,17 +37,17 @@ class _SymptomsBarState extends State<SymptomsBar>{
 
     return
       Container(
+        margin: EdgeInsets.symmetric(horizontal: 0),
         alignment: Alignment.center,
-        width:double.infinity,
         decoration: BoxDecoration(
-          color: Palette.primaryThreeMoreLight,
+          color: Palette.bealthyColorScheme.background,
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15)), //border corner radius
           boxShadow:[
             BoxShadow(
-              color: Colors.grey.withOpacity(0.8), //color of shadow
-              spreadRadius: 3, //spread radius
-              blurRadius: 3, // blur radius
-              offset: Offset(0, 4), // changes position of shadow
+              color: Colors.grey.withOpacity(0.9), //color of shadow
+              spreadRadius: 1, //spread radius
+              blurRadius: 1.5, // blur radius
+              offset: Offset(2, 4),// changes position of shadow
               //first paramerter of offset is left-right
               //second parameter is top to down
             ),
@@ -57,11 +57,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
         child:Column(
 
             children: [
-              Divider(
-                height: 2.5,
-                thickness: 0.5,
-                color: Colors.black87,
-              ),
+
               ListTile(
                 title: Text("Symptoms",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
                 leading: Icon(Icons.sick,color: Colors.black),
@@ -72,9 +68,9 @@ class _SymptomsBarState extends State<SymptomsBar>{
                   padding: EdgeInsets.only(left: 6,right: 6 ),
                   width:double.infinity,
                   decoration: BoxDecoration(
-                    color: Palette.primaryDoubleMoreLight,
+                    color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(15)), //border corner radius
-                    border: Border.all(color: Palette.primaryDark, width: 2)
+                    border: Border.all(color: Palette.bealthyColorScheme.primaryVariant, width: 2)
                   ),
                   child: SizedBox(// Horizontal ListView
                     height: 70,
@@ -114,6 +110,10 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                   alignment: Alignment.center,
                                   color: Colors.transparent,
                                   child:  RawMaterialButton(
+                                    constraints : const BoxConstraints(minWidth: 55.0, minHeight: 55.0),
+                                    shape: CircleBorder(
+                                      side: BorderSide(color:  Palette.bealthyColorScheme.primaryVariant, width: 2, style: BorderStyle.solid)
+                                  ),
                                     onPressed: () => {
                                       Navigator.push(
                                           context,
@@ -122,14 +122,12 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                       )//todo inserire qui il salvataggio
                                     },
                                     elevation: 5.0,
-                                    fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.primaryDark : Colors.white,
+                                    fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.bealthyColorScheme.primaryVariant : Colors.white,
                                     child: ImageIcon(
                                       AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
-                                      color: symptomStore.symptomList[index].isSymptomSelectDay ? Color(0xfff0ff1f) : null,
-                                      size: 24.0,
+                                      color: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.bealthyColorScheme.onSecondary : null,
+                                      size: 35.0,
                                     ),
-                                    padding: EdgeInsets.all(15.0),
-                                    shape: CircleBorder(),
 
                                   )),
                               );

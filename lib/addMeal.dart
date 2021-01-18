@@ -49,7 +49,6 @@ class _AddMealState extends State<AddMeal>{
         body: OKToast( child: SingleChildScrollView(
 
         child:Container(
-          color: Palette.primaryThreeMoreLight,
             child: Column(
                 children: [
                   GestureDetector(

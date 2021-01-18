@@ -210,7 +210,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     controller: _tabController,
       children: [
     SingleChildScrollView(child: Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 5),
             child: Observer(
               builder: (_) {
                 switch (overviewStore.loadInitSymptomGraph.status) {

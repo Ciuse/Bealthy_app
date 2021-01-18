@@ -23,4 +23,20 @@ class Palette {
   static const Color tealMoreLight2 = Color(0xff55c3a8);
   static const Color tealDoubleMoreLight2 = Color(0xff6ccbb3);
   static const Color tealThreeMoreLight2 = Color(0xff8ed7c5);
+
+  static const ColorScheme bealthyColorScheme = ColorScheme(
+    primary:Color(0xff0096a7),
+    primaryVariant: Color(0xff005f64),
+    onPrimary: Color(0xffFFFFFF),
+    secondary: Color(0xffe26200),
+    secondaryVariant: Color(0xffaf3d00),
+    onSecondary: Color(0xffFFFFFF),
+    background:Color(0xfff5f5f5),
+    onBackground:Color(0xff000000),
+    surface: Color(0xffffffff),
+    onSurface:Color(0xff000000),
+    error:Color(0xffB00020),
+    onError:Color(0xffFFFFFF),
+    brightness:Brightness.light,
+  );
 }

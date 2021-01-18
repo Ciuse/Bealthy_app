@@ -268,7 +268,6 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                           "Indicate the quantity eaten!",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Palette.primaryDark,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -309,7 +308,6 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
 
           },
           child: Icon(Icons.add , color:  Colors.white ),
-          backgroundColor:  Palette.primaryDark
       ),
     );
   }

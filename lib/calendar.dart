@@ -114,7 +114,9 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   Widget build(BuildContext context) {
     reactToDataChange();
     return Container(
-
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Palette.bealthyColorScheme.primaryVariant, width: 2.5,style: BorderStyle.solid)
+      ),
       child: new ListView(
 
         shrinkWrap: true,
@@ -122,10 +124,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
           // Switch out 2 lines below to play with TableCalendar's settings
           //-----------------------
           //_buildTableCalendar(),
-        const SizedBox(height: 8.0),
-
         _buildTableCalendarWithBuilders(),
-        const SizedBox(height: 8.0),
         ],),);
   }
 
@@ -136,7 +135,6 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
     return TableCalendar(
 
       rowHeight: 35,
-
       locale: 'en_US',
       calendarController: _calendarController,
       events: _illneses,
@@ -161,14 +159,13 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         weekendStyle: TextStyle().copyWith(fontWeight:FontWeight.bold, color: Colors.black),
       ),
       headerStyle: HeaderStyle(
-        headerMargin: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
+        headerMargin: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
         headerPadding: EdgeInsets.symmetric(vertical: 1,horizontal: 1),
         leftChevronMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 0),
         centerHeaderTitle: true,
         formatButtonVisible: false,
         decoration: BoxDecoration(
-          border: Border.all(width: 0.8),
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(15.0),
         ),
       ),
       builders: CalendarBuilders(
@@ -177,14 +174,14 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
             opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
             child: Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(vertical: 1,horizontal: 10),
+              margin: EdgeInsets.symmetric(vertical: 1,horizontal: 1),
                decoration: new BoxDecoration(
-                   color: Palette.primaryDoubleMoreLight,
+                   color: Palette.bealthyColorScheme.primary,
                    shape: BoxShape.circle,
                  ),
               child: Text(
                 '${date.day}',
-                style: TextStyle().copyWith(fontSize: 16.0),
+                style: TextStyle().copyWith(fontSize: 16.0, color: Palette.bealthyColorScheme.onPrimary),
               ),
             ),
           );
@@ -192,13 +189,13 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         todayDayBuilder: (context, date, _) {
           return Container(
             alignment: Alignment.center,
-            margin:  EdgeInsets.symmetric(vertical: 1,horizontal: 10),
+            margin:  EdgeInsets.symmetric(vertical: 1,horizontal: 1),
             decoration: new BoxDecoration(
-              border: Border.all(color:Palette.secondaryDark),
+              border: Border.all(color:Palette.bealthyColorScheme.secondary),
               shape: BoxShape.circle,),
             child: Text(
               '${date.day}',
-              style: TextStyle().copyWith(fontSize: 16.0, color: Palette.secondaryDark),
+              style: TextStyle().copyWith(fontSize: 16.0, color: Palette.bealthyColorScheme.secondary),
             ),
           );
         },
@@ -256,8 +253,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
       Icons.add_circle_outline,
       size: 15.0,
       color: _calendarController.isSelected(date)
-          ? Palette.secondaryDark
-          : _calendarController.isToday(date) ? Palette.secondaryDark : Colors.grey[900],
+          ? Palette.bealthyColorScheme.primaryVariant
+          : _calendarController.isToday(date) ? Palette.bealthyColorScheme.secondaryVariant : Colors.grey[900],
     );
   }
 

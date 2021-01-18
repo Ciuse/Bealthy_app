@@ -44,7 +44,6 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     final ingredientStore = Provider.of<IngredientStore>(context);
     return Container(
-        color: Palette.primaryThreeMoreLight,
         child:Column(
           children:<Widget>[
             for( var element in MealTime.values )
@@ -70,7 +69,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Palette.primaryDark,size: 30,),
+                  icon: Icon(Icons.add,size: 30,),
                   tooltip: 'Add new dish to Breakfast',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -88,12 +87,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       case 1: {
         return ListTile(
           title: Text(MealTime.Lunch.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-          leading: Icon(Icons.lunch_dining,color: Colors.black ),
+          leading: Icon(Icons.lunch_dining),
           trailing: Row (
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.add,color: Palette.primaryDark,size: 30,),
+                  icon: Icon(Icons.add, size: 30,),
                   tooltip: 'Add new dish to Lunch',
                   onPressed: () {
                     mealTimeStore.changeCurrentMealTime(index);
@@ -190,7 +189,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore,IngredientStore ingredientStore ){
     return  Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
+        margin: EdgeInsets.only(top: 15, left: 4,right: 4 ),
         width:double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -198,9 +197,9 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
           boxShadow:[
             BoxShadow(
               color: Colors.grey.withOpacity(0.6), //color of shadow
-              spreadRadius: 4, //spread radius
-              blurRadius: 6, // blur radius
-              offset: Offset(0, 4), // changes position of shadow
+              spreadRadius: 1.3, //spread radius
+              blurRadius: 3.5, // blur radius
+              offset: Offset(2, 4), // changes position of shadow
               //first paramerter of offset is left-right
               //second parameter is top to down
             ),
@@ -221,7 +220,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                 margin:  EdgeInsets.symmetric(horizontal: 10 ),
                 padding: EdgeInsets.symmetric(horizontal: 10 ),
                 decoration: BoxDecoration(
-                  color: Color(0xffb30000),
+                  color: Palette.bealthyColorScheme.error,
                   borderRadius: BorderRadius.circular(20),),
                 alignment: AlignmentDirectional.centerEnd,
                 child: Icon(Icons.delete, color: Colors.white),
