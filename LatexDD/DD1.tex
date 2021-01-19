@@ -44,7 +44,7 @@
 \centerline{AA 2017-2018}
 \vspace{0.5cm}
 \centerline{Computer Science and Engineering}
-\centerline{\textbf{Software Engineering 2 Project}}
+\centerline{\textbf{Dima}}
 \end{large}
 \begin{figure}[ht!]
 \centering
@@ -87,27 +87,93 @@
 \item[(G9)]Allow the user to delete the inserted symptoms.
 \item[(G10)]Allow the user to visualize the percentage of symptoms occurrences and ingredients eaten in a days range (weekly or monthly).
 \item[(G11)]Allow the user to visualize the correlation between the symptoms occurrences and the eaten ingredients.
-\item[(G12)]Allow the user to add a new treatment specifying the diet and medical cure.
-\item[(G13)]Allow the user to remove a treatment.
-\item[(G14)]Allow the user to visualize the in progress treatments and the completed ones.
-\item[(G15)]Allow the user to change the profile image.
+\item[(G12)]Allow the user to visualize a page tha shows of an ingredient what is the likelihood of causing one or more symptoms.
+\item[(G13)]Allow the user to add a new treatment specifying the diet and medical cure.
+\item[(G14)]Allow the user to remove a treatment.
+\item[(G15)]Allow the user to visualize the in progress treatments and the completed ones.
+\item[(G16)]Allow the user to change the profile image.
 
 
 \end{enumerate}
 \subsection{Functional Requirement}
 \begin{description}
 \item[(G1)]Allow the user of the application to create a personal account with an email and password, or with an external services (Google, Github, Twitter).
-
-
-\end{description}
 \begin{itemize}
-\item The user should be able to register through the mobile application.\\
-The user must provide user-name, password, e-mail, and a valid address that will be used as the default position.\\
-\item The user must insert the transport means preferences.\\
-Then he can accept or modify the default limits about them.\\
-\item Finally, he can accept or modify the default set of “Type of appointment”.\\
-\item The user must be able to modify all the option even after he finished the registration process.\\
+\item The user should be able to register through the mobile application and in order to do that he has to provide a password, and a valid e-mail.\\
 \end{itemize}
+\end{description}
+
+\begin{description}
+\item[(G2)]Allow the user to change the current day
+\begin{itemize}
+\item  by clicking another day on the interactive calendar.
+\item by using the appropriate tab to change the dates.
+\end{itemize}
+\end{description}
+
+\begin{description}
+\item[(G3)]Allow the user to add a new dish in a specific mealtime.
+\begin{itemize}
+\item The user has to click on the "+" button of the mealtime he has chosen to add a new dish.
+\item  Then he can chose the way with which adding the dish. There are 5 ways to add it:\\
+\item[(G4)] The first 3 ways consist of searching for the dish:
+\begin{itemize}[•]
+\item Using the \textbf{"Search list"} button:\\
+A list of all the dishes in the online database will appear. After selecting the desired dish and entering the quantity eaten, it will be automatically inserted on the Homepage in the box corresponding to the previously selected mealtime.
+\item Using the \textbf{"Favourites list"} button:\\
+A user list of all favourites dishes will appear. After selecting the desired dish and entering the quantity eaten, it will be automatically inserted on the Homepage in the box corresponding to the previously selected mealtime. 
+\item Using the \textbf{"Your created dishes list"} button:\\
+A user list of all created dishes will appear. After selecting the desired dish and entering the quantity eaten, it will be automatically inserted on the Homepage in the box corresponding to the previously selected mealtime.
+\end{itemize}
+
+\item[(G5)] Using the \textbf{"Scanning a barcode"} button:\\
+The user can scan the product eaten and if there is a valid match in the external database "Open food facts" the page containing all the information about it will be shown.  The user can edit the image, the name and the list of ingredients provided. Once the quantity eaten has been entered, it will be automatically inserted on the Homepage in the box corresponding to the previously selected mealtime.
+\item[(G6)] Using the \textbf{"Creating new dish"} button:\\
+A form for manually entering the information of the dish eaten will appear: 
+The user can enter a picture (using the mobile camera or uploading it from own image gallery), a name, the quantity eaten and the ingredients with their corresponding quantity.The user must then click on the "create" button to create it and add it on the Homepage in the box corresponding to the previously selected mealtime. 
+\end{itemize}
+\end{description}
+
+\begin{description}
+\item[(G7)]Allow the user to add a symptom in the selected day
+\begin{itemize}
+\item The user has to click on the button with the icon of the symptom he/she wants to add. 
+\item A page will open where he/she will have to set the various parameters required. 
+\item The user must then enter the intensity of the perceived pain, the frequency with which the symptom occurred and the time(s) of day it occurred. 
+\item Once you have entered all the parameters, the "save" button will become clickable. The user can click on this button to automatically add the symptom to the Homepage.
+\end{itemize}
+\end{description}
+
+\begin{description}
+\item[(G8)]Allow the user to delete a dish
+\begin{itemize}
+\item The user must click on the dish button to remove its occurrence from a specific time of the selected day. 
+\item On the page with the specific information of that dish, there is a red button to delete it on that day. The user has to click on it.
+\end{itemize}
+\end{description}
+
+\begin{description}
+\item[(G9)]Allow the user to remove a symptom occurrence from a specific day
+\begin{itemize}
+\item The user must click on the symptom button in the Homepage to remove its occurrence. 
+\item On the page with the specific information of that symptom, there is a button to reset all parameters, so the user can delete it.
+\end{itemize}
+\end{description}
+
+\begin{description}
+\item[(G10)]Allow the user to visualize the percentage of symptoms occurrences and ingredients eaten in a days range (weekly or monthly).
+\begin{itemize}
+\item The user has to select the statistics icon in the bottom app bar to view the graphs of symptoms and ingredients. 
+\item By clicking the button in the top right corner of the app bar, he can change the period of days (week or month). 
+\item In this page there are two Tabs that allow navigation between groups of content that are related and at the same level of hierarchy: symptoms and ingredients.
+\begin{itemize}[•]
+\item[(G11)] In the first tab "symptoms" there is a pie chart with the percentage of symptoms and under it, there are all the symptoms button. Clicking on one of them will open another bar graph showing the severity of that specific symptom during the selected period of days. Moving from one day to the next will show the list of ingredients that most caused that symptom.
+\item[(G12)] In the second tab "ingredients" there is a pie chart with the percentage of ingredients and under it, there are all the ingredients button. Clicking on one of them will open another page that shows of an ingredient what is the likelihood of causing one or more symptoms.
+\end{itemize}
+\end{itemize}
+\end{description}
+
+
 \subsection{Scope}
 Bealthy is an application that allows the user to enter the dishes they consume and monitor the symptoms they experience on a daily basis. 
 The entry of dishes can be done by: searching a predefined list of foods known to our application, scanning a barcode with the camera, or manually entering the information of the dish.
