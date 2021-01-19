@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:Bealthy_app/Models/dateStore.dart';
@@ -21,7 +22,7 @@ import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 class DishPageFromScan extends StatefulWidget {
 
   final String barcode;
-  Dish dish;
+  Dish dish = new Dish();
   DishPageFromScan({@required this.barcode});
 
   @override
@@ -115,9 +116,11 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
   }
 
   void initializeDishFromProduct() async{
-    widget.dish = new Dish(name: barCodeScannerStore.productFromQuery.productName, barcode: widget.barcode);
+    widget.dish.name= barCodeScannerStore.productFromQuery.productName;
+    widget.dish.barcode= widget.barcode;
     getLastNumber().then((value) =>widget.dish.id="Dish_User_" + widget.dish.number.toString());
     getImageFileDish();
+    barCodeScannerStore.ingredients.clear();
     barCodeScannerStore.initIngredients(ingredientStore, foodStore);
   }
 
@@ -126,88 +129,18 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
   Widget build(BuildContext context) {
     MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context);
     DateStore dateStore = Provider.of<DateStore>(context);
-    return   Scaffold(
+    return  Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("widget.dish.name"),
-        actions: [
-          IconButton(
-              alignment: Alignment.centerLeft,
-              icon: Icon(
-                Icons.mode_rounded,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                return showDialog(
-                  context: context,
-                  builder: (_) =>  new  AlertDialog(
-                      title: Center(child: Text("Modify the name of ${widget.dish.name}",style: TextStyle(fontWeight: FontWeight.bold,),)),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children : <Widget>[
-                          Expanded(
-                            child: TextFormField(
-                              autovalidateMode: AutovalidateMode.disabled,
-                              controller: titleCt,
-                              decoration: new InputDecoration(
-                                labelText: 'Name',
-                                fillColor: Colors.white,
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(
-                                  ),
-                                ),
-                                //fillColor: Colors.green
-                              ),
-                              validator: (val) {
-                                if(val.length==0) {
-                                  return "Name cannot be empty";
-                                }else{
-                                  return null;
-                                }
-                              },
-                              keyboardType: TextInputType.text,
-                              style: new TextStyle(
-                                fontFamily: "Poppins",
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      actions: <Widget> [
-                        RaisedButton(
-
-                            onPressed:  () {
-                              widget.dish.name= titleCt.text;
-                              Navigator.of(context).pop();
-                            },
-                            textColor: Colors.white,
-                            padding: const EdgeInsets.all(0.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: <Color>[
-                                    Palette.primaryDark,
-                                    Palette.primaryLight,
-                                    Palette.primaryMoreLight,
-                                  ],
-                                ),
-                              ),
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text("OK" , style: TextStyle(fontSize: 20)),)
-                        )]
-                  ),
-                );
-              }
-          ),
-        ],
+        title:  Text(barCodeScannerStore.scanBarcode),
       ),
       body: Center(child:SingleChildScrollView(
           physics: ScrollPhysics(),
-          child: Container(child:
-          Observer(
-            builder: (_) {
+          child: Container(
+
+              child:
+              Observer(
+                builder: (_) {
               switch (barCodeScannerStore.loadProduct.status) {
                 case FutureStatus.rejected:
                   return Container(
@@ -260,6 +193,73 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                                   ])
 
                           )),
+                        ),
+                        ListTile(
+                            title: Text("Name: ",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
+                            trailing: TextButton(child:
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Observer(builder: (_) =>widget.dish.name==null? Text(barCodeScannerStore.productFromQuery.productName, textAlign: TextAlign.left)
+                                    : Text(widget.dish.name)),
+                                Icon(Icons.mode_rounded,),
+                              ],
+                            ),
+                                onPressed: () =>{
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) =>  new  AlertDialog(
+                                      title: Center(child: Text("Modify the name of ${widget.dish.name}",style: TextStyle(fontWeight: FontWeight.bold,),)),
+                                      content: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children : <Widget>[
+                                          Expanded(
+                                            child: TextFormField(
+                                              autovalidateMode: AutovalidateMode.disabled,
+                                              controller: titleCt,
+                                              decoration: new InputDecoration(
+                                                labelText: 'Name',
+                                                fillColor: Colors.white,
+                                                border: new OutlineInputBorder(
+                                                  borderRadius: new BorderRadius.circular(25.0),
+                                                  borderSide: new BorderSide(
+                                                  ),
+                                                ),
+                                                //fillColor: Colors.green
+                                              ),
+                                              validator: (val) {
+                                                if(val.length==0) {
+                                                  return "Name cannot be empty";
+                                                }else{
+                                                  return null;
+                                                }
+                                              },
+                                              keyboardType: TextInputType.text,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      contentPadding: EdgeInsets.only(top: 8, left: 10, right: 10),
+                                      actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                      actions: [
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('CANCEL'),
+                                        ),
+                                        FlatButton(
+                                          onPressed: () {
+                                            widget.dish.name= titleCt.text;
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('ACCEPT'),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                })
                         ),
                         ingredientsWidget(),
                         SizedBox(height: 20,)
@@ -317,7 +317,11 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                 FlatButton(
                   onPressed: () {
                     setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
-                    mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
+                    foodStore.addNewDishScannedByUser(widget.dish, barCodeScannerStore.ingredients);
+                    if(widget.dish.imageFile!=null){
+                      uploadImageToFirebase(context,widget.dish.imageFile);
+                    }
+                    mealTimeStore.addScannedDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
                         .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
                     );
                   },
@@ -332,6 +336,19 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
         child: Icon(Icons.add ),
       ),
     );
+  }
+
+  int getQuantityEnumIndex(String name){
+    int i =0;
+    int toReturn=0;
+    Quantity.values.forEach((element) {
+      if (element.toString().contains(name))
+      {
+        toReturn=i;
+      }i++;
+    }
+    );
+    return toReturn;
   }
 
   Widget ingredientsWidget(){
@@ -374,11 +391,68 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                               children: [
                                 Container(
                                     child:
-                                    ListTile(
+                            Observer(builder: (_) =>ListTile(
                                       title: Text(barCodeScannerStore.ingredients[index].name),
-                                      subtitle:Text(barCodeScannerStore.ingredients[index].qty),
                                       leading: Image(image:AssetImage("images/ingredients/" + barCodeScannerStore.ingredients[index].id + ".png"), height: 40,width:40,),
-                                    )),
+                                      trailing: TextButton(child:
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(barCodeScannerStore.ingredients[index].qty, textAlign: TextAlign.left),
+                                          Icon(Icons.mode_rounded,),
+                                        ],
+                                      ),
+                                          onPressed: () =>{
+                                            barCodeScannerStore.ingredients[index].valueShowDialog=getQuantityEnumIndex(barCodeScannerStore.ingredients[index].qty),
+                                            showDialog(
+                                                context: context,
+                                                builder: (_) =>  new AlertDialog(
+                                                  title: Text('Change Quantity'),
+                                                  content: Observer(builder: (_) => Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: <Widget>[
+
+                                                      for (int i = 0; i < Quantity.values.length; i++)
+                                                        ListTile(
+                                                          title: Text(
+                                                            Quantity.values[i].toString().split('.').last,
+                                                          ),
+                                                          leading: Radio(
+                                                            value: i,
+                                                            groupValue:  barCodeScannerStore.ingredients[index].valueShowDialog,
+                                                            onChanged: (int value) {
+                                                              barCodeScannerStore.ingredients[index].valueShowDialog=value;
+                                                            },
+                                                          ),
+                                                        ),
+                                                      Divider(
+                                                        height: 4,
+                                                        thickness: 0.8,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ],
+                                                  )),
+                                                  contentPadding: EdgeInsets.only(top: 8),
+                                                  actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                                  actions: [
+                                                    FlatButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('CANCEL'),
+                                                    ),
+                                                    FlatButton(
+                                                      onPressed: () {
+                                                        barCodeScannerStore.ingredients[index].qty=Quantity.values[barCodeScannerStore.ingredients[index].valueShowDialog].toString().split('.').last;
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text('ACCEPT'),
+                                                    ),
+                                                  ],
+                                                )
+                                            )
+                                          }),
+                                    ))),
                                 index!=barCodeScannerStore.ingredients.length-1?
                                 Divider(
                                   height: 4,

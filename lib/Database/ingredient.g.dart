@@ -69,6 +69,21 @@ mixin _$Ingredient on _IngredientBase, Store {
     });
   }
 
+  final _$valueShowDialogAtom = Atom(name: '_IngredientBase.valueShowDialog');
+
+  @override
+  int get valueShowDialog {
+    _$valueShowDialogAtom.reportRead();
+    return super.valueShowDialog;
+  }
+
+  @override
+  set valueShowDialog(int value) {
+    _$valueShowDialogAtom.reportWrite(value, super.valueShowDialog, () {
+      super.valueShowDialog = value;
+    });
+  }
+
   final _$mealTimeAtom = Atom(name: '_IngredientBase.mealTime');
 
   @override
@@ -106,6 +121,7 @@ id: ${id},
 name: ${name},
 it_Name: ${it_Name},
 qty: ${qty},
+valueShowDialog: ${valueShowDialog},
 mealTime: ${mealTime},
 totalQuantity: ${totalQuantity}
     ''';

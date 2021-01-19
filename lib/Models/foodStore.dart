@@ -165,7 +165,7 @@ void setBooleanQuantityDish(){
         .doc(auth.currentUser.uid)
         .collection("Dishes")
         .doc(dish.id)
-        .set(dish.toMapDishesScannedByUser());
+        .set(dish.toMapDayDishScannedByUser());
 
     ingredients.forEach((element) {
       firestoreInstance
