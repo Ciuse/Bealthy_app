@@ -313,52 +313,88 @@ class _DishPageState extends State<DishPage>{
       floatingActionButton: FloatingActionButton(
 
         onPressed: () {
-
+          if(!mealTimeStore.checkIfDishIsPresent(widget.dish)){
           return showDialog(
             context: context,
-            builder: (_) =>  new AlertDialog(
-                title: Center(child: Text("Add ${widget.dish.name} to this day ",style: TextStyle(fontWeight: FontWeight.bold,))),
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children : <Widget>[
-                    Expanded(
-                      child: Text(
-                        "Indicate the quantity eaten! ",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+            builder: (_) =>
+            new AlertDialog(
+              title: Text('Select the quantity eaten'),
+              content: Observer(builder: (_) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+
+                  for (int i = 0; i < Quantity.values.length; i++)
+                    ListTile(
+                      title: Text(
+                        Quantity.values[i].toString().split('.').last,
                       ),
+                      leading: Radio(
+                        value: i,
+                        groupValue: widget.dish.valueShowDialog,
+                        onChanged: (int value) {
+                          widget.dish.valueShowDialog=value;
+                        },
+                      ),
+                    ),
+                  Divider(
+                    height: 4,
+                    thickness: 0.8,
+                    color: Colors.black,
+                  ),
+                ],
+              )),
+              contentPadding: EdgeInsets.only(top: 8),
+              actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('CANCEL'),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
+                    mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
+                        .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                    );
+                  },
+                  child: Text('ACCEPT'),
+                ),
+              ],
+            )
+
+          );
+          }else{
+            return showDialog(
+                context: context,
+                builder: (_) =>
+                new AlertDialog(
+                  title: Text('Dish already present'),
+                  content:Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Divider(
+                        height: 4,
+                        thickness: 0.8,
+                        color: Colors.black,
+                      ),
+                    ],
+                  ),
+                  contentPadding: EdgeInsets.only(top: 30),
+                  actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                  actions: [
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('OK'),
                     )
                   ],
-                ),
-                actions: <Widget> [
-                  for(String qty in quantityList) RaisedButton(
-                      onPressed:  () {
-                        setQuantityAndMealTimeToDish(qty);
-                        mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
-                            .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
-                        );
-                      },
-                      textColor: Colors.white,
-                      padding: const EdgeInsets.all(0.0),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: <Color>[
-                              Palette.primaryDark,
-                              Palette.primaryLight,
-                              Palette.primaryMoreLight,
-                            ],
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(qty , style: TextStyle(fontSize: 20)),)
-                  ),
-                ]
-            ),
-          );
+                )
+
+            );
+          }
 
 
         },

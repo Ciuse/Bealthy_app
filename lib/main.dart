@@ -119,7 +119,7 @@ class MyApp extends StatelessWidget {
                   visualDensity: VisualDensity.adaptivePlatformDensity,
 
                   buttonBarTheme: ButtonBarThemeData(
-                    alignment: MainAxisAlignment.spaceEvenly,
+                    alignment: MainAxisAlignment.end,
                   ),
                   iconTheme: IconThemeData(
                     color: Color(0xff005f64),

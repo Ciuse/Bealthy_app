@@ -31,35 +31,49 @@ abstract class _BarCodeScannerStoreBase with Store {
    @observable
    List<Ingredient> ingredients = new ObservableList<Ingredient>();
 
+   @observable
+   ObservableFuture loadProduct;
+
+   @observable
+   ObservableFuture loadIngredients;
+
+   @observable
+   OFF.Product productFromQuery;
 
    @action
-   Future<OFF.Product> getProductFromOpenFoodDB(String barcode) async {
+   Future<void> initProduct() {
+      productFromQuery = null;
+      return loadProduct = ObservableFuture(getDishFromRemoteApi());
+   }
+
+   Future<void> getDishFromRemoteApi() async{
+      return await getProductFromOpenFoodDB(scanBarcode);
+   }
+   Future<void> initIngredients(IngredientStore ingredientStore, FoodStore foodStore) async {
+      return loadIngredients = ObservableFuture(getIngredients(ingredientStore, foodStore));
+   }
+   @action
+   Future<void> getProductFromOpenFoodDB(String barcode) async {
       OFF.ProductQueryConfiguration configuration = OFF.ProductQueryConfiguration(barcode, language: OFF.OpenFoodFactsLanguage.ENGLISH, fields: [OFF.ProductField.ALL]);
       OFF.ProductResult result =
       await OFF.OpenFoodAPIClient.getProduct(configuration);
-
       if (result.status == 1) {
-         print(result.product.images);
-            print(result.product.imgSmallUrl);
-         return result.product;
+         productFromQuery = result.product;
       } else {
-         return null;
+         productFromQuery = null;
       }
    }
 
    @action
-   Future<void> getIngredients(OFF.Product product, IngredientStore ingredientStore, FoodStore foodStore) async {
+   Future<void> getIngredients(IngredientStore ingredientStore, FoodStore foodStore) async {
 
-
-      product.ingredients.forEach((productIngredient) {
+      productFromQuery.ingredients.forEach((productIngredient) {
          ingredientStore.ingredientList.forEach((ingredient) {
             if(isSubstring(ingredient.name, productIngredient.id) || isSubstring(ingredient.it_Name, productIngredient.id)){
                if(!ingredients.contains(ingredient)){
                   ingredient.qty= Quantity.Normal.toString().split('.').last;
                   ingredients.add(ingredient);
-
                }
-
             }
             });
       });

@@ -214,30 +214,30 @@ class _AddMealState extends State<AddMeal>{
                             children: <Widget>[
                               RawMaterialButton(
                                 onPressed: () async => {
-                                  scanBarCodeAndCheckPermission(),
-                                   //barCodeScannerStore.scanBarcode="8076800195057",
-                                  // await barCodeScannerStore.getProductFromOpenFoodDB("8076800195057")
-                                  //     .then((value) async => {
-                                  //    if(value!=null){
-                                  //      await barCodeScannerStore.getScannedDishes(barCodeScannerStore.scanBarcode).then((dishDB) {
-                                  //        if(dishDB.id!=null){
-                                  //          Navigator.push(
-                                  //            context,
-                                  //            MaterialPageRoute(builder: (context) => DishPage(dish: dishDB,createdByUser: true,)),
-                                  //          );
-                                  //        }else{
-                                  //          Navigator.push(
-                                  //            context,
-                                  //            MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,barcode: barCodeScannerStore.scanBarcode)),
-                                  //          );
-                                  //
-                                  //        }
-                                  //      }),
-                                  //   }
-                                  //    else{
-                                  //      showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom)
-                                  //   }
-                                  //  })
+                                 // scanBarCodeAndCheckPermission(),
+                                  barCodeScannerStore.scanBarcode = "3017620422003",
+                                  if(barCodeScannerStore.scanBarcode != "-1") {
+                                    await barCodeScannerStore.getScannedDishes(
+                                        barCodeScannerStore.scanBarcode).then((dishDB) {
+                                      if (dishDB.id != null) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) =>
+                                              DishPage(dish: dishDB, createdByUser: true,)),
+                                        );
+                                      } else {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) =>
+                                              DishPageFromScan(barcode: barCodeScannerStore.scanBarcode)),
+                                        ).then((value) =>   showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom, duration: Duration(seconds: 4))
+                                        );
+                                      }
+                                    }),
+                                  }
+                                  else{
+                                    showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4)),
+                                  }
                                 },
                                 elevation: 7.0,
                                 fillColor: Colors.white,
@@ -315,37 +315,29 @@ class _AddMealState extends State<AddMeal>{
       errorPlatform=true;
     }
     barCodeScannerStore.scanBarcode = barcodeScanRes;
-    if(barCodeScannerStore.scanBarcode != "-1" && errorPlatform!=true){
-      print(barCodeScannerStore.scanBarcode);
-      await barCodeScannerStore.getProductFromOpenFoodDB(barCodeScannerStore.scanBarcode)
-          .then((value) => {
-        if(value!=null){
-          barCodeScannerStore.getScannedDishes(barCodeScannerStore.scanBarcode).then((dishDB) {
-            if(dishDB.id!=null){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DishPage(dish: dishDB,createdByUser: true,)),
-              );
-            }else{
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DishPageFromScan(urlImage: value.imgSmallUrl,product: value,barcode: barCodeScannerStore.scanBarcode)),
-              );
-
-            }
-          }),
-
-        }
-        else{
-          showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom, duration: Duration(seconds: 4))
+    if(barCodeScannerStore.scanBarcode != "-1" && errorPlatform!=true) {
+      await barCodeScannerStore.getScannedDishes(
+          barCodeScannerStore.scanBarcode).then((dishDB) {
+        if (dishDB.id != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>
+                DishPage(dish: dishDB, createdByUser: true,)),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>
+                DishPageFromScan(barcode: barCodeScannerStore.scanBarcode)),
+          ).then((value) =>   showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom, duration: Duration(seconds: 4))
+          );
         }
       });
-
-    }else{
+    }
+    else{
       showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4));
     }
   }
-
 }
 
 class FavouriteDishes extends StatefulWidget {

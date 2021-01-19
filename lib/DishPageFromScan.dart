@@ -9,22 +9,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Database/enumerators.dart';
 import 'Database/dish.dart';
 import 'Login/config/palette.dart';
 import 'Models/barCodeScannerStore.dart';
 import 'Models/foodStore.dart';
-import 'package:openfoodfacts/openfoodfacts.dart' as OFF;
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
 class DishPageFromScan extends StatefulWidget {
 
-  final String urlImage;
-  final OFF.Product product;
   final String barcode;
   Dish dish;
-  DishPageFromScan({@required this.urlImage,@required this.product,@required this.barcode });
+  DishPageFromScan({@required this.barcode});
 
   @override
   _DishPageFromScanState createState() => _DishPageFromScanState();
@@ -44,21 +42,19 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
     super.initState();
     initializeCameras();
     quantityList= getQuantityName();
-    widget.dish = new Dish(name: widget.product.productName,barcode: widget.barcode);
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
     barCodeScannerStore = Provider.of<BarCodeScannerStore>(context, listen: false);
+    barCodeScannerStore.initProduct();
     foodStore = Provider.of<FoodStore>(context, listen: false);
-    ingredientStore.ingredientListOfDish.clear();
-    ingredientStore.getIngredientsFromUserDish(widget.dish);
-    getLastNumber().then((value) =>widget.dish.id="Dish_User_" + widget.dish.number.toString());
-    getImageFileDish();
-    getIngredients();
+
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
+
 
   Future<void> initializeCameras() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -71,12 +67,10 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
   }
 
   Future<void> getImageFileDish() async {
-    widget.dish.imageFile = await barCodeScannerStore.urlToFile(widget.urlImage);
+    widget.dish.imageFile = await barCodeScannerStore.urlToFile(barCodeScannerStore.productFromQuery.imgSmallUrl);
   }
 
-  Future<void> getIngredients() async {
-     await barCodeScannerStore.getIngredients(widget.product,ingredientStore, foodStore);
-  }
+
 
 
   List<String> getQuantityName(){
@@ -120,6 +114,12 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
 
   }
 
+  void initializeDishFromProduct() async{
+    widget.dish = new Dish(name: barCodeScannerStore.productFromQuery.productName, barcode: widget.barcode);
+    getLastNumber().then((value) =>widget.dish.id="Dish_User_" + widget.dish.number.toString());
+    getImageFileDish();
+    barCodeScannerStore.initIngredients(ingredientStore, foodStore);
+  }
 
 
   @override
@@ -129,7 +129,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
     return   Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Observer(builder: (_) =>Text(widget.dish.name)),
+        title: Text("widget.dish.name"),
         actions: [
           IconButton(
               alignment: Alignment.centerLeft,
@@ -203,52 +203,76 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Center(child:SingleChildScrollView(
           physics: ScrollPhysics(),
           child: Container(child:
-          Column(
-              children: [
-                Container(
-                  width: 200,
-                  height: 200,
-                  child: Observer(builder: (_) =>Container(
-                      alignment: Alignment.center ,
-                      child: Stack(
-                          children: [
-                            Container
-                              (width: 150,
-                                height: 150,
-                                decoration: new BoxDecoration(
-                                  borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
-                                  border: new Border.all(
-                                    color: Palette.bealthyColorScheme.primaryVariant,
-                                    width: 1.5,
-                                  ),
-                                ),
-                                child: ClipOval(
-                                  child: widget.dish.imageFile==null? null:
-                                  Image.file(widget.dish.imageFile, fit: BoxFit.cover,),
-                                )
-                            ),
+          Observer(
+            builder: (_) {
+              switch (barCodeScannerStore.loadProduct.status) {
+                case FutureStatus.rejected:
+                  return Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Oops something went wrong'),
+                        RaisedButton(
+                          child: Text('Retry'),
+                          onPressed: () async {
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                case FutureStatus.fulfilled:
+                  initializeDishFromProduct();
+                  return Column(
+                      children: [
+                        Container(
+                          width: 200,
+                          height: 200,
+                          child: Observer(builder: (_) =>Container(
+                              alignment: Alignment.center ,
+                              child: Stack(
+                                  children: [
+                                    Container
+                                      (width: 150,
+                                        height: 150,
+                                        decoration: new BoxDecoration(
+                                          borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                          border: new Border.all(
+                                            color: Palette.bealthyColorScheme.primaryVariant,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                        child: ClipOval(
+                                          child: widget.dish.imageFile==null? null:
+                                          Image.file(widget.dish.imageFile, fit: BoxFit.cover,),
+                                        )
+                                    ),
 
-                            Stack(
-                                children:  <Widget>[
-                                  Container(
-                                      margin: const EdgeInsets.only(left: 125,top:125),
-                                      child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                        color: Colors.black,)),]
+                                    Stack(
+                                        children:  <Widget>[
+                                          Container(
+                                              margin: const EdgeInsets.only(left: 125,top:125),
+                                              child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                                color: Colors.black,)),]
+                                    )
+                                  ])
 
-                            )
-                          ])
-
-                  )),
-                ),
-                ingredientsWidget(),
-                SizedBox(height: 20,)
-
-              ]
-          ))
-      ),
+                          )),
+                        ),
+                        ingredientsWidget(),
+                        SizedBox(height: 20,)
+                      ]
+                  );
+                case FutureStatus.pending:
+                default:
+                  return CircularProgressIndicator();
+              }
+            },
+          )
+          )
+      )),
       floatingActionButton: FloatingActionButton(
 
         onPressed: () {
@@ -256,51 +280,51 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
           return showDialog(
             context: context,
             builder: (_) =>  new AlertDialog(
-                title: Center(child: Text("Add ${widget.dish.name} to this day ",style: TextStyle(fontWeight: FontWeight.bold,))),
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children : <Widget>[
-                    Expanded(
-                      child: Text(
-                        "Indicate the quantity eaten!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+              title: Text('Select the quantity eaten'),
+              content: Observer(builder: (_) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+
+                  for (int i = 0; i < Quantity.values.length; i++)
+                    ListTile(
+                      title: Text(
+                        Quantity.values[i].toString().split('.').last,
                       ),
-                    )
-                  ],
-                ),
-                actions: <Widget> [
-                  for(String qty in quantityList) RaisedButton(
-                      onPressed:  () {
-                        setQuantityAndMealTimeToDish(qty);
-                        foodStore.addNewDishScannedByUser(widget.dish, barCodeScannerStore.ingredients);
-                        if(widget.dish.imageFile!=null){
-                          uploadImageToFirebase(context,widget.dish.imageFile);
-                        }
-                        mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
-                            .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
-                        );
-                      },
-                      textColor: Colors.white,
-                      padding: const EdgeInsets.all(0.0),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: <Color>[
-                              Palette.primaryDark,
-                              Palette.primaryLight,
-                              Palette.primaryMoreLight,
-                            ],
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(qty , style: TextStyle(fontSize: 20)),)
+                      leading: Radio(
+                        value: i,
+                        groupValue: widget.dish.valueShowDialog,
+                        onChanged: (int value) {
+                          widget.dish.valueShowDialog=value;
+                        },
+                      ),
+                    ),
+                  Divider(
+                    height: 4,
+                    thickness: 0.8,
+                    color: Colors.black,
                   ),
-                ]
-            ),
+                ],
+              )),
+              contentPadding: EdgeInsets.only(top: 8),
+              actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+              actions: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('CANCEL'),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
+                    mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
+                        .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                    );
+                  },
+                  child: Text('ACCEPT'),
+                ),
+              ],
+            )
           );
 
 
@@ -322,33 +346,58 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                 thickness: 0.8,
                 color: Colors.black54,
               ),
-              Observer(builder: (_) => ListView.builder
-                (
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: ingredientStore.ingredientListOfDish.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      children: [
-                        Container(
-                            child:
-                            ListTile(
-                              title: Text(ingredientStore.ingredientListOfDish[index].name),
-                              subtitle:Text(ingredientStore.ingredientListOfDish[index].qty),
-                              leading: Image(image:AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"), height: 40,width:40,),
-                            )),
-                        index!=ingredientStore.ingredientListOfDish.length-1?
-                        Divider(
-                          height: 4,
-                          thickness: 0.5,
-                          indent: 20,
-                          endIndent: 20,
-                          color: Colors.black38,
-                        ):Container(),
-                      ],
-                    );
+              Observer(
+                builder: (_) {
+                  switch (barCodeScannerStore.loadIngredients.status) {
+                    case FutureStatus.rejected:
+                      return Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Oops something went wrong'),
+                            RaisedButton(
+                              child: Text('Retry'),
+                              onPressed: () async {
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    case FutureStatus.fulfilled:
+                      return  Observer(builder: (_) => ListView.builder
+                        (
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          itemCount: barCodeScannerStore.ingredients.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              children: [
+                                Container(
+                                    child:
+                                    ListTile(
+                                      title: Text(barCodeScannerStore.ingredients[index].name),
+                                      subtitle:Text(barCodeScannerStore.ingredients[index].qty),
+                                      leading: Image(image:AssetImage("images/ingredients/" + barCodeScannerStore.ingredients[index].id + ".png"), height: 40,width:40,),
+                                    )),
+                                index!=barCodeScannerStore.ingredients.length-1?
+                                Divider(
+                                  height: 4,
+                                  thickness: 0.5,
+                                  indent: 20,
+                                  endIndent: 20,
+                                  color: Colors.black38,
+                                ):Container(),
+                              ],
+                            );
+                          }
+                      ));
+                    case FutureStatus.pending:
+                    default:
+                      return CircularProgressIndicator();
                   }
-              ))
+                },
+              )
+
             ]
         )
     );

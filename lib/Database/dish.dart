@@ -44,7 +44,7 @@ abstract class _DishBase with Store {
   bool isFavourite= false;
 
   @observable
-  int valueShowDialog = 1;
+  int valueShowDialog = 0;
 
 
   @action

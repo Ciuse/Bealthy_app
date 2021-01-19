@@ -183,6 +183,17 @@ abstract class _MealTimeStoreBase with Store {
 
   }
 
+  bool checkIfDishIsPresent(Dish dish){
+    bool found=false;
+    if(getDishesOfMealTimeList(selectedMealTime.index).firstWhere((element) => dish.id==element.id, orElse: () => null)!=null){
+      found=true;
+    }else{
+      found=false;
+    }
+
+    return found;
+  }
+
   bool isSubstring(String s1, String s2) {
     int M = s1.length;
     int N = s2.length;

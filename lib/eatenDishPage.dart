@@ -307,15 +307,16 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                 widget.dish.valueShowDialog=value;
                                               },
                                             ),
-                                          ),    Divider(
-                                          thickness: 0.5,
+                                          ),
+                                        Divider(
+                                          height: 4,
+                                          thickness: 0.8,
                                           color: Colors.black,
                                         ),
                                       ],
                                     )),
                                     contentPadding: EdgeInsets.only(top: 8),
-                                    buttonPadding: EdgeInsets.only(bottom: 7),
-                                    actionsPadding: EdgeInsets.all(0),
+                                    actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
                                     actions: [
                                       FlatButton(
                                         onPressed: () {
@@ -392,20 +393,37 @@ class _EatenDishPageState extends State<EatenDishPage>{
                 return showDialog(
                     context: context,
                     builder: (_) =>  new AlertDialog(
-                      title: new Text(widget.dish.name),
-                      content: new Text("Are you sure to remove it?"),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('Remove it!'),
-                          onPressed: () {
+                        title: Text('Are you sure to remove it?'),
+                        content:Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
 
-                            mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getMealTimeEnumIndex(widget.dish.mealTime), widget.dish, dateStore.calendarSelectedDate)
-                                .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+                            Divider(
+                              height: 4,
+                              thickness: 0.8,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                        contentPadding: EdgeInsets.only(top: 30),
+                        actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                        actions: [
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('CANCEL'),
+                          ),
+                          FlatButton(
+                            child:Text('REMOVE'),
+                            onPressed: () {
 
-                          },
-                        )
-                      ],
-                    ));
+                              mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getMealTimeEnumIndex(widget.dish.mealTime), widget.dish, dateStore.calendarSelectedDate)
+                                  .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+
+                            },
+
+                          )]));
               },
               child: Icon(Icons.auto_delete),
               backgroundColor: Palette.bealthyColorScheme.error
