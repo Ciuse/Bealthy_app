@@ -72,6 +72,7 @@ abstract class _FoodStoreBase with Store {
 
     if (!storeFavouriteDishInitialized) {
       storeFavouriteDishInitialized = true;
+      yourFavouriteDishList.clear();
       return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes());
     }
   }
@@ -89,6 +90,7 @@ abstract class _FoodStoreBase with Store {
 
     if (!storeCreatedYourDishInitialized) {
       storeCreatedYourDishInitialized = true;
+      yourCreatedDishList.clear();
       return loadInitCreatedYourDishesList = ObservableFuture(_getYourDishes());
     }
   }
@@ -121,6 +123,7 @@ void setBooleanQuantityDish(){
   Future<void> initSearchAllDishList() async {
 
     if (!storeSearchAllDishInitialized) {
+      dishesListFromDBAndUser.clear();
       storeSearchAllDishInitialized = true;
       return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser());
     }
@@ -151,6 +154,7 @@ void setBooleanQuantityDish(){
           .doc(dish.id)
           .collection("Ingredients").doc(element.id).set(element.toMap());
     });
+    dishesListFromDBAndUser.add(dish);
     yourCreatedDishList.add(dish);
   }
 
@@ -171,6 +175,7 @@ void setBooleanQuantityDish(){
           .doc(dish.id)
           .collection("Ingredients").doc(element.id).set(element.toMap());
     });
+    dishesListFromDBAndUser.add(dish);
     yourCreatedDishList.add(dish);
   }
 
