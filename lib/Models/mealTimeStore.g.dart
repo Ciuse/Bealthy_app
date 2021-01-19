@@ -126,6 +126,16 @@ mixin _$MealTimeStore on _MealTimeStoreBase, Store {
         .run(() => super.addDishOfMealTimeListOfSpecificDay(dish, day));
   }
 
+  final _$addScannedDishOfMealTimeListOfSpecificDayAsyncAction = AsyncAction(
+      '_MealTimeStoreBase.addScannedDishOfMealTimeListOfSpecificDay');
+
+  @override
+  Future<void> addScannedDishOfMealTimeListOfSpecificDay(
+      Dish dish, DateTime day) {
+    return _$addScannedDishOfMealTimeListOfSpecificDayAsyncAction
+        .run(() => super.addScannedDishOfMealTimeListOfSpecificDay(dish, day));
+  }
+
   final _$updateDishOfMealTimeListOfSpecificDayAsyncAction =
       AsyncAction('_MealTimeStoreBase.updateDishOfMealTimeListOfSpecificDay');
 

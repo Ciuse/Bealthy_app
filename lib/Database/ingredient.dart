@@ -30,7 +30,8 @@ abstract class _IngredientBase with Store {
   String it_Name;
   @observable
   String qty;
-
+  @observable
+  int valueShowDialog = 0;
   @observable
   String mealTime;
 

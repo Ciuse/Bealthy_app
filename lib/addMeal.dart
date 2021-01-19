@@ -215,7 +215,7 @@ class _AddMealState extends State<AddMeal>{
                               RawMaterialButton(
                                 onPressed: () async => {
                                  // scanBarCodeAndCheckPermission(),
-                                  barCodeScannerStore.scanBarcode = "3017620422003",
+                                  barCodeScannerStore.scanBarcode = " 3159470000120",
                                   if(barCodeScannerStore.scanBarcode != "-1") {
                                     await barCodeScannerStore.getScannedDishes(
                                         barCodeScannerStore.scanBarcode).then((dishDB) {

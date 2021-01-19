@@ -85,10 +85,12 @@ abstract class _DishBase with Store {
         "number":number,
       };
 
-  Map<String, dynamic> toMapDishesScannedByUser() =>
+  Map<String, dynamic> toMapDayDishScannedByUser() =>
       {
         "name": name,
         "number":number,
         "barcode": barcode,
+        "qty": qty,
+        "mealTime":mealTime
       };
 }
