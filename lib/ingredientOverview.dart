@@ -41,7 +41,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
       builder: (_) {
         switch (widget.overviewStore.loadInitIngredientGraph.status) {
           case FutureStatus.rejected:
-            return Center(
+            return Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -58,8 +58,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
             return widget.overviewStore.totalOccurrenceIngredient.length>0? ingredientsWidget() : noIngredientsWidget();
           case FutureStatus.pending:
           default:
-            return Center(
-                child:CircularProgressIndicator());
+            return CircularProgressIndicator();
         }
       },
     );
@@ -112,8 +111,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
 
 
   Widget noIngredientsWidget(){
-    return Center(child:Text("No Ingredients")
-    );
+    return Text("No Ingredients");
   }
 }
 class PieChartIngredient extends StatefulWidget {

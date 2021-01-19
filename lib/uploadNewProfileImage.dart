@@ -48,7 +48,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
     if(await Permission.storage.isGranted){
       pickImageFromGallery().then((value) => _cropImage());
     }else{
-      showToast("Bealthy needs to access your Gallery, please provide permission", position: ToastPosition.bottom);
+      showToast("Bealthy needs to access your Gallery, please provide permission", position: ToastPosition.bottom, duration: Duration(seconds: 4));
       openAppSettings2();
     }
 
@@ -65,7 +65,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
     if(await Permission.camera.isGranted){
       await pickImageWithCamera().then((value) => _cropImage());
     }else{
-      showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
+      showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom, duration: Duration(seconds: 4));
       openAppSettings2();
     }
 
@@ -133,129 +133,106 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
   Widget build(BuildContext context) {
     return OKToast(
         child:Scaffold(
-          appBar: AppBar(
-            title: Text("Add Profile Picture"),
-          ),
-          body: Stack(
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height/5,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(50.0),
-                        bottomRight: Radius.circular(50.0)),
-                    gradient: LinearGradient(
-                        colors: [Palette.primaryDark, Palette.primaryLight,Palette.primaryMoreLight,],
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.bottomRight)),
+            appBar: AppBar(
+              title: Text("Profile Picture"),
+              bottom: PreferredSize(
+                child:
+                ListTile(
+                  title: Text(
+                    "",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontSize: 20,color: Colors.white),
+                  ),
+                ),
+                preferredSize: Size(50,50),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 50),
-                child: Column(
+            ),
+            body:  Container(
+                margin: EdgeInsets.symmetric(vertical: 20,horizontal: 15),
+                child:Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                          "Take or load a picture",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 40.0),
-                    Expanded(
-                      child: Stack(
-                        alignment: AlignmentDirectional.topCenter,
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.only(top: 15.0),
-                            child:Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                        flex: 1,
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            FlatButton(
-                                              child: Icon(Icons.add_a_photo, size: 55,),
-                                              onPressed: checkPermissionOpenCamera,
-                                            ),
-                                            SizedBox(width: 30.0),
-                                            FlatButton(
-                                              child: Icon(Icons.image_search, size: 55,),
-                                              onPressed: checkPermissionOpenGallery,
-                                            ),
-
-                                          ],
-                                        )),
-                                    SizedBox(height: 10.0),
-                                    Flexible(
-                                      flex: 4,
-                                      child: _imageFile != null
-                                          ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(40.0),
-                                          child:Image.file(_imageFile,)) : Container(),)
-                                  ],)
-                          ),
-                        ],
-                      ),
-                    ),
+                    SingleChildScrollView(
+                      child:
+                      Container(
+                          margin: const EdgeInsets.only(top: 15.0),
+                          child:Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 20.0),
+                              _imageFile != null
+                                  ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  child:Image.file(_imageFile,)) : Image(image:AssetImage("images/placeholder-image.png"))
+                            ],)
+                      ),),
                     uploadImageButton(context),
                   ],
-                ),
-              ),
-            ],
-          ),
-        ));
+                )),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+            floatingActionButton: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FloatingActionButton(
+                    child: Icon(
+                        Icons.add_a_photo,size: 33
+                    ),
+                    onPressed: () {
+                      checkPermissionOpenCamera();
+                    },
+                    heroTag: null,
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  FloatingActionButton(
+                    child: Icon(
+                      Icons.image_search,size: 33,
+                    ),
+                    onPressed: () => {checkPermissionOpenGallery()},
+                    heroTag: null,
+                  ),SizedBox(
+                    width: 15,
+                  ),
+                ]
+            )));
   }
 
   Future<Null> _cropImage() async {
-    File croppedFile = await ImageCropper.cropImage(
+    if(_imageFile!=null){
+      File croppedFile = await ImageCropper.cropImage(
         sourcePath: _imageFile.path,
         aspectRatio: CropAspectRatio(ratioX:1, ratioY:1),
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Cropper',
-            toolbarColor: Palette.appBarColor,
+            toolbarColor: Palette.bealthyColorScheme.primary,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             showCropGrid: false,
             lockAspectRatio: true),
-        );
-    if(croppedFile!=null){
-      setState(() {
-        _imageFile = File(croppedFile.path);
-      });
+      );
+      if(croppedFile!=null){
+        setState(() {
+          _imageFile = File(croppedFile.path);
+        });
+      }
     }
+
   }
   Widget uploadImageButton(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            padding:
-            const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-            margin: const EdgeInsets.only(
-                top: 30, left: 20.0, right: 20.0, bottom: 20.0),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Palette.primaryDark, Palette.primaryLight,Palette.primaryMoreLight,],
-                ),
-                borderRadius: BorderRadius.circular(30.0)),
-            child: FlatButton(
-              onPressed: _imageFile == null? null :  () => uploadImageToFirebase(context),
-              child: Text(
-                "Upload Image",
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
+    return Expanded(
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: ElevatedButton(
+          onPressed: _imageFile == null? null :  () => uploadImageToFirebase(context),
+          child: Text(
+            "Save Image",
+            style: TextStyle(fontSize: 20),
           ),
-        ],
+        ),
       ),
     );
   }

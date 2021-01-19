@@ -255,13 +255,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
               ),
                 child: Card(
                   shape:  RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.black, width: 1),
+                    side: BorderSide(color: Palette.bealthyColorScheme.primaryVariant, width: 1),
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   margin: EdgeInsets.only(left: 10,right: 10, bottom: 12),
                   child: ListTile(
                       shape:  RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.black, width: 1),
                         borderRadius: BorderRadius.circular(15.0),
                       ) ,
                     onTap: ()  => {
@@ -288,7 +287,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                               decoration: new BoxDecoration(
                                 borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                 border: new Border.all(
-                                  color: Colors.black,
+                                  color: Palette.bealthyColorScheme.primaryVariant,
                                   width: 1.0,
                                 ),
                               ),

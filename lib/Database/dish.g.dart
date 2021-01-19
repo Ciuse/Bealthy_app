@@ -129,6 +129,21 @@ mixin _$Dish on _DishBase, Store {
     });
   }
 
+  final _$valueShowDialogAtom = Atom(name: '_DishBase.valueShowDialog');
+
+  @override
+  int get valueShowDialog {
+    _$valueShowDialogAtom.reportRead();
+    return super.valueShowDialog;
+  }
+
+  @override
+  set valueShowDialog(int value) {
+    _$valueShowDialogAtom.reportWrite(value, super.valueShowDialog, () {
+      super.valueShowDialog = value;
+    });
+  }
+
   final _$_DishBaseActionController = ActionController(name: '_DishBase');
 
   @override
@@ -152,7 +167,8 @@ qty: ${qty},
 mealTime: ${mealTime},
 barcode: ${barcode},
 imageFile: ${imageFile},
-isFavourite: ${isFavourite}
+isFavourite: ${isFavourite},
+valueShowDialog: ${valueShowDialog}
     ''';
   }
 }

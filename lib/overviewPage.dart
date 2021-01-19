@@ -114,7 +114,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         ),
       ),
         body:Container(
-    margin: EdgeInsets.all(8),
+    margin: EdgeInsets.symmetric(horizontal: 8,vertical: 18),
     child:
             Observer(builder: (_) =>
             dateStore.timeSelected==TemporalTime.Day? dayOverviewBuild():
@@ -216,44 +216,50 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   Widget overviewContent (){
 
     return TabBarView(
-    controller: _tabController,
+      controller: _tabController,
       children: [
-    SingleChildScrollView(child: Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-            child: Observer(
-              builder: (_) {
-                switch (overviewStore.loadInitSymptomGraph.status) {
-                  case FutureStatus.rejected:
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Oops something went wrong'),
-                          RaisedButton(
-                            child: Text('Retry'),
-                            onPressed: () async {
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  case FutureStatus.fulfilled:
-                    return overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget();
-                  case FutureStatus.pending:
-                  default:
-                    return Center(
-                        child:CircularProgressIndicator());
-                }
-              },
-            ))),
-        SingleChildScrollView(child: Container(
-            margin: EdgeInsets.symmetric(vertical: 5),
-            child: IngredientOverview(overviewStore: overviewStore,))),
+        Center(
+          child:
+          SingleChildScrollView(
+              child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: Observer(
+                    builder: (_) {
+                      switch (overviewStore.loadInitSymptomGraph.status) {
+                        case FutureStatus.rejected:
+                          return Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Oops something went wrong'),
+                                RaisedButton(
+                                  child: Text('Retry'),
+                                  onPressed: () async {
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        case FutureStatus.fulfilled:
+                          return overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget();
+                        case FutureStatus.pending:
+                        default:
+                          return CircularProgressIndicator();
+                      }
+                    },
+                  )))),
+        Center(
+            child:SingleChildScrollView(child: Container(
+                margin: EdgeInsets.symmetric(vertical: 5),
+                child: IngredientOverview(overviewStore: overviewStore,)
+            )
+            )
+        ),
       ],
     );
   }
   Widget noSymptomsWidget() {
-    return Center(child: Text("No Symptoms"));
+    return Text("No Symptoms");
   }
 
   void selectPreviousDay() {

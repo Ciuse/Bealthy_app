@@ -77,27 +77,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                     child:  Observer(builder: (_) => ListView(
                         scrollDirection: Axis.horizontal,
                         children:[
-                          Container(
-                              width: 70,
-                              alignment: Alignment.center,
-                              color: Colors.transparent,
-                              child:  RawMaterialButton(
-                                onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => AllSymptomsPage())).then((value) =>
-                                  {})
-                                },
-                                elevation: 5.0,
-                                fillColor: Colors.white,
-                                child: Icon(
-                                  Icons.apps_rounded,
-                                  size: 24.0,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
 
-                              )),
                           ListView.builder(
                             itemCount: symptomStore.symptomList.length,
                             scrollDirection: Axis.horizontal,
@@ -132,7 +112,28 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                   )),
                               );
                             },
-                          )
+                          ),
+                          Container(
+                              width: 70,
+                              alignment: Alignment.center,
+                              color: Colors.transparent,
+                              child:  RawMaterialButton(
+                                onPressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => AllSymptomsPage())).then((value) =>
+                                  {})
+                                },
+                                elevation: 5.0,
+                                fillColor: Colors.white,
+                                child: Icon(
+                                  Icons.apps_rounded,
+                                  size: 24.0,
+                                ),
+                                padding: EdgeInsets.all(15.0),
+                                shape: CircleBorder(),
+
+                              )),
                         ]
                     )
                     ),

@@ -173,7 +173,7 @@ class _DishPageState extends State<DishPage>{
           Observer(builder: (_) =>IconButton(
               icon: Icon(
                 widget.dish.isFavourite ? Icons.favorite : Icons.favorite_border,
-                color: widget.dish.isFavourite ? Colors.pinkAccent : null,
+                color: widget.dish.isFavourite ? Palette.bealthyColorScheme.secondary : null,
               ),
               onPressed: () {
                 if (widget.dish.isFavourite) {
@@ -190,8 +190,8 @@ class _DishPageState extends State<DishPage>{
     physics: ScrollPhysics(),
     child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.all(10.0),
+            Card(
+
         child: widget.createdByUser? FutureBuilder(
             future: getImage(),
             builder: (context, remoteString) {
@@ -207,8 +207,8 @@ class _DishPageState extends State<DishPage>{
                                 decoration: new BoxDecoration(
                                   borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                   border: new Border.all(
-                                    color: Colors.black,
-                                    width: 4.0,
+                                    color: Palette.bealthyColorScheme.primaryVariant,
+                                    width: 1.5,
                                   ),
                                 ),
                                 child: ClipOval(
@@ -235,6 +235,13 @@ class _DishPageState extends State<DishPage>{
                             Container
                               (width: 150,
                                 height: 150,
+                                decoration: new BoxDecoration(
+                                  borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                  border: new Border.all(
+                                    color: Palette.bealthyColorScheme.primaryVariant,
+                                    width: 1.5,
+                                  ),
+                                ),
                                 child: ClipOval(
                                   child: widget.dish.imageFile==null? Image.network(remoteString.data,  fit: BoxFit.cover):
                                   Image.file(widget.dish.imageFile,  fit: BoxFit.cover),)),
@@ -268,15 +275,27 @@ class _DishPageState extends State<DishPage>{
                 }
                 else {
                   return Container(
-                      width: 150,
-                      height: 150,
-                      child:  ClipOval(
-                          child: Image(
-                            image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
-                              fit: BoxFit.cover
-                          )
-
-                      ));
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      alignment: Alignment.center,
+                      child:Stack(
+                          children: [
+                            Container(
+                                width: 150,
+                                height: 150,
+                                decoration: new BoxDecoration(
+                                  borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                  border: new Border.all(
+                                    color: Palette.bealthyColorScheme.primaryVariant,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child:  ClipOval(
+                                    child: Image(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
+                                    )
+                                ))
+                          ]));
                 }
               } else{
                 return Center(
@@ -285,147 +304,113 @@ class _DishPageState extends State<DishPage>{
             }
         ),
 
-      ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
-              width:double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20), //border corner radius
-                boxShadow:[
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.6), //color of shadow
-                    spreadRadius: 4, //spread radius
-                    blurRadius: 6, // blur radius
-                    offset: Offset(0, 4), // changes position of shadow
-                    //first paramerter of offset is left-right
-                    //second parameter is top to down
-                  ),
-                  //you can set more BoxShadow() here
-                ],
-              ),
-              child: ingredientsWidget(),
             ),
+            ingredientsWidget(),
             SizedBox(height: 20,)
           ]
-      )),
+    )),
 
       floatingActionButton: FloatingActionButton(
 
-          onPressed: () {
+        onPressed: () {
 
-              return showDialog(
-                  context: context,
-                  builder: (_) =>  new AlertDialog(
-                    title: Center(child: Text("Add ${widget.dish.name} to this day ",style: TextStyle(fontWeight: FontWeight.bold,))),
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children : <Widget>[
-                        Expanded(
-                          child: Text(
-                            "Indicate the quantity eaten! ",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    actions: <Widget> [
-                            for(String qty in quantityList) RaisedButton(
-                                onPressed:  () {
-                                  setQuantityAndMealTimeToDish(qty);
-                                   mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
-                                       .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
-                                   );
-                                },
-                                textColor: Colors.white,
-                                padding: const EdgeInsets.all(0.0),
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: <Color>[
-                                        Palette.primaryDark,
-                                        Palette.primaryLight,
-                                        Palette.primaryMoreLight,
-                                      ],
-                                    ),
-                                  ),
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(qty , style: TextStyle(fontSize: 20)),)
-                            ),
-                          ]
+          return showDialog(
+            context: context,
+            builder: (_) =>  new AlertDialog(
+                title: Center(child: Text("Add ${widget.dish.name} to this day ",style: TextStyle(fontWeight: FontWeight.bold,))),
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children : <Widget>[
+                    Expanded(
+                      child: Text(
+                        "Indicate the quantity eaten! ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                  );
+                    )
+                  ],
+                ),
+                actions: <Widget> [
+                  for(String qty in quantityList) RaisedButton(
+                      onPressed:  () {
+                        setQuantityAndMealTimeToDish(qty);
+                        mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
+                            .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                        );
+                      },
+                      textColor: Colors.white,
+                      padding: const EdgeInsets.all(0.0),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: <Color>[
+                              Palette.primaryDark,
+                              Palette.primaryLight,
+                              Palette.primaryMoreLight,
+                            ],
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(qty , style: TextStyle(fontSize: 20)),)
+                  ),
+                ]
+            ),
+          );
 
 
-          },
-          child: Icon(Icons.add , color:  Colors.white ),
+        },
+        child: Icon(Icons.add),
       ),
 
     );
   }
 
   Widget ingredientsWidget(){
-    return Column(
-        children:[
-          ListTile(
-            title: Text("Ingredients:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-            leading: Icon(Icons.fastfood_outlined,color: Colors.black),
-          ),
-          Observer(builder: (_) => ListView.builder
-            (
-            scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: ingredientStore.ingredientListOfDish.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 10,right: 10, bottom: 6, top:6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+    return
+      Card(
+          child: Column(
+              children:[
+                ListTile(
+                  title: Text("Ingredients",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
+                  leading: Icon(Icons.fastfood_outlined,color: Colors.black),
+                ),
+                Divider(
+                  thickness: 0.8,
+                  color: Colors.black54,
+                ),
+                Observer(builder: (_) => ListView.builder
+                  (
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemCount: ingredientStore.ingredientListOfDish.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
                         children: [
-                          Expanded(
-                              flex:1,
-                              child: Container(
-                                  width: 35,
-                                  height: 35,
-                                  child:  ClipOval(
-                                      child: Image(
-                                        image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
-                                      )
-                                  )))
-                          ,
-                          Expanded(
-                              flex:5,
-                              child: Container(
-                                margin: EdgeInsets.only(left: 20,right: 10,),
-                                child: Text(ingredientStore.ingredientListOfDish[index].name),
-                              ))
-
+                          Container(
+                              child:
+                              ListTile(
+                                title: Text(ingredientStore.ingredientListOfDish[index].name),
+                                subtitle:Text(ingredientStore.ingredientListOfDish[index].qty),
+                                leading: Image(image:AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"), height: 40,width:40,),
+                              )),
+                          index!=ingredientStore.ingredientListOfDish.length-1?
+                          Divider(
+                            height: 4,
+                            thickness: 0.5,
+                            indent: 20,
+                            endIndent: 20,
+                            color: Colors.black38,
+                          ):Container(),
                         ],
-
-                      ),
-                    ),
-                    index!=ingredientStore.ingredientListOfDish.length-1?
-                    Divider(
-                      thickness: 0.5,
-                      indent: 10,
-                      endIndent: 10,
-                      color: Colors.black,
-                    ):Container(),
-                  ],
-                );
-              }
-    ))
-        ]
-    );
+                      );
+                    }
+                ))
+              ]
+          )
+      );
   }
 }
 

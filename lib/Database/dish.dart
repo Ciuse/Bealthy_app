@@ -43,6 +43,10 @@ abstract class _DishBase with Store {
   @observable
   bool isFavourite= false;
 
+  @observable
+  int valueShowDialog = 1;
+
+
   @action
   void setIsFavourite(bool value) {
     isFavourite = value;

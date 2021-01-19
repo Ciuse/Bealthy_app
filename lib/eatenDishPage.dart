@@ -63,10 +63,23 @@ class _EatenDishPageState extends State<EatenDishPage>{
     return listToReturn;
   }
 
-  int getEnumIndex(String name){
+  int getMealTimeEnumIndex(String name){
     int i =0;
     int toReturn=0;
     MealTime.values.forEach((element) {
+      if (element.toString().contains(name))
+      {
+        toReturn=i;
+      }i++;
+    }
+    );
+    return toReturn;
+  }
+
+  int getQuantityEnumIndex(String name){
+    int i =0;
+    int toReturn=0;
+    Quantity.values.forEach((element) {
       if (element.toString().contains(name))
       {
         toReturn=i;
@@ -126,7 +139,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
               Observer(builder: (_) =>IconButton(
                   icon: Icon(
                     widget.dish.isFavourite ? Icons.favorite : Icons.favorite_border,
-                    color: widget.dish.isFavourite ? Colors.pinkAccent : null,
+                    color: widget.dish.isFavourite ? Palette.bealthyColorScheme.secondary : null,
                   ),
                   onPressed: () {
                     if (widget.dish.isFavourite) {
@@ -140,299 +153,261 @@ class _EatenDishPageState extends State<EatenDishPage>{
             ],
           ),
           body: SingleChildScrollView(
-    physics: ScrollPhysics(),
-    child: Column(
-              children: [
-                Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: widget.createdByUser? FutureBuilder(
-                                  future: getImage(),
-                                  builder: (context, remoteString) {
-                                    if (remoteString.connectionState != ConnectionState.waiting) {
-                                      if (remoteString.hasError) {
-                                        return Observer(builder: (_) =>Container(
-                                            alignment: Alignment.center ,
-                                            child: Stack(
-                                                children: [
-                                                  Container
-                                                    (width: 150,
-                                                      height: 150,
-                                                      decoration: new BoxDecoration(
-                                                        borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
-                                                        border: new Border.all(
-                                                          color: Colors.black,
-                                                          width: 4.0,
-                                                        ),
-                                                      ),
-                                                      child: ClipOval(
-                                                        child: widget.dish.imageFile==null? null:
-                                                        Image.file(widget.dish.imageFile,  fit: BoxFit.cover,),)),
+              physics: ScrollPhysics(),
+              child: Column(
+                  children: [
+                    Card(
+                      child: widget.createdByUser? FutureBuilder(
+                          future: getImage(),
+                          builder: (context, remoteString) {
+                            if (remoteString.connectionState != ConnectionState.waiting) {
+                              if (remoteString.hasError) {
+                                return Observer(builder: (_) =>Container(
+                                    alignment: Alignment.center ,
+                                    child: Stack(
+                                        children: [
+                                          Container
+                                            (width: 150,
+                                              height: 150,
+                                              decoration: new BoxDecoration(
+                                                borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                border: new Border.all(
+                                                  color: Palette.bealthyColorScheme.primaryVariant,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                              child: ClipOval(
+                                                child: widget.dish.imageFile==null? null:
+                                                Image.file(widget.dish.imageFile,  fit: BoxFit.cover,),)),
 
-                                                  Stack(
-                                                      children:  <Widget>[
-                                                        Container(
-                                                            margin: const EdgeInsets.only(left: 125,top:125),
-                                                            child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                                              color: Colors.black,)),]
+                                          Stack(
+                                              children:  <Widget>[
+                                                Container(
+                                                    margin: const EdgeInsets.only(left: 125,top:125),
+                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                                      color: Colors.black,)),]
 
-                                                  )
-                                                ])
+                                          )
+                                        ])
 
-                                        ));
-                                      }
-                                      else {
-                                        return Observer(builder: (_) =>Container(
-                                            alignment: Alignment.center ,
-                                            child: Stack(
-                                                children: [
-                                                  Container
-                                                    (width: 150,
-                                                      height: 150,
-                                                      child: ClipOval(
-                                                        child: widget.dish.imageFile==null? Image.network(remoteString.data, fit: BoxFit.cover):
-                                                        Image.file(widget.dish.imageFile, fit: BoxFit.cover),)),
+                                ));
+                              }
+                              else {
+                                return Observer(builder: (_) =>Container(
+                                    alignment: Alignment.center ,
+                                    child: Stack(
+                                        children: [
+                                          Container
+                                            (width: 150,
+                                              height: 150,
+                                              decoration: new BoxDecoration(
+                                                borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                border: new Border.all(
+                                                  color: Palette.bealthyColorScheme.primaryVariant,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                              child: ClipOval(
+                                                child: widget.dish.imageFile==null? Image.network(remoteString.data, fit: BoxFit.cover):
+                                                Image.file(widget.dish.imageFile, fit: BoxFit.cover),)),
 
-                                                  Stack(
-                                                      children:  <Widget>[
-                                                        Container(
-                                                            margin: const EdgeInsets.only(left: 125,top:125),
-                                                            child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42,
-                                                              color: Colors.black,)),]
+                                          Stack(
+                                              children:  <Widget>[
+                                                Container(
 
-                                                  )
-                                                ])
+                                                    margin: const EdgeInsets.only(left: 125,top:125),
+                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42,
+                                                      )),]
 
-                                        ));
-                                      }
-                                    }
-                                    else {
-                                      return Center(
-                                          child:CircularProgressIndicator());
-                                    }
-                                  }
-                              )
-                             :
-                    FutureBuilder (
-                        future: findIfLocal(),
-                        builder: (context,  AsyncSnapshot localData) {
-                          if(localData.connectionState != ConnectionState.waiting ) {
-                            if (localData.hasError) {
-                              return Text("Image not found");
+                                          )
+                                        ])
+
+                                ));
+                              }
                             }
                             else {
-                              return Container(
-                                  width: 150,
-                                  height: 150,
-                                  child:  ClipOval(
-                                      child: Image(
-                                          fit: BoxFit.cover,
-                                        image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
-                                      )
-                                  ));
+                              return Center(
+                                  child:CircularProgressIndicator());
                             }
-                          } else{
-                            return Center(
-                                child:CircularProgressIndicator());
                           }
-                        }
-                    ),
-
-                ),
-                Divider(
-                  thickness: 0.5,
-                  indent: 5,
-                  endIndent: 5,
-                  color: Colors.black,
-                ),
-                Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  child:Observer(builder: (_) =>ListTile(
-                    title: RichText(textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: "The quantity you eat today is \n",
-                        style: TextStyle(color: Colors.black54, fontSize: 16),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: widget.dish.qty,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 22),
-                          ),
-                        ],
-                      ),
-                    ),
-                  trailing:IconButton(
-                    alignment: Alignment.centerLeft,
-                      icon: Icon(
-                        Icons.mode_rounded,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        return showDialog(
-                          context: context,
-                          builder: (_) =>  new AlertDialog(
-                              title: Center(child: Text("Modify the quantity of ${widget.dish.name}",style: TextStyle(fontWeight: FontWeight.bold,),)),
-                              content: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children : <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      "Indicate the quantity eaten! ",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Palette.primaryDark,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              actions: <Widget> [
-                                for(String qty in quantityList) RaisedButton(
-                                    onPressed:  () {
-
-                                      widget.dish.qty = qty;
-                                      mealTimeStore.updateDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
-                                          .then((value) => Navigator.of(context).pop()
-                                      );
-                                    },
-                                    textColor: Colors.white,
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: <Color>[
-                                            Palette.primaryDark,
-                                            Palette.primaryLight,
-                                            Palette.primaryMoreLight,
-                                          ],
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(qty , style: TextStyle(fontSize: 20)),)
-                                ),
-                              ]
-                          ),
-                        );
-                      }
-                  ),
-                  ),
-
-
-                  ),
-
-                ),
-                Divider(
-                  thickness: 0.5,
-                  indent: 5,
-                  endIndent: 5,
-                  color: Colors.black,
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
-                    width:double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20), //border corner radius
-                      boxShadow:[
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.6), //color of shadow
-                          spreadRadius: 4, //spread radius
-                          blurRadius: 6, // blur radius
-                          offset: Offset(0, 4), // changes position of shadow
-                          //first paramerter of offset is left-right
-                          //second parameter is top to down
-                        ),
-                        //you can set more BoxShadow() here
-                      ],
-                    ),
-                    child: Column(
-                        children:[
-                          ListTile(
-                            title: Text("Ingredients:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-                            leading: Icon(Icons.fastfood_outlined,color: Colors.black),
-                          ),
-                          Observer(builder: (_) => ListView.builder
-                            (
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              itemCount: ingredientStore.ingredientListOfDish.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Column(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(left: 10,right: 10, bottom: 6, top:6),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                              flex:1,
-                                              child: Container(
-                                                  width: 35,
-                                                  height: 35,
-                                                  child:  ClipOval(
-                                                      child: Image(
-                                                        image: AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"),
-                                                      )
-                                                  )))
-                                          ,
-                                          Expanded(
-                                              flex:5,
-                                              child: Container(
-                                                margin: EdgeInsets.only(left: 20,right: 10,),
-                                                child: Text(ingredientStore.ingredientListOfDish[index].name),
-                                              ))
-
-                                        ],
-
-                                      ),
-                                    ),
-                                    index!=ingredientStore.ingredientListOfDish.length-1?
-                                    Divider(
-                                      thickness: 0.5,
-                                      indent: 10,
-                                      endIndent: 10,
-                                      color: Colors.black,
-                                    ):Container(),
-                                  ],
-                                );
+                      )
+                          :
+                      FutureBuilder (
+                          future: findIfLocal(),
+                          builder: (context,  AsyncSnapshot localData) {
+                            if(localData.connectionState != ConnectionState.waiting ) {
+                              if (localData.hasError) {
+                                return Text("Image not found");
                               }
-                          ))
-                        ]
-                    )
-                ),
-                SizedBox(height: 20,)
+                              else {
+                                return Container(
+                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                    alignment: Alignment.center,
+                                    child:Stack(
+                                    children: [
+                                    Container(
+                                    width: 150,
+                                    height: 150,
+                                        decoration: new BoxDecoration(
+                                          borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                          border: new Border.all(
+                                            color: Palette.bealthyColorScheme.primaryVariant,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                    child:  ClipOval(
+                                        child: Image(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage("images/Dishes/" + widget.dish.id + ".png"),
+                                        )
+                                    ))
+                                ]));
+                              }
+                            } else{
+                              return Center(
+                                  child:CircularProgressIndicator());
+                            }
+                          }
+                      ),
 
-              ]
+                    ),
 
-          )),
+                    Card(
+                      // height: 50,
+                      // alignment: Alignment.center,
+                      child:Observer(builder: (_) =>ListTile(
+                        title:Text( "Eaten quantity"),
+                        trailing:TextButton(child:
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(widget.dish.qty, textAlign: TextAlign.left),
+                            Icon(Icons.mode_rounded,),
+                          ],
+                        ),
+                            onPressed: () =>{
+                              widget.dish.valueShowDialog=getQuantityEnumIndex(widget.dish.qty),
+                              showDialog(
+                                  context: context,
+                                  builder: (_) =>  new AlertDialog(
+                                    title: Text('Change Quantity'),
+                                    content: Observer(builder: (_) => Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+
+                                        for (int i = 0; i < Quantity.values.length; i++)
+                                          ListTile(
+                                            title: Text(
+                                              Quantity.values[i].toString().split('.').last,
+                                            ),
+                                            leading: Radio(
+                                              value: i,
+                                              groupValue: widget.dish.valueShowDialog,
+                                              onChanged: (int value) {
+                                                widget.dish.valueShowDialog=value;
+                                              },
+                                            ),
+                                          ),    Divider(
+                                          thickness: 0.5,
+                                          color: Colors.black,
+                                        ),
+                                      ],
+                                    )),
+                                    contentPadding: EdgeInsets.only(top: 8),
+                                    buttonPadding: EdgeInsets.only(bottom: 7),
+                                    actionsPadding: EdgeInsets.all(0),
+                                    actions: [
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('CANCEL'),
+                                      ),
+                                      FlatButton(
+                                        onPressed: () {
+                                          widget.dish.qty=Quantity.values[widget.dish.valueShowDialog].toString().split('.').last;
+                                          mealTimeStore.updateDishOfMealTimeListOfSpecificDay
+                                            (widget.dish, dateStore.calendarSelectedDate)
+                                              .then((value) => Navigator.of(context).pop()
+                                          );
+                                        },
+                                        child: Text('ACCEPT'),
+                                      ),
+                                    ],
+                                  )
+                              )}
+                        ),
+                      ),
+                      ),
+                    ),
+                    Card(
+                        child: Column(
+                            children:[
+                              ListTile(
+                                title: Text("Ingredients",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
+                                leading: Icon(Icons.fastfood_outlined,color: Colors.black),
+                              ),
+                              Divider(
+                                thickness: 0.8,
+                                color: Colors.black54,
+                              ),
+                              Observer(builder: (_) => ListView.builder
+                                (
+                                  shrinkWrap: true,
+                                  physics: ClampingScrollPhysics(),
+                                  itemCount: ingredientStore.ingredientListOfDish.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Column(
+                                      children: [
+                                        Container(
+                                            child:
+                                            ListTile(
+                                              title: Text(ingredientStore.ingredientListOfDish[index].name),
+                                              subtitle:Text(ingredientStore.ingredientListOfDish[index].qty),
+                                              leading: Image(image:AssetImage("images/ingredients/" + ingredientStore.ingredientListOfDish[index].id + ".png"), height: 40,width:40,),
+                                            )),
+                                        index!=ingredientStore.ingredientListOfDish.length-1?
+                                        Divider(
+                                          height: 4,
+                                          thickness: 0.5,
+                                          indent: 20,
+                                          endIndent: 20,
+                                          color: Colors.black38,
+                                        ):Container(),
+                                      ],
+                                    );
+                                  }
+                              ))
+                            ]
+                        )
+                    ),
+                    SizedBox(height: 20,)
+
+                  ]
+
+              )),
 
           floatingActionButton: FloatingActionButton(
               onPressed: () {
                 return showDialog(
-                      context: context,
-                      builder: (_) =>  new AlertDialog(
-                        title: new Text(widget.dish.name),
-                        content: new Text("Are you sure to remove it?"),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('Remove it!'),
-                            onPressed: () {
+                    context: context,
+                    builder: (_) =>  new AlertDialog(
+                      title: new Text(widget.dish.name),
+                      content: new Text("Are you sure to remove it?"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('Remove it!'),
+                          onPressed: () {
 
-                              mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getEnumIndex(widget.dish.mealTime), widget.dish, dateStore.calendarSelectedDate)
-                                  .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+                            mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getMealTimeEnumIndex(widget.dish.mealTime), widget.dish, dateStore.calendarSelectedDate)
+                                .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
 
-                            },
-                          )
-                        ],
-                      ));
+                          },
+                        )
+                      ],
+                    ));
               },
-              child: Icon(Icons.auto_delete, color: Colors.white),
+              child: Icon(Icons.auto_delete),
               backgroundColor: Palette.bealthyColorScheme.error
           ),
 

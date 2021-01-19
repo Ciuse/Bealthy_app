@@ -44,10 +44,9 @@ class _AddMealState extends State<AddMeal>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Add new dish to"+" "+widget.title),
+          title: Text(widget.title),
         ),
         body: OKToast( child: SingleChildScrollView(
-
         child:Container(
             child: Column(
                 children: [
@@ -274,7 +273,7 @@ class _AddMealState extends State<AddMeal>{
       scanBarcodeNormal();
 
     }else{
-      showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom);
+      showToast("Provide Camera permission to use camera.", position: ToastPosition.bottom, duration: Duration(seconds: 4));
       openAppSettings2();
     }
 
@@ -338,12 +337,12 @@ class _AddMealState extends State<AddMeal>{
 
         }
         else{
-          showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom)
+          showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom, duration: Duration(seconds: 4))
         }
       });
 
     }else{
-      showToast("Failed To scan Barcode", position: ToastPosition.bottom);
+      showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4));
     }
   }
 
