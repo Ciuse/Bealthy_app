@@ -55,6 +55,9 @@ abstract class _SymptomBase with Store {
   bool isModifyButtonActive=false;
 
   @observable
+  bool isModeRemove=false;
+
+  @observable
   bool isPresentAtLeastOneMeal=false;
 
   bool storeInitialized = false;
@@ -144,6 +147,13 @@ abstract class _SymptomBase with Store {
   }
 
   @action
+  void resetMealTimeBoolListTemp() {
+    mealTimeBoolListTemp.forEach((element) {
+      element.setIsSelected(false);
+    });
+  }
+
+  @action
   void setIsSymptomInADay(bool value) {
     isSymptomSelectDay = value;
   }
@@ -164,6 +174,13 @@ abstract class _SymptomBase with Store {
   @action
   void setMealTime(List<dynamic> value) {
     mealTime = value;
+  }
+
+  @action
+  void resetTempValue() {
+    frequencyTemp=0;
+    intensityTemp=0;
+    resetMealTimeBoolListTemp();
   }
 
 

@@ -177,6 +177,21 @@ mixin _$Symptom on _SymptomBase, Store {
     });
   }
 
+  final _$isModeRemoveAtom = Atom(name: '_SymptomBase.isModeRemove');
+
+  @override
+  bool get isModeRemove {
+    _$isModeRemoveAtom.reportRead();
+    return super.isModeRemove;
+  }
+
+  @override
+  set isModeRemove(bool value) {
+    _$isModeRemoveAtom.reportWrite(value, super.isModeRemove, () {
+      super.isModeRemove = value;
+    });
+  }
+
   final _$isPresentAtLeastOneMealAtom =
       Atom(name: '_SymptomBase.isPresentAtLeastOneMeal');
 
@@ -310,6 +325,17 @@ mixin _$Symptom on _SymptomBase, Store {
   }
 
   @override
+  void resetMealTimeBoolListTemp() {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.resetMealTimeBoolListTemp');
+    try {
+      return super.resetMealTimeBoolListTemp();
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setIsSymptomInADay(bool value) {
     final _$actionInfo = _$_SymptomBaseActionController.startAction(
         name: '_SymptomBase.setIsSymptomInADay');
@@ -365,6 +391,17 @@ mixin _$Symptom on _SymptomBase, Store {
   }
 
   @override
+  void resetTempValue() {
+    final _$actionInfo = _$_SymptomBaseActionController.startAction(
+        name: '_SymptomBase.resetTempValue');
+    try {
+      return super.resetTempValue();
+    } finally {
+      _$_SymptomBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void resetValue() {
     final _$actionInfo = _$_SymptomBaseActionController.startAction(
         name: '_SymptomBase.resetValue');
@@ -389,6 +426,7 @@ mealTime: ${mealTime},
 overviewValue: ${overviewValue},
 isSymptomSelectDay: ${isSymptomSelectDay},
 isModifyButtonActive: ${isModifyButtonActive},
+isModeRemove: ${isModeRemove},
 isPresentAtLeastOneMeal: ${isPresentAtLeastOneMeal},
 mealTimeBoolList: ${mealTimeBoolList},
 intensityTemp: ${intensityTemp},

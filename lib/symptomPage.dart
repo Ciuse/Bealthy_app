@@ -9,6 +9,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Database/symptom.dart';
+import 'Login/config/palette.dart';
 import 'overviewPage.dart';
 
 class SymptomPage extends StatefulWidget {
@@ -37,6 +38,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     widget.symptom.intensityTemp = widget.symptom.intensity;
     widget.symptom.frequencyTemp = widget.symptom.frequency;
     widget.symptom.copyOriginalToTempMealtime();
+    widget.symptom.isModeRemove=false;
   }
 
   @override
@@ -171,10 +173,11 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   }
 
   Widget modifyWidget(SymptomStore symptomStore) {
-    return Container(
+    return SingleChildScrollView(child: Container(
+      padding: EdgeInsets.symmetric(vertical: 15),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Divider(height: 30),
             Text("Intensity",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
             Observer(builder: (_) =>
                 Slider(
@@ -187,7 +190,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                     widget.symptom.intensityTemp = val.toInt();
                   },
                 )),
-            Divider(height: 30),
+            Divider(height: 40),
             Text("Frequency",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
             Observer(builder: (_) =>
                 Slider(
@@ -200,20 +203,28 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                     widget.symptom.frequencyTemp = val.toInt();
                   },
                 )),
-            Divider(height: 30),
-            Text("When did the symptom occur?",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
-            Divider(height: 30),
+            Divider(height: 40),
+            Text("Select symptom occurrence",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
+            SizedBox(height: 10,),
             mealTimeList(widget.symptom),
-            Divider(height: 30),
-        Observer(builder: (_) =>  Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: !widget.symptom.isModifyButtonActive?  null :  () => buttonActivated(symptomStore),
-                child: Text('Save'),
-              )
+            Divider(height: 10),
+            Align(
+                alignment: Alignment.centerRight,
+                child:TextButton(
+                  style: TextButton.styleFrom(primary: Palette.bealthyColorScheme.secondary),
+              child:Text('RESET VALUES'),
+              onPressed: ()=>widget.symptom.resetTempValue(),)),
+            Observer(builder: (_) =>  Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: ElevatedButton(
+                  onPressed: !widget.symptom.isModifyButtonActive?  null :  () => buttonActivated(symptomStore),
+                  child: !widget.symptom.isModeRemove ? Text('SAVE'):Text('REMOVE'),
+                  style: !widget.symptom.isModeRemove?ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.primary)
+                      :ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.error),
+                )
             ))
           ],
-        ));
+        )));
   }
 
 
@@ -277,7 +288,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                 content: new Text("Are you sure to remove it?"),
                 actions: <Widget>[
                   FlatButton(
-                    child: Text('Remove it!'),
+                    child: Text('REMOVE'),
                     onPressed: () {
                       symptomStore.removeSymptomOfSpecificDay( widget.symptom, date)
                           .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
@@ -313,10 +324,13 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
               if((widget.symptom.frequencyTemp == 0 &&
                   widget.symptom.intensityTemp == 0) &&
                   !widget.symptom.isPresentAtLeastOneTrue()){
-                widget.symptom.isModifyButtonActive = true
+                widget.symptom.isModifyButtonActive = true,
+                widget.symptom.isModeRemove = true
               }else{
-                widget.symptom.isModifyButtonActive = false
-              }
+                widget.symptom.isModifyButtonActive = false,
+                widget.symptom.isModeRemove = false
+
+            }
             }
         }
 
@@ -324,9 +338,11 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   }
 
   Widget mealTimeList(Symptom symptom) {
-    return Expanded(child:
+    return
     Observer(builder: (_) =>
         ListView.builder(
+            shrinkWrap: true,
+            physics: ClampingScrollPhysics(),
             itemCount: symptom.mealTimeBoolListTemp.length,
             itemBuilder: (BuildContext context, int index) {
               return Observer(builder: (_) =>
@@ -344,7 +360,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
                   ));
             }
-        )),
+        ),
     );
   }
 }
