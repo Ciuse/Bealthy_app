@@ -1,48 +1,29 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Purpose}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.1}{Scope}{section.1}% 2
 \BOOKMARK [2][-]{subsection.1.2}{Goals}{section.1}% 3
 \BOOKMARK [2][-]{subsection.1.3}{Functional Requirement}{section.1}% 4
-\BOOKMARK [2][-]{subsection.1.4}{Scope}{section.1}% 5
-\BOOKMARK [2][-]{subsection.1.5}{Acronyms}{section.1}% 6
-\BOOKMARK [2][-]{subsection.1.6}{Revision history}{section.1}% 7
-\BOOKMARK [2][-]{subsection.1.7}{Document Structure}{section.1}% 8
-\BOOKMARK [3][-]{subsubsection.1.7.1}{Introduction:}{subsection.1.7}% 9
-\BOOKMARK [3][-]{subsubsection.1.7.2}{Architecture Design:}{subsection.1.7}% 10
-\BOOKMARK [3][-]{subsubsection.1.7.3}{System interfaces}{subsection.1.7}% 11
-\BOOKMARK [3][-]{subsubsection.1.7.4}{Software interfaces}{subsection.1.7}% 12
-\BOOKMARK [3][-]{subsubsection.1.7.5}{Algorithms Design:}{subsection.1.7}% 13
-\BOOKMARK [3][-]{subsubsection.1.7.6}{User Interface Design:}{subsection.1.7}% 14
-\BOOKMARK [3][-]{subsubsection.1.7.7}{Requirements Traceability:}{subsection.1.7}% 15
-\BOOKMARK [3][-]{subsubsection.1.7.8}{Implementation, Integration and Test Plan:}{subsection.1.7}% 16
-\BOOKMARK [1][-]{section.2}{Architectural Design}{}% 17
-\BOOKMARK [2][-]{subsection.2.1}{Overview}{section.2}% 18
-\BOOKMARK [2][-]{subsection.2.2}{High level components}{section.2}% 19
-\BOOKMARK [2][-]{subsection.2.3}{Component view}{section.2}% 20
-\BOOKMARK [2][-]{subsection.2.4}{Runtime view}{section.2}% 21
-\BOOKMARK [3][-]{subsubsection.2.4.1}{Sequence Diagram 1}{subsection.2.4}% 22
-\BOOKMARK [2][-]{subsection.2.5}{Component interfaces}{section.2}% 23
-\BOOKMARK [3][-]{subsubsection.2.5.1}{Administrator Services}{subsection.2.5}% 24
-\BOOKMARK [3][-]{subsubsection.2.5.2}{Client Services}{subsection.2.5}% 25
-\BOOKMARK [3][-]{subsubsection.2.5.3}{DBMS}{subsection.2.5}% 26
-\BOOKMARK [3][-]{subsubsection.2.5.4}{Processing Service}{subsection.2.5}% 27
-\BOOKMARK [3][-]{subsubsection.2.5.5}{Notification Service}{subsection.2.5}% 28
-\BOOKMARK [3][-]{subsubsection.2.5.6}{Map Service}{subsection.2.5}% 29
-\BOOKMARK [3][-]{subsubsection.2.5.7}{API Interface}{subsection.2.5}% 30
-\BOOKMARK [2][-]{subsection.2.6}{Styles and patterns}{section.2}% 31
-\BOOKMARK [3][-]{subsubsection.2.6.1}{Overall Architecture}{subsection.2.6}% 32
-\BOOKMARK [3][-]{subsubsection.2.6.2}{Design decisions}{subsection.2.6}% 33
-\BOOKMARK [3][-]{subsubsection.2.6.3}{Design patterns}{subsection.2.6}% 34
-\BOOKMARK [1][-]{section.3}{Algorithm design}{}% 35
-\BOOKMARK [2][-]{subsection.3.1}{Brief description of the best travel calculation algorithm}{section.3}% 36
-\BOOKMARK [2][-]{subsection.3.2}{Software System Attributes}{section.3}% 37
-\BOOKMARK [3][-]{subsubsection.3.2.1}{Reliability}{subsection.3.2}% 38
-\BOOKMARK [3][-]{subsubsection.3.2.2}{Availability}{subsection.3.2}% 39
-\BOOKMARK [3][-]{subsubsection.3.2.3}{Security}{subsection.3.2}% 40
-\BOOKMARK [3][-]{subsubsection.3.2.4}{Maintainability}{subsection.3.2}% 41
-\BOOKMARK [3][-]{subsubsection.3.2.5}{Portability}{subsection.3.2}% 42
-\BOOKMARK [1][-]{section.4}{User Interface Design}{}% 43
-\BOOKMARK [1][-]{section.5}{Implementation,Integration and Test Plan:}{}% 44
-\BOOKMARK [2][-]{subsection.5.1}{Elements to be integrated}{section.5}% 45
-\BOOKMARK [2][-]{subsection.5.2}{Integration Testing Strategy}{section.5}% 46
-\BOOKMARK [2][-]{subsection.5.3}{Component Integration}{section.5}% 47
-\BOOKMARK [2][-]{subsection.5.4}{Used Tools}{section.5}% 48
+\BOOKMARK [2][-]{subsection.1.4}{Acronyms}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{Revision history}{section.1}% 6
+\BOOKMARK [1][-]{section.2}{Architectural Design}{}% 7
+\BOOKMARK [2][-]{subsection.2.1}{Overview}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.2}{High level components}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.3}{Component view}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.4}{Runtime view}{section.2}% 11
+\BOOKMARK [3][-]{subsubsection.2.4.1}{Sequence Diagram 1}{subsection.2.4}% 12
+\BOOKMARK [2][-]{subsection.2.5}{Styles and patterns}{section.2}% 13
+\BOOKMARK [3][-]{subsubsection.2.5.1}{Overall Architecture}{subsection.2.5}% 14
+\BOOKMARK [3][-]{subsubsection.2.5.2}{Design decisions and patterns}{subsection.2.5}% 15
+\BOOKMARK [1][-]{section.3}{Algorithm design}{}% 16
+\BOOKMARK [2][-]{subsection.3.1}{Brief description of the best travel calculation algorithm}{section.3}% 17
+\BOOKMARK [2][-]{subsection.3.2}{Software System Attributes}{section.3}% 18
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Reliability}{subsection.3.2}% 19
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Availability}{subsection.3.2}% 20
+\BOOKMARK [3][-]{subsubsection.3.2.3}{Security}{subsection.3.2}% 21
+\BOOKMARK [3][-]{subsubsection.3.2.4}{Maintainability}{subsection.3.2}% 22
+\BOOKMARK [3][-]{subsubsection.3.2.5}{Portability}{subsection.3.2}% 23
+\BOOKMARK [1][-]{section.4}{User Interface Design}{}% 24
+\BOOKMARK [1][-]{section.5}{Implementation,Integration and Test Plan:}{}% 25
+\BOOKMARK [2][-]{subsection.5.1}{Elements to be integrated}{section.5}% 26
+\BOOKMARK [2][-]{subsection.5.2}{Integration Testing Strategy}{section.5}% 27
+\BOOKMARK [2][-]{subsection.5.3}{Component Integration}{section.5}% 28
+\BOOKMARK [2][-]{subsection.5.4}{Used Tools}{section.5}% 29
