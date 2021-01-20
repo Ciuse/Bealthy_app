@@ -113,8 +113,72 @@ mixin _$DateStore on _DateStoreBase, Store {
     });
   }
 
+  final _$illnessesAtom = Atom(name: '_DateStoreBase.illnesses');
+
+  @override
+  ObservableMap<DateTime, List<dynamic>> get illnesses {
+    _$illnessesAtom.reportRead();
+    return super.illnesses;
+  }
+
+  @override
+  set illnesses(ObservableMap<DateTime, List<dynamic>> value) {
+    _$illnessesAtom.reportWrite(value, super.illnesses, () {
+      super.illnesses = value;
+    });
+  }
+
+  final _$initializeIllnessesAtom =
+      Atom(name: '_DateStoreBase.initializeIllnesses');
+
+  @override
+  bool get initializeIllnesses {
+    _$initializeIllnessesAtom.reportRead();
+    return super.initializeIllnesses;
+  }
+
+  @override
+  set initializeIllnesses(bool value) {
+    _$initializeIllnessesAtom.reportWrite(value, super.initializeIllnesses, () {
+      super.initializeIllnesses = value;
+    });
+  }
+
   final _$_DateStoreBaseActionController =
       ActionController(name: '_DateStoreBase');
+
+  @override
+  void addIllnesses(DateTime day) {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.addIllnesses');
+    try {
+      return super.addIllnesses(day);
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeIllnesses(SymptomStore symptomStore, DateTime day) {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.removeIllnesses');
+    try {
+      return super.removeIllnesses(symptomStore, day);
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  DateTime setDateFromString(String dateTime) {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.setDateFromString');
+    try {
+      return super.setDateFromString(dateTime);
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void getDaysOfAWeekOrMonth(DateTime firstDate, DateTime lastDate) {
@@ -280,6 +344,8 @@ rangeDays: ${rangeDays},
 timeSelected: ${timeSelected},
 overviewFirstDate: ${overviewFirstDate},
 calculationPeriodInProgress: ${calculationPeriodInProgress},
+illnesses: ${illnesses},
+initializeIllnesses: ${initializeIllnesses},
 weekDay: ${weekDay}
     ''';
   }

@@ -198,9 +198,9 @@ double calculatePercentageSymptom(Symptom symptom){
         symptomCreated.initStore();
         symptomCreated.setMealTime(symptom.get("mealTime"));
         symptomCreated.setMealTimeBoolList();
-        symptomCreated.overviewValue = (symptomCreated.intensity*(symptomCreated.frequency*0.5)*mealTimeValueSymptom(symptomCreated))/2.5;
+        symptomCreated.overviewValue = ((symptomCreated.intensity)*(symptomCreated.frequency)*mealTimeValueSymptom(symptomCreated))*0.4;
         symptomCreated.overviewValue.roundToDouble();
-        if(symptomCreated.overviewValue>=4){
+        if(symptomCreated.overviewValue>=3.5){
           if(!sickDays.contains(dateTime)){
             sickDays.add(dateTime);
           }

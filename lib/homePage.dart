@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'Login/config/palette.dart';
 
 import 'calendar.dart';
 import 'headerScrollStyle.dart';
@@ -75,7 +76,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
                   color: Colors.black,
                 ),
                 backgroundColor: Colors.white,
-                expandedHeight: 260,
+                expandedHeight: 282,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   stretchModes: [StretchMode.blurBackground],
@@ -92,7 +93,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
               SliverList(
                 delegate: SliverChildListDelegate([
                   ListDishesOfDay(day: dateModel.calendarSelectedDate),
-                  Container(height: 100,),
+                  Container(height: 80,),
 
                 ]),
               ),
@@ -107,28 +108,30 @@ class _HomePageWidgetState extends State<HomePageWidget>{
               //   ),
               // )),
             ],
-          ),Observer(builder: (_) =>scrollControllerStore.offset>180?Positioned(
-                    top: 0,
-                    width: MediaQuery.of(context).size.width,
-                    height:70,
-                    child:_buildHeaderDay(dateStore.calendarSelectedDate)):Container())],)),
+          ),Observer(
+                    builder: (_) =>scrollControllerStore.offset>210?
+                    Positioned(
+                        top: 0,
+                        width: MediaQuery.of(context).size.width-16,
+                        height:70,
+                        child:_buildHeaderDay(dateStore.calendarSelectedDate)):Container())],)),
 
     );
   }
   Widget _buildHeaderDay(DateTime day) {
     final children = [
       CustomIconButtonOur(
-        icon: widget.headerScrollStyle.leftChevronIcon,
+        icon: Icon(Icons.chevron_left,size: 30,color: Palette.bealthyColorScheme.secondaryVariant,),
         onTap: ()=>dateStore.calendarSelectedDate=dateStore.calendarSelectedDate.subtract(Duration(days: 1)),
-        margin: widget.headerScrollStyle.leftChevronMargin,
-        padding: widget.headerScrollStyle.leftChevronPadding,
+        margin: EdgeInsets.only(top:6,bottom: 6,left: 5,right: 5),
+        padding: EdgeInsets.only(top:6,bottom: 6,left: 9,right: 0),
       ),
       Expanded(
         child: GestureDetector(
           onTap: null,
           onLongPress: null,
           child: Text(DateFormat.yMMMMEEEEd("en_US").format(day),
-            style: widget.headerScrollStyle.titleTextStyle,
+            style: TextStyle(fontSize: 18),
             textAlign: widget.headerScrollStyle.centerHeaderTitle
                 ? TextAlign.center
                 : TextAlign.start,
@@ -136,10 +139,10 @@ class _HomePageWidgetState extends State<HomePageWidget>{
         ),
       ),
       CustomIconButtonOur(
-        icon: widget.headerScrollStyle.rightChevronIcon,
+        icon: Icon(Icons.chevron_right,size: 30,color: Palette.bealthyColorScheme.secondaryVariant,),
         onTap: ()=>dateStore.calendarSelectedDate=dateStore.calendarSelectedDate.add(Duration(days: 1)),
-        margin: widget.headerScrollStyle.leftChevronMargin,
-        padding: widget.headerScrollStyle.leftChevronPadding,
+        margin: EdgeInsets.only(top:6,bottom: 6,left: 5,right: 5),
+        padding: EdgeInsets.only(top:6,bottom: 6,left: 0,right: 9),
       ),
     ];
 

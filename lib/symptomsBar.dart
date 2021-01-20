@@ -37,23 +37,23 @@ class _SymptomsBarState extends State<SymptomsBar>{
 
     return
       Container(
-        margin: EdgeInsets.symmetric(horizontal: 0),
+        margin: EdgeInsets.only(left: 6,right: 6,top:20),
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Palette.bealthyColorScheme.background,
-          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15)), //border corner radius
-          boxShadow:[
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.9), //color of shadow
-              spreadRadius: 1, //spread radius
-              blurRadius: 1.5, // blur radius
-              offset: Offset(2, 4),// changes position of shadow
-              //first paramerter of offset is left-right
-              //second parameter is top to down
-            ),
-            //you can set more BoxShadow() here
-          ],
-        ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20), //border corner radius
+            boxShadow:[
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.6), //color of shadow
+                spreadRadius: 1.3, //spread radius
+                blurRadius: 3.5, // blur radius
+                offset: Offset(2, 4), // changes position of shadow
+                //first paramerter of offset is left-right
+                //second parameter is top to down
+              ),
+              //you can set more BoxShadow() here
+            ],
+          ),
         child:Column(
 
             children: [

@@ -32,7 +32,9 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
       appBar: AppBar(
         title: Text("Details:"),
       ),
-      body: SingleChildScrollView(child: Container(child:
+      body: SingleChildScrollView(child: Container(
+          margin: EdgeInsets.all(8),
+          child:
       Column(
           children: [
             treatmentDescriptionWidget(),
@@ -70,7 +72,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
         children: [
           ListTile(
             leading: Icon(Icons.description),
-            title: Text("Description of this treatment: "),
+            title: Text("Description of this treatment: ",),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),

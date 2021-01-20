@@ -83,33 +83,38 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         appBar: AppBar(
           title: Text("Statistics",),
           actions: <Widget>[
-       PopupMenuButton(
-                onSelected:  choiceAction,
-                child: Container(
-                  padding: EdgeInsets.only(right: 15),
-                  alignment: Alignment.centerLeft,
-                  child: Observer(builder: (_) =>
-
-                      Text(dateStore.timeSelected.toString().split('.').last,textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20,),),
-
-                )
-                ),
-                itemBuilder: (BuildContext context)
-                {
-                  return temporalList.map((String choice) {
-                    return PopupMenuItem<String>(
-                        value: choice,
-                        child: Text(choice));
-                  }).toList();
-                }
-            )
-        ],
-          bottom: TabBar(
-          tabs: [
-            Tab(text: "Symptoms"),
-            Tab(text: "Ingredients")
+            Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(right: 5),
+                child:
+                PopupMenuButton(
+                  offset: Offset(0,10),
+                    onSelected:  choiceAction,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                        child: Observer(builder: (_) =>
+                            Row(children: [
+                              Text(dateStore.timeSelected.toString().split('.').last,textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 18,),),
+                              Icon(Icons.arrow_drop_down)
+                            ],)
+                        )
+                    ),
+                    itemBuilder: (BuildContext context)
+                    {
+                      return temporalList.map((String choice) {
+                        return PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice));
+                      }).toList();
+                    }
+                ))
           ],
+          bottom: TabBar(
+            tabs: [
+              Tab(text: "Symptoms"),
+              Tab(text: "Ingredients")
+            ],
           controller: _tabController,
         ),
       ),

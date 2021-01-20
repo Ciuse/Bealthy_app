@@ -1,4 +1,9 @@
 import 'package:Bealthy_app/Database/enumerators.dart';
+import 'package:Bealthy_app/Database/symptom.dart';
+import 'package:Bealthy_app/Models/symptomStore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 // Include generated file
@@ -9,6 +14,7 @@ class DateStore = _DateStoreBase with _$DateStore;
 
 // The store-class
 abstract class _DateStoreBase with Store {
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @observable
   DateTime calendarSelectedDate = DateTime.now() ;
@@ -30,6 +36,58 @@ abstract class _DateStoreBase with Store {
 
   @observable
   bool calculationPeriodInProgress = false;
+
+  @observable
+  var illnesses = ObservableMap<DateTime, List>();
+
+  @observable
+  bool initializeIllnesses=false;
+
+  void initIllnesses(){
+    if(initializeIllnesses==false){
+      initializeIllnesses=true;
+      getAllSickDay();
+    }
+  }
+
+  Future<void> getAllSickDay() async {
+    await (FirebaseFirestore.instance
+        .collection('UserSymptoms')
+        .doc(auth.currentUser.uid).collection("DaySymptoms")
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((day) async{
+        await (FirebaseFirestore.instance
+            .collection('UserSymptoms')
+            .doc(auth.currentUser.uid).collection("DaySymptoms")
+            .doc(day.id).collection("Symptoms").get() .then((querySnapshot) {
+          if(querySnapshot.docs.length>0){
+            illnesses.putIfAbsent(setDateFromString(day.id), () => ['']);
+          };
+        }));
+      }
+      );
+    })
+    );
+  }
+
+  @action
+  void addIllnesses(DateTime day){
+    illnesses.putIfAbsent(day, () => ['']);
+  }
+
+  @action
+  void removeIllnesses(SymptomStore symptomStore,DateTime day){
+    if(symptomStore.symptomListOfSpecificDay.length==1){
+      illnesses.remove(day);
+    }
+  }
+
+  @action
+  DateTime setDateFromString(String dateTime){
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+    return dateFormat.parse(dateTime);
+  }
 
   @action
   void getDaysOfAWeekOrMonth(DateTime firstDate, DateTime lastDate) {

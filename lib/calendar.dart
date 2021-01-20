@@ -1,6 +1,7 @@
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:Bealthy_app/Models/treatmentStore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'Models/dateStore.dart';
@@ -28,7 +29,6 @@ class CalendarHomePage extends StatefulWidget {
 
 class _CalendarHomePageState extends State<CalendarHomePage> with TickerProviderStateMixin {
   ReactionDisposer reactionCalendar;
-  Map<DateTime, List> _illneses;
   List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
@@ -38,28 +38,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   void initState() {
     super.initState();
     dateStore = Provider.of<DateStore>(context, listen: false);
-    final _selectedDay = DateTime.now();
-
-    _illneses = {
-      _selectedDay.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
-      _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
-      _selectedDay.subtract(Duration(days: 20)): ['Event A2', 'Event B2', 'Event C2', 'Event D2'],
-      _selectedDay.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
-      _selectedDay.subtract(Duration(days: 10)): ['Event A4', 'Event B4', 'Event C4'],
-      _selectedDay.subtract(Duration(days: 4)): ['Event A5', 'Event B5', 'Event C5'],
-      _selectedDay.subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
-      _selectedDay: ['Event A7', 'Event B7', 'Event C7', 'Event D7'],
-      _selectedDay.add(Duration(days: 1)): ['Event A8', 'Event B8', 'Event C8', 'Event D8'],
-      _selectedDay.add(Duration(days: 3)): Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
-      _selectedDay.add(Duration(days: 7)): ['Event A10', 'Event B10', 'Event C10'],
-      _selectedDay.add(Duration(days: 11)): ['Event A11', 'Event B11'],
-      _selectedDay.add(Duration(days: 17)): ['Event A12', 'Event B12', 'Event C12', 'Event D12'],
-      _selectedDay.add(Duration(days: 22)): ['Event A13', 'Event B13'],
-      _selectedDay.add(Duration(days: 26)): ['Event A14', 'Event B14', 'Event C14'],
-    };
 
     _calendarController = CalendarController();
-
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
@@ -67,6 +47,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
     _animationController.forward();
     reactionCalendar=reactToDataChange();
+    dateStore.initIllnesses();
   }
 
   @override
@@ -124,11 +105,11 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
       child: new ListView(
 
         shrinkWrap: true,
-      children: <Widget>[
+        children: <Widget>[
           // Switch out 2 lines below to play with TableCalendar's settings
           //-----------------------
           //_buildTableCalendar(),
-        _buildTableCalendarWithBuilders(),
+          Observer(builder: (_) =>_buildTableCalendarWithBuilders()),
         ],),);
   }
 
@@ -137,11 +118,10 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   Widget _buildTableCalendarWithBuilders() {
 
     return TableCalendar(
-
-      rowHeight: 35,
+      rowHeight: 40,
       locale: 'en_US',
       calendarController: _calendarController,
-      events: _illneses,
+      events: dateStore.illnesses,
       holidays: _holidays,
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
@@ -163,7 +143,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         weekendStyle: TextStyle().copyWith(fontWeight:FontWeight.bold, color: Colors.black),
       ),
       headerStyle: HeaderStyle(
-        headerMargin: EdgeInsets.symmetric(vertical: 2,horizontal: 2),
+        headerMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 5),
         headerPadding: EdgeInsets.symmetric(vertical: 1,horizontal: 1),
         leftChevronMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 0),
         centerHeaderTitle: true,
@@ -173,15 +153,28 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         ),
       ),
       builders: CalendarBuilders(
+        dayBuilder: (context, date, _) {
+          return Container(
+            alignment: Alignment.center,
+            margin:  EdgeInsets.symmetric(vertical: 1.5,horizontal: 1.5),
+            decoration: new BoxDecoration(
+              border: Border.all(color:Colors.black12),
+              shape: BoxShape.rectangle,),
+            child: Text(
+              '${date.day}',
+              style: TextStyle().copyWith(fontSize: 16.0)
+            ),
+          );
+        },
         selectedDayBuilder: (context, date, _) {
           return FadeTransition(
             opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
             child: Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(vertical: 1,horizontal: 1),
+              margin: EdgeInsets.symmetric(vertical: 1.5,horizontal: 1.5),
                decoration: new BoxDecoration(
                    color: Palette.bealthyColorScheme.primary,
-                   shape: BoxShape.circle,
+                   shape: BoxShape.rectangle,
                  ),
               child: Text(
                 '${date.day}',
@@ -193,24 +186,24 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         todayDayBuilder: (context, date, _) {
           return Container(
             alignment: Alignment.center,
-            margin:  EdgeInsets.symmetric(vertical: 1,horizontal: 1),
+            margin:  EdgeInsets.symmetric(vertical: 1.5,horizontal: 1.5),
             decoration: new BoxDecoration(
-              border: Border.all(color:Palette.bealthyColorScheme.secondary),
-              shape: BoxShape.circle,),
+              border: Border.all(color:Palette.bealthyColorScheme.secondaryVariant),
+              shape: BoxShape.rectangle,),
             child: Text(
               '${date.day}',
-              style: TextStyle().copyWith(fontSize: 16.0, color: Palette.bealthyColorScheme.secondary),
+              style: TextStyle().copyWith(fontSize: 16.0, color: Palette.bealthyColorScheme.secondaryVariant),
             ),
           );
         },
         markersBuilder: (context, date, events, holidays) {
           final children = <Widget>[];
 
-          if (_illneses.isNotEmpty) {
+          if (dateStore.illnesses.isNotEmpty) {
             children.add(
               Positioned(
-                right: -1,
-                bottom: 0,
+                right: 3,
+                bottom: 2.5,
                 child: _buildIllnessesMarker(date),
               ),
             );
@@ -254,29 +247,11 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
   Widget _buildIllnessesMarker(DateTime date) {
     return Icon(
-      Icons.add_circle_outline,
-      size: 15.0,
+      Icons.sick_outlined,
+      size: 16.0,
       color: _calendarController.isSelected(date)
-          ? Palette.bealthyColorScheme.primaryVariant
-          : _calendarController.isToday(date) ? Palette.bealthyColorScheme.secondaryVariant : Colors.grey[900],
-    );
-  }
-
-  Widget _buildEventList() {
-    return ListView(
-      children: _selectedEvents
-          .map((event) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 0.8),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: ListTile(
-          title: Text(event.toString()),
-          onTap: () => print('$event tapped!'),
-        ),
-      ))
-          .toList(),
+          ? Palette.bealthyColorScheme.onPrimary
+          : _calendarController.isToday(date) ? Palette.bealthyColorScheme.secondaryVariant : Colors.black,
     );
   }
 }

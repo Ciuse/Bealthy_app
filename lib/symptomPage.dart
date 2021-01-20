@@ -265,6 +265,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
       if ((widget.symptom.frequencyTemp > 0 && widget.symptom.intensityTemp > 0) &&
           widget.symptom.isPresentAtLeastOneTrue()){
         saveTempValueToRealSymptom();
+        dateStore.addIllnesses(date);
         symptomStore.updateSymptom(widget.symptom, date);
         Navigator.pop(context);
       }
@@ -290,6 +291,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                   FlatButton(
                     child: Text('REMOVE'),
                     onPressed: () {
+                      dateStore.removeIllnesses(symptomStore, date);
                       symptomStore.removeSymptomOfSpecificDay( widget.symptom, date)
                           .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
                     },
