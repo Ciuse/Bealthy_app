@@ -21,10 +21,10 @@
 \usepackage{wrapfig}
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{\small{Travlendar+ project by Meneghin Giulia \& Mauri Giuseppe}}
+\lhead{\small{Bealthy project by Meneghin Giulia \& Mauri Giuseppe}}
 \rhead{\small{\rightmark}}
 \rfoot{\small{Page \thepage}}
-\lfoot{\small{Copyright © 2017, Meneghin Giulia \& Mauri Giuseppe  – All rights reserved}}
+\lfoot{\small{Copyright © 2020, Meneghin Giulia \& Mauri Giuseppe  – All rights reserved}}
 
 \setlength{\headheight}{17pt}
 \usepackage{graphicx}
@@ -41,9 +41,9 @@
 \end{figure}
 \begin{large}
 \centerline{\textbf{Politecnico di Milano} }
-\centerline{AA 2017-2018}
+\centerline{AA 2020-2021}
 \vspace{0.5cm}
-\centerline{Computer Science and Engineering}
+\centerline{Design and Implementation of Mobile Applications}
 \centerline{\textbf{Dima}}
 \end{large}
 \begin{figure}[ht!]
@@ -61,9 +61,9 @@
 \textbf{Title:} & Design Document \\
 \textbf{Authors:} & Meneghin Giulia \& Mauri Giuseppe \\
 \textbf{Version:} & 1.0 \\ 
-\textbf{Date:} & 26-November-2017 \\
+\textbf{Date:} & 05-January-2021 \\
 \textbf{Download page:} & \url{<https://github.com/Ciuse/MauriMeneghin>} \\
-\textbf{Copyright:} & Copyright © 2017, Meneghin Giulia \& Mauri Giuseppe – All rights reserved \\
+\textbf{Copyright:} & Copyright © 2020, Meneghin Giulia \& Mauri Giuseppe – All rights reserved \\
 \hline
 \end{tabu}
 \end{table}
@@ -73,7 +73,16 @@
 \tableofcontents
 
 \section{Introduction}
-\subsection{Purpose}
+\subsection{Scope}
+Bealthy is an application that allows the user to enter the dishes they consume and monitor the symptoms they experience on a daily basis. 
+The entry of dishes can be done by: searching a predefined list of foods known to our application, scanning a barcode with the camera, or manually entering the information of the dish.
+The purpose of the application is to collect the data entered by the user, process it and reorganize it in the form of a graph to show the user the correlation between the symptoms experienced and the individual ingredients consumed.
+The application implements three types of graphs:
+The first consists of showing which symptoms/ingredients have a higher percentage of the total in a specific period of days.
+The second type shows which ingredients affect a particular symptom in the selected time period.
+The third shows of an ingredient what is the likelihood of causing one or more symptoms.
+In addition, the system allows the user to enter his or her medical treatments that he or she is following and shows past treatments.
+The system compares the previous month's symptom data with that of the days under treatment to show the effectiveness of the treatment taken.
 \subsection{Goals}
 \begin{enumerate}
 \item[(G1)]Allow the user of the application to create a personal account and modify his information.
@@ -88,9 +97,9 @@
 \item[(G10)]Allow the user to visualize the percentage of symptoms occurrences and ingredients eaten in a days range (weekly or monthly).
 \item[(G11)]Allow the user to visualize the correlation between the symptoms occurrences and the eaten ingredients.
 \item[(G12)]Allow the user to visualize a page tha shows of an ingredient what is the likelihood of causing one or more symptoms.
-\item[(G13)]Allow the user to add a new treatment specifying the diet and medical cure.
-\item[(G14)]Allow the user to remove a treatment.
-\item[(G15)]Allow the user to visualize the in progress treatments and the completed ones.
+\item[(G13)]Allow the user to visualize the in progress treatments and the completed ones.
+\item[(G14)]Allow the user to add a new treatment specifying the diet and medical cure.
+\item[(G15)]Allow the user to remove a treatment.
 \item[(G16)]Allow the user to change the profile image.
 
 
@@ -173,17 +182,43 @@ The user can enter a picture (using the mobile camera or uploading it from own i
 \end{itemize}
 \end{description}
 
+\begin{description}
+\item[(G13)]Allow the user to visualize the treatments in progress and the completed ones.
+\begin{itemize}
+\item The user has to select the treatments icon in the bottom app bar to open the page that shows the list of treatments in progress or that ones completed.  
+\end{itemize}
+\end{description}
 
-\subsection{Scope}
-Bealthy is an application that allows the user to enter the dishes they consume and monitor the symptoms they experience on a daily basis. 
-The entry of dishes can be done by: searching a predefined list of foods known to our application, scanning a barcode with the camera, or manually entering the information of the dish.
-The purpose of the application is to collect the data entered by the user, process it and reorganize it in the form of a graph to show the user the correlation between the symptoms experienced and the individual ingredients consumed.
-The application implements three types of graphs:
-The first consists of showing which symptoms/ingredients have a higher percentage of the total in a specific period of days.
-The second type shows which ingredients affect a particular symptom in the selected time period.
-The third shows of an ingredient what is the likelihood of causing one or more symptoms.
-In addition, the system allows the user to enter his or her medical treatments that he or she is following and shows past treatments.
-The system compares the previous month's symptom data with that of the days under treatment to show the effectiveness of the treatment taken.
+\begin{description}
+\item[(G14)]Allow the user to add a new treatment 
+\begin{itemize}
+\item The user has to select the treatments icon in the bottom app bar to open the page that shows the list of treatments in progress or that ones completed.  
+\item In that page the user can click on the "+" button in order to create a new treatment.
+\item Clicking on the button will open the page containing the form for entering a new treatment. The name, start date and end date of the treatment are compulsory, while the description, medical information and diet are optional.
+\end{itemize}
+\end{description}
+
+\begin{description}
+\item[(G15)]Allow the user to remove a treatment 
+\begin{itemize}
+\item The user has to select the treatments icon in the bottom app bar to open the page that shows the list of treatments in progress or that ones completed.  
+\item In that page the user can click on the treatment he/she wants to delete.
+\item In the page of treatment information, there is the "delete" button. The user has to click on it.
+\end{itemize}
+\end{description}
+
+\clearpage
+
+\begin{description}
+\item[(G16)]Allow the user to change the profile image 
+\begin{itemize}
+\item The user has to select the personal info icon in the bottom app bar to open the page that shows the information and the settings of the user.  
+\item In that page the user can click on "camera" button in order to change his/her image profile.
+\item The user can take a photo or upload an image from his/her gallery.
+\end{itemize}
+\end{description}
+
+
 
 \subsection{Acronyms}
 \begin{itemize}
@@ -195,39 +230,28 @@ The system compares the previous month's symptom data with that of the days unde
 \item Version 1.0
 \end{itemize}
 
-\subsection{Document Structure}
 
-
-\subsubsection{Introduction:}
-The introduction to this section describes the main features of the design document. This section highlights more technical aspects that were not dealt with in the RASD document. We can distinguish different subsections of this document:
-\subsubsection{Architecture Design:}
-\begin{itemize}
-\item Overview: The top-level components of our application are described.
-\item High level components and their interaction: This section focuses on how the various components interact with each other.
-\item Component View: This section provides a more detailed view of the application components. We will use the component diagram which will show how the components of our application are connected together to form larger components. The system structure is shown.
-\item Deployment View: This section shows how software components are distributed over the hardware resources available on your system. We will use a Deployment Diagram that statically describes our system in terms of hardware resources, called nodes, and relationships between them.  
-\item Runtime view: In this part, sequence diagrams will be used to describe how components interact to perform specific tasks typically related to usage cases.
-\item Component interfaces
-\item Selected architectural styles and models: This section explains the architectural choices made during the implementation of the application.
-\item Other design decisions
-\end{itemize}
-\subsubsection{System interfaces}
-
-\subsubsection{Software interfaces}
-
-\subsubsection{Algorithms Design:}
-
-\subsubsection{User Interface Design:}
-This section presents examples of mockups and user experiences.
-\subsubsection{Requirements Traceability:}
-This section explains how decisions taken in the RASD are related to design elements.
-\subsubsection{Implementation, Integration and Test Plan:}
-This last section proposes the order in which we plan to implement the sub-components of our system and the order in which we plan to integrate these sub-components and test the integration.
 \section{Architectural Design}
 \subsection{Overview}
+Bealthy application has a two tier architecture.
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=8cm, width=\linewidth]{ArchitectureTwoTier.png}
+\caption{Structure Overview} 
+\end{figure}
+\\
+Bealthy uses a two tier architecture with a fat client. The client tier and the business logic tier are both located within the mobile application, while the database is remote. Most of the data are in the database managed by the provider "Firebase" on which there are all the static data of the predefined dishes, the dishes created by the user, the day by day information of which dishes he eats and which symptoms he shows, and the files of the images of the dishes and the photo of the user. The other part of the data is managed by the provider "OpenFoodFacts", an open source database containing thousands of food information associated with a barcode.
 
 \subsection{High level components}
-
+The architecture of the high-level components consists of two different types of elements:
+the External Services and the Mobile Application.
+\begin{itemize}
+\item \textbf{The Mobile Application} allows users to interact directly with the system. This component provides a simple and clear view of the various functions that the system provides to the user. We decided to develop a fat client application that handles both the UI and UX part as well as the business logic. A fat client application  connects to a external remote database (firebase) in order to sync data or upload and download user information. 
+Bealthy processes most of data by itself, it does not rely on any servers for processing. 
+The processing of user data, in order to showing the correlation between the symptoms and the ingredients, is done offline.
+\item There are two different kind of \textbf{External Services} that the application uses: The database ones and the authentication ones.
+The external databases,Firebase and OpenFoodFact, are interrogated by our application when it needs their updated data while the external authentication services are: Google, Github and Twitter.
+\end{itemize}
 
 \subsection{Component view}
 
@@ -268,44 +292,6 @@ If it is possible to solve the calculation, the travel itinerary will be saved a
 \end{figure}  
 \clearpage
 
-\subsection{Component interfaces}
-
-\subsubsection{Administrator Services}
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=3cm, width=12.5cm]{Int1.jpg}
-\end{figure}
-\subsubsection{Client Services}
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=7.5cm, width=14.5cm]{Int2.jpg}
-\end{figure}
-\subsubsection{DBMS}
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=5cm, width=12cm]{Int3.jpg}
-\end{figure}
-\clearpage
-\subsubsection{Processing Service}
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=3.3cm, width=8cm]{Int4.jpg}
-\end{figure}
-\subsubsection{Notification Service}
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=3.3cm, width=4.8cm]{Int5.jpg}
-\end{figure}
-\subsubsection{Map Service}
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=3.0cm, width=5.5cm]{Int6.jpg}
-\end{figure}
-\subsubsection{API Interface}
-\begin{figure}[ht!]
-\centering
-\includegraphics[height=5cm, width=5cm]{Int7.jpg}
-\end{figure}
 
 
 \subsection{Styles and patterns}
@@ -313,20 +299,34 @@ If it is possible to solve the calculation, the travel itinerary will be saved a
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[height=7cm, width=7cm]{3tier.jpg}
+\includegraphics[height=7cm, width=7cm]{2tier.jpg}
 \end{figure}  
-Our application will be divided into 2 tiers: (fat client)
+Our application has been divided into 2 tiers: (fat client)
 \begin{enumerate}
-\item Database tier ( DAL: Data Access Layer )
-\item Business Logic tier ( BLL: Business Logic Layer ) (mobx)
-\item Client tier (interface to BLL )
+\item \textbf{Database tier ( DAL: Data Access Layer )}\\
+Here information is stored and retrieved from an external database. The information is then passed to the logic tier for processing, and then eventually back to the user.
+\item \textbf{Business Logic ( BLL: Business Logic Layer ) and Client tier (interface to BLL )} 
+\\
+The highest level of the application is the user interface, whose main function is to take care of all the user's requests, and to give him the possibility to interact quickly with the system.
+The user will then be able to view own Symptoms, eaten dishes and statistics of a certain time period whenever he/she wishes.
+Business Logic Tier is an important part of the Client Tier. 
+It is managed by the "store" classes of our application through the use of \textbf{MobX} that is a state-management library that makes it simple to connect the reactive data of application with the UI.
+All of these classes coordinate the application, process commands, make logical decisions and assessments and perform the calculations in order to elaborate user statistics chart of symptoms and ingredients. This level is mainly concerned with: processing the user's data and information, managing the interactions between our system and that of external Databases services.
 \end{enumerate}
+\clearpage
 
+\subsubsection{Design decisions and patterns}
+\begin{itemize}
+\item We decided to use \textbf{Flutter} because it is Google’s UI toolkit used for building natively compiled applications for mobile from a single codebase. It is characterize by a fast development that allow to
+use a rich set of fully-customizable widgets in order to build native interfaces.
+\item Flutter provides a lot of flexibility in deciding how to organize and architect your apps. We decided to use the library \textbf{MobX} because it is a popular state management library for Dart and Flutter apps. It has also been recognized as a Flutter Favorite package.
+MobX relies on 3 core concepts: Observables, Actions and Reactions. Observables represent the reactive state of your application. Actions are semantic operations that modify these observables and Reactions are the listeners that "react" to the change in Observables, by updating UI or firing network operations. Reactions are considered as the side-effects in a MobX-based application.
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=7cm, width=12cm]{MobX.png}
+\end{figure}
 
-\subsubsection{Design decisions}
-
-\subsubsection{Design patterns}
-
+\end{itemize}
 \section{Algorithm design}
 
 \subsection{Brief description of the best travel calculation algorithm}
