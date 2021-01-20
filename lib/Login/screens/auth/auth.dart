@@ -1,4 +1,5 @@
 import 'package:Bealthy_app/Login/config/palette.dart';
+import 'package:Bealthy_app/Login/config/palette.dart';
 import 'package:Bealthy_app/Login/screens/auth/widgets/register.dart';
 import 'package:Bealthy_app/Login/screens/auth/widgets/sign_in.dart';
 import 'package:Bealthy_app/Models/userStore.dart';
@@ -53,11 +54,21 @@ class _AuthScreenState extends State<AuthScreen>
         return false;},
       child: Scaffold(
       body: LitAuth.custom(
+        successNotification: const NotificationConfig(
+            backgroundColor: Palette.primaryDark,
+            icon: Icon(
+              Icons.check_circle_outline_rounded,
+              color: Palette.secondaryDark,
+              size: 32,
+            ),
+          duration: Duration(milliseconds: 1800),
+        ),
         errorNotification: const NotificationConfig(
-          backgroundColor: Palette.darkBlue,
+          duration: Duration(milliseconds: 1800),
+          backgroundColor: Palette.primaryDark,
           icon: Icon(
             Icons.error_outline,
-            color: Colors.deepOrange,
+            color: Palette.secondaryDark,
             size: 32,
           ),
         ),

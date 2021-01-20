@@ -27,6 +27,7 @@ class CalendarHomePage extends StatefulWidget {
 }
 
 class _CalendarHomePageState extends State<CalendarHomePage> with TickerProviderStateMixin {
+  ReactionDisposer reactionCalendar;
   Map<DateTime, List> _illneses;
   List _selectedEvents;
   AnimationController _animationController;
@@ -65,12 +66,14 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
     );
 
     _animationController.forward();
+    reactionCalendar=reactToDataChange();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
     _calendarController.dispose();
+    reactionCalendar.reaction.dispose();
     super.dispose();
   }
 
@@ -100,11 +103,13 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
   }
 
-  void reactToDataChange(){
-    reaction((_) => dateStore.calendarSelectedDate, (value) => {
-      dateNormalized=DateTime.utc(value.year, value.month, value.day, 12),
+  ReactionDisposer reactToDataChange(){
+    return reaction((_) => dateStore.calendarSelectedDate, (value) => {
+        dateNormalized=DateTime.utc(value.year, value.month, value.day, 12),
       if(_calendarController.selectedDay!=dateNormalized){
-        _calendarController.setSelectedDay(dateNormalized, isProgrammatic: false),
+        setState((){
+          _calendarController.setSelectedDay(dateNormalized, isProgrammatic: false);
+        }),
         _onDayChangedTab(dateNormalized),
       }
     });
@@ -112,7 +117,6 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    reactToDataChange();
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
           border: Border.all(color: Palette.bealthyColorScheme.primaryVariant, width: 2.5,style: BorderStyle.solid)

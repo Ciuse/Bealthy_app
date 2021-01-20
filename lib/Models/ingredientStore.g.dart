@@ -154,9 +154,20 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   }
 
   @override
+  Ingredient getIngredientFromName(String ingredientName) {
+    final _$actionInfo = _$_IngredientStoreBaseActionController.startAction(
+        name: '_IngredientStoreBase.getIngredientFromName');
+    try {
+      return super.getIngredientFromName(ingredientName);
+    } finally {
+      _$_IngredientStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Ingredient getIngredientFromList(String ingredientId) {
     final _$actionInfo = _$_IngredientStoreBaseActionController.startAction(
-        name: '_IngredientStoreBase.getSymptomFromList');
+        name: '_IngredientStoreBase.getIngredientFromList');
     try {
       return super.getIngredientFromList(ingredientId);
     } finally {

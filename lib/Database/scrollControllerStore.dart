@@ -17,4 +17,7 @@ abstract class _ScrollControllerBase with Store {
   @observable
   double scale= 0.0;
 
+  @observable
+  double offset=0.0;
+
 }

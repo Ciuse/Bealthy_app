@@ -89,9 +89,10 @@ class _CreateNewDishStateOld extends State<CreateNewDishOld> {
     ingredientsQuantityList.add("");
   }
 
+
+
   void addDishToUser() {
-    if (nameCt.text != "" && ingredientsSelectedList.length>0 &&
-        ingredientsQuantityList.length==ingredientsSelectedList.length) {
+
       dish.name=nameCt.text;
 
       List<Ingredient> ingredients = new List<Ingredient>();
@@ -110,7 +111,7 @@ class _CreateNewDishStateOld extends State<CreateNewDishOld> {
         uploadImageToFirebase(dish.imageFile);
       }
       Navigator.pop(context);
-    }
+
   }
 
   Future uploadImageToFirebase(File imageFile) async {

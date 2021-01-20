@@ -85,205 +85,209 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                 Form(
                     key: this._formKey,
                     child:
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.disabled,
-                          controller: titleCt,
-                          decoration: new InputDecoration(
-                            labelText: 'Name',
-                            fillColor: Colors.white,
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(
-                              ),
-                            ),
-                            //fillColor: Colors.green
-                          ),
-                          validator: (val) {
-                            if(val.length==0) {
-                              return "Name cannot be empty";
-                            }else{
-                              return null;
-                            }
-                          },
-                          keyboardType: TextInputType.text,
-                          style: new TextStyle(
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        ),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.disabled,
-                          controller: descriptionTextCt,
-                          decoration: new InputDecoration(
-                            labelText: 'Description',
-                            fillColor: Colors.white,
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(
-                              ),
-                            ),
-                            //fillColor: Colors.green
-                          ),
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          style: new TextStyle(
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        ),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.disabled,
-                          controller: dietInfoCt,
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          decoration: new InputDecoration(
-                            labelText: 'Diet',
-                            fillColor: Colors.white,
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(
-                              ),
-                            ),
-                            //fillColor: Colors.green
-                          ),
-                          style: new TextStyle(
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        ),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.disabled,
-                          controller: medicalInfoCt,
-                          decoration: new InputDecoration(
-                            labelText: 'Medical Cure',
-                            fillColor: Colors.white,
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(
-                              ),
-                            ),
-                            //fillColor: Colors.green
-                          ),
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          style: new TextStyle(
-                            fontFamily: "Poppins",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        ),
-                        TextFormField(
-                              onTap: (){
-                                FocusScope.of(context).requestFocus(new FocusNode());
-                                showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2019, 1),
-                                    lastDate: DateTime(2030,12),
-                                    builder: (BuildContext context, Widget picker){
-                                      return Theme(
-                                        data: ThemeData.light(),
-                                        child: picker,);
-                                    })
-                                    .then((selectedDate) {
-                                  //TODO: handle selected date
-                                  if(selectedDate!=null){
-                                    startingDateCt.text = fixDate(selectedDate);
-                                  }
-                                });
-                              },
-                              autovalidateMode: AutovalidateMode.disabled,
-                              controller: startingDateCt,
-                              decoration: new InputDecoration(
-                                labelText: "Enter Starting date of treatment",
-                                fillColor: Colors.white,
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(
+                    Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              TextFormField(
+                                maxLength: 25,
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                controller: titleCt,
+                                decoration: new InputDecoration(
+                                  labelText: 'Name',
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(
+                                    ),
                                   ),
+                                  //fillColor: Colors.green
+                                ),
+                                validator: (val) {
+                                  if(val.length==0) {
+                                    return "Name cannot be empty";
+                                  }else{
+                                    return null;
+                                  }
+                                },
+                                keyboardType: TextInputType.text,
+                                style: new TextStyle(
+                                  fontFamily: "Poppins",
                                 ),
                               ),
-                              validator: (val) {
-                                if(val.length==0) {
-                                  return "Starting Date of treatment cannot be empty";
-                                }else{
-                                  if(treatmentStore.setDateFromString(val)!=null){
-                                    return null;
-                                  }else{
-                                    return "Insert a valid Date of starting treatment date";
-                                  }
-
-                                }
-                              },
-                              keyboardType: TextInputType.datetime,
-                              style: new TextStyle(
-                                fontFamily: "Poppins",
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                               ),
-                            ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        ),
-                  TextFormField(
-                              onTap: (){
-                                FocusScope.of(context).requestFocus(new FocusNode());
-                                showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2019, 1),
-                                    lastDate: DateTime(2030,12),
-                                    builder: (BuildContext context, Widget picker){
-                                      return Theme(
-                                        data: ThemeData.light(),
-                                        child: picker,);
-                                    })
-                                    .then((selectedDate) {
-                                  //TODO: handle selected date
-                                  if(selectedDate!=null){
-                                    endingDateCt.text = fixDate(selectedDate);
-                                  }
-                                });
-                              },
-                              autovalidateMode: AutovalidateMode.disabled,
-                              controller: endingDateCt,
-                              decoration: new InputDecoration(
-                                labelText: "Enter Ending date of treatment",
-                                fillColor: Colors.white,
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(
+                              TextFormField(
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                controller: descriptionTextCt,
+                                decoration: new InputDecoration(
+                                  labelText: 'Description',
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(
+                                    ),
                                   ),
+                                  //fillColor: Colors.green
+                                ),
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                style: new TextStyle(
+                                  fontFamily: "Poppins",
                                 ),
                               ),
-                              validator: (val) {
-                                if(val.length==0) {
-                                  return "Ending Date of treatment cannot be empty";
-                                }else{
-                                  if(treatmentStore.setDateFromString(val)!=null && treatmentStore.setDateFromString(startingDateCt.text).isBefore(treatmentStore.setDateFromString(val))){
-                                    return null;
-                                  }else{
-                                    return "Insert a valid Date of ending treatment date";
-                                  }
-
-                                }
-                              },
-                              keyboardType: TextInputType.datetime,
-                              style: new TextStyle(
-                                fontFamily: "Poppins",
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
                               ),
-                            ),
-                      ]))
+                              TextFormField(
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                controller: dietInfoCt,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                decoration: new InputDecoration(
+                                  labelText: 'Diet',
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                  //fillColor: Colors.green
+                                ),
+                                style: new TextStyle(
+                                  fontFamily: "Poppins",
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              ),
+                              TextFormField(
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                controller: medicalInfoCt,
+                                decoration: new InputDecoration(
+                                  labelText: 'Medical Cure',
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                  //fillColor: Colors.green
+                                ),
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                style: new TextStyle(
+                                  fontFamily: "Poppins",
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              ),
+                              TextFormField(
+                                readOnly: true,
+                                onTap: (){
+                                  FocusScope.of(context).requestFocus(new FocusNode());
+                                  showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2019, 1),
+                                      lastDate: DateTime(2030,12),
+                                      builder: (BuildContext context, Widget picker){
+                                        return Theme(
+                                          data: ThemeData.light(),
+                                          child: picker,);
+                                      })
+                                      .then((selectedDate) {
+                                    //TODO: handle selected date
+                                    if(selectedDate!=null){
+                                      startingDateCt.text = fixDate(selectedDate);
+                                    }
+                                  });
+                                },
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                controller: startingDateCt,
+                                decoration: new InputDecoration(
+                                  labelText: "Enter Starting date of treatment",
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                ),
+                                validator: (val) {
+                                  if(val.length==0) {
+                                    return "Starting Date of treatment cannot be empty";
+                                  }else{
+                                    if(treatmentStore.setDateFromString(val)!=null){
+                                      return null;
+                                    }else{
+                                      return "Insert a valid Date of starting treatment date";
+                                    }
+
+                                  }
+                                },
+                                keyboardType: TextInputType.datetime,
+                                style: new TextStyle(
+                                  fontFamily: "Poppins",
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              ),
+                              TextFormField(
+                                enabled: startingDateCt.text.length>0?true:false, //METTERE SOLO DOPO AVER SELEZIONATO LA PRIMA DATA
+                                readOnly: true,
+                                onTap: (){
+                                  FocusScope.of(context).requestFocus(new FocusNode());
+                                  showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2019, 1),
+                                      lastDate: DateTime(2030,12),
+                                      builder: (BuildContext context, Widget picker){
+                                        return Theme(
+                                          data: ThemeData.light(),
+                                          child: picker,);
+                                      })
+                                      .then((selectedDate) {
+                                    //TODO: handle selected date
+                                    if(selectedDate!=null){
+                                      endingDateCt.text = fixDate(selectedDate);
+                                    }
+                                  });
+                                },
+                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                controller: endingDateCt,
+                                decoration: new InputDecoration(
+                                  labelText: "Enter Ending date of treatment",
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                ),
+                                validator: (val) {
+                                  if(val.length==0) {
+                                    return "Ending Date of treatment cannot be empty";
+                                  }else{
+                                    if(treatmentStore.setDateFromString(val)!=null && treatmentStore.setDateFromString(startingDateCt.text).isBefore(treatmentStore.setDateFromString(val))){
+                                      return null;
+                                    }else{
+                                      return "Insert a valid Date of ending treatment date";
+                                    }
+
+                                  }
+                                },
+                                keyboardType: TextInputType.datetime,
+                                style: new TextStyle(
+                                  fontFamily: "Poppins",
+                                ),
+                              ),
+                            ]))
                 ),
 
 

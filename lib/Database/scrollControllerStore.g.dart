@@ -40,11 +40,27 @@ mixin _$ScrollControllerStore on _ScrollControllerBase, Store {
     });
   }
 
+  final _$offsetAtom = Atom(name: '_ScrollControllerBase.offset');
+
+  @override
+  double get offset {
+    _$offsetAtom.reportRead();
+    return super.offset;
+  }
+
+  @override
+  set offset(double value) {
+    _$offsetAtom.reportWrite(value, super.offset, () {
+      super.offset = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 scrollController: ${scrollController},
-scale: ${scale}
+scale: ${scale},
+offset: ${offset}
     ''';
   }
 }

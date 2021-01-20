@@ -3,22 +3,26 @@ import 'package:Bealthy_app/Database/scrollControllerStore.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'calendar.dart';
+import 'headerScrollStyle.dart';
 import 'listDishesOfDay.dart';
+import 'overviewPage.dart';
 import 'symptomsBar.dart';
 
 class HomePageWidget extends StatefulWidget {
   final Color color;
+  final headerScrollStyle = const HeaderScrollStyle();
 
   HomePageWidget(this.color);
   @override
   _HomePageWidgetState createState() => _HomePageWidgetState();
 }
 class _HomePageWidgetState extends State<HomePageWidget>{
-
   ScrollControllerStore scrollControllerStore;
+  DateStore dateStore;
 
   @override
   void dispose() {
@@ -29,10 +33,12 @@ class _HomePageWidgetState extends State<HomePageWidget>{
   @override
   void initState() {
     super.initState();
+    dateStore = Provider.of<DateStore>(context, listen: false);
     scrollControllerStore = new ScrollControllerStore();
     scrollControllerStore.scrollController.addListener(() {
       if (scrollControllerStore.scrollController.hasClients) {
         scrollControllerStore.scale = scrollControllerStore.scrollController.offset / 300;
+        scrollControllerStore.offset= scrollControllerStore.scrollController.offset;
         scrollControllerStore.scale = scrollControllerStore.scale * 2;
         if (scrollControllerStore.scale > 1) {
           scrollControllerStore.scale = 1.0;
@@ -58,219 +64,96 @@ class _HomePageWidgetState extends State<HomePageWidget>{
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(8),
           child:
-      CustomScrollView(
-        controller: scrollControllerStore.scrollController,
-          slivers: <Widget>[
-            SliverAppBar(
-              iconTheme: IconThemeData(
-                color: Colors.black,
+              Stack(children: [
+          CustomScrollView(
+            controller: scrollControllerStore.scrollController,
+            slivers: <Widget>[
+              SliverAppBar(
+                iconTheme: IconThemeData(
+                  color: Colors.black,
+                ),
+                backgroundColor: Colors.white,
+                expandedHeight: 260,
+                flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.pin,
+                  stretchModes: [StretchMode.blurBackground],
+                  background: CalendarHomePage(),
+
+                ),
               ),
-              backgroundColor: Colors.white,
-              expandedHeight: 260,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.pin,
-                stretchModes: [StretchMode.blurBackground],
-                background: CalendarHomePage(),
 
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  SymptomsBar(day: dateModel.calendarSelectedDate),
+                ]),
               ),
-            ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _SliverAppBarDelegate(
-                minHeight: 143.0,
-                maxHeight: 143.0,
-                child: SymptomsBar(day: dateModel.calendarSelectedDate),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  ListDishesOfDay(day: dateModel.calendarSelectedDate),
+                  Container(height: 100,),
+
+                ]),
               ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                ListDishesOfDay(day: dateModel.calendarSelectedDate),
-              ]),
-            ),
 
-          ],
-        )),
+              // Observer(builder: (_) => SliverPersistentHeader(
+              //   pinned: true,
+              //   delegate: _SliverAppBarDelegate(
+              //     minHeight: scrollControllerStore.offset>240?70.0:0,
+              //     maxHeight: scrollControllerStore.offset>240?70.0:0,
+              //     child: scrollControllerStore.offset>240?_buildHeaderDay(dateStore.calendarSelectedDate):Container(),
+              //
+              //   ),
+              // )),
+            ],
+          ),Observer(builder: (_) =>scrollControllerStore.offset>180?Positioned(
+                    top: 0,
+                    width: MediaQuery.of(context).size.width,
+                    height:70,
+                    child:_buildHeaderDay(dateStore.calendarSelectedDate)):Container())],)),
 
+    );
+  }
+  Widget _buildHeaderDay(DateTime day) {
+    final children = [
+      CustomIconButtonOur(
+        icon: widget.headerScrollStyle.leftChevronIcon,
+        onTap: ()=>dateStore.calendarSelectedDate=dateStore.calendarSelectedDate.subtract(Duration(days: 1)),
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: widget.headerScrollStyle.leftChevronPadding,
+      ),
+      Expanded(
+        child: GestureDetector(
+          onTap: null,
+          onLongPress: null,
+          child: Text(DateFormat.yMMMMEEEEd("en_US").format(day),
+            style: widget.headerScrollStyle.titleTextStyle,
+            textAlign: widget.headerScrollStyle.centerHeaderTitle
+                ? TextAlign.center
+                : TextAlign.start,
+          ),
+        ),
+      ),
+      CustomIconButtonOur(
+        icon: widget.headerScrollStyle.rightChevronIcon,
+        onTap: ()=>dateStore.calendarSelectedDate=dateStore.calendarSelectedDate.add(Duration(days: 1)),
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: widget.headerScrollStyle.leftChevronPadding,
+      ),
+    ];
 
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     showDialog(
-      //         context: context,
-      //         barrierColor: Colors.white10.withOpacity(0.85), // background color
-      //         barrierDismissible: false, // should dialog be dismissed when tapped outside
-      //         builder: (_) =>  new AlertDialog(
-      //             content:GestureDetector(
-      //                 behavior: HitTestBehavior.opaque,
-      //                 onTap: () {
-      //                   Navigator.pop(context);
-      //                 },
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   crossAxisAlignment: CrossAxisAlignment.center,
-      //                   children: [
-      //                     Row(
-      //                       mainAxisAlignment: MainAxisAlignment.center,
-      //                       crossAxisAlignment: CrossAxisAlignment.center,
-      //                       children: [
-      //                         Column(
-      //                           children: [
-      //                             RawMaterialButton(
-      //
-      //                               onPressed: () {
-      //                                 mealTimeStore.changeCurrentMealTime(0);
-      //                                 Navigator.pop(context);
-      //                                 Navigator.push(
-      //                                   context,
-      //                                   MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last)),
-      //                                 );
-      //                               },
-      //                               elevation: 2.0,
-      //                               fillColor: Colors.white,
-      //                               child: Icon(
-      //                                 Icons.breakfast_dining,
-      //                                 size: 35.0,
-      //                               ),
-      //                               padding: EdgeInsets.all(15.0),
-      //                               shape: CircleBorder(),
-      //                             ),
-      //                             Text("Breakfast",style: TextStyle(
-      //                               fontSize: 25,
-      //                               fontWeight: FontWeight.normal,
-      //                               fontFamily: 'Open Sans',
-      //                               decoration: TextDecoration.none,
-      //                               letterSpacing: 1.0,
-      //                               wordSpacing: 5.0,
-      //                               color: Colors.black,
-      //                             ),)
-      //                           ],
-      //                         ),
-      //
-      //                         Padding(padding: EdgeInsets.all(15)),
-      //
-      //                         Column(
-      //                           children: [
-      //                             RawMaterialButton(
-      //
-      //                               onPressed: () {
-      //                                 mealTimeStore.changeCurrentMealTime(1);
-      //                                 Navigator.pop(context);
-      //                                 Navigator.push(
-      //                                   context,
-      //                                   MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last,)),
-      //                                 );
-      //                               },
-      //                               elevation: 2.0,
-      //                               fillColor: Colors.white,
-      //
-      //                               child: Icon(
-      //                                 Icons.lunch_dining,
-      //                                 size: 35.0,
-      //                               ),
-      //                               padding: EdgeInsets.all(15.0),
-      //                               shape: CircleBorder(),
-      //                             ),
-      //                             Text("Lunch",style: TextStyle(
-      //                               fontSize: 25,
-      //                               fontWeight: FontWeight.normal,
-      //                               fontFamily: 'Open Sans',
-      //                               decoration: TextDecoration.none,
-      //                               letterSpacing: 1.0,
-      //                               wordSpacing: 5.0,
-      //                               color: Colors.black,
-      //                             ),)
-      //                           ],
-      //                         )],
-      //                     ),
-      //                     Row(
-      //                       mainAxisAlignment: MainAxisAlignment.center,
-      //                       crossAxisAlignment: CrossAxisAlignment.center,
-      //                       children: [
-      //                         Column(
-      //                           children: [
-      //                             RawMaterialButton(
-      //
-      //                               onPressed: () {
-      //                                 mealTimeStore.changeCurrentMealTime(2);
-      //                                 Navigator.pop(context);
-      //                                 Navigator.push(
-      //                                   context,
-      //                                   MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last,)),
-      //                                 );
-      //                               },
-      //                               elevation: 2.0,
-      //                               fillColor: Colors.white,
-      //                               child: Icon(
-      //                                 Icons.fastfood_rounded,
-      //                                 size: 35.0,
-      //                               ),
-      //                               padding: EdgeInsets.all(15.0),
-      //                               shape: CircleBorder(),
-      //                             ),
-      //                             Text("Snack",style: TextStyle(
-      //                               fontSize: 25,
-      //                               fontWeight: FontWeight.normal,
-      //                               fontFamily: 'Open Sans',
-      //                               decoration: TextDecoration.none,
-      //                               letterSpacing: 1.0,
-      //                               wordSpacing: 5.0,
-      //                               color: Colors.black,
-      //                             ),)
-      //                           ],
-      //                         ),
-      //
-      //                         Padding(padding: EdgeInsets.all(15)),
-      //
-      //                         Column(
-      //                           children: [
-      //                             RawMaterialButton(
-      //
-      //                               onPressed: () {
-      //                                 mealTimeStore.changeCurrentMealTime(3);
-      //                                 Navigator.pop(context);
-      //                                 Navigator.push(
-      //                                   context,
-      //                                   MaterialPageRoute(builder: (context) => AddMeal(title: mealTimeStore.selectedMealTime.toString().split('.').last)),
-      //                                 );
-      //                               },
-      //                               elevation: 2.0,
-      //                               fillColor: Colors.white,
-      //
-      //                               child: Icon(
-      //                                 Icons.dinner_dining,
-      //                                 size: 35.0,
-      //                               ),
-      //                               padding: EdgeInsets.all(15.0),
-      //                               shape: CircleBorder(),
-      //                             ),
-      //                             Text("Dinner",style: TextStyle(
-      //                               fontSize: 25,
-      //                               fontWeight: FontWeight.normal,
-      //                               fontFamily: 'Open Sans',
-      //                               decoration: TextDecoration.none,
-      //                               letterSpacing: 1.0,
-      //                               wordSpacing: 5.0,
-      //                               color: Colors.black,
-      //                             ),)
-      //                           ],
-      //                         )],
-      //                     )
-      //                   ],
-      //                 )
-      //
-      //             )
-      //         )
-      //
-      //     );
-      //     // Add your onPressed code here!
-      //
-      //   },
-      //   child: Icon(Icons.add, color:Colors.white),
-      //   backgroundColor: Palette.tealDark,
-      // ),
-      );
-    }
+    return Container(
+      decoration: widget.headerScrollStyle.decoration,
+      margin: EdgeInsets.all(0),
+      padding: widget.headerScrollStyle.headerPadding,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: children,
+      ),
+    );
+
+  }
 
   Widget _buildActions() {
     Widget profile = new GestureDetector(

@@ -8,14 +8,18 @@ import 'package:dropdownfield/dropdownfield.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import 'Database/dish.dart';
 import 'Database/ingredient.dart';
 import 'Login/config/palette.dart';
+import 'Models/dateStore.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
 import 'Database/enumerators.dart';
+import 'Models/mealTimeStore.dart';
 
 class CreateNewDish extends StatefulWidget {
   @override
@@ -30,7 +34,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
   List<String> quantityList = [];
   String selectedItemIngredient="";
   final nameCt = TextEditingController();
-  final _openDropDownProgKey = GlobalKey<DropdownSearchState<String>>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -43,7 +47,22 @@ class _CreateNewDishState extends State<CreateNewDish> {
     ingredientStore.ingredientListOfDish.clear();
     ingredientStore.ingredientsName.clear();
     ingredientStore.getIngredientsName();
+    //loadDefaultImage("images/defaultImageProfile.png");
   }
+
+  Future<void> loadDefaultImage(String path) async{
+    dish.imageFile = await getImageFileFromAssets(path);
+  }
+
+  Future<File> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load('assets/$path');
+
+    final file = File('${(await getTemporaryDirectory()).path}/$path');
+    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+    return file;
+  }
+
 
   Future<void> getLastNumber() async {
     dish.number = await foodStore.getLastCreatedDishId();
@@ -69,20 +88,37 @@ class _CreateNewDishState extends State<CreateNewDish> {
 
   }
 
+  void addDishToUser() {
+    dish.name=nameCt.text;
+    foodStore.addNewDishCreatedByUser(dish, ingredientStore.ingredientListOfDish);
+    if(dish.imageFile!=null){
+      uploadImageToFirebase(dish.imageFile);
+    }
+  }
+
+  void setQuantityAndMealTimeToDish(String qty,MealTimeStore mealTimeStore){
+    dish.mealTime = mealTimeStore.selectedMealTime.toString().split('.').last;
+    dish.qty = qty;
+  }
 
   @override
   Widget build(BuildContext context) {
+    MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context);
+    DateStore dateStore = Provider.of<DateStore>(context);
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     final ingredientStore = Provider.of<IngredientStore>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text("Create New Dish"),
+          title: Text("Create Dish"),
         ),
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
         body: SingleChildScrollView(
             reverse: true,
-            child: Padding(
+            child:
+    Form(
+        key: this._formKey,
+    child:Padding(
                 padding: EdgeInsets.only(top:8,right:8,left:8,bottom: bottom),
                 child:
                 Column(
@@ -123,9 +159,9 @@ class _CreateNewDishState extends State<CreateNewDish> {
                         )),
                       ),
 
-
                       TextFormField(
-                        autovalidateMode: AutovalidateMode.disabled,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        maxLength: 25,
                         controller: nameCt,
                         decoration: new InputDecoration(
                           labelText: 'Name',
@@ -165,11 +201,19 @@ class _CreateNewDishState extends State<CreateNewDish> {
                         //  showSearchBox: true,
                         items: ingredientStore.ingredientsName,
                         label: "Select ingredient",
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
+                        validator:  (val) {
+                          if(ingredientStore.ingredientListOfDish.length==0) {
+                            return "Insert at least one ingredient";
+                          }else{
+                            return null;
+                          }
+                        },
                         onChanged: (String ingredient) {
                           selectedItemIngredient="";
                           ingredientStore.ingredientListOfDish.add(ingredientStore.getIngredientFromName(ingredient));
                           ingredientStore.ingredientsName.remove(ingredient);
-                          // _openDropDownProgKey.currentState.openDropDownSearch();
+
                         },
                       ),
                       Padding(padding: EdgeInsets.all(10)),
@@ -198,12 +242,76 @@ class _CreateNewDishState extends State<CreateNewDish> {
                               },
                             );
                           }
-                      ))
+                      )),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (this._formKey.currentState.validate()) {
+                              setState(() {
+                                this._formKey.currentState.save();
+                              });
+                              addDishToUser();
+                              return showDialog(
+                                  context: context,
+                                  builder: (_) =>
+                                  new AlertDialog(
+                                    title: Text('Select the quantity eaten'),
+                                    content: Observer(builder: (_) => Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        for (int i = 0; i < Quantity.values.length; i++)
+                                          ListTile(
+                                            title: Text(
+                                              Quantity.values[i].toString().split('.').last,
+                                            ),
+                                            leading: Radio(
+                                              value: i,
+                                              groupValue: dish.valueShowDialog,
+                                              onChanged: (int value) {
+                                                dish.valueShowDialog=value;
+                                              },
+                                            ),
+                                          ),
+                                        Divider(
+                                          height: 4,
+                                          thickness: 0.8,
+                                          color: Colors.black,
+                                        ),
+                                      ],
+                                    )),
+                                    contentPadding: EdgeInsets.only(top: 8),
+                                    actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                    actions: [
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('CANCEL'),
+                                      ),
+                                      FlatButton(
+                                        onPressed: () {
+                                          setQuantityAndMealTimeToDish(quantityList[dish.valueShowDialog], mealTimeStore);
+                                          mealTimeStore.addDishOfMealTimeListOfSpecificDay(dish, dateStore.calendarSelectedDate)
+                                              .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                          );
+                                        },
+                                        child: Text('ACCEPT'),
+                                      ),
+                                    ],
+                                  )
+                              );
+                            }
+                          },
+                          child: Text('Create'),
+                        ),
+                      ),
                     ]
 
                 )
             )
         )
+    )
     );
   }
 
@@ -216,7 +324,8 @@ class _CreateNewDishState extends State<CreateNewDish> {
               title: Text(ingredient.name),
               subtitle:Text(ingredient.qty),
               leading: Image(image:AssetImage("images/ingredients/" + ingredient.id + ".png"), height: 40,width:40,),
-              trailing:     Container(
+              trailing:
+              Container(
                   width: 140,
                   child:DropdownSearch<String>(
                       key: Key(ingredient.id),
@@ -228,6 +337,14 @@ class _CreateNewDishState extends State<CreateNewDish> {
                       maxHeight:230,
                       dialogMaxWidth:200,
                       showSelectedItem: true,
+                      autoValidateMode: AutovalidateMode.onUserInteraction,
+                      validator:  (val) {
+                        if(val==null) {
+                          return "Empty Quantity";
+                        }else{
+                          return null;
+                        }
+                      },
                       onChanged: (String quantity) {
                         ingredient.qty=quantity;
                       }
