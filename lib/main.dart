@@ -95,9 +95,9 @@ class MyApp extends StatelessWidget {
                     fontSize: 70, fontWeight: FontWeight.w400, letterSpacing: 0.3),
                 headline5: GoogleFonts.roboto(fontSize: 24, fontWeight: FontWeight.w400),
                 headline6: GoogleFonts.roboto(
-                    fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 0.15),
+                    fontSize: 22, fontWeight: FontWeight.w500, letterSpacing: 0.15),
                 subtitle1: GoogleFonts.roboto(
-                    fontSize: 18, fontWeight: FontWeight.w400, letterSpacing: 0.15),
+                    fontSize: 20, fontWeight: FontWeight.w400, letterSpacing: 0.15),
                 subtitle2: GoogleFonts.roboto(
                     fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 0.1),
                 bodyText1: GoogleFonts.roboto(
@@ -124,7 +124,20 @@ class MyApp extends StatelessWidget {
                   iconTheme: IconThemeData(
                     color: Color(0xff005f64),
                   ),
-
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(
+                        fontSize: 18,
+                      )
+                    )
+                  ),
+                  elevatedButtonTheme: ElevatedButtonThemeData(
+                      style: TextButton.styleFrom(
+                          textStyle: TextStyle(
+                            fontSize: 18,
+                          )
+                      )
+                  ),
                   bottomNavigationBarTheme: BottomNavigationBarThemeData(
                     unselectedItemColor: Palette.bealthyColorScheme.onBackground,
                     selectedItemColor: Palette.bealthyColorScheme.primary,

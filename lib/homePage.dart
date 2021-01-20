@@ -1,13 +1,10 @@
 import 'dart:math' as math;
-import 'Login/config/palette.dart';
 import 'package:Bealthy_app/Database/scrollControllerStore.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
-import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-import 'addMeal.dart';
 import 'calendar.dart';
 import 'listDishesOfDay.dart';
 import 'symptomsBar.dart';

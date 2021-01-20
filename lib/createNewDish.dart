@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:Bealthy_app/uploadNewPictureToUserDish.dart';
 import 'package:camera/camera.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import 'Database/dish.dart';
 import 'Database/ingredient.dart';
+import 'Login/config/palette.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
 import 'Database/enumerators.dart';
@@ -21,32 +23,14 @@ class CreateNewDish extends StatefulWidget {
 }
 
 class _CreateNewDishState extends State<CreateNewDish> {
-
-  int _keyboardVisibilitySubscriberId;
-  bool _keyboardState;
-
-  final nameCt = TextEditingController();
-  final ingredientsCt = TextEditingController();
-  final ingredientsQty = TextEditingController();
-  final ingredientSelected = TextEditingController();
-  final quantitySelected = TextEditingController();
-
-
-  String id;  //TODO Dovrebbe prendere l' id nel database piu alto e fare Dish_+1
-
-  List<String> quantityList = [];
-
-
-
-
-  String selectIngredient = "";  //by default we are not providing any of the ingredients
-
-  List<String> ingredientsSelectedList = new List<String>();
-  List<String> ingredientsQuantityList = new List<String>();
+  Dish dish = new Dish();
   IngredientStore ingredientStore;
   FoodStore foodStore;
   List<CameraDescription> cameras;
-  Dish dish = new Dish();
+  List<String> quantityList = [];
+  String selectedItemIngredient="";
+  final nameCt = TextEditingController();
+  final _openDropDownProgKey = GlobalKey<DropdownSearchState<String>>();
 
   @override
   void initState() {
@@ -56,17 +40,13 @@ class _CreateNewDishState extends State<CreateNewDish> {
     foodStore = Provider.of<FoodStore>(context, listen: false);
     getLastNumber().then((value) =>dish.id="Dish_User_" + dish.number.toString());
     quantityList= getQuantityName();
+    ingredientStore.ingredientListOfDish.clear();
     ingredientStore.ingredientsName.clear();
     ingredientStore.getIngredientsName();
   }
 
   Future<void> getLastNumber() async {
     dish.number = await foodStore.getLastCreatedDishId();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   Future<void> initializeCameras() async {
@@ -86,32 +66,183 @@ class _CreateNewDishState extends State<CreateNewDish> {
   }
 
   void addIngredientsToListView(String value){
-    ingredientsSelectedList.add(value);
-    ingredientsQuantityList.add("");
+
   }
 
-  void addDishToUser() {
-    if (nameCt.text != "" && ingredientsSelectedList.length>0 &&
-        ingredientsQuantityList.length==ingredientsSelectedList.length) {
-      dish.name=nameCt.text;
 
-      List<Ingredient> ingredients = new List<Ingredient>();
+  @override
+  Widget build(BuildContext context) {
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final ingredientStore = Provider.of<IngredientStore>(context);
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Create New Dish"),
+        ),
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
+        body: SingleChildScrollView(
+            reverse: true,
+            child: Padding(
+                padding: EdgeInsets.only(top:8,right:8,left:8,bottom: bottom),
+                child:
+                Column(
+                    children: [
+                      Container(
+                        width: 200,
+                        height: 200,
+                        child: Observer(builder: (_) =>Container(
+                            alignment: Alignment.center ,
+                            child: Stack(
+                                children: [
+                                  Container
+                                    (width: 150,
+                                      height: 150,
+                                      decoration: new BoxDecoration(
+                                        borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                        border: new Border.all(
+                                          color: Colors.black,
+                                          width: 4.0,
+                                        ),
+                                      ),
+                                      child: ClipOval(
+                                        child: dish.imageFile==null? null:
+                                        Image.file(dish.imageFile, fit:BoxFit.cover),
+                                      )
+                                  ),
 
-      for (int i = 0; i < ingredientsSelectedList.length; i++) {
-        Ingredient ingredient =
-        new Ingredient(
-            id: ingredientStore.getIngredientIdFromName(
-                ingredientsSelectedList[i]),
-            name: ingredientsSelectedList[i],
-            qty: ingredientsQuantityList[i]);
-        ingredients.add(ingredient);
-      }
-      foodStore.addNewDishCreatedByUser(dish, ingredients);
-      if(dish.imageFile!=null){
-        uploadImageToFirebase(dish.imageFile);
-      }
-      Navigator.pop(context);
-    }
+                                  Stack(
+                                      children:  <Widget>[
+                                        Container(
+                                            margin: const EdgeInsets.only(left: 125,top:125),
+                                            child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                              color: Colors.black,)),]
+
+                                  )
+                                ])
+
+                        )),
+                      ),
+
+
+                      TextFormField(
+                        autovalidateMode: AutovalidateMode.disabled,
+                        controller: nameCt,
+                        decoration: new InputDecoration(
+                          labelText: 'Name',
+                          fillColor: Colors.white,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(25.0),
+                            borderSide: new BorderSide(
+                            ),
+                          ),
+                          //fillColor: Colors.green
+                        ),
+                        validator: (val) {
+                          if(val.length==0) {
+                            return "Name cannot be empty";
+                          }else{
+                            return null;
+                          }
+                        },
+                        keyboardType: TextInputType.text,
+                        style: new TextStyle(
+                          fontFamily: "Poppins",
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      DropdownSearch<String>(
+                        mode: Mode.MENU,
+                        dropdownSearchDecoration:  new InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(10),
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(25.0),
+                            borderSide: new BorderSide(
+                            ),
+                          ),
+                          //fillColor: Colors.green
+                        ),
+                        //  showSearchBox: true,
+                        items: ingredientStore.ingredientsName,
+                        label: "Select ingredient",
+                        onChanged: (String ingredient) {
+                          selectedItemIngredient="";
+                          ingredientStore.ingredientListOfDish.add(ingredientStore.getIngredientFromName(ingredient));
+                          ingredientStore.ingredientsName.remove(ingredient);
+                          // _openDropDownProgKey.currentState.openDropDownSearch();
+                        },
+                      ),
+                      Padding(padding: EdgeInsets.all(10)),
+
+                      Observer(builder: (_) =>ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) {
+                            return SizedBox(
+                              height: 10,
+                            );
+                          },
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          itemCount: ingredientStore.ingredientListOfDish.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Dismissible(
+                              key: Key(ingredientStore.ingredientListOfDish[index].id),
+                              background: Container(
+                                alignment: AlignmentDirectional.centerEnd,
+                                color: Palette.bealthyColorScheme.error,
+                                child: Icon(Icons.delete, color: Colors.white),
+                              ),
+                              child: ingredient(ingredientStore.ingredientListOfDish[index], index),
+                              onDismissed: (direction){
+                                ingredientStore.ingredientsName.add(ingredientStore.ingredientListOfDish[index].name);
+                                ingredientStore.ingredientListOfDish.removeAt(index);
+                              },
+                            );
+                          }
+                      ))
+                    ]
+
+                )
+            )
+        )
+    );
+  }
+
+  Widget ingredient(Ingredient ingredient, int index){
+    return Observer(builder: (_) =>Column(
+      children: [
+        Container(
+            child:
+            ListTile(
+              title: Text(ingredient.name),
+              subtitle:Text(ingredient.qty),
+              leading: Image(image:AssetImage("images/ingredients/" + ingredient.id + ".png"), height: 40,width:40,),
+              trailing:     Container(
+                  width: 140,
+                  child:DropdownSearch<String>(
+                      key: Key(ingredient.id),
+                      items: quantityList,
+                      label: "Quantity",
+                      popupTitle:Padding(
+                          padding: EdgeInsets.all(16),
+                          child:Text("Select ingredient quantity",textAlign: TextAlign.center,)),
+                      maxHeight:230,
+                      dialogMaxWidth:200,
+                      showSelectedItem: true,
+                      onChanged: (String quantity) {
+                        ingredient.qty=quantity;
+                      }
+                  )),
+            )),
+        index!=ingredientStore.ingredientListOfDish.length-1?
+        Divider(
+          height: 4,
+          thickness: 0.5,
+          indent: 20,
+          endIndent: 20,
+          color: Colors.black38,
+        ):Container(),
+      ],
+    ));
   }
 
   Future uploadImageToFirebase(File imageFile) async {
@@ -136,187 +267,4 @@ class _CreateNewDishState extends State<CreateNewDish> {
     );
   }
 
-
-  @override
-  Widget build(BuildContext context) {
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
-    final ingredientStore = Provider.of<IngredientStore>(context);
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Create New Dish"),
-        ),
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
-        body: SingleChildScrollView(
-            reverse: true,
-            child: Padding(
-                padding: EdgeInsets.only(bottom: bottom),
-                child:Observer(builder: (_) =>
-                    Column(
-                        children: [
-                          Container(
-                            width: 200,
-                            height: 200,
-                            child: Observer(builder: (_) =>Container(
-                                alignment: Alignment.center ,
-                                child: Stack(
-                                    children: [
-                                      Container
-                                        (width: 150,
-                                          height: 150,
-                                          decoration: new BoxDecoration(
-                                            borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
-                                            border: new Border.all(
-                                              color: Colors.black,
-                                              width: 4.0,
-                                            ),
-                                          ),
-                                          child: ClipOval(
-                                            child: dish.imageFile==null? null:
-                                            Image.file(dish.imageFile, fit:BoxFit.cover),
-                                          )
-                                      ),
-
-                                      Stack(
-                                          children:  <Widget>[
-                                            Container(
-                                                margin: const EdgeInsets.only(left: 125,top:125),
-                                                child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                                  color: Colors.black,)),]
-
-                                      )
-                                    ])
-
-                            )),
-                          ),
-
-
-                          TextField(
-                            controller: nameCt,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Name',
-                            ),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          ),
-
-                          DropDownField(
-
-                            controller: ingredientSelected,
-                            hintText: "Select an ingredient",
-                            enabled: true,
-                            itemsVisibleInDropdown: 3,
-                            items: ingredientStore.ingredientsName,
-                            strict: false,
-                            onValueChanged: (value){
-                              setState(() {
-                                FocusScopeNode currentFocus = FocusScope.of(context);
-                                if (!currentFocus.hasPrimaryFocus) {
-                                  currentFocus.unfocus();
-                                }
-                                selectIngredient = value;
-                                addIngredientsToListView(value);
-                                ingredientStore.ingredientsName.remove(value);
-                                ingredientSelected.clear();
-
-                              });
-                            } ,
-
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-
-                          ),
-
-                          Container(
-                            height: ingredientsSelectedList.length >= 3 ? MediaQuery.of(context).size.height/4 : null,
-                            child:
-                            ListView.separated(
-                                separatorBuilder: (BuildContext context, int index) {
-                                  return SizedBox(
-                                    height: 10,
-                                  );
-                                },
-                                shrinkWrap: true,
-                                itemCount: ingredientsSelectedList.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Dismissible(
-                                    key: Key(ingredientsSelectedList[index]),
-                                    background: Container(
-                                      alignment: AlignmentDirectional.centerEnd,
-                                      color: Colors.red,
-                                      child: Icon(Icons.delete, color: Colors.white),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Flexible(
-                                          flex:1,
-                                          fit: FlexFit.tight,
-
-                                          child:
-                                          new Text('${ingredientsSelectedList[index]}',
-                                              style: TextStyle(fontSize: 18)),
-                                        ),
-                                        Flexible(
-                                            fit: FlexFit.loose,
-                                            flex:2,
-                                            child:
-                                            new DropDownField(
-                                              hintText: "Select a quantity",
-                                              enabled: true,
-                                              itemsVisibleInDropdown: 3,
-                                              items: quantityList,
-                                              strict: false,
-                                              value: (ingredientsQuantityList[index]!="") ? ingredientsQuantityList[index]: null,
-                                              onValueChanged: (value){
-                                                setState(() {
-
-                                                  FocusScopeNode currentFocus = FocusScope.of(context);
-                                                  if (!currentFocus.hasPrimaryFocus) {
-                                                    currentFocus.unfocus();
-                                                  }
-
-                                                  ingredientsQuantityList[index]=value;
-                                                });
-                                              } ,
-
-                                            )),
-                                      ],),
-                                    onDismissed: (direction){
-                                      setState(() {
-                                        FocusScopeNode currentFocus = FocusScope.of(context);
-
-                                        if (!currentFocus.hasPrimaryFocus) {
-                                          currentFocus.unfocus();
-                                        }
-                                        ingredientsSelectedList.removeAt(index);
-                                        ingredientsQuantityList.removeAt(index);
-                                      });
-                                    },
-                                  );
-                                }
-                            )
-                            ,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                addDishToUser();
-                              },
-                              child: Text('Create'),
-                            ),
-                          ),
-                        ]) ,
-                )
-            )
-        ));
-
-  }
 }

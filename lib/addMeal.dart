@@ -2,23 +2,22 @@ import 'package:Bealthy_app/DishPageFromScan.dart';
 import 'package:Bealthy_app/Models/barCodeScannerStore.dart';
 import 'package:Bealthy_app/dishPage.dart';
 import 'package:Bealthy_app/searchDishesList.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:mobx/mobx.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'Database/dish.dart';
-import 'Database/enumerators.dart';
+
 import 'Login/config/palette.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
 import 'createNewDish.dart';
-import 'package:lit_firebase_auth/lit_firebase_auth.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:openfoodfacts/openfoodfacts.dart';
 
 class AddMeal extends StatefulWidget {
   final String title;
@@ -46,219 +45,155 @@ class _AddMealState extends State<AddMeal>{
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: OKToast( child: SingleChildScrollView(
-        child:Container(
-            child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SearchDishesList()),
-                      )
-                    },
-                    child: Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(left: 10,right: 10 ),
-                        margin: EdgeInsets.only(top: 15, left: 10,right: 10 ),
-                        height: 60,
-                        width:double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30), //border corner radius
-                          boxShadow:[
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.6), //color of shadow
-                              spreadRadius: 4, //spread radius
-                              blurRadius: 6, // blur radius
-                              offset: Offset(0, 4), // changes position of shadow
-                              //first paramerter of offset is left-right
-                              //second parameter is top to down
-                            ),
-                            //you can set more BoxShadow() here
-                          ],
-                        ),
-                        child: Row(children:[ Icon(Icons.search, size: 35, color: Colors.black,),
-                          SizedBox(width: 10,),
-                          Text("Search dish to add")
-                        ]
-                        )
-                    ),
-                  ),
-                  Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.only(left: 10,right: 10 ),
-                      margin: EdgeInsets.only(top: 35, left: 10,right: 10 ),
-                      width:double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10), //border corner radius
-                        boxShadow:[
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.6), //color of shadow
-                            spreadRadius: 4, //spread radius
-                            blurRadius: 6, // blur radius
-                            offset: Offset(0, 4), // changes position of shadow
-                            //first paramerter of offset is left-right
-                            //second parameter is top to down
-                          ),
-                          //you can set more BoxShadow() here
-                        ],
-                      ),
-                      child: Column(children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(right: 10, top: 15),
-                          child:
-                          Row(
-                              children: <Widget>[
-                                RawMaterialButton(
-                                  onPressed: () => {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => FavouriteDishes()))
-                                  },
-                                  elevation: 7.0,
-                                  fillColor: Colors.white,
-                                  child: Icon(
-                                    Icons.favorite_border,
-                                    size: 24.0,
-                                    color: Colors.black,
-                                  ),
-                                  padding: EdgeInsets.all(15.0),
-                                  shape: CircleBorder(),
-                                ),
-                                SizedBox(width: 10,),
-                                Text("Favourites")
-                              ],
-                            ),
-                          ),
+        body: OKToast( child: Container(
+            child:SingleChildScrollView(
+            child:Container(
+                margin: EdgeInsets.all(30),
+                child: Column(
+                    children: [
 
-                        Divider(
-                          thickness: 0.5,
-                          indent: 5,
-                          endIndent: 5,
-                          color: Colors.black,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(right: 10, top: 15),
-                          child:
-                          Row(
-                            children: <Widget>[
-                              RawMaterialButton(
-                                onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => YourDishList()))
-                                },
-                                elevation: 7.0,
-                                fillColor: Colors.white,
-                                child: Icon(
-                                  Icons.handyman_rounded,
-                                  size: 24.0,
-                                  color: Colors.black,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(child:Card(
+                              elevation: 5,
+                              child:
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                primary:  Palette.secondaryLight,
                               ),
-                              SizedBox(width: 10,),
-                              Text("Your Dish")
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          thickness: 0.5,
-                          indent: 5,
-                          endIndent: 5,
-                          color: Colors.black,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(right: 10, top: 15,bottom:15),
-                          child:
-                          Row(
-                            children: <Widget>[
-                              RawMaterialButton(
-                                onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => CreateNewDish()))
-                                },
-                                elevation: 7.0,
-                                fillColor: Colors.white,
-                                child: Icon(
-                                  Icons.create_outlined,
-                                  size: 24.0,
-                                  color: Colors.black,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
+                              onPressed: ()=> Navigator.push(
+                                  context,MaterialPageRoute(builder: (context) => SearchDishesList())),
+                              child:
+                              Column(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children:[
+                                    Icon(Icons.search, size: 75),
+                                    Text("Search")
+                                  ]
+                              )
+                        ))),
+                          SizedBox(width: 20,),
+                          Expanded(child:Card(
+                              elevation: 5,
+                              child:
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                primary:  Palette.secondaryLight,
                               ),
-                              SizedBox(width: 10,),
-                              Text("Create New Dish")
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          thickness: 0.5,
-                          indent: 5,
-                          endIndent: 5,
-                          color: Colors.black,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(right: 10, top: 15,bottom:15),
-                          child:
-                          Row(
-                            children: <Widget>[
-                              RawMaterialButton(
-                                onPressed: () async => {
-                                 // scanBarCodeAndCheckPermission(),
-                                  barCodeScannerStore.scanBarcode = " 3159470000120",
-                                  if(barCodeScannerStore.scanBarcode != "-1") {
-                                    await barCodeScannerStore.getScannedDishes(
-                                        barCodeScannerStore.scanBarcode).then((dishDB) {
-                                      if (dishDB.id != null) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) =>
-                                              DishPage(dish: dishDB, createdByUser: true,)),
-                                        );
-                                      } else {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) =>
-                                              DishPageFromScan(barcode: barCodeScannerStore.scanBarcode)),
-                                        ).then((value) =>   showToast("Product of this barcode: "+ barCodeScannerStore.scanBarcode + " does not exists", position: ToastPosition.bottom, duration: Duration(seconds: 4))
-                                        );
+                                    onPressed: () async => {
+                                      // scanBarCodeAndCheckPermission(),
+                                      barCodeScannerStore.scanBarcode = " 3159470000120",
+                                      if(barCodeScannerStore.scanBarcode != "-1") {
+                                        await barCodeScannerStore.getScannedDishes(
+                                            barCodeScannerStore.scanBarcode).then((dishDB) {
+                                          if (dishDB.id != null) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) =>
+                                                  DishPage(dish: dishDB, createdByUser: true,)),
+                                            );
+                                          } else {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) =>
+                                                  DishPageFromScan(barcode: barCodeScannerStore.scanBarcode)),
+                                            );
+                                          }
+                                        }),
                                       }
-                                    }),
-                                  }
-                                  else{
-                                    showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4)),
-                                  }
-                                },
-                                elevation: 7.0,
-                                fillColor: Colors.white,
-                                child: Icon(
-                                  Icons.scanner,
-                                  size: 24.0,
-                                  color: Colors.black,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
+                                      else{
+                                        showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4)),
+                                      }
+                                    },
+                              child:
+                              Column(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children:[
+                                    Icon(FontAwesomeIcons.barcode, size: 75),
+                                    Text("Scan Barcode")
+                                  ]
+                              )
+                          )))
+                        ],),
+                      SizedBox(height: 20,),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(child:Card(
+                              elevation: 5,
+                              child:
+                              TextButton(
+                                  style: TextButton.styleFrom(
+                                    primary:  Palette.secondaryLight,
+                                  ),
+                                  onPressed: ()=> Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => FavouriteDishes())),
+                                  child:
+                                  Column(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children:[
+                                    Padding(
+                                        padding:EdgeInsets.all(5) ,
+                                        child:Icon(Icons.favorite_border, size: 65)),
+                                    Text("Favourites")
+                                  ]
+                              )
+                          ))),
+                          SizedBox(width: 20,),
+                          Expanded(child:Card(
+                              elevation: 5,
+                              child:
+                          TextButton(
+                              style: TextButton.styleFrom(
+                                primary:  Palette.secondaryLight,
                               ),
-                              SizedBox(width: 10,),
-                              Text("BarCodeScanner")
-                            ],
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => YourDishList()));
+                              },
+                              child:
+                              Column(
+                                  mainAxisSize: MainAxisSize.min,
+
+                                  children:[
+                                    Padding(
+                                      padding:EdgeInsets.all(10) ,
+                                        child:Icon(FontAwesomeIcons.userEdit, size: 55)),
+                                    Text("Created")
+                                  ]
+                              )
+                          )))
+                        ],),
+                      SizedBox(height: 20,),
+
+                      Card(
+                          elevation: 5,
+                          child:
+                      TextButton(
+                          style: TextButton.styleFrom(
+                            primary:  Palette.secondaryLight,
                           ),
-                        )]
-                      )
-                  ),
-                ]
-            )
-        )))
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CreateNewDish()));
+                          },
+                          child:
+                          ListTile(
+                              leading: Icon(Icons.restaurant_menu, size: 50),
+                              title: Text("Create Dish", style: TextStyle(color: Colors.black87),),
+                              trailing: Icon(FontAwesomeIcons.chevronRight, size: 20,)
+                          )
+                      ))
+                    ]
+                )
+            ))))
     );
   }
 
@@ -406,6 +341,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                         itemCount: foodStore.yourFavouriteDishList.length,
                         itemBuilder: (context, index) {
                           return Card(
+
                             child: ListTile(
                               onTap: ()=> { Navigator.push(
                                 context, MaterialPageRoute(builder: (context) =>

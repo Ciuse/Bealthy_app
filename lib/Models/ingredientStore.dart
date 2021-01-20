@@ -121,8 +121,22 @@ abstract class _IngredientStoreBase with Store {
     return id;
   }
 
+
   @action
-  Ingredient getSymptomFromList(String ingredientId){
+  Ingredient getIngredientFromName (String ingredientName) {
+    Ingredient ingredient;
+    ingredientList.forEach((element) {
+      if(element.name.compareTo(ingredientName)==0){
+        ingredient=new Ingredient(id:element.id,name: element.name, qty: "");
+        return;
+      }
+    });
+
+    return ingredient;
+  }
+
+  @action
+  Ingredient getIngredientFromList(String ingredientId){
     Ingredient ingredient;
     ingredientList.forEach((element) {
       if(element.id.compareTo(ingredientId)==0){

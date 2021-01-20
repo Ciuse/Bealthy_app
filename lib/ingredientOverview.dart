@@ -176,7 +176,7 @@ class PieChartIngredientState extends State<PieChartIngredient> {
                 for(var ingredientId in widget.overviewStore.totalOccurrenceIngredient.keys.take(8))
                   Indicator2(
                     color: ingredientStore.colorIngredientMap[ingredientId],
-                    text: ingredientStore.getSymptomFromList(ingredientId).name,
+                    text: ingredientStore.getIngredientFromList(ingredientId).name,
                     isSquare: true,
                   ),
                 SizedBox(

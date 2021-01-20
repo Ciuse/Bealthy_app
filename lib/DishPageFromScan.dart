@@ -134,10 +134,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
       appBar: AppBar(
         title:  Text(barCodeScannerStore.scanBarcode),
       ),
-      body: Center(child:SingleChildScrollView(
-          physics: ScrollPhysics(),
-          child: Container(
-
+      body:  Container(
               child:
               Observer(
                 builder: (_) {
@@ -157,8 +154,11 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                     ),
                   );
                 case FutureStatus.fulfilled:
+                  if(barCodeScannerStore.productFromQuery!=null){
                   initializeDishFromProduct();
-                  return Column(
+                  return SingleChildScrollView(
+                      physics: ScrollPhysics(),
+                  child:Column(
                       children: [
                         Container(
                           width: 200,
@@ -194,6 +194,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
 
                           )),
                         ),
+                        Card(child:
                         ListTile(
                             title: Text("Name: ",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
                             trailing: TextButton(child:
@@ -260,20 +261,29 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                                     ),
                                   )
                                 })
-                        ),
+                        )),
                         ingredientsWidget(),
                         SizedBox(height: 20,)
                       ]
+                  )
                   );
+                  }
+                  else{
+                    return Center(
+                        child: Container(
+                          padding: EdgeInsets.all(40),
+                            child:Text("Can't find any product with this barcode in our Database: "+ barCodeScannerStore.scanBarcode )
+                    ));
+                  }
+                  break;
                 case FutureStatus.pending:
                 default:
-                  return CircularProgressIndicator();
+                  return Center(child:CircularProgressIndicator());
               }
             },
           )
-          )
-      )),
-      floatingActionButton: FloatingActionButton(
+          ),
+      floatingActionButton: barCodeScannerStore.productFromQuery!=null?FloatingActionButton(
 
         onPressed: () {
 
@@ -334,7 +344,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
 
         },
         child: Icon(Icons.add ),
-      ),
+      ):null,
     );
   }
 
@@ -356,8 +366,11 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
         child: Column(
             children:[
               ListTile(
-                title: Text("Ingredients",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
+                title: Text("Ingredients",style: TextStyle(fontWeight:FontWeight.bold)),
                 leading: Icon(Icons.fastfood_outlined,color: Colors.black),
+                trailing: Padding(
+                    padding: EdgeInsets.only(right: 15),
+                    child:Text("Quantity",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20))),
               ),
               Divider(
                 thickness: 0.8,
