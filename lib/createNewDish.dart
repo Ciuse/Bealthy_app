@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:Bealthy_app/dishPage.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:Bealthy_app/uploadNewPictureToUserDish.dart';
@@ -136,8 +137,8 @@ class _CreateNewDishState extends State<CreateNewDish> {
                                       decoration: new BoxDecoration(
                                         borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                         border: new Border.all(
-                                          color: Colors.black,
-                                          width: 4.0,
+                                          color: Palette.bealthyColorScheme.primaryVariant,
+                                          width: 1.5,
                                         ),
                                       ),
                                       child: ClipOval(
@@ -151,7 +152,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                                         Container(
                                             margin: const EdgeInsets.only(left: 125,top:125),
                                             child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                              color: Colors.black,)),]
+                                              color: Palette.bealthyColorScheme.secondary)),]
 
                                   )
                                 ])
@@ -248,38 +249,12 @@ class _CreateNewDishState extends State<CreateNewDish> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (this._formKey.currentState.validate()) {
-                              setState(() {
-                                this._formKey.currentState.save();
-                              });
-                              addDishToUser();
                               return showDialog(
+                                barrierDismissible: false,
                                   context: context,
                                   builder: (_) =>
                                   new AlertDialog(
-                                    title: Text('Select the quantity eaten'),
-                                    content: Observer(builder: (_) => Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        for (int i = 0; i < Quantity.values.length; i++)
-                                          ListTile(
-                                            title: Text(
-                                              Quantity.values[i].toString().split('.').last,
-                                            ),
-                                            leading: Radio(
-                                              value: i,
-                                              groupValue: dish.valueShowDialog,
-                                              onChanged: (int value) {
-                                                dish.valueShowDialog=value;
-                                              },
-                                            ),
-                                          ),
-                                        Divider(
-                                          height: 4,
-                                          thickness: 0.8,
-                                          color: Colors.black,
-                                        ),
-                                      ],
-                                    )),
+                                    title: Text('Are you sure to create it?'),
                                     contentPadding: EdgeInsets.only(top: 8),
                                     actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
                                     actions: [
@@ -291,9 +266,13 @@ class _CreateNewDishState extends State<CreateNewDish> {
                                       ),
                                       FlatButton(
                                         onPressed: () {
-                                          setQuantityAndMealTimeToDish(quantityList[dish.valueShowDialog], mealTimeStore);
-                                          mealTimeStore.addDishOfMealTimeListOfSpecificDay(dish, dateStore.calendarSelectedDate)
-                                              .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                          addDishToUser();
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) =>
+                                                DishPage(dish: dish, createdByUser: true,)),
                                           );
                                         },
                                         child: Text('ACCEPT'),

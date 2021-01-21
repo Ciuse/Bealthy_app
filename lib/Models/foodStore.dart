@@ -26,7 +26,6 @@ abstract class _FoodStoreBase with Store {
   bool storeFavouriteDishInitialized = false;
   bool storeCreatedYourDishInitialized = false;
 
-  bool booleanQuantityDishInitialized = false;
 
   @observable
   var yourFavouriteDishList = new ObservableList<Dish>();
@@ -101,14 +100,6 @@ abstract class _FoodStoreBase with Store {
 
 
 
-  @action
-  Future<void> initBooleanDishQuantity() async {
-    if (!booleanQuantityDishInitialized) {
-      booleanQuantityDishInitialized = true;
-     setBooleanQuantityDish();
-
-    }
-  }
 @action
 void setBooleanQuantityDish(){
   for(int i = 0; i< Quantity.values.length; i++){

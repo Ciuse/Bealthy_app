@@ -29,7 +29,6 @@ class CalendarHomePage extends StatefulWidget {
 
 class _CalendarHomePageState extends State<CalendarHomePage> with TickerProviderStateMixin {
   ReactionDisposer reactionCalendar;
-  List _selectedEvents;
   AnimationController _animationController;
   CalendarController _calendarController;
   DateStore dateStore;
@@ -47,7 +46,12 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
     _animationController.forward();
     reactionCalendar=reactToDataChange();
-    dateStore.initIllnesses();
+    waitIllnesses();
+  }
+
+  Future<void> waitIllnesses() async{
+
+   await dateStore.initIllnesses().then((value) => print(dateStore.illnesses));
   }
 
   @override
@@ -81,7 +85,6 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
       context.read<SymptomStore>().getSymptomsOfADay(dateStore.calendarSelectedDate);
     context.read<MealTimeStore>().initDishesOfMealTimeList(dateStore.calendarSelectedDate);
     context.read<TreatmentStore>().initTreatmentsList( dateStore.calendarSelectedDate);
-
   }
 
   ReactionDisposer reactToDataChange(){
@@ -209,6 +212,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
             );
           }
 
+
+
           return children;
         },
       ),
@@ -246,6 +251,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   Widget _buildIllnessesMarker(DateTime date) {
+
     return Icon(
       Icons.sick_outlined,
       size: 16.0,

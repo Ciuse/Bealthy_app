@@ -181,6 +181,17 @@ mixin _$DateStore on _DateStoreBase, Store {
   }
 
   @override
+  DateTime setDateUTCFromString(String dateTime) {
+    final _$actionInfo = _$_DateStoreBaseActionController.startAction(
+        name: '_DateStoreBase.setDateUTCFromString');
+    try {
+      return super.setDateUTCFromString(dateTime);
+    } finally {
+      _$_DateStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void getDaysOfAWeekOrMonth(DateTime firstDate, DateTime lastDate) {
     final _$actionInfo = _$_DateStoreBaseActionController.startAction(
         name: '_DateStoreBase.getDaysOfAWeekOrMonth');

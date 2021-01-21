@@ -14,10 +14,9 @@ import 'overviewPage.dart';
 import 'symptomsBar.dart';
 
 class HomePageWidget extends StatefulWidget {
-  final Color color;
   final headerScrollStyle = const HeaderScrollStyle();
 
-  HomePageWidget(this.color);
+  HomePageWidget();
   @override
   _HomePageWidgetState createState() => _HomePageWidgetState();
 }
@@ -93,7 +92,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
               SliverList(
                 delegate: SliverChildListDelegate([
                   ListDishesOfDay(day: dateModel.calendarSelectedDate),
-                  Container(height: 80,),
+                  Container(height: MediaQuery.of(context).size.height-680,),
 
                 ]),
               ),
@@ -121,7 +120,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
   Widget _buildHeaderDay(DateTime day) {
     final children = [
       CustomIconButtonOur(
-        icon: Icon(Icons.chevron_left,size: 30,color: Palette.bealthyColorScheme.secondaryVariant,),
+        icon: Icon(Icons.chevron_left,size: 30,color: Palette.bealthyColorScheme.secondary,),
         onTap: ()=>dateStore.calendarSelectedDate=dateStore.calendarSelectedDate.subtract(Duration(days: 1)),
         margin: EdgeInsets.only(top:6,bottom: 6,left: 5,right: 5),
         padding: EdgeInsets.only(top:6,bottom: 6,left: 9,right: 0),
@@ -139,7 +138,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
         ),
       ),
       CustomIconButtonOur(
-        icon: Icon(Icons.chevron_right,size: 30,color: Palette.bealthyColorScheme.secondaryVariant,),
+        icon: Icon(Icons.chevron_right,size: 30,color: Palette.bealthyColorScheme.secondary,),
         onTap: ()=>dateStore.calendarSelectedDate=dateStore.calendarSelectedDate.add(Duration(days: 1)),
         margin: EdgeInsets.only(top:6,bottom: 6,left: 5,right: 5),
         padding: EdgeInsets.only(top:6,bottom: 6,left: 0,right: 9),

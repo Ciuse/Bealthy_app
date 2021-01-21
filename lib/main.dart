@@ -187,17 +187,23 @@ class _MyHomePageState extends State<HomePage> {
 
 
   DateStore dateStore;
+  FoodStore foodStore;
   int _selectedIndex = 0;
 
   void initState() {
     super.initState();
    dateStore = Provider.of<DateStore>(context, listen: false);
+    foodStore = Provider.of<FoodStore>(context, listen: false);
+    dateStore.initializeIllnesses=false;
+    foodStore.storeCreatedYourDishInitialized = false;
+    foodStore.storeFavouriteDishInitialized = false;
+    foodStore.storeSearchAllDishInitialized = false;
     UserStore userStore = Provider.of<UserStore>(context, listen: false);
     userStore.initUserDb();
   }
 
   final List<Widget> _widgetOptions = <Widget>[
-    HomePageWidget(Colors.green),
+    HomePageWidget(),
     OverviewPage(),
     TreatmentPage(),
     PersonalPage(),

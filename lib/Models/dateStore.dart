@@ -43,10 +43,11 @@ abstract class _DateStoreBase with Store {
   @observable
   bool initializeIllnesses=false;
 
-  void initIllnesses(){
+  Future<void> initIllnesses()async{
     if(initializeIllnesses==false){
+      illnesses.clear();
       initializeIllnesses=true;
-      getAllSickDay();
+      return await ObservableFuture(getAllSickDay());
     }
   }
 
@@ -62,8 +63,8 @@ abstract class _DateStoreBase with Store {
             .doc(auth.currentUser.uid).collection("DaySymptoms")
             .doc(day.id).collection("Symptoms").get() .then((querySnapshot) {
           if(querySnapshot.docs.length>0){
-            illnesses.putIfAbsent(setDateFromString(day.id), () => ['']);
-          };
+            illnesses.putIfAbsent(setDateUTCFromString(day.id), () => ['']);
+          }
         }));
       }
       );
@@ -78,7 +79,10 @@ abstract class _DateStoreBase with Store {
 
   @action
   void removeIllnesses(SymptomStore symptomStore,DateTime day){
-    if(symptomStore.symptomListOfSpecificDay.length==1){
+    if(symptomStore.symptomListOfSpecificDay.length==0){
+      print(illnesses.keys);
+      print("giornoNOsotro"+ day.toString());
+
       illnesses.remove(day);
     }
   }
@@ -87,6 +91,13 @@ abstract class _DateStoreBase with Store {
   DateTime setDateFromString(String dateTime){
     DateFormat dateFormat = DateFormat("yyyy-MM-dd");
     return dateFormat.parse(dateTime);
+  }
+
+  @action
+  DateTime setDateUTCFromString(String dateTime){
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+    DateTime dateNormalized = dateFormat.parse(dateTime);
+    return DateTime.utc(dateNormalized.year, dateNormalized.month, dateNormalized.day, 12);
   }
 
   @action

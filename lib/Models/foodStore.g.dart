@@ -252,15 +252,6 @@ mixin _$FoodStore on _FoodStoreBase, Store {
         .run(() => super.initCreatedYourDishList());
   }
 
-  final _$initBooleanDishQuantityAsyncAction =
-      AsyncAction('_FoodStoreBase.initBooleanDishQuantity');
-
-  @override
-  Future<void> initBooleanDishQuantity() {
-    return _$initBooleanDishQuantityAsyncAction
-        .run(() => super.initBooleanDishQuantity());
-  }
-
   final _$initSearchAllDishListAsyncAction =
       AsyncAction('_FoodStoreBase.initSearchAllDishList');
 

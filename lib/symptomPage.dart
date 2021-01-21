@@ -291,9 +291,13 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                   FlatButton(
                     child: Text('REMOVE'),
                     onPressed: () {
-                      dateStore.removeIllnesses(symptomStore, date);
+                      //dateStore.removeIllnesses(symptomStore, date);
                       symptomStore.removeSymptomOfSpecificDay( widget.symptom, date)
-                          .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+                          .then((value) {
+                            dateStore.removeIllnesses(symptomStore, date);
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                          }
+                            );
                     },
                   )
                 ],
