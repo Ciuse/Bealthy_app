@@ -171,7 +171,6 @@ abstract class _IngredientStoreBase with Store {
         return;
       }
     });
-
     return ingredient;
   }
 

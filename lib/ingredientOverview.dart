@@ -58,7 +58,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
             return widget.overviewStore.totalOccurrenceIngredient.length>0? ingredientsWidget() : noIngredientsWidget();
           case FutureStatus.pending:
           default:
-            return CircularProgressIndicator();
+            return Center(child:CircularProgressIndicator());
         }
       },
     );

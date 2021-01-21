@@ -39,8 +39,7 @@ abstract class _SymptomStoreBase with Store {
   Future<void> initStore(DateTime day) async {
     if (!storeInitialized) {
       
-      await _getSymptomList().then((value) => initializeColorMap());
-      await initSymptomDay(day);
+      await _getSymptomList().then((value) => {initializeColorMap(),initSymptomDay(day)});
       storeInitialized = true;
     }
   }

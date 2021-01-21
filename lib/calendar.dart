@@ -145,9 +145,10 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         weekendStyle: TextStyle().copyWith(fontWeight:FontWeight.bold, color: Colors.black),
       ),
       headerStyle: HeaderStyle(
-        headerMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 5),
-        headerPadding: EdgeInsets.symmetric(vertical: 1,horizontal: 1),
+        headerMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 8),
+        headerPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 8),
         leftChevronMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 0),
+        rightChevronMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 0),
         centerHeaderTitle: true,
         formatButtonVisible: false,
         decoration: BoxDecoration(

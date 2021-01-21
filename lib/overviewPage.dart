@@ -119,15 +119,15 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         ),
       ),
         body:Container(
-    margin: EdgeInsets.symmetric(horizontal: 8,vertical: 18),
-    child:
+            margin: EdgeInsets.symmetric(horizontal: 4,vertical: 8),
+            child:
             Observer(builder: (_) =>
             dateStore.timeSelected==TemporalTime.Day? dayOverviewBuild():
             dateStore.timeSelected==TemporalTime.Week? weekOverviewBuild():
             dateStore.timeSelected==TemporalTime.Month? monthOverviewBuild(): null
             )
 
-      ))
+        ))
     );
   }
 
@@ -223,43 +223,37 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return TabBarView(
       controller: _tabController,
       children: [
-        Center(
-          child:
-          SingleChildScrollView(
-              child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                  child: Observer(
-                    builder: (_) {
-                      switch (overviewStore.loadInitSymptomGraph.status) {
-                        case FutureStatus.rejected:
-                          return Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Oops something went wrong'),
-                                RaisedButton(
-                                  child: Text('Retry'),
-                                  onPressed: () async {
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        case FutureStatus.fulfilled:
-                          return overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget();
-                        case FutureStatus.pending:
-                        default:
-                          return CircularProgressIndicator();
-                      }
-                    },
-                  )))),
-        Center(
-            child:SingleChildScrollView(child: Container(
-                margin: EdgeInsets.symmetric(vertical: 5),
-                child: IngredientOverview(overviewStore: overviewStore,)
-            )
-            )
-        ),
+        Container(
+            margin: EdgeInsets.symmetric(vertical: 8),
+            child: Observer(
+              builder: (_) {
+                switch (overviewStore.loadInitSymptomGraph.status) {
+                  case FutureStatus.rejected:
+                    return Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Oops something went wrong'),
+                          RaisedButton(
+                            child: Text('Retry'),
+                            onPressed: () async {
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  case FutureStatus.fulfilled:
+                    return overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget();
+                  case FutureStatus.pending:
+                  default:
+                    return Center(child:CircularProgressIndicator());
+                }
+              },
+            )),
+        Container(
+            margin: EdgeInsets.symmetric(vertical: 8),
+            child: IngredientOverview(overviewStore: overviewStore,)
+        )
       ],
     );
   }

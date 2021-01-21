@@ -24,6 +24,7 @@ class SignIn extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(height: 70,),
               Align(
                 alignment: Alignment.centerLeft,
                 child: LoginTitle(

@@ -38,7 +38,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
               Expanded(child: Container(
                   height: 300,
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 7, bottom: 7,left: 10,right: 10 ),
+                  margin: EdgeInsets.only(top: 8, bottom: 8,left: 8,right: 8 ),
                   width:double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -97,7 +97,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                             itemBuilder: (BuildContext context, int index) {
                               return Card(
                                 elevation: 0,
-                                margin: EdgeInsets.only(left: 5,right: 5),
+                                margin: EdgeInsets.only(left: 0,right: 0),
                                 child: ListTile(
                                   onTap: ()  => {
                                     Navigator.push(
@@ -121,7 +121,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
               )),
             Expanded(child: Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 7, bottom: 7,left: 10,right: 10 ),
+                  margin: EdgeInsets.only(top: 8, bottom: 8,left: 8,right: 8 ),
                   width:double.infinity,
 
                   decoration: BoxDecoration(
@@ -167,7 +167,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                             itemBuilder: (BuildContext context, int index) {
                               return Card(
                                 elevation: 0,
-                                margin: EdgeInsets.only(left: 5,right: 5),
+                                margin: EdgeInsets.only(left: 0,right: 0),
                                 child: ListTile(
                                   onTap: ()  => {
                                     Navigator.push(

@@ -7,18 +7,18 @@ InputDecoration registerInputDecoration({String hintText}) {
     hintStyle: const TextStyle(color: Colors.white, fontSize: 18),
     hintText: hintText,
     focusedBorder: const UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.white, width: 2),
+      borderSide: BorderSide(color: Palette.secondaryLight, width: 2),
     ),
     enabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(color: Colors.white),
     ),
     errorBorder: const UnderlineInputBorder(
-      borderSide: BorderSide(color: Palette.orange),
+      borderSide: BorderSide(color: Palette.errorLight),
     ),
     focusedErrorBorder: const UnderlineInputBorder(
-      borderSide: BorderSide(width: 2.0, color: Palette.orange),
+      borderSide: BorderSide(width: 2.0, color: Palette.errorLight),
     ),
-    errorStyle: const TextStyle(color: Colors.white),
+    errorStyle: const TextStyle(color: Palette.errorLight, fontSize: 14),
   );
 }
 
@@ -28,17 +28,17 @@ InputDecoration signInInputDecoration({String hintText}) {
     hintStyle: const TextStyle(fontSize: 18, color: Colors.black),
     hintText: hintText,
     focusedBorder: const UnderlineInputBorder(
-      borderSide: BorderSide(width: 3, color: Palette.darkBlue),
+      borderSide: BorderSide(width: 2, color: Palette.secondaryLight),
     ),
     enabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(color: Palette.darkBlue),
     ),
     errorBorder: const UnderlineInputBorder(
-      borderSide: BorderSide(color: Palette.darkOrange),
+      borderSide: BorderSide(color: Palette.errorDark),
     ),
     focusedErrorBorder: const UnderlineInputBorder(
-      borderSide: BorderSide(width: 2.0, color: Palette.darkOrange),
+      borderSide: BorderSide(width: 2.0, color: Palette.errorDark),
     ),
-    errorStyle: const TextStyle(color: Palette.darkOrange),
+    errorStyle: const TextStyle(color: Palette.errorDark, fontSize: 14),
   );
 }

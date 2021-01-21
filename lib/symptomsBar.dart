@@ -38,10 +38,9 @@ class _SymptomsBarState extends State<SymptomsBar>{
       Container(
         height: 130,
           margin: EdgeInsets.only(left: 8,right: 8,top:8),
-          padding: EdgeInsets.only(left: 8,right: 8,bottom: 8),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10), //border corner radius
+            borderRadius: BorderRadius.circular(5), //border corner radius
             boxShadow:[
               BoxShadow(
                 color: Colors.grey.withOpacity(0.6), //color of shadow
@@ -96,7 +95,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                               );
                             case FutureStatus.fulfilled:
                               return  Observer(builder: (_) => Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
                                   child:symptomStore.symptomListOfSpecificDay.length!=0?ListView.separated(
                                     separatorBuilder: (BuildContext context, int index) {
                                       return SizedBox(

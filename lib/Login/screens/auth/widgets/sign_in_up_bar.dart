@@ -118,7 +118,7 @@ class _RoundContinueButton extends StatelessWidget {
     return RawMaterialButton(
       onPressed: onPressed,
       elevation: 0.0,
-      fillColor: Palette.darkBlue,
+      fillColor: Palette.bealthyColorScheme.secondary,
       splashColor: Palette.darkOrange,
       padding: const EdgeInsets.all(22.0),
       shape: const CircleBorder(),

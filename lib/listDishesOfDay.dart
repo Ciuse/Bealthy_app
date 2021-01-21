@@ -114,6 +114,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
         );
       }
       break;
+      break;
       case 2: {
         return ListTile(
           onTap: () {
@@ -207,7 +208,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
         width:double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10), //border corner radius
+          borderRadius: BorderRadius.circular(5), //border corner radius
           boxShadow:[
             BoxShadow(
               color: Colors.grey.withOpacity(0.6), //color of shadow
@@ -235,19 +236,19 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                         padding: EdgeInsets.symmetric(horizontal: 10 ),
                         decoration: BoxDecoration(
                           color: Palette.bealthyColorScheme.error,
-                          borderRadius: BorderRadius.circular(10),),
+                          borderRadius: BorderRadius.circular(5),),
                         alignment: AlignmentDirectional.centerEnd,
                         child: Icon(Icons.delete, color: Colors.white),
                       ),
                       child: Card(
                         shape:  RoundedRectangleBorder(
                           side: BorderSide(color: Palette.bealthyColorScheme.primaryVariant, width: 1),
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        margin: EdgeInsets.only(left: 10,right: 10, bottom: 12),
+                        margin: EdgeInsets.only(left: 16,right: 16, bottom: 16),
                         child: ListTile(
                           shape:  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                            borderRadius: BorderRadius.circular(5),
                           ) ,
                           onTap: ()  => {
                             Navigator.push(
@@ -268,8 +269,8 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                   }
                                   else {
                                     return Observer(builder: (_) =>Container
-                                      (width: 45,
-                                        height: 45,
+                                      (width: 44,
+                                        height: 44,
                                         decoration: new BoxDecoration(
                                           borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                           border: new Border.all(
@@ -291,12 +292,12 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
                               :
                           Container
-                            (width: 45,
-                              height: 45,
+                            (width: 44,
+                              height: 44,
                               decoration: new BoxDecoration(
                                 borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                 border: new Border.all(
-                                  color: Colors.black,
+                                  color: Palette.bealthyColorScheme.primaryVariant,
                                   width: 1.0,
                                 ),
                               ),
