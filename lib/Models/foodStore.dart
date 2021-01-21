@@ -1,9 +1,11 @@
 import 'package:Bealthy_app/Database/enumerators.dart';
+import 'package:Bealthy_app/Database/observableValues.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
 import '../Database/dish.dart';
 import '../Database/ingredient.dart';
+import 'ingredientStore.dart';
 
 // Include generated file
 part 'foodStore.g.dart';
@@ -56,6 +58,9 @@ abstract class _FoodStoreBase with Store {
   var dishesListFromDBAndUser = new ObservableList<Dish>(); //lista usata nella search bar
 
   @observable
+  var mapIngredientsStringDish = new ObservableMap<Dish,ObservableValues>();
+
+  @observable
   var resultsList = new ObservableList<Dish>();  //lista usata nella search bar per filtrare
 
   @observable
@@ -67,35 +72,35 @@ abstract class _FoodStoreBase with Store {
   ObservableFuture loadInitFavouriteDishesList;
 
   @action
-  Future<void> initFavouriteDishList() async {
+  Future<void> initFavouriteDishList(IngredientStore ingredientStore) async {
 
     if (!storeFavouriteDishInitialized) {
       storeFavouriteDishInitialized = true;
       yourFavouriteDishList.clear();
-      return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes());
+      return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes(ingredientStore));
     }
   }
 
   @action
-  Future<void> retryFavouriteDishesList() {
-    return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes());
+  Future<void> retryFavouriteDishesList(IngredientStore ingredientStore) {
+    return loadInitFavouriteDishesList = ObservableFuture(_getFavouriteDishes(ingredientStore));
   }
 
   @observable
   ObservableFuture loadInitCreatedYourDishesList;
 
   @action
-  Future<void> initCreatedYourDishList() async {
+  Future<void> initCreatedYourDishList(IngredientStore ingredientStore) async {
 
     if (!storeCreatedYourDishInitialized) {
       storeCreatedYourDishInitialized = true;
       yourCreatedDishList.clear();
-      return loadInitCreatedYourDishesList = ObservableFuture(_getYourDishes());
+      return loadInitCreatedYourDishesList = ObservableFuture(_getYourDishes(ingredientStore));
     }
   }
   @action
-  Future<void> retryCreatedYourDishesList() {
-    return loadInitCreatedYourDishesList = ObservableFuture(_getYourDishes());
+  Future<void> retryCreatedYourDishesList(IngredientStore ingredientStore) {
+    return loadInitCreatedYourDishesList = ObservableFuture(_getYourDishes(ingredientStore));
   }
 
 
@@ -111,18 +116,18 @@ void setBooleanQuantityDish(){
   ObservableFuture loadInitSearchAllDishesList;
 
   @action
-  Future<void> initSearchAllDishList() async {
+  Future<void> initSearchAllDishList(IngredientStore ingredientStore) async {
 
     if (!storeSearchAllDishInitialized) {
       dishesListFromDBAndUser.clear();
       storeSearchAllDishInitialized = true;
-      return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser());
+      return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser(ingredientStore));
     }
   }
 
   @action
-  Future<void> retrySearchAllDishesList() {
-    return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser());
+  Future<void> retrySearchAllDishesList(IngredientStore ingredientStore) {
+    return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser(ingredientStore));
   }
 
 
@@ -172,8 +177,18 @@ void setBooleanQuantityDish(){
 
 
   @action
-  Future<void> _getDishesFromDBAndUser() async {
+  Future<void> initializeIngredients(Dish dish, IngredientStore ingredientStore)async {
+    String ingredients = "";
+    if(isSubstring("User", dish.id)){
+      ingredients= await ingredientStore.getIngredientsStringFromUserDish(dish);
+    }else{
+      ingredients = await ingredientStore.getIngredientsStringFromDatabaseDish(dish);
+    }
+    mapIngredientsStringDish[dish].stringIngredients = ingredients;
+  }
 
+  @action
+  Future<void> _getDishesFromDBAndUser(IngredientStore ingredientStore) async {
     await (FirebaseFirestore.instance
         .collection('Dishes').orderBy("name")
         .get()
@@ -181,7 +196,10 @@ void setBooleanQuantityDish(){
       querySnapshot.docs.forEach((result) {
 
         Dish i = new Dish(id:result.id,name:result.get("name") ,qty: "",);
+        ObservableValues value = new ObservableValues(stringIngredients: "");
+        mapIngredientsStringDish.putIfAbsent(i, () => value);
         dishesListFromDBAndUser.add(i);
+        initializeIngredients(i,ingredientStore);
       }
       );
     }));
@@ -194,14 +212,17 @@ void setBooleanQuantityDish(){
             name: dish.get("name"),
             qty: null,
             );
+        ObservableValues value = new ObservableValues(stringIngredients: "");
+        mapIngredientsStringDish.putIfAbsent(toAdd, () => value);
         dishesListFromDBAndUser.add(toAdd);
+        initializeIngredients(toAdd,ingredientStore);
       });
     })
     );
   }
 
   @action
-  Future<void> _getYourDishes() async {
+  Future<void> _getYourDishes(IngredientStore ingredientStore) async {
     await (FirebaseFirestore.instance
         .collection('DishesCreatedByUsers')
         .doc(auth.currentUser.uid).collection("Dishes").orderBy("name").get()
@@ -211,7 +232,10 @@ void setBooleanQuantityDish(){
             name: dish.get("name"),
             qty: null,
             );
+        ObservableValues value = new ObservableValues(stringIngredients: "");
+        mapIngredientsStringDish.putIfAbsent(toAdd, () => value);
         yourCreatedDishList.add(toAdd);
+        initializeIngredients(toAdd,ingredientStore);
       });
     })
     );
@@ -239,7 +263,7 @@ void setBooleanQuantityDish(){
   }
 
   @action
-  Future<void> _getFavouriteDishes() async {
+  Future<void> _getFavouriteDishes(IngredientStore ingredientStore) async {
     await (FirebaseFirestore.instance
         .collection('DishesFavouriteByUsers')
         .doc(auth.currentUser.uid).collection("Dishes").orderBy("name").get()
@@ -250,7 +274,10 @@ void setBooleanQuantityDish(){
             qty: null,
             );
         toAdd.setIsFavourite(true);
+        ObservableValues value = new ObservableValues(stringIngredients: "");
+        mapIngredientsStringDish.putIfAbsent(toAdd, () => value);
         yourFavouriteDishList.add(toAdd);
+        initializeIngredients(toAdd,ingredientStore);
       });
     })
     );

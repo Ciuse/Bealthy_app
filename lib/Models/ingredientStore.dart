@@ -33,6 +33,10 @@ abstract class _IngredientStoreBase with Store {
   var ingredientListOfDish = new ObservableList<Ingredient>();
 
   @observable
+  var mapIngredientDish = new ObservableMap<Dish,List<Ingredient>>();
+
+
+  @observable
   var ingredientsName = new ObservableList<String>();
 
   @observable
@@ -100,6 +104,42 @@ abstract class _IngredientStoreBase with Store {
     }));
   }
 
+  @action
+  Future<String> getIngredientsStringFromDatabaseDish(Dish dish) async {
+    return await (FirebaseFirestore.instance
+        .collection('Dishes').doc(dish.id).collection("Ingredients").orderBy("name")
+        .get().then((querySnapshot) {
+      String ingredients="";
+      querySnapshot.docs.forEach((ingredient) {
+        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
+        ingredients = ingredients+ i.name+", ";
+      }
+      );
+      return ingredients;
+    }));
+  }
+
+
+  @action
+  Future<String> getIngredientsStringFromUserDish(Dish dish) async {
+
+    return await (FirebaseFirestore.instance
+        .collection("DishesCreatedByUsers")
+        .doc(auth.currentUser.uid)
+        .collection("Dishes").doc(dish.id).collection("Ingredients").orderBy("name")
+        .get().then((querySnapshot) {
+      String ingredients="";
+      querySnapshot.docs.forEach((ingredient) {
+        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
+        ingredients = ingredients+ i.name+", ";
+      }
+      );
+      return ingredients;
+    }
+    ));
+
+  }
+
 
   @action
   Future<void> getIngredientsName() async {
@@ -161,7 +201,7 @@ abstract class _IngredientStoreBase with Store {
       Colors.purple,Colors.deepOrange,Colors.blueAccent, Colors.green,
       Colors.teal,Colors.pinkAccent,Colors.blueGrey,Colors.black,
       Colors.orangeAccent, Colors.yellowAccent,Colors.red,Colors.cyanAccent,
-      Colors.purple,Colors.deepOrange,];
+      Colors.purple,Colors.deepOrange,Colors.purple];
 
 
     colorIngredientMap=Map.fromIterables(keys, colorsOfChart);

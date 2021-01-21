@@ -42,6 +42,22 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     });
   }
 
+  final _$mapIngredientDishAtom =
+      Atom(name: '_IngredientStoreBase.mapIngredientDish');
+
+  @override
+  ObservableMap<Dish, List<Ingredient>> get mapIngredientDish {
+    _$mapIngredientDishAtom.reportRead();
+    return super.mapIngredientDish;
+  }
+
+  @override
+  set mapIngredientDish(ObservableMap<Dish, List<Ingredient>> value) {
+    _$mapIngredientDishAtom.reportWrite(value, super.mapIngredientDish, () {
+      super.mapIngredientDish = value;
+    });
+  }
+
   final _$ingredientsNameAtom =
       Atom(name: '_IngredientStoreBase.ingredientsName');
 
@@ -106,6 +122,24 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   Future<void> getIngredientsFromUserDish(Dish dish) {
     return _$getIngredientsFromUserDishAsyncAction
         .run(() => super.getIngredientsFromUserDish(dish));
+  }
+
+  final _$getIngredientsStringFromDatabaseDishAsyncAction =
+      AsyncAction('_IngredientStoreBase.getIngredientsStringFromDatabaseDish');
+
+  @override
+  Future<String> getIngredientsStringFromDatabaseDish(Dish dish) {
+    return _$getIngredientsStringFromDatabaseDishAsyncAction
+        .run(() => super.getIngredientsStringFromDatabaseDish(dish));
+  }
+
+  final _$getIngredientsStringFromUserDishAsyncAction =
+      AsyncAction('_IngredientStoreBase.getIngredientsStringFromUserDish');
+
+  @override
+  Future<String> getIngredientsStringFromUserDish(Dish dish) {
+    return _$getIngredientsStringFromUserDishAsyncAction
+        .run(() => super.getIngredientsStringFromUserDish(dish));
   }
 
   final _$getIngredientsNameAsyncAction =
@@ -180,6 +214,7 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
     return '''
 ingredientList: ${ingredientList},
 ingredientListOfDish: ${ingredientListOfDish},
+mapIngredientDish: ${mapIngredientDish},
 ingredientsName: ${ingredientsName},
 loadInitIngredientList: ${loadInitIngredientList}
     ''';

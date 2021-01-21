@@ -14,9 +14,13 @@ import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+import 'Database/dish.dart';
+import 'Database/enumerators.dart';
 import 'Login/config/palette.dart';
+import 'Models/dateStore.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
+import 'Models/mealTimeStore.dart';
 import 'createNewDish.dart';
 
 class AddMeal extends StatefulWidget {
@@ -84,7 +88,7 @@ class _AddMealState extends State<AddMeal>{
                               ),
                                     onPressed: () async => {
                                       // scanBarCodeAndCheckPermission(),
-                                      barCodeScannerStore.scanBarcode = " 3159470000120",
+                                      barCodeScannerStore.scanBarcode = " 5010477348678",
                                       if(barCodeScannerStore.scanBarcode != "-1") {
                                         await barCodeScannerStore.getScannedDishes(
                                             barCodeScannerStore.scanBarcode).then((dishDB) {
@@ -283,12 +287,29 @@ class FavouriteDishes extends StatefulWidget {
 
 class _FavouriteDishesState extends State<FavouriteDishes>{
   var storage = FirebaseStorage.instance;
+  FoodStore foodStore;
+  IngredientStore ingredientStore;
+  MealTimeStore mealTimeStore;
+  List<String> quantityList;
+  DateStore dateStore;
 
   @override
   void initState() {
     super.initState();
-    var store = Provider.of<FoodStore>(context, listen: false);
-    store.initFavouriteDishList();
+    quantityList= getQuantityName();
+    var foodStore = Provider.of<FoodStore>(context, listen: false);
+    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
+    mealTimeStore = Provider.of<MealTimeStore>(context, listen: false);
+    dateStore = Provider.of<DateStore>(context, listen: false);
+    foodStore.initFavouriteDishList(ingredientStore);
+  }
+
+  List<String> getQuantityName(){
+    List<String> listToReturn = new List<String>();
+    Quantity.values.forEach((element) {
+      listToReturn.add(element.toString().split('.').last);
+    });
+    return listToReturn;
   }
 
   Future getImage(String dishId) async {
@@ -305,6 +326,12 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
     catch (e) {
       return await Future.error(e);
     }
+  }
+
+  void setQuantityAndMealTimeToDish(String qty,Dish dish){
+    MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context, listen: false);
+    dish.mealTime = mealTimeStore.selectedMealTime.toString().split('.').last;
+    dish.qty = qty;
   }
 
   @override
@@ -330,27 +357,109 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                           RaisedButton(
                             child: Text('Retry'),
                             onPressed: () async {
-                              await foodStore.retryFavouriteDishesList();
+                              await foodStore.retryFavouriteDishesList(ingredientStore);
                             },
                           ),
                         ],
                       ),
                     );
                   case FutureStatus.fulfilled:
-                    return Expanded(child: ListView.builder(
+                    return Expanded(child: Observer(builder: (_) => ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) {
+                          return Divider(
+                            height: 4,
+                          );
+                        },
                         itemCount: foodStore.yourFavouriteDishList.length,
                         itemBuilder: (context, index) {
-                          return Card(
+                          return ListTile(
+                              onTap: ()=> {
+                                if(!mealTimeStore.checkIfDishIsPresent(foodStore.yourFavouriteDishList[index])){
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                      new AlertDialog(
+                                        title: Text('Select the quantity eaten'),
+                                        content: Observer(builder: (_) => Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
 
-                            child: ListTile(
-                              onTap: ()=> { Navigator.push(
-                                context, MaterialPageRoute(builder: (context) =>
-                                  DishPage(dish: foodStore.yourFavouriteDishList[index],
-                                      createdByUser: foodStore.isSubstring("User", foodStore.yourFavouriteDishList[index].id))
-                              ),
-                              )
+                                            for (int i = 0; i < Quantity.values.length; i++)
+                                              ListTile(
+                                                title: Text(
+                                                  Quantity.values[i].toString().split('.').last,
+                                                ),
+                                                leading: Radio(
+                                                  value: i,
+                                                  groupValue: foodStore.yourFavouriteDishList[index].valueShowDialog,
+                                                  onChanged: (int value) {
+                                                    foodStore.yourFavouriteDishList[index].valueShowDialog=value;
+                                                  },
+                                                ),
+                                              ),
+                                            Divider(
+                                              height: 4,
+                                              thickness: 0.8,
+                                              color: Colors.black,
+                                            ),
+                                          ],
+                                        )),
+                                        contentPadding: EdgeInsets.only(top: 8),
+                                        actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                        actions: [
+                                          FlatButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('CANCEL'),
+                                          ),
+                                          FlatButton(
+                                            onPressed: () {
+                                              setQuantityAndMealTimeToDish(quantityList[foodStore.yourFavouriteDishList[index].valueShowDialog],foodStore.yourFavouriteDishList[index]);
+                                              mealTimeStore.addDishOfMealTimeListOfSpecificDay(foodStore.yourFavouriteDishList[index], dateStore.calendarSelectedDate)
+                                                  .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                             );
+                                            },
+                                            child: Text('ADD'),
+                                          ),
+                                        ],
+                                      )
+
+                                  )
+                                }else{
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                      new AlertDialog(
+                                        title: Text('Dish already present'),
+                                        content:Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Divider(
+                                              height: 4,
+                                              thickness: 0.8,
+                                              color: Colors.black,
+                                            ),
+                                          ],
+                                        ),
+                                        contentPadding: EdgeInsets.only(top: 30),
+                                        actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                        actions: [
+                                          FlatButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('OK'),
+                                          )
+                                        ],
+                                      )
+
+                                  )
+                                }
+
                               },
                               title: Text(foodStore.yourFavouriteDishList[index].name,style: TextStyle(fontSize: 22.0)),
+                            subtitle:  Observer(builder: (_) =>Text(foodStore.mapIngredientsStringDish[foodStore.yourFavouriteDishList[index]].stringIngredients)),
                               leading: foodStore.isSubstring("User", foodStore.yourFavouriteDishList[index].id)?
                               FutureBuilder(
                                   future: getImage(foodStore.yourFavouriteDishList[index].id),
@@ -398,9 +507,8 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                                           , fit:BoxFit.cover
                                       )
                                   )),
-                            ),
-                          );
-                        }));
+                            );
+                        })));
                   case FutureStatus.pending:
                   default:
                     return CircularProgressIndicator();
@@ -422,15 +530,31 @@ class YourDishList extends StatefulWidget {
 
 class _YourDishListState extends State<YourDishList> {
   var storage = FirebaseStorage.instance;
+  FoodStore foodStore;
+  IngredientStore ingredientStore;
+  MealTimeStore mealTimeStore;
+  List<String> quantityList;
+  DateStore dateStore;
 
   @override
   void initState() {
     super.initState();
-    var store = Provider.of<FoodStore>(context, listen: false);
-
-    store.initCreatedYourDishList();
-
+    quantityList= getQuantityName();
+    var foodStore = Provider.of<FoodStore>(context, listen: false);
+    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
+    mealTimeStore = Provider.of<MealTimeStore>(context, listen: false);
+    dateStore = Provider.of<DateStore>(context, listen: false);
+    foodStore.initCreatedYourDishList(ingredientStore);
   }
+
+  List<String> getQuantityName(){
+    List<String> listToReturn = new List<String>();
+    Quantity.values.forEach((element) {
+      listToReturn.add(element.toString().split('.').last);
+    });
+    return listToReturn;
+  }
+
   Future getImage(String dishId) async {
     String userUid;
     final litUser = context.getSignedInUser();
@@ -446,6 +570,13 @@ class _YourDishListState extends State<YourDishList> {
       return await Future.error(e);
     }
   }
+
+  void setQuantityAndMealTimeToDish(String qty,Dish dish){
+    MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context, listen: false);
+    dish.mealTime = mealTimeStore.selectedMealTime.toString().split('.').last;
+    dish.qty = qty;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -470,26 +601,109 @@ class _YourDishListState extends State<YourDishList> {
                             RaisedButton(
                               child: Text('Retry'),
                               onPressed: () async {
-                                await foodStore.retryCreatedYourDishesList();
+                                await foodStore.retryCreatedYourDishesList(ingredientStore);
                               },
                             ),
                           ],
                         ),
                       );
                     case FutureStatus.fulfilled:
-                      return Expanded(child: ListView.builder(
+                      return Expanded(child: Observer(builder: (_) => ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Divider(
+                              height: 4,
+                            );
+                          },
                           itemCount: foodStore.yourCreatedDishList.length,
                           itemBuilder: (context, index) {
-                            return Card(
-                              child: ListTile(
-                                onTap: ()=> { Navigator.push(
-                                  context, MaterialPageRoute(builder: (context) =>
-                                    DishPage(dish: foodStore.yourCreatedDishList[index],
-                                        createdByUser: true)
-                                ),
-                                )
-                                },
+                           return ListTile(
+                               onTap: ()=> {
+                                 if(!mealTimeStore.checkIfDishIsPresent(foodStore.yourCreatedDishList[index])){
+                                   showDialog(
+                                       context: context,
+                                       builder: (_) =>
+                                       new AlertDialog(
+                                         title: Text('Select the quantity eaten'),
+                                         content: Observer(builder: (_) => Column(
+                                           mainAxisSize: MainAxisSize.min,
+                                           children: <Widget>[
+
+                                             for (int i = 0; i < Quantity.values.length; i++)
+                                               ListTile(
+                                                 title: Text(
+                                                   Quantity.values[i].toString().split('.').last,
+                                                 ),
+                                                 leading: Radio(
+                                                   value: i,
+                                                   groupValue: foodStore.yourCreatedDishList[index].valueShowDialog,
+                                                   onChanged: (int value) {
+                                                     foodStore.yourCreatedDishList[index].valueShowDialog=value;
+                                                   },
+                                                 ),
+                                               ),
+                                             Divider(
+                                               height: 4,
+                                               thickness: 0.8,
+                                               color: Colors.black,
+                                             ),
+                                           ],
+                                         )),
+                                         contentPadding: EdgeInsets.only(top: 8),
+                                         actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                         actions: [
+                                           FlatButton(
+                                             onPressed: () {
+                                               Navigator.pop(context);
+                                             },
+                                             child: Text('CANCEL'),
+                                           ),
+                                           FlatButton(
+                                             onPressed: () {
+                                               setQuantityAndMealTimeToDish(quantityList[foodStore.yourCreatedDishList[index].valueShowDialog],foodStore.yourCreatedDishList[index]);
+                                               mealTimeStore.addDishOfMealTimeListOfSpecificDay(foodStore.yourCreatedDishList[index], dateStore.calendarSelectedDate)
+                                                   .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                               );
+                                             },
+                                             child: Text('ADD'),
+                                           ),
+                                         ],
+                                       )
+
+                                   )
+                                 }else{
+                                   showDialog(
+                                       context: context,
+                                       builder: (_) =>
+                                       new AlertDialog(
+                                         title: Text('Dish already present'),
+                                         content:Column(
+                                           mainAxisSize: MainAxisSize.min,
+                                           children: <Widget>[
+                                             Divider(
+                                               height: 4,
+                                               thickness: 0.8,
+                                               color: Colors.black,
+                                             ),
+                                           ],
+                                         ),
+                                         contentPadding: EdgeInsets.only(top: 30),
+                                         actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                         actions: [
+                                           FlatButton(
+                                             onPressed: () {
+                                               Navigator.pop(context);
+                                             },
+                                             child: Text('OK'),
+                                           )
+                                         ],
+                                       )
+
+                                   )
+                                 }
+
+                               },
                                 title: Text(foodStore.yourCreatedDishList[index].name,style: TextStyle(fontSize: 22.0)),
+                               subtitle:  Observer(builder: (_) =>Text(foodStore.mapIngredientsStringDish[foodStore.yourCreatedDishList[index]].stringIngredients)),
                                 leading:
                                 FutureBuilder(
                                     future: getImage(foodStore.yourCreatedDishList[index].id),
@@ -520,9 +734,8 @@ class _YourDishListState extends State<YourDishList> {
                                       }
                                     }
                                 )
-                              ),
-                            );
-                          }));
+                              );
+                          })));
                     case FutureStatus.pending:
                     default:
                       return CircularProgressIndicator();

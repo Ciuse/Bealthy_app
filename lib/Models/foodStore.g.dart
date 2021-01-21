@@ -153,6 +153,23 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  final _$mapIngredientsStringDishAtom =
+      Atom(name: '_FoodStoreBase.mapIngredientsStringDish');
+
+  @override
+  ObservableMap<Dish, ObservableValues> get mapIngredientsStringDish {
+    _$mapIngredientsStringDishAtom.reportRead();
+    return super.mapIngredientsStringDish;
+  }
+
+  @override
+  set mapIngredientsStringDish(ObservableMap<Dish, ObservableValues> value) {
+    _$mapIngredientsStringDishAtom
+        .reportWrite(value, super.mapIngredientsStringDish, () {
+      super.mapIngredientsStringDish = value;
+    });
+  }
+
   final _$resultsListAtom = Atom(name: '_FoodStoreBase.resultsList');
 
   @override
@@ -238,53 +255,64 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       AsyncAction('_FoodStoreBase.initFavouriteDishList');
 
   @override
-  Future<void> initFavouriteDishList() {
+  Future<void> initFavouriteDishList(IngredientStore ingredientStore) {
     return _$initFavouriteDishListAsyncAction
-        .run(() => super.initFavouriteDishList());
+        .run(() => super.initFavouriteDishList(ingredientStore));
   }
 
   final _$initCreatedYourDishListAsyncAction =
       AsyncAction('_FoodStoreBase.initCreatedYourDishList');
 
   @override
-  Future<void> initCreatedYourDishList() {
+  Future<void> initCreatedYourDishList(IngredientStore ingredientStore) {
     return _$initCreatedYourDishListAsyncAction
-        .run(() => super.initCreatedYourDishList());
+        .run(() => super.initCreatedYourDishList(ingredientStore));
   }
 
   final _$initSearchAllDishListAsyncAction =
       AsyncAction('_FoodStoreBase.initSearchAllDishList');
 
   @override
-  Future<void> initSearchAllDishList() {
+  Future<void> initSearchAllDishList(IngredientStore ingredientStore) {
     return _$initSearchAllDishListAsyncAction
-        .run(() => super.initSearchAllDishList());
+        .run(() => super.initSearchAllDishList(ingredientStore));
+  }
+
+  final _$initializeIngredientsAsyncAction =
+      AsyncAction('_FoodStoreBase.initializeIngredients');
+
+  @override
+  Future<void> initializeIngredients(
+      Dish dish, IngredientStore ingredientStore) {
+    return _$initializeIngredientsAsyncAction
+        .run(() => super.initializeIngredients(dish, ingredientStore));
   }
 
   final _$_getDishesFromDBAndUserAsyncAction =
       AsyncAction('_FoodStoreBase._getDishesFromDBAndUser');
 
   @override
-  Future<void> _getDishesFromDBAndUser() {
+  Future<void> _getDishesFromDBAndUser(IngredientStore ingredientStore) {
     return _$_getDishesFromDBAndUserAsyncAction
-        .run(() => super._getDishesFromDBAndUser());
+        .run(() => super._getDishesFromDBAndUser(ingredientStore));
   }
 
   final _$_getYourDishesAsyncAction =
       AsyncAction('_FoodStoreBase._getYourDishes');
 
   @override
-  Future<void> _getYourDishes() {
-    return _$_getYourDishesAsyncAction.run(() => super._getYourDishes());
+  Future<void> _getYourDishes(IngredientStore ingredientStore) {
+    return _$_getYourDishesAsyncAction
+        .run(() => super._getYourDishes(ingredientStore));
   }
 
   final _$_getFavouriteDishesAsyncAction =
       AsyncAction('_FoodStoreBase._getFavouriteDishes');
 
   @override
-  Future<void> _getFavouriteDishes() {
+  Future<void> _getFavouriteDishes(IngredientStore ingredientStore) {
     return _$_getFavouriteDishesAsyncAction
-        .run(() => super._getFavouriteDishes());
+        .run(() => super._getFavouriteDishes(ingredientStore));
   }
 
   final _$removeFavouriteDishAsyncAction =
@@ -309,22 +337,22 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       ActionController(name: '_FoodStoreBase');
 
   @override
-  Future<void> retryFavouriteDishesList() {
+  Future<void> retryFavouriteDishesList(IngredientStore ingredientStore) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.retryFavouriteDishesList');
     try {
-      return super.retryFavouriteDishesList();
+      return super.retryFavouriteDishesList(ingredientStore);
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  Future<void> retryCreatedYourDishesList() {
+  Future<void> retryCreatedYourDishesList(IngredientStore ingredientStore) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.retryCreatedYourDishesList');
     try {
-      return super.retryCreatedYourDishesList();
+      return super.retryCreatedYourDishesList(ingredientStore);
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -342,11 +370,11 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
-  Future<void> retrySearchAllDishesList() {
+  Future<void> retrySearchAllDishesList(IngredientStore ingredientStore) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.retrySearchAllDishesList');
     try {
-      return super.retrySearchAllDishesList();
+      return super.retrySearchAllDishesList(ingredientStore);
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -397,6 +425,7 @@ sideDishList: ${sideDishList},
 dessertsDishList: ${dessertsDishList},
 drinksDishList: ${drinksDishList},
 dishesListFromDBAndUser: ${dishesListFromDBAndUser},
+mapIngredientsStringDish: ${mapIngredientsStringDish},
 resultsList: ${resultsList},
 isSelected: ${isSelected},
 loadInitFavouriteDishesList: ${loadInitFavouriteDishesList},

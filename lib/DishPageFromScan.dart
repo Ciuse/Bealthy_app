@@ -283,7 +283,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
             },
           )
           ),
-      floatingActionButton: barCodeScannerStore.productFromQuery!=null?FloatingActionButton(
+      floatingActionButton: barCodeScannerStore.scanBarcode != "-1"? FloatingActionButton(
 
         onPressed: () {
 
@@ -335,7 +335,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                         .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
                     );
                   },
-                  child: Text('ACCEPT'),
+                  child: Text('ADD DISH'),
                 ),
               ],
             )
@@ -344,7 +344,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
 
         },
         child: Icon(Icons.add ),
-      ):null,
+      ): Container(),
     );
   }
 
