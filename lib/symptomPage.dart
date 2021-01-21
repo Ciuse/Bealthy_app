@@ -267,7 +267,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
         saveTempValueToRealSymptom();
         dateStore.addIllnesses(date);
         symptomStore.updateSymptom(widget.symptom, date);
-        Navigator.pop(context);
+        Navigator.of(context).popUntil((route) => route.isFirst);
       }
     } else {
       if ((widget.symptom.frequencyTemp > 0 && widget.symptom.intensityTemp > 0) &&
@@ -276,7 +276,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             widget.symptom.intensity != widget.symptom.intensityTemp || !areMealTimeBoolListsEqual()) {
           saveTempValueToRealSymptom();
           symptomStore.updateSymptom(widget.symptom, date);
-          Navigator.pop(context);
+          Navigator.of(context).popUntil((route) => route.isFirst);
 
         }
       }else{

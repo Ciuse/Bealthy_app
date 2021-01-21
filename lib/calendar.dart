@@ -102,7 +102,10 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
+      decoration: BoxDecoration(
+          color: Colors.white,
+
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Palette.bealthyColorScheme.primaryVariant, width: 2.5,style: BorderStyle.solid)
       ),
       child: new ListView(

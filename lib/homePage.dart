@@ -64,7 +64,6 @@ class _HomePageWidgetState extends State<HomePageWidget>{
         ],
       ),
       body: Container(
-          padding: EdgeInsets.all(8),
           child:
               Stack(children: [
           CustomScrollView(
@@ -74,25 +73,29 @@ class _HomePageWidgetState extends State<HomePageWidget>{
                 iconTheme: IconThemeData(
                   color: Colors.black,
                 ),
-                backgroundColor: Colors.white,
-                expandedHeight: 282,
+                backgroundColor: Palette.bealthyColorScheme.background,
+                expandedHeight: 298,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   stretchModes: [StretchMode.blurBackground],
-                  background: CalendarHomePage(),
+                  background: Container(
+                   margin: EdgeInsets.all(8),
+                    child:CalendarHomePage(),
+                  ),
 
                 ),
               ),
 
               SliverList(
                 delegate: SliverChildListDelegate([
-                  SymptomsBar(day: dateModel.calendarSelectedDate),
+                Observer(
+                builder: (_) =>SymptomsBar(day: dateModel.calendarSelectedDate)),
                 ]),
               ),
               SliverList(
                 delegate: SliverChildListDelegate([
                   ListDishesOfDay(day: dateModel.calendarSelectedDate),
-                  Container(height: MediaQuery.of(context).size.height-680,),
+                  Container(height: MediaQuery.of(context).size.height-632,),
 
                 ]),
               ),
@@ -108,10 +111,10 @@ class _HomePageWidgetState extends State<HomePageWidget>{
               // )),
             ],
           ),Observer(
-                    builder: (_) =>scrollControllerStore.offset>210?
+                    builder: (_) =>scrollControllerStore.offset>220?
                     Positioned(
                         top: 0,
-                        width: MediaQuery.of(context).size.width-16,
+                        width: MediaQuery.of(context).size.width,
                         height:70,
                         child:_buildHeaderDay(dateStore.calendarSelectedDate)):Container())],)),
 

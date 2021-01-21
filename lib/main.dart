@@ -188,6 +188,7 @@ class _MyHomePageState extends State<HomePage> {
 
   DateStore dateStore;
   FoodStore foodStore;
+  IngredientStore ingredientStore;
   int _selectedIndex = 0;
 
   void initState() {
@@ -200,6 +201,8 @@ class _MyHomePageState extends State<HomePage> {
     foodStore.storeSearchAllDishInitialized = false;
     UserStore userStore = Provider.of<UserStore>(context, listen: false);
     userStore.initUserDb();
+    ingredientStore = Provider.of<IngredientStore>(context, listen: false);
+    ingredientStore.initStore();
   }
 
   final List<Widget> _widgetOptions = <Widget>[
