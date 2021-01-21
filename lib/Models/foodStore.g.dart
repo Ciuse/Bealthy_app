@@ -328,9 +328,9 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       AsyncAction('_FoodStoreBase.addFavouriteDish');
 
   @override
-  Future<void> addFavouriteDish(Dish dish) {
+  Future<void> addFavouriteDish(Dish dish, IngredientStore ingredientStore) {
     return _$addFavouriteDishAsyncAction
-        .run(() => super.addFavouriteDish(dish));
+        .run(() => super.addFavouriteDish(dish, ingredientStore));
   }
 
   final _$_FoodStoreBaseActionController =
@@ -381,22 +381,24 @@ mixin _$FoodStore on _FoodStoreBase, Store {
   }
 
   @override
-  void addNewDishCreatedByUser(Dish dish, List<Ingredient> ingredients) {
+  void addNewDishCreatedByUser(Dish dish, List<Ingredient> ingredients,
+      IngredientStore ingredientStore) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.addNewDishCreatedByUser');
     try {
-      return super.addNewDishCreatedByUser(dish, ingredients);
+      return super.addNewDishCreatedByUser(dish, ingredients, ingredientStore);
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void addNewDishScannedByUser(Dish dish, List<Ingredient> ingredients) {
+  void addNewDishScannedByUser(Dish dish, List<Ingredient> ingredients,
+      IngredientStore ingredientStore) {
     final _$actionInfo = _$_FoodStoreBaseActionController.startAction(
         name: '_FoodStoreBase.addNewDishScannedByUser');
     try {
-      return super.addNewDishScannedByUser(dish, ingredients);
+      return super.addNewDishScannedByUser(dish, ingredients, ingredientStore);
     } finally {
       _$_FoodStoreBaseActionController.endAction(_$actionInfo);
     }

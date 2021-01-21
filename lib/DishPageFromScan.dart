@@ -7,6 +7,7 @@ import 'package:Bealthy_app/Models/mealTimeStore.dart';
 import 'package:Bealthy_app/uploadNewPictureToUserDish.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -14,6 +15,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'Database/enumerators.dart';
 import 'Database/dish.dart';
+import 'Database/ingredient.dart';
 import 'Login/config/palette.dart';
 import 'Models/barCodeScannerStore.dart';
 import 'Models/foodStore.dart';
@@ -38,6 +40,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
   FoodStore foodStore;
   final titleCt = TextEditingController();
   List<CameraDescription> cameras;
+  String selectedItemIngredient="";
 
   void initState() {
     super.initState();
@@ -48,6 +51,9 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
     barCodeScannerStore.initProduct();
     foodStore = Provider.of<FoodStore>(context, listen: false);
 
+    ingredientStore.ingredientListOfDish.clear();
+    ingredientStore.ingredientsName.clear();
+    ingredientStore.getIngredientsName();
   }
 
   @override
@@ -124,6 +130,17 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
     barCodeScannerStore.initIngredients(ingredientStore, foodStore);
   }
 
+bool findIngredient(Ingredient ingredient){
+    bool toReturn = false;
+    barCodeScannerStore.ingredients.forEach((element) {
+      if(element.id==ingredient.id){
+        toReturn = true;
+        return toReturn;
+    }
+    });
+    return toReturn;
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +205,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                                           Container(
                                               margin: const EdgeInsets.only(left: 125,top:125),
                                               child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                                color: Colors.black,)),]
+                                                color: Palette.bealthyColorScheme.secondary,)),]
                                     )
                                   ])
 
@@ -263,7 +280,109 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                                 })
                         )),
                         ingredientsWidget(),
-                        SizedBox(height: 20,)
+                        SizedBox(height: 20,),
+                        SizedBox(height: 20,),
+                        DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          dropdownSearchDecoration:  new InputDecoration(
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.all(10),
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                            //fillColor: Colors.green
+                          ),
+                          //  showSearchBox: true,
+                          items: ingredientStore.ingredientsName,
+                          label: "Select ingredient",
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          validator:  (val) {
+                            if(barCodeScannerStore.ingredients.length==0) {
+                              return "Insert at least one ingredient";
+                            }else{
+                              return null;
+                            }
+                          },
+                          onChanged: (String ingredient) {
+                            selectedItemIngredient="";
+                              if(!findIngredient(ingredientStore.getIngredientFromName(ingredient))){
+                                //ingredientStore.ingredientListOfDish.add(ingredientStore.getIngredientFromName(ingredient));
+                                Ingredient toAdd = ingredientStore.getIngredientFromName(ingredient);
+                                toAdd.qty=Quantity.Normal.toString().split('.').last;
+                                barCodeScannerStore.ingredients.add(toAdd);
+                                ingredientStore.ingredientsName.remove(ingredient);
+                              }else{
+                                print("già presente");
+                              }
+
+
+                            },
+                        ),
+
+                        barCodeScannerStore.scanBarcode != "-1"? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: ElevatedButton(
+                              onPressed: (){
+                                return showDialog(
+                                    context: context,
+                                    builder: (_) =>  new AlertDialog(
+                                      title: Text('Select the quantity eaten'),
+                                      content: Observer(builder: (_) => Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+
+                                          for (int i = 0; i < Quantity.values.length; i++)
+                                            ListTile(
+                                              title: Text(
+                                                Quantity.values[i].toString().split('.').last,
+                                              ),
+                                              leading: Radio(
+                                                value: i,
+                                                groupValue: widget.dish.valueShowDialog,
+                                                onChanged: (int value) {
+                                                  widget.dish.valueShowDialog=value;
+                                                },
+                                              ),
+                                            ),
+                                          Divider(
+                                            height: 4,
+                                            thickness: 0.8,
+                                            color: Colors.black,
+                                          ),
+                                        ],
+                                      )),
+                                      contentPadding: EdgeInsets.only(top: 8),
+                                      actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                      actions: [
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('CANCEL'),
+                                        ),
+                                        FlatButton(
+                                          onPressed: () {
+                                            setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
+                                            foodStore.addNewDishScannedByUser(widget.dish, barCodeScannerStore.ingredients,ingredientStore);
+                                            if(widget.dish.imageFile!=null){
+                                              uploadImageToFirebase(context,widget.dish.imageFile);
+                                            }
+                                            mealTimeStore.addScannedDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
+                                                .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                            );
+                                          },
+                                          child: Text('ADD DISH'),
+                                        ),
+                                      ],
+                                    )
+                                );
+                              },
+                              child:  Text('ADD DISH'),
+                              style: ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.primary),
+                            )
+                        ): Container()
                       ]
                   )
                   );
@@ -283,69 +402,54 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
             },
           )
           ),
-      floatingActionButton: barCodeScannerStore.scanBarcode != "-1"? FloatingActionButton(
-
-        onPressed: () {
-
-          return showDialog(
-            context: context,
-            builder: (_) =>  new AlertDialog(
-              title: Text('Select the quantity eaten'),
-              content: Observer(builder: (_) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-
-                  for (int i = 0; i < Quantity.values.length; i++)
-                    ListTile(
-                      title: Text(
-                        Quantity.values[i].toString().split('.').last,
-                      ),
-                      leading: Radio(
-                        value: i,
-                        groupValue: widget.dish.valueShowDialog,
-                        onChanged: (int value) {
-                          widget.dish.valueShowDialog=value;
-                        },
-                      ),
-                    ),
-                  Divider(
-                    height: 4,
-                    thickness: 0.8,
-                    color: Colors.black,
-                  ),
-                ],
-              )),
-              contentPadding: EdgeInsets.only(top: 8),
-              actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-              actions: [
-                FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('CANCEL'),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
-                    foodStore.addNewDishScannedByUser(widget.dish, barCodeScannerStore.ingredients);
-                    if(widget.dish.imageFile!=null){
-                      uploadImageToFirebase(context,widget.dish.imageFile);
-                    }
-                    mealTimeStore.addScannedDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
-                        .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
-                    );
-                  },
-                  child: Text('ADD DISH'),
-                ),
-              ],
-            )
-          );
-
-
-        },
-        child: Icon(Icons.add ),
-      ): Container(),
     );
+  }
+
+  Widget ingredientAdd(Ingredient ingredient, int index){
+    return Observer(builder: (_) =>Column(
+      children: [
+        Container(
+            child:
+            ListTile(
+              title: Text(ingredient.name),
+              subtitle:Text(ingredient.qty),
+              leading: Image(image:AssetImage("images/ingredients/" + ingredient.id + ".png"), height: 40,width:40,),
+              trailing:
+              Container(
+                  width: 140,
+                  child:DropdownSearch<String>(
+                      key: Key(ingredient.id),
+                      items: quantityList,
+                      label: "Quantity",
+                      popupTitle:Padding(
+                          padding: EdgeInsets.all(16),
+                          child:Text("Select ingredient quantity",textAlign: TextAlign.center,)),
+                      maxHeight:230,
+                      dialogMaxWidth:200,
+                      showSelectedItem: true,
+                      autoValidateMode: AutovalidateMode.onUserInteraction,
+                      validator:  (val) {
+                        if(val==null) {
+                          return "Empty Quantity";
+                        }else{
+                          return null;
+                        }
+                      },
+                      onChanged: (String quantity) {
+                        ingredient.qty=quantity;
+                      }
+                  )),
+            )),
+        index!=ingredientStore.ingredientListOfDish.length-1?
+        Divider(
+          height: 4,
+          thickness: 0.5,
+          indent: 20,
+          endIndent: 20,
+          color: Colors.black38,
+        ):Container(),
+      ],
+    ));
   }
 
   int getQuantityEnumIndex(String name){

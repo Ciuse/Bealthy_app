@@ -134,7 +134,7 @@ void setBooleanQuantityDish(){
 
 
   @action
-  void addNewDishCreatedByUser(Dish dish, List<Ingredient> ingredients) {
+  void addNewDishCreatedByUser(Dish dish, List<Ingredient> ingredients, IngredientStore ingredientStore) {
     firestoreInstance
         .collection("DishesCreatedByUsers")
         .doc(auth.currentUser.uid)
@@ -150,12 +150,16 @@ void setBooleanQuantityDish(){
           .doc(dish.id)
           .collection("Ingredients").doc(element.id).set(element.toMap());
     });
+
+    ObservableValues value = new ObservableValues(stringIngredients: "");
+    mapIngredientsStringDish.putIfAbsent(dish, () => value);
     dishesListFromDBAndUser.add(dish);
     yourCreatedDishList.add(dish);
+    initializeIngredients(dish,ingredientStore);
   }
 
   @action
-  void addNewDishScannedByUser(Dish dish, List<Ingredient> ingredients) {
+  void addNewDishScannedByUser(Dish dish, List<Ingredient> ingredients,IngredientStore ingredientStore) {
     firestoreInstance
         .collection("DishesCreatedByUsers")
         .doc(auth.currentUser.uid)
@@ -171,8 +175,12 @@ void setBooleanQuantityDish(){
           .doc(dish.id)
           .collection("Ingredients").doc(element.id).set(element.toMap());
     });
+    ObservableValues value = new ObservableValues(stringIngredients: "");
+    mapIngredientsStringDish.putIfAbsent(dish, () => value);
     dishesListFromDBAndUser.add(dish);
     yourCreatedDishList.add(dish);
+    initializeIngredients(dish,ingredientStore);
+
   }
 
 
@@ -314,7 +322,7 @@ void setBooleanQuantityDish(){
   }
 
   @action
-  Future<void> addFavouriteDish(Dish dish) async {
+  Future<void> addFavouriteDish(Dish dish,IngredientStore ingredientStore) async {
     dish.setIsFavourite(true);
     firestoreInstance
         .collection("DishesFavouriteByUsers")
@@ -323,7 +331,10 @@ void setBooleanQuantityDish(){
         .doc(dish.id)
         .set(dish.toMapDishes());
 
+    ObservableValues value = new ObservableValues(stringIngredients: "");
+    mapIngredientsStringDish.putIfAbsent(dish, () => value);
     yourFavouriteDishList.add(dish);
+    initializeIngredients(dish,ingredientStore);
   }
 
 
