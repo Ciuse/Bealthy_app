@@ -179,7 +179,7 @@ class _DishPageState extends State<DishPage>{
                 if (widget.dish.isFavourite) {
                   foodStore.removeFavouriteDish(widget.dish);
                 } else {
-                  foodStore.addFavouriteDish(widget.dish);
+                  foodStore.addFavouriteDish(widget.dish,ingredientStore);
                 }
                 // do something
               }
@@ -306,100 +306,100 @@ class _DishPageState extends State<DishPage>{
 
             ),
             ingredientsWidget(),
-            SizedBox(height: 20,)
+            SizedBox(height: 20,),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: ElevatedButton(
+                  onPressed: (){
+                    if(!mealTimeStore.checkIfDishIsPresent(widget.dish)){
+                      return showDialog(
+                          context: context,
+                          builder: (_) =>  new AlertDialog(
+                            title: Text('Select the quantity eaten'),
+                            content: Observer(builder: (_) => Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+
+                                for (int i = 0; i < Quantity.values.length; i++)
+                                  ListTile(
+                                    title: Text(
+                                      Quantity.values[i].toString().split('.').last,
+                                    ),
+                                    leading: Radio(
+                                      value: i,
+                                      groupValue: widget.dish.valueShowDialog,
+                                      onChanged: (int value) {
+                                        widget.dish.valueShowDialog=value;
+                                      },
+                                    ),
+                                  ),
+                                Divider(
+                                  height: 4,
+                                  thickness: 0.8,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            )),
+                            contentPadding: EdgeInsets.only(top: 8),
+                            actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                            actions: [
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('CANCEL'),
+                              ),
+                              FlatButton(
+                                onPressed: () {
+                                  setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
+                                  mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
+                                      .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                  );
+                                },
+                                child: Text('ACCEPT'),
+                              ),
+                            ],
+                          )
+                      );
+                    }else{
+                      showDialog(
+                          context: context,
+                          builder: (_) =>
+                          new AlertDialog(
+                            title: Text('Dish already present'),
+                            content:Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Divider(
+                                  height: 4,
+                                  thickness: 0.8,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                            contentPadding: EdgeInsets.only(top: 30),
+                            actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                            actions: [
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('OK'),
+                              )
+                            ],
+                          )
+
+                      );
+                    }
+
+                  },
+                  child:  Text('ADD DISH'),
+                  style: ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.primary),
+                )
+            )
           ]
     )),
 
-      floatingActionButton: FloatingActionButton(
-
-        onPressed: () {
-          if(!mealTimeStore.checkIfDishIsPresent(widget.dish)){
-          return showDialog(
-            context: context,
-            builder: (_) =>
-            new AlertDialog(
-              title: Text('Select the quantity eaten'),
-              content: Observer(builder: (_) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-
-                  for (int i = 0; i < Quantity.values.length; i++)
-                    ListTile(
-                      title: Text(
-                        Quantity.values[i].toString().split('.').last,
-                      ),
-                      leading: Radio(
-                        value: i,
-                        groupValue: widget.dish.valueShowDialog,
-                        onChanged: (int value) {
-                          widget.dish.valueShowDialog=value;
-                        },
-                      ),
-                    ),
-                  Divider(
-                    height: 4,
-                    thickness: 0.8,
-                    color: Colors.black,
-                  ),
-                ],
-              )),
-              contentPadding: EdgeInsets.only(top: 8),
-              actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-              actions: [
-                FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('CANCEL'),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
-                    mealTimeStore.addDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
-                        .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
-                    );
-                  },
-                  child: Text('ACCEPT'),
-                ),
-              ],
-            )
-
-          );
-          }else{
-            return showDialog(
-                context: context,
-                builder: (_) =>
-                new AlertDialog(
-                  title: Text('Dish already present'),
-                  content:Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Divider(
-                        height: 4,
-                        thickness: 0.8,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
-                  contentPadding: EdgeInsets.only(top: 30),
-                  actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-                  actions: [
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text('OK'),
-                    )
-                  ],
-                )
-
-            );
-          }
-
-
-        },
-        child: Icon(Icons.add),
-      ),
 
     );
   }

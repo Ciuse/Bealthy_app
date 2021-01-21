@@ -91,7 +91,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
 
   void addDishToUser() {
     dish.name=nameCt.text;
-    foodStore.addNewDishCreatedByUser(dish, ingredientStore.ingredientListOfDish);
+    foodStore.addNewDishCreatedByUser(dish, ingredientStore.ingredientListOfDish,ingredientStore);
     if(dish.imageFile!=null){
       uploadImageToFirebase(dish.imageFile);
     }

@@ -145,11 +145,53 @@ class _EatenDishPageState extends State<EatenDishPage>{
                     if (widget.dish.isFavourite) {
                       foodStore.removeFavouriteDish(widget.dish);
                     } else {
-                      foodStore.addFavouriteDish(widget.dish);
+                      foodStore.addFavouriteDish(widget.dish,ingredientStore);
                     }
                     // do something
                   }
-              ))
+              )),
+              IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Palette.bealthyColorScheme.onError,
+                  ),
+                  onPressed: () {
+                      return showDialog(
+                          context: context,
+                          builder: (_) =>  new AlertDialog(
+                              title: Text('Are you sure to remove it?'),
+                              content:Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+
+                                  Divider(
+                                    height: 4,
+                                    thickness: 0.8,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                              contentPadding: EdgeInsets.only(top: 30),
+                              actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                              actions: [
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('CANCEL'),
+                                ),
+                                FlatButton(
+                                  child:Text('REMOVE'),
+                                  onPressed: () {
+
+                                    mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getMealTimeEnumIndex(widget.dish.mealTime), widget.dish, dateStore.calendarSelectedDate)
+                                        .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
+
+                                  },
+
+                                )]));
+                  }
+              )
             ],
           ),
           body: SingleChildScrollView(
@@ -185,7 +227,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                 Container(
                                                     margin: const EdgeInsets.only(left: 125,top:125),
                                                     child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                                      color: Colors.black,)),]
+                                                      color: Palette.bealthyColorScheme.secondary)),]
 
                                           )
                                         ])
@@ -216,7 +258,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                 Container(
 
                                                     margin: const EdgeInsets.only(left: 125,top:125),
-                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42,
+                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42, color: Palette.bealthyColorScheme.secondary,
                                                       )),]
 
                                           )
@@ -387,47 +429,6 @@ class _EatenDishPageState extends State<EatenDishPage>{
                   ]
 
               )),
-
-          floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                return showDialog(
-                    context: context,
-                    builder: (_) =>  new AlertDialog(
-                        title: Text('Are you sure to remove it?'),
-                        content:Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-
-                            Divider(
-                              height: 4,
-                              thickness: 0.8,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
-                        contentPadding: EdgeInsets.only(top: 30),
-                        actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-                        actions: [
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('CANCEL'),
-                          ),
-                          FlatButton(
-                            child:Text('REMOVE'),
-                            onPressed: () {
-
-                              mealTimeStore.removeDishOfMealTimeListOfSpecificDay(getMealTimeEnumIndex(widget.dish.mealTime), widget.dish, dateStore.calendarSelectedDate)
-                                  .then((value) => Navigator.of(context).popUntil((route) => route.isFirst));
-
-                            },
-
-                          )]));
-              },
-              child: Icon(Icons.auto_delete),
-              backgroundColor: Palette.bealthyColorScheme.error
-          ),
 
         ));
   }

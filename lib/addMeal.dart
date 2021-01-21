@@ -88,7 +88,7 @@ class _AddMealState extends State<AddMeal>{
                               ),
                                     onPressed: () async => {
                                       // scanBarCodeAndCheckPermission(),
-                                      barCodeScannerStore.scanBarcode = " 5010477348678",
+                                      barCodeScannerStore.scanBarcode = "3168930010906",
                                       if(barCodeScannerStore.scanBarcode != "-1") {
                                         await barCodeScannerStore.getScannedDishes(
                                             barCodeScannerStore.scanBarcode).then((dishDB) {
