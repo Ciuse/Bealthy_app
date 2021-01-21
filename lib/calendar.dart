@@ -65,24 +65,21 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   void _onDaySelected(DateTime day, List events, List holidays) {
     dateStore.calendarSelectedDate = day;
     context.read<MealTimeStore>().initDishesOfMealTimeList(day);
-    context.read<SymptomStore>().getSymptomsOfADay(day);
+    context.read<SymptomStore>().initSymptomDay(day);
   }
 
   void _onDayChangedTab(DateTime day) {
     dateStore.calendarSelectedDate = day;
     context.read<MealTimeStore>().initDishesOfMealTimeList(day);
-    context.read<SymptomStore>().getSymptomsOfADay(day);
+    context.read<SymptomStore>().initSymptomDay(day);
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    print('CALLBACK: _onVisibleDaysChanged');
   }
 
   void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format) {
-       print('CALLBACK: _onCalendarCreated');
     dateStore.calendarSelectedDate=DateTime.now();
     if(context.read<SymptomStore>().storeInitialized)
-      context.read<SymptomStore>().getSymptomsOfADay(dateStore.calendarSelectedDate);
     context.read<MealTimeStore>().initDishesOfMealTimeList(dateStore.calendarSelectedDate);
     context.read<TreatmentStore>().initTreatmentsList( dateStore.calendarSelectedDate);
   }
@@ -102,7 +99,10 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
+      decoration: BoxDecoration(
+          color: Colors.white,
+
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Palette.bealthyColorScheme.primaryVariant, width: 2.5,style: BorderStyle.solid)
       ),
       child: new ListView(
@@ -129,8 +129,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
       initialCalendarFormat: CalendarFormat.month,
       formatAnimation: FormatAnimation.slide,
       startingDayOfWeek: StartingDayOfWeek.monday,
-
-      availableGestures: AvailableGestures.all,
+      availableGestures: AvailableGestures.horizontalSwipe,
       availableCalendarFormats: const {
         CalendarFormat.month: '',
       },
@@ -156,6 +155,26 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         ),
       ),
       builders: CalendarBuilders(
+        outsideDayBuilder: (context, date, _) {
+          return Container(
+            alignment: Alignment.center,
+            margin:  EdgeInsets.symmetric(vertical: 1.5,horizontal: 1.5),
+            child: Text(
+                '${date.day}',
+                style: TextStyle().copyWith(fontSize: 16.0,color: Colors.grey[500])
+            ),
+          );
+        },
+        outsideWeekendDayBuilder: (context, date, _) {
+          return Container(
+            alignment: Alignment.center,
+            margin:  EdgeInsets.symmetric(vertical: 1.5,horizontal: 1.5),
+            child: Text(
+                '${date.day}',
+                style: TextStyle().copyWith(fontSize: 16.0,color: Colors.grey[500])
+            ),
+          );
+        },
         dayBuilder: (context, date, _) {
           return Container(
             alignment: Alignment.center,
@@ -201,7 +220,6 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         },
         markersBuilder: (context, date, events, holidays) {
           final children = <Widget>[];
-
           if (dateStore.illnesses.isNotEmpty) {
             children.add(
               Positioned(

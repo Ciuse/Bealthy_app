@@ -1,10 +1,11 @@
-import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:Bealthy_app/allSymptomsPage.dart';
 import 'package:Bealthy_app/symptomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+
 import 'Login/config/palette.dart';
 
 
@@ -19,29 +20,28 @@ class SymptomsBar extends StatefulWidget {
 
 class _SymptomsBarState extends State<SymptomsBar>{
 
-
+  SymptomStore symptomStore;
   @override
 
   void initState() {
     super.initState();
-    var store = Provider.of<SymptomStore>(context, listen: false);
-    store.initStore(widget.day);
-    var storeIngredient = Provider.of<IngredientStore>(context, listen: false);
-    storeIngredient.initStore();
+    symptomStore = Provider.of<SymptomStore>(context, listen: false);
+    symptomStore.initStore(widget.day);
+    symptomStore.initSymptomDay(widget.day);
   }
 
 
   @override
   Widget build(BuildContext context) {
-    final symptomStore = Provider.of<SymptomStore>(context);
 
     return
       Container(
-        margin: EdgeInsets.only(left: 6,right: 6,top:20),
-        alignment: Alignment.center,
+        height: 130,
+          margin: EdgeInsets.only(left: 8,right: 8,top:8),
+          padding: EdgeInsets.only(left: 8,right: 8,bottom: 8),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20), //border corner radius
+            borderRadius: BorderRadius.circular(10), //border corner radius
             boxShadow:[
               BoxShadow(
                 color: Colors.grey.withOpacity(0.6), //color of shadow
@@ -54,138 +54,95 @@ class _SymptomsBarState extends State<SymptomsBar>{
               //you can set more BoxShadow() here
             ],
           ),
-        child:Column(
-
-            children: [
-
-              ListTile(
-                title: Text("Symptoms",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
-                leading: Icon(Icons.sick,color: Colors.black),
-              ),
-              Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 5,right: 5 ),
-                  padding: EdgeInsets.only(left: 6,right: 6 ),
-                  width:double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(15)), //border corner radius
-                    border: Border.all(color: Palette.bealthyColorScheme.primaryVariant, width: 2)
-                  ),
-                  child: SizedBox(// Horizontal ListView
-                    height: 70,
-                    child:  Observer(builder: (_) => ListView(
-                        scrollDirection: Axis.horizontal,
-                        children:[
-
-                          ListView.builder(
-                            itemCount: symptomStore.symptomList.length,
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return Observer(builder: (_) => Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 4),
-                                  width: 70,
-                                  alignment: Alignment.center,
-                                  color: Colors.transparent,
-                                  child:  RawMaterialButton(
-                                    constraints : const BoxConstraints(minWidth: 55.0, minHeight: 55.0),
-                                    shape: CircleBorder(
-                                      side: BorderSide(color:  Palette.bealthyColorScheme.primaryVariant, width: 2, style: BorderStyle.solid)
-                                  ),
-                                    onPressed: () => {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomList[index])
-                                          )
-                                      )//todo inserire qui il salvataggio
-                                    },
-                                    elevation: 5.0,
-                                    fillColor: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.bealthyColorScheme.primaryVariant : Colors.white,
-                                    child: ImageIcon(
-                                      AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
-                                      color: symptomStore.symptomList[index].isSymptomSelectDay ? Palette.bealthyColorScheme.onSecondary : null,
-                                      size: 35.0,
-                                    ),
-
-                                  )),
-                              );
-                            },
-                          ),
-                          Container(
-                              width: 70,
-                              alignment: Alignment.center,
-                              color: Colors.transparent,
-                              child:  RawMaterialButton(
-                                onPressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => AllSymptomsPage())).then((value) =>
-                                  {})
-                                },
-                                elevation: 5.0,
-                                fillColor: Colors.white,
-                                child: Icon(
-                                  Icons.apps_rounded,
-                                  size: 24.0,
-                                ),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
-
-                              )),
-                        ]
-                    )
-                    ),
-                  )),
-              SizedBox(height: 10)
-
-            ],
-          ));
-  }
-}
-
-/*
-List<Widget> _buildRowList(SymptomStore symptomStore) {
-
-  int i =0;
-  List<Widget> lines = []; // this will hold Rows according to available lines.
-  List<Widget> elementOfLine = []; // this will hold the places for each line
-
-  for (Symptom symptom in symptomStore.symptomList) {
-    if(i%3==0 && i!=0){
-      lines.add(
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child:Column(
+            mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:elementOfLine
+              children: [
+                Flexible(
+                    flex:2,
+                    child:ListTile(
+                      title: Text("Symptoms",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+                      leading: Icon(Icons.sick,color: Colors.black),
+                      trailing: IconButton(
+                        icon: Icon(Icons.add,color: Theme.of(context).accentColor,size: 30,),
+                        tooltip: 'Add a new symptom',
+                        onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => AllSymptomsPage()))
+                        },
+                      ),
+                    )),
+                Container(
+                  child:
+                  Expanded(
+                      flex:2,
+                      child:  Observer(
+                        builder: (_) {
+                          switch (symptomStore.loadSymptomDay.status) {
+                            case FutureStatus.rejected:
+                              return Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Oops something went wrong'),
+                                    RaisedButton(
+                                      child: Text('Retry'),
+                                      onPressed: () async {
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            case FutureStatus.fulfilled:
+                              return  Observer(builder: (_) => Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child:symptomStore.symptomListOfSpecificDay.length!=0?ListView.separated(
+                                    separatorBuilder: (BuildContext context, int index) {
+                                      return SizedBox(
+                                        width: 8,
+                                      );
+                                    },
+                                    itemCount: symptomStore.symptomListOfSpecificDay.length,
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    physics: ClampingScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      return Observer(builder: (_) => Container(
+                                          alignment: Alignment.center,
+                                          color: Colors.transparent,
+                                          child:  RawMaterialButton(
+                                            constraints : const BoxConstraints(minWidth: 50.0, minHeight: 50.0),
+                                            shape: CircleBorder(
+                                                side: BorderSide(color:  Palette.bealthyColorScheme.primaryVariant, width: 2, style: BorderStyle.solid)
+                                            ),
+                                            onPressed: () => {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomListOfSpecificDay[index])
+                                                  ))
+                                            },
+                                            elevation: 5.0,
+                                            child: ImageIcon(
+                                              AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
+                                              size: 35.0,
+                                            ),
+
+                                          )),
+                                      );
+                                    },
+                                  ):Center(child:Text("No symptoms this day",style: TextStyle(fontSize: 20),))));
+                            case FutureStatus.pending:
+                            default:
+                              return Center(child:CircularProgressIndicator());
+                          }
+                        },
+                      )
+                      //
+
+                  )),
+                ]
           ));
-      elementOfLine =[];
-    }
-
-    elementOfLine.add(Icon(
-      Icons.favorite,
-      color: Colors.pink,
-      size: 50.0,
-      semanticLabel: 'Text to announce in accessibility modes',
-    ),);
-    i++;
 
   }
-  if(i%3!=0){
-    for (int j=0; j<3-(i%3); j++) {
-      elementOfLine.add(Icon(
-        Icons.add,
-        color: Colors.pink,
-        size: 50.0,
-        semanticLabel: 'Text to announce in accessibility modes',
-      ),);
-    }
-  }
-  lines.add(Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly   ,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children:elementOfLine));
-
-  return lines;
 }
-*/
