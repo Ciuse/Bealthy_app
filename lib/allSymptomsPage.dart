@@ -71,7 +71,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
           for(var symptom in symptomStore.symptomList )
             Padding(
               key: Key(symptom.id),
-              padding: EdgeInsets.only(top: 8,bottom: 8),
+              padding: EdgeInsets.only(top: 4,bottom: 4),
               child:
               ListTile(
 

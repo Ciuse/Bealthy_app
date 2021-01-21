@@ -41,6 +41,21 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
+  final _$loadSymptomDayAtom = Atom(name: '_SymptomStoreBase.loadSymptomDay');
+
+  @override
+  ObservableFuture<dynamic> get loadSymptomDay {
+    _$loadSymptomDayAtom.reportRead();
+    return super.loadSymptomDay;
+  }
+
+  @override
+  set loadSymptomDay(ObservableFuture<dynamic> value) {
+    _$loadSymptomDayAtom.reportWrite(value, super.loadSymptomDay, () {
+      super.loadSymptomDay = value;
+    });
+  }
+
   final _$initStoreAsyncAction = AsyncAction('_SymptomStoreBase.initStore');
 
   @override
@@ -56,13 +71,21 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     return _$_getSymptomListAsyncAction.run(() => super._getSymptomList());
   }
 
-  final _$getSymptomsOfADayAsyncAction =
-      AsyncAction('_SymptomStoreBase.getSymptomsOfADay');
+  final _$initSymptomDayAsyncAction =
+      AsyncAction('_SymptomStoreBase.initSymptomDay');
 
   @override
-  Future<void> getSymptomsOfADay(DateTime date) {
-    return _$getSymptomsOfADayAsyncAction
-        .run(() => super.getSymptomsOfADay(date));
+  Future<void> initSymptomDay(DateTime day) {
+    return _$initSymptomDayAsyncAction.run(() => super.initSymptomDay(day));
+  }
+
+  final _$_getSymptomsOfADayAsyncAction =
+      AsyncAction('_SymptomStoreBase._getSymptomsOfADay');
+
+  @override
+  Future<void> _getSymptomsOfADay(DateTime date) {
+    return _$_getSymptomsOfADayAsyncAction
+        .run(() => super._getSymptomsOfADay(date));
   }
 
   final _$createOccurrenceSymptomAsyncAction =
@@ -141,7 +164,8 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   String toString() {
     return '''
 symptomList: ${symptomList},
-symptomListOfSpecificDay: ${symptomListOfSpecificDay}
+symptomListOfSpecificDay: ${symptomListOfSpecificDay},
+loadSymptomDay: ${loadSymptomDay}
     ''';
   }
 }

@@ -3,11 +3,8 @@ import 'dart:async';
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // Include generated file
@@ -34,12 +31,16 @@ abstract class _SymptomStoreBase with Store {
   Map colorSymptomsMap = new Map<String , Color>();
 
 
+  @observable
+  ObservableFuture loadSymptomDay;
+
+
   @action
   Future<void> initStore(DateTime day) async {
     if (!storeInitialized) {
       
       await _getSymptomList().then((value) => initializeColorMap());
-      await getSymptomsOfADay(day);
+      await initSymptomDay(day);
       storeInitialized = true;
     }
   }
@@ -77,10 +78,15 @@ abstract class _SymptomStoreBase with Store {
   }
 
 
+  @action
+  Future<void> initSymptomDay(DateTime day) async {
+    symptomListOfSpecificDay.clear();
+    return loadSymptomDay = ObservableFuture(_getSymptomsOfADay(day));
+  }
+
 
   @action
-  Future<void> getSymptomsOfADay(DateTime date) async {
-    symptomListOfSpecificDay.clear();
+  Future<void> _getSymptomsOfADay(DateTime date) async {
     _resetSymptomsValue();
     String day = fixDate(date);
     await (FirebaseFirestore.instance
