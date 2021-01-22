@@ -1,15 +1,21 @@
 import 'package:Bealthy_app/Database/treatment.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
+import 'Models/dateStore.dart';
+import 'Models/symptomStore.dart';
 import 'Models/treatmentStore.dart';
 
 
 
 class DetailsOfSpecificTreatmentPage extends StatefulWidget {
   final Treatment treatment;
-  DetailsOfSpecificTreatmentPage({@required this.treatment});
+  final bool treatmentCompleted;
+  DetailsOfSpecificTreatmentPage({@required this.treatment,@required this.treatmentCompleted});
 
   @override
   _DetailsOfSpecificTreatmentPageState createState() => _DetailsOfSpecificTreatmentPageState();
@@ -17,12 +23,29 @@ class DetailsOfSpecificTreatmentPage extends StatefulWidget {
 
 class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatmentPage> {
   TreatmentStore treatmentStore;
-
+  SymptomStore symptomStore;
+  DateStore dateStore;
+DateTime startingDateTreatment;
+DateTime endingDateTreatment;
+DateTime startingDateBeforeTreatment;
+  DateTime endingDateBeforeTreatment;
+int rangeDaysLength;
   @override
   void initState() {
 
     super.initState();
     treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
+    dateStore = Provider.of<DateStore>(context, listen: false);
+    symptomStore = Provider.of<SymptomStore>(context, listen: false);
+    if(widget.treatmentCompleted){
+      startingDateTreatment = dateStore.setDateFromString(widget.treatment.startingDay);
+      endingDateTreatment = dateStore.setDateFromString(widget.treatment.endingDay);
+      rangeDaysLength = dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment).length;
+      startingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: rangeDaysLength*2));
+      endingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: 1));
+      symptomStore.initBeforeTreatmentMap(dateStore.returnDaysOfAWeekOrMonth(startingDateBeforeTreatment, endingDateBeforeTreatment));
+      symptomStore.initTreatmentMap(dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment));
+    }
 
   }
 
@@ -34,10 +57,31 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
       ),
       body: SingleChildScrollView(child: Container(
           margin: EdgeInsets.all(8),
+          height:1000,
+
           child:
       Column(
+        mainAxisSize: MainAxisSize.min,
           children: [
             treatmentDescriptionWidget(),
+            widget.treatmentCompleted? Container(
+                height: 200,
+                child:Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(dateStore.returnStringDate(startingDateBeforeTreatment) +"\n"+ dateStore.returnStringDate(endingDateBeforeTreatment)),
+                      SizedBox(width: 20,),
+                      Text(dateStore.returnStringDate(startingDateTreatment) +"\n"+ dateStore.returnStringDate(endingDateTreatment)),
+                    ])): Container(),
+            widget.treatmentCompleted? Container(
+                height: 200,
+                child:Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                Observer(builder: (_) =>treatmentBeforeMap()),
+                Observer(builder: (_) =>treatmentMap()),
+              ])): Container(),
+
           ]))),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -64,6 +108,69 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
       ),
     );
   }
+
+  Widget treatmentMap(){
+    switch (symptomStore.loadTreatmentMap.status) {
+      case FutureStatus.rejected:
+        return Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Oops something went wrong'),
+              RaisedButton(
+                child: Text('Retry'),
+                onPressed: () async {
+                },
+              ),
+            ],
+          ),
+        );
+      case FutureStatus.fulfilled:
+        return Expanded(child:ListView(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            children: [for(var symptom in symptomStore.mapSymptomTreatment.keys )
+            ListTile(
+                title: Text((symptomStore.mapSymptomTreatment[symptom].severitySymptom/symptomStore.mapSymptomTreatment[symptom].occurrenceSymptom).toStringAsFixed(2)),
+              subtitle:Text(symptom),
+              )]
+        ));
+      case FutureStatus.pending:
+      default:
+        return Center(child:CircularProgressIndicator());
+    }
+  }
+
+  Widget treatmentBeforeMap(){
+    switch (symptomStore.loadBeforeTreatmentMap.status) {
+      case FutureStatus.rejected:
+        return Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Oops something went wrong'),
+              RaisedButton(
+                child: Text('Retry'),
+                onPressed: () async {
+                },
+              ),
+            ],
+          ),
+        );
+      case FutureStatus.fulfilled:
+        return Expanded(child:ListView(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            children: [for(var symptom in symptomStore.mapSymptomBeforeTreatment.keys )
+              ListTile(
+                title: Text((symptomStore.mapSymptomBeforeTreatment[symptom].severitySymptom/symptomStore.mapSymptomBeforeTreatment[symptom].occurrenceSymptom).toStringAsFixed(2)),
+                subtitle:Text(symptom),
+              )]
+        ));
+      case FutureStatus.pending:
+      default:
+        return Center(child:CircularProgressIndicator());
+    }
+  }
+
 
   Widget descriptionWidget(){
     return  Card(

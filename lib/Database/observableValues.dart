@@ -14,5 +14,10 @@ abstract class _ObservableValuesBase with Store {
   @observable
   String stringIngredients;
 
+  @observable
+  double severitySymptom;
+
+  @observable
+  int occurrenceSymptom;
 
 }

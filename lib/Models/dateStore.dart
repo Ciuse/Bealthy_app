@@ -87,6 +87,12 @@ abstract class _DateStoreBase with Store {
     }
   }
 
+  String returnStringDate(DateTime date) {
+    String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(
+        2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    return dateSlug;
+  }
+
   @action
   DateTime setDateFromString(String dateTime){
     DateFormat dateFormat = DateFormat("yyyy-MM-dd");
@@ -176,7 +182,6 @@ abstract class _DateStoreBase with Store {
     overviewDefaultLastDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day-31 );
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
   }
-
 
 
   @action
