@@ -89,7 +89,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
 
   }
 
-  void addDishToUser() {
+  void addDishToDishCreated() {
     dish.name=nameCt.text;
     foodStore.addNewDishCreatedByUser(dish, ingredientStore.ingredientListOfDish,ingredientStore);
     if(dish.imageFile!=null){
@@ -104,10 +104,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
 
   @override
   Widget build(BuildContext context) {
-    MealTimeStore mealTimeStore = Provider.of<MealTimeStore>(context);
-    DateStore dateStore = Provider.of<DateStore>(context);
     final bottom = MediaQuery.of(context).viewInsets.bottom;
-    final ingredientStore = Provider.of<IngredientStore>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text("Create Dish"),
@@ -266,7 +263,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                                       ),
                                       FlatButton(
                                         onPressed: () {
-                                          addDishToUser();
+                                          addDishToDishCreated();
                                           Navigator.pop(context);
                                           Navigator.pop(context);
                                           Navigator.push(
