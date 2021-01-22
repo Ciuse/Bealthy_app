@@ -3,6 +3,7 @@ import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
@@ -197,6 +198,13 @@ abstract class _DateStoreBase with Store {
     calculationPeriodInProgress = true;
     overviewFirstDate = DateTime(overviewDefaultLastDate.year, overviewDefaultLastDate.month,overviewDefaultLastDate.day-31 );
     getDaysOfAWeekOrMonth(overviewFirstDate, overviewDefaultLastDate);
+
+  }
+
+  void getPickerRangeDate(DateTimeRange dateTimeRange){
+    calculationPeriodInProgress = true;
+    overviewFirstDate=dateTimeRange.start;
+    getDaysOfAWeekOrMonth(dateTimeRange.start, dateTimeRange.end);
 
   }
 }

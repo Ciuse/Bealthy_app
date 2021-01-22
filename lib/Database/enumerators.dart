@@ -9,6 +9,7 @@ enum TemporalTime {
   Day,
   Week,
   Month,
+  Picker,
 }
 
 enum MealTime{
