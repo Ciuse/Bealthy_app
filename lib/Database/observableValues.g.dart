@@ -25,10 +25,44 @@ mixin _$ObservableValues on _ObservableValuesBase, Store {
     });
   }
 
+  final _$severitySymptomAtom =
+      Atom(name: '_ObservableValuesBase.severitySymptom');
+
+  @override
+  double get severitySymptom {
+    _$severitySymptomAtom.reportRead();
+    return super.severitySymptom;
+  }
+
+  @override
+  set severitySymptom(double value) {
+    _$severitySymptomAtom.reportWrite(value, super.severitySymptom, () {
+      super.severitySymptom = value;
+    });
+  }
+
+  final _$occurrenceSymptomAtom =
+      Atom(name: '_ObservableValuesBase.occurrenceSymptom');
+
+  @override
+  int get occurrenceSymptom {
+    _$occurrenceSymptomAtom.reportRead();
+    return super.occurrenceSymptom;
+  }
+
+  @override
+  set occurrenceSymptom(int value) {
+    _$occurrenceSymptomAtom.reportWrite(value, super.occurrenceSymptom, () {
+      super.occurrenceSymptom = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-stringIngredients: ${stringIngredients}
+stringIngredients: ${stringIngredients},
+severitySymptom: ${severitySymptom},
+occurrenceSymptom: ${occurrenceSymptom}
     ''';
   }
 }

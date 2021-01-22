@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Bealthy_app/Database/enumerators.dart';
+import 'package:Bealthy_app/Database/observableValues.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +29,23 @@ abstract class _SymptomStoreBase with Store {
   @observable
   var symptomListOfSpecificDay = new ObservableList<Symptom>();
 
+  @observable
+  var mapSymptomTreatment = new ObservableMap<String,ObservableValues>();
+
+  @observable
+  var mapSymptomBeforeTreatment = new ObservableMap<String,ObservableValues>();
+
   Map colorSymptomsMap = new Map<String , Color>();
 
 
   @observable
   ObservableFuture loadSymptomDay;
 
+  @observable
+  ObservableFuture loadTreatmentMap;
+
+  @observable
+  ObservableFuture loadBeforeTreatmentMap;
 
   @action
   Future<void> initStore(DateTime day) async {
@@ -105,6 +117,128 @@ abstract class _SymptomStoreBase with Store {
         symptomListOfSpecificDay.add(toUpdate);
       }
       );
+    })
+    );
+  }
+
+  @action
+  Future<void> initTreatmentMap(List<DateTime> days) async {
+    mapSymptomTreatment.clear();
+    return loadTreatmentMap = ObservableFuture(asyncForEachSymptoms(days));
+  }
+
+  Future<void>asyncForEachSymptoms(List<DateTime> dates) async {
+    await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValue(dates,symptom.id)));
+  }
+
+  Future<void>asyncGetSymptomValue(List<DateTime> dates,String symptomId) async {
+    await Future.wait(dates.map((date)=>_fillTreatmentMap(date,symptomId)));
+  }
+
+  @action
+  Future<void> initBeforeTreatmentMap(List<DateTime> days) async {
+    mapSymptomBeforeTreatment.clear();
+    return loadBeforeTreatmentMap = ObservableFuture(asyncForEachSymptomsBeforeTreatment(days));
+  }
+
+  Future<void>asyncForEachSymptomsBeforeTreatment(List<DateTime> dates) async {
+    await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValueBeforeTreatment(dates,symptom.id)));
+  }
+
+  Future<void>asyncGetSymptomValueBeforeTreatment(List<DateTime> dates,String symptomId) async {
+    await Future.wait(dates.map((date)=>_fillBeforeTreatmentMap(date,symptomId)));
+  }
+
+
+
+  @action
+  double mealTimeValueSymptom(Symptom symptom){
+    double value;
+    int count=0;
+    symptom.mealTimeBoolList.forEach((element) {
+      if(element.isSelected==true){
+        count=count+1;
+      }
+    });
+    if(count==0){
+      value = 0;
+    }
+    if(count==1){
+      value = 0.6;
+    }
+    if(count==2){
+      value = 0.8;
+    }
+    if(count==3){
+      value = 0.95;
+    }
+    if(count==4){
+      value = 1.0;
+    }
+    return value;
+  }
+
+
+  @action
+  Future<void> _fillTreatmentMap(DateTime date,String symptomId) async {
+    String day = fixDate(date);
+    await (FirebaseFirestore.instance
+        .collection('UserSymptoms')
+        .doc(auth.currentUser.uid).collection("DaySymptoms").doc(day)
+        .collection("Symptoms").doc(symptomId)
+        .get()
+        .then((querySnapshot) {
+          if(querySnapshot.exists){
+            Symptom symptomCreated = new Symptom(id: symptomId, intensity: querySnapshot.get("intensity"),frequency: querySnapshot.get("frequency"));
+            symptomCreated.initStore();
+            symptomCreated.setMealTime(querySnapshot.get("mealTime"));
+            symptomCreated.setMealTimeBoolList();
+            symptomCreated.overviewValue = ((symptomCreated.intensity)*(symptomCreated.frequency)*mealTimeValueSymptom(symptomCreated))*0.4;
+            if(mapSymptomTreatment.keys.isEmpty || mapSymptomTreatment[symptomId]==null){
+              print("entrato if");
+              ObservableValues symptomValue = new ObservableValues();
+              symptomValue.occurrenceSymptom = 1;
+              symptomValue.severitySymptom = symptomCreated.overviewValue;
+              mapSymptomTreatment.putIfAbsent(symptomId, () => symptomValue);
+            }else{
+              print("entrato else");
+              mapSymptomTreatment[symptomId].occurrenceSymptom = mapSymptomTreatment[symptomId].occurrenceSymptom +1;
+              mapSymptomTreatment[symptomId].severitySymptom = mapSymptomTreatment[symptomId].severitySymptom + symptomCreated.overviewValue;
+            }
+          }
+
+    })
+    );
+  }
+
+  @action
+  Future<void> _fillBeforeTreatmentMap(DateTime date,String symptomId) async {
+    String day = fixDate(date);
+    await (FirebaseFirestore.instance
+        .collection('UserSymptoms')
+        .doc(auth.currentUser.uid).collection("DaySymptoms").doc(day)
+        .collection("Symptoms").doc(symptomId)
+        .get()
+        .then((querySnapshot) {
+      if(querySnapshot.exists){
+        Symptom symptomCreated = new Symptom(id: symptomId, intensity: querySnapshot.get("intensity"),frequency: querySnapshot.get("frequency"));
+        symptomCreated.initStore();
+        symptomCreated.setMealTime(querySnapshot.get("mealTime"));
+        symptomCreated.setMealTimeBoolList();
+        symptomCreated.overviewValue = ((symptomCreated.intensity)*(symptomCreated.frequency)*mealTimeValueSymptom(symptomCreated))*0.4;
+        if(mapSymptomBeforeTreatment.keys.isEmpty || mapSymptomBeforeTreatment[symptomId]==null){
+          print("entrato if");
+          ObservableValues symptomValue = new ObservableValues();
+          symptomValue.occurrenceSymptom = 1;
+          symptomValue.severitySymptom = symptomCreated.overviewValue;
+          mapSymptomBeforeTreatment.putIfAbsent(symptomId, () => symptomValue);
+        }else{
+          print("entrato else");
+          mapSymptomBeforeTreatment[symptomId].occurrenceSymptom = mapSymptomBeforeTreatment[symptomId].occurrenceSymptom +1;
+          mapSymptomBeforeTreatment[symptomId].severitySymptom = mapSymptomBeforeTreatment[symptomId].severitySymptom + symptomCreated.overviewValue;
+        }
+      }
+
     })
     );
   }

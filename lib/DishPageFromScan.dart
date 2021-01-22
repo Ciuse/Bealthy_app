@@ -12,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'Database/enumerators.dart';
 import 'Database/dish.dart';
@@ -151,7 +152,7 @@ bool findIngredient(Ingredient ingredient){
       appBar: AppBar(
         title:  Text(barCodeScannerStore.scanBarcode),
       ),
-      body:  Container(
+      body: OKToast( child: Container(
               child:
               Observer(
                 builder: (_) {
@@ -173,6 +174,7 @@ bool findIngredient(Ingredient ingredient){
                 case FutureStatus.fulfilled:
                   if(barCodeScannerStore.productFromQuery!=null){
                   initializeDishFromProduct();
+                  Ingredient toAdd;
                   return SingleChildScrollView(
                       physics: ScrollPhysics(),
                   child:Column(
@@ -281,45 +283,78 @@ bool findIngredient(Ingredient ingredient){
                         )),
                         ingredientsWidget(),
                         SizedBox(height: 20,),
-                        SizedBox(height: 20,),
-                        DropdownSearch<String>(
-                          mode: Mode.MENU,
-                          dropdownSearchDecoration:  new InputDecoration(
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.all(10),
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(
+                      Container(
+                          height: 100,
+                          child:Card(child:Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                        Flexible(
+                            fit: FlexFit.loose,
+                          flex:5,
+                            child: ListTile(
+                          title: Text("Add ingredients!"),
+                        )),
+                        Expanded(
+                            flex:4,
+                            child:
+                            Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child:DropdownSearch<String>(
+                              mode: Mode.MENU,
+                              dropdownSearchDecoration:  new InputDecoration(
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.all(10),
+                                border: new OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(25.0),
+                                  borderSide: new BorderSide(
+                                  ),
+                                ),
+                                //fillColor: Colors.green
                               ),
-                            ),
-                            //fillColor: Colors.green
-                          ),
-                          //  showSearchBox: true,
-                          items: ingredientStore.ingredientsName,
-                          label: "Select ingredient",
-                          autoValidateMode: AutovalidateMode.onUserInteraction,
-                          validator:  (val) {
-                            if(barCodeScannerStore.ingredients.length==0) {
-                              return "Insert at least one ingredient";
-                            }else{
-                              return null;
-                            }
-                          },
-                          onChanged: (String ingredient) {
-                            selectedItemIngredient="";
-                              if(!findIngredient(ingredientStore.getIngredientFromName(ingredient))){
-                                //ingredientStore.ingredientListOfDish.add(ingredientStore.getIngredientFromName(ingredient));
-                                Ingredient toAdd = ingredientStore.getIngredientFromName(ingredient);
-                                toAdd.qty=Quantity.Normal.toString().split('.').last;
-                                barCodeScannerStore.ingredients.add(toAdd);
-                                ingredientStore.ingredientsName.remove(ingredient);
-                              }else{
-                                print("già presente");
-                              }
+                              //  showSearchBox: true,
+                              items: ingredientStore.ingredientsName,
+                              label: "Select ingredient",
+                              autoValidateMode: AutovalidateMode.onUserInteraction,
+                              validator:  (val) {
+                                if(barCodeScannerStore.ingredients.length==0) {
+                                  return "Insert at least one ingredient";
+                                }else{
+                                  return null;
+                                }
+                              },
+                              onChanged: (String ingredient)=> {
+                                selectedItemIngredient="",
+                                if(!findIngredient(ingredientStore.getIngredientFromName(ingredient))){
+                                  toAdd = ingredientStore.getIngredientFromName(ingredient),
+                                  toAdd.qty=Quantity.Normal.toString().split('.').last,
+                                  barCodeScannerStore.ingredients.add(toAdd),
+                                  ingredientStore.ingredientsName.remove(ingredient),
+                                }else{
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) =>
+                                      new AlertDialog(
+                                        title: Center(child: Text("Ingredient already inserted")),
+                                        contentPadding: EdgeInsets.only(top: 8, left: 10, right: 10),
+                                        actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                        actions: [
+                                          FlatButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('OK'),
+                                          ),
+                                        ],
+                                      )),
+
+                                }
 
 
-                            },
-                        ),
+                              },
+                            ))),
+                      ],))),
+
+
 
                         barCodeScannerStore.scanBarcode != "-1"? Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -401,56 +436,10 @@ bool findIngredient(Ingredient ingredient){
               }
             },
           )
-          ),
+          )),
     );
   }
 
-  Widget ingredientAdd(Ingredient ingredient, int index){
-    return Observer(builder: (_) =>Column(
-      children: [
-        Container(
-            child:
-            ListTile(
-              title: Text(ingredient.name),
-              subtitle:Text(ingredient.qty),
-              leading: Image(image:AssetImage("images/ingredients/" + ingredient.id + ".png"), height: 40,width:40,),
-              trailing:
-              Container(
-                  width: 140,
-                  child:DropdownSearch<String>(
-                      key: Key(ingredient.id),
-                      items: quantityList,
-                      label: "Quantity",
-                      popupTitle:Padding(
-                          padding: EdgeInsets.all(16),
-                          child:Text("Select ingredient quantity",textAlign: TextAlign.center,)),
-                      maxHeight:230,
-                      dialogMaxWidth:200,
-                      showSelectedItem: true,
-                      autoValidateMode: AutovalidateMode.onUserInteraction,
-                      validator:  (val) {
-                        if(val==null) {
-                          return "Empty Quantity";
-                        }else{
-                          return null;
-                        }
-                      },
-                      onChanged: (String quantity) {
-                        ingredient.qty=quantity;
-                      }
-                  )),
-            )),
-        index!=ingredientStore.ingredientListOfDish.length-1?
-        Divider(
-          height: 4,
-          thickness: 0.5,
-          indent: 20,
-          endIndent: 20,
-          color: Colors.black38,
-        ):Container(),
-      ],
-    ));
-  }
 
   int getQuantityEnumIndex(String name){
     int i =0;
@@ -511,64 +500,103 @@ bool findIngredient(Ingredient ingredient){
                             Observer(builder: (_) =>ListTile(
                                       title: Text(barCodeScannerStore.ingredients[index].name),
                                       leading: Image(image:AssetImage("images/ingredients/" + barCodeScannerStore.ingredients[index].id + ".png"), height: 40,width:40,),
-                                      trailing: TextButton(child:
-                                      Row(
+                                      trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text(barCodeScannerStore.ingredients[index].qty, textAlign: TextAlign.left),
-                                          Icon(Icons.mode_rounded,),
-                                        ],
-                                      ),
-                                          onPressed: () =>{
-                                            barCodeScannerStore.ingredients[index].valueShowDialog=getQuantityEnumIndex(barCodeScannerStore.ingredients[index].qty),
-                                            showDialog(
-                                                context: context,
-                                                builder: (_) =>  new AlertDialog(
-                                                  title: Text('Change Quantity'),
-                                                  content: Observer(builder: (_) => Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: <Widget>[
+                                          TextButton(child:
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(barCodeScannerStore.ingredients[index].qty, textAlign: TextAlign.left),
+                                              Icon(Icons.mode_rounded,),
+                                            ],
+                                          ),
+                                              onPressed: () =>{
+                                                barCodeScannerStore.ingredients[index].valueShowDialog=getQuantityEnumIndex(barCodeScannerStore.ingredients[index].qty),
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (_) =>  new AlertDialog(
+                                                      title: Text('Change Quantity'),
+                                                      content: Observer(builder: (_) => Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: <Widget>[
 
-                                                      for (int i = 0; i < Quantity.values.length; i++)
-                                                        ListTile(
-                                                          title: Text(
-                                                            Quantity.values[i].toString().split('.').last,
+                                                          for (int i = 0; i < Quantity.values.length; i++)
+                                                            ListTile(
+                                                              title: Text(
+                                                                Quantity.values[i].toString().split('.').last,
+                                                              ),
+                                                              leading: Radio(
+                                                                value: i,
+                                                                groupValue:  barCodeScannerStore.ingredients[index].valueShowDialog,
+                                                                onChanged: (int value) {
+                                                                  barCodeScannerStore.ingredients[index].valueShowDialog=value;
+                                                                },
+                                                              ),
+                                                            ),
+                                                          Divider(
+                                                            height: 4,
+                                                            thickness: 0.8,
+                                                            color: Colors.black,
                                                           ),
-                                                          leading: Radio(
-                                                            value: i,
-                                                            groupValue:  barCodeScannerStore.ingredients[index].valueShowDialog,
-                                                            onChanged: (int value) {
-                                                              barCodeScannerStore.ingredients[index].valueShowDialog=value;
-                                                            },
-                                                          ),
+                                                        ],
+                                                      )),
+                                                      contentPadding: EdgeInsets.only(top: 8),
+                                                      actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                                      actions: [
+                                                        FlatButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(context);
+                                                          },
+                                                          child: Text('CANCEL'),
                                                         ),
-                                                      Divider(
-                                                        height: 4,
-                                                        thickness: 0.8,
-                                                        color: Colors.black,
+                                                        FlatButton(
+                                                          onPressed: () {
+                                                            barCodeScannerStore.ingredients[index].qty=Quantity.values[barCodeScannerStore.ingredients[index].valueShowDialog].toString().split('.').last;
+                                                            Navigator.of(context).pop();
+                                                          },
+                                                          child: Text('ACCEPT'),
+                                                        ),
+                                                      ],
+                                                    )
+                                                )
+                                              }),
+                                          IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: (){
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) =>  new AlertDialog(
+                                                    title: Text('Delete ingredient'),
+                                                    contentPadding: EdgeInsets.only(top: 8),
+                                                    actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                                    actions: [
+                                                      FlatButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(context);
+                                                        },
+                                                        child: Text('CANCEL'),
+                                                      ),
+                                                      FlatButton(
+                                                        onPressed: () {
+                                                          String ingredientName = barCodeScannerStore.ingredients[index].name;
+                                                          barCodeScannerStore.ingredients.removeAt(index);
+                                                          if(!ingredientStore.ingredientsName.contains(ingredientName)){
+                                                            ingredientStore.ingredientsName.add(ingredientName);
+                                                          }
+
+                                                          Navigator.pop(context);
+                                                        },
+                                                        child: Text('DELETE'),
                                                       ),
                                                     ],
-                                                  )),
-                                                  contentPadding: EdgeInsets.only(top: 8),
-                                                  actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-                                                  actions: [
-                                                    FlatButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text('CANCEL'),
-                                                    ),
-                                                    FlatButton(
-                                                      onPressed: () {
-                                                        barCodeScannerStore.ingredients[index].qty=Quantity.values[barCodeScannerStore.ingredients[index].valueShowDialog].toString().split('.').last;
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: Text('ACCEPT'),
-                                                    ),
-                                                  ],
-                                                )
-                                            )
-                                          }),
+                                                  )
+                                              );
+
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ))),
                                 index!=barCodeScannerStore.ingredients.length-1?
                                 Divider(

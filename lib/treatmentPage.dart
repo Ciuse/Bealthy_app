@@ -103,7 +103,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => DetailsOfSpecificTreatmentPage(treatment: treatmentStore.treatmentsInProgressList[index]),
+                                        builder: (context) => DetailsOfSpecificTreatmentPage(treatment: treatmentStore.treatmentsInProgressList[index],treatmentCompleted: false,),
                                       ),
                                     )
                                   },
@@ -173,7 +173,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => DetailsOfSpecificTreatmentPage(treatment: treatmentStore.treatmentsCompletedList[index]),
+                                        builder: (context) => DetailsOfSpecificTreatmentPage(treatment: treatmentStore.treatmentsCompletedList[index],treatmentCompleted: true,),
                                       ),
                                     )
                                   },
