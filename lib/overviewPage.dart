@@ -2,7 +2,6 @@ import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/headerScrollStyle.dart';
 import 'package:Bealthy_app/ingredientOverview.dart';
 import 'package:Bealthy_app/overviewSingleSymptomMonth.dart';
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -36,17 +35,16 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
 
   void initState() {
-  temporalList= getTemporalName();
+    temporalList= getTemporalName();
     super.initState();
-
     _tabController = getTabController();
     dateStore = Provider.of<DateStore>(context, listen: false);
     //trovo l'ultimo giorno della settimana
-  if(widget.lastDayOfWeek==null){
-    dateStore.overviewDefaultLastDate=DateTime.now();
-  }else{
-    dateStore.overviewDefaultLastDate=widget.lastDayOfWeek;
-  }
+    if(widget.lastDayOfWeek==null){
+      dateStore.overviewDefaultLastDate=DateTime.now();
+    }else{
+      dateStore.overviewDefaultLastDate=widget.lastDayOfWeek;
+    }
 
 
     //trovo il primo giorno della settimana
@@ -64,6 +62,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     List<String> listToReturn = new List<String>();
     listToReturn.add(TemporalTime.Week.toString().split('.').last);
     listToReturn.add(TemporalTime.Month.toString().split('.').last);
+    listToReturn.add(TemporalTime.Picker.toString().split('.').last);
+
     return listToReturn;
   }
 
@@ -92,7 +92,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                     onSelected:  choiceAction,
                     child: Container(
                       padding: EdgeInsets.all(10),
-                        child: Observer(builder: (_) =>
+                        child: Observer(builder: (context) =>
                             Row(children: [
                               Text(dateStore.timeSelected.toString().split('.').last,textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 18,),),
@@ -105,7 +105,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                       return temporalList.map((String choice) {
                         return PopupMenuItem<String>(
                             value: choice,
-                            child: Text(choice));
+                            textStyle:TextStyle(fontSize: 17,color: Colors.black),
+                            child: Text(choice),);
                       }).toList();
                     }
                 ))
@@ -121,10 +122,11 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         body:Container(
             margin: EdgeInsets.symmetric(horizontal: 4,vertical: 8),
             child:
-            Observer(builder: (_) =>
+            Observer(builder: (context) =>
             dateStore.timeSelected==TemporalTime.Day? dayOverviewBuild():
             dateStore.timeSelected==TemporalTime.Week? weekOverviewBuild():
-            dateStore.timeSelected==TemporalTime.Month? monthOverviewBuild(): null
+            dateStore.timeSelected==TemporalTime.Month? monthOverviewBuild():
+            dateStore.timeSelected==TemporalTime.Picker? pickerOverviewBuild():Container()
             )
 
         ))
@@ -136,7 +138,10 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         if(element.toString().split('.').last==choice){
           dateStore.timeSelected = element;
         }
-      });
+      }
+
+      );
+
     if(choice== TemporalTime.Day.toString().split('.').last){
       overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
 
@@ -146,7 +151,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
 
       //calcolo il primo giorno della settimana e trovo i giorni del range
-      context.read<DateStore>().firstDayInWeek();
+      dateStore.firstDayInWeek();
 
       //trovo le statistiche di quel range di giorni
       overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
@@ -156,11 +161,39 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
 
     //calcolo il primo giorno del mese e trovo i giorni del range
-      context.read<DateStore>().firstDayInMonth();
+      dateStore.firstDayInMonth();
 
       overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
       //trovo le statistiche di quel range di giorni
       overviewStore.initializeSymptomsMap(dateStore);
+    }
+
+    if(choice==TemporalTime.Picker.toString().split('.').last){
+      showDateRangePicker(
+        context: context,
+        currentDate: DateTime.now(),
+        initialDateRange: DateTimeRange(start: DateTime.now().subtract(Duration(days: 7)), end: DateTime.now()),
+        firstDate: DateTime.now().subtract(Duration(days: 200)),
+        lastDate: DateTime.now().add(Duration(days: 0)),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData(
+            ),
+            child: child,
+          );
+        },
+      ).then((value) => {
+        if(value!=null)
+          {
+            dateStore.overviewDefaultLastDate = value.end,
+            dateStore.getPickerRangeDate(value),
+            overviewStore =
+            new OverviewStore(timeSelected: dateStore.timeSelected),
+            overviewStore.initializeSymptomsMap(dateStore)
+          }
+      });
+
+
     }
   }
 
@@ -320,7 +353,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   }
 
   Widget weekOverviewBuild(){
-    return Observer(builder: (_) =>Column(
+    return Observer(builder: (context) =>Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildHeaderWeek(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate),
@@ -342,6 +375,16 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     ));
   }
 
+  Widget pickerOverviewBuild(){
+    return Observer(builder: (_) =>Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _buildHeaderPicker(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate),
+        Expanded(child: _buildContent())
+        //Add this to give height
+      ],
+    ));
+  }
 
   Widget _buildHeaderDay(DateTime day) {
     final children = [
@@ -380,7 +423,6 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         children: children,
       ),
     );
-
   }
 
   Widget _buildHeaderWeek(DateTime firstDay, DateTime lastDay) {
@@ -463,6 +505,64 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   }
 
+  Widget _buildHeaderPicker(DateTime firstDay, DateTime lastDay) {
+    final children = [
+
+      Expanded(
+        child: GestureDetector(
+          onTap: ()=>{
+
+          },
+          onLongPress: null,
+          child: Text(DateFormat.yMMMMEEEEd("en_US").format(firstDay) +"\n"+ DateFormat.yMMMMEEEEd("en_US").format(lastDay),
+            style: widget.headerScrollStyle.titleTextStyle,
+            textAlign: widget.headerScrollStyle.centerHeaderTitle
+                ? TextAlign.center
+                : TextAlign.start,
+          ),
+        ),
+      ),
+      CustomIconButtonOur(
+        icon: Icon(Icons.today,size: 30,),
+        onTap: ()=> showDateRangePicker(
+          context: context,
+          currentDate: DateTime.now(),
+          initialDateRange: DateTimeRange(start: DateTime.now().subtract(Duration(days: 7)), end: DateTime.now()),
+          firstDate: DateTime.now().subtract(Duration(days: 200)),
+          lastDate: DateTime.now().add(Duration(days: 0)),
+          builder: (BuildContext context, Widget child) {
+            return Theme(
+              data: ThemeData(
+              ),
+              child: child,
+            );
+          },
+        ).then((value) => {
+          if(value!=null)
+            {dateStore.overviewDefaultLastDate = value.end,
+              dateStore.getPickerRangeDate(value),
+              overviewStore =
+              new OverviewStore(timeSelected: dateStore.timeSelected),
+              overviewStore.initializeSymptomsMap(dateStore)}
+        }),
+        margin: widget.headerScrollStyle.leftChevronMargin,
+        padding: EdgeInsets.only(right:16, bottom: 12,top: 12),
+      ),
+
+    ];
+
+    return Container(
+      decoration: widget.headerScrollStyle.decoration,
+      margin: widget.headerScrollStyle.headerMargin,
+      padding: widget.headerScrollStyle.headerPadding,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: children,
+      ),
+    );
+
+  }
+
   Widget symptomsWidget() {
     return Column(
       children: [
@@ -489,7 +589,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                                   MaterialPageRoute(builder: (context) =>
                                   dateStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
                                   dateStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
-                                  dateStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore): null
+                                  dateStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
+                                  dateStore.timeSelected==TemporalTime.Picker? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
+                                      Container()
                                   ))
                             },
                             elevation: 5.0,
@@ -577,7 +679,7 @@ class PieChart2State extends State<PieChartSample2> {
     SymptomStore symptomStore = Provider.of<SymptomStore>(context);
     return Observer(builder: (_) => Card(
 
-        elevation: 1,
+        elevation: 3,
         margin: EdgeInsets.all(4),
         child: Column(children: [
           ListTile(

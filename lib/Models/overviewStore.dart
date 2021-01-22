@@ -103,6 +103,9 @@ abstract class _OverviewBase with Store {
       case 2: loadInitSymptomGraph =  ObservableFuture(Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
           .then((value) =>  totalOccurrenceSymptomsPeriod()));
       break;
+      case 3: loadInitSymptomGraph =  ObservableFuture(Future.wait(dateStore.rangeDays.map(getSymptomSingleDayOfAPeriod))
+          .then((value) =>  totalOccurrenceSymptomsPeriod()));
+      break;
     }
 
   }
@@ -120,6 +123,8 @@ abstract class _OverviewBase with Store {
       case 1: loadInitIngredientGraph =  ObservableFuture(initializePeriodIngredientAsync(dateStore));
       break;
       case 2: loadInitIngredientGraph =  ObservableFuture(initializePeriodIngredientAsync(dateStore));
+      break;
+      case 3: loadInitIngredientGraph =  ObservableFuture(initializePeriodIngredientAsync(dateStore));
       break;
     }
 

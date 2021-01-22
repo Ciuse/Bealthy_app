@@ -99,7 +99,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                   child:symptomStore.symptomListOfSpecificDay.length!=0?ListView.separated(
                                     separatorBuilder: (BuildContext context, int index) {
                                       return SizedBox(
-                                        width: 8,
+                                        width: 16,
                                       );
                                     },
                                     itemCount: symptomStore.symptomListOfSpecificDay.length,
@@ -112,7 +112,8 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                           color: Colors.transparent,
                                           child:  RawMaterialButton(
                                             constraints : const BoxConstraints(minWidth: 50.0, minHeight: 50.0),
-                                            shape: CircleBorder(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20),
                                                 side: BorderSide(color:  Palette.bealthyColorScheme.primaryVariant, width: 2, style: BorderStyle.solid)
                                             ),
                                             onPressed: () => {
