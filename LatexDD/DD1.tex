@@ -380,7 +380,131 @@ Generally, there should not be too much invasive maintenance processes, as it us
 The system in terms of portability shall be very flexible. The application logic and the system interfaces are abstractly separated; so, the application porting consist only in the re-adapting of the user interface with the new operating system.
 Also, could be necessary to reimplement some of the system interaction with the external services.\\
 
-\section{User Interface Design}
+\section{Specific Requirement}
+\subsection{User characteristics}
+The main actor that interact with the system is the \textbf{Registered User} of the application.\\
+The registered user can access to all the function of the application, and can link external available services to his account in the login page.\\
+The application is designed for all those users who suffer from eating problems or chronic disorders in their daily diet and who experience frequent symptoms. The application would help them monitor the chronic pattern of symptoms and identify a correlation between what they eat and the symptoms they experience so that they can follow a food diet that may alleviate their symptoms in some way. 
+\subsection{User Interface Design}
+\
+\begin{description}[leftmargin=1cm,rightmargin=1cm]
+\item [  1)Home page]
+\
+\
+\
+\begin{figure}[h!]
+\centering
+\hspace*{\fill}
+\begin{subfigure}[tl]{0.3\linewidth}
+\includegraphics[width=\linewidth]{HomePage1.PNG}
+\caption{\textbf{Empty day}}
+\end{subfigure}\hfill
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{HomePage2.PNG}
+\caption{\textbf{Day with symptoms and dishes}}
+\end{subfigure}
+\hspace*{\fill}
+\end{figure}
+
+\begin{itemize}[•]
+\item This is the main screen of the application, from this screen the user can navigate through the calendar by simply clicking on any day. The side arrows allow the user to change the month selected on the calendar.  Underneath the calendar, the user can both view and keep track of his or her symptoms and meals taken in the past days and enter new ones using the appropriate buttons.  Scrolling upwards, the calendar is reduced to a simple bar showing the day selected by the user. Again, the user can use the side arrows to change the day. The calendar also shows with a specific icon the presence or absence of a symptom on a given day so that it is easy to see which days the user has been sickest.
+\item With the "+" button in the symptoms box the user can add a symptom.
+\item With the "+" button in the mealtime boxes ( breakfast,lunch,snach and dinner) the user can add a dish.
+\item With the bottom bar  it will be possible to navigate through the various screens(calendar , statistics , treatments and personal page).
+\end{itemize}
+\item [ 2)Add symptom page]
+\
+\
+\
+\begin{figure}[h!]
+\centering
+\hspace*{\fill}
+\begin{subfigure}[tl]{0.3\linewidth}
+\includegraphics[width=\linewidth]{addSymptom1.PNG}
+\caption{\textbf{All symptoms}}
+\end{subfigure}\hfill
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{addSymptom2.PNG}
+\caption{\textbf{Add symptom}}
+\end{subfigure}
+\hspace*{\fill}
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{addSymptom3.PNG}
+\caption{\textbf{Set parameters}}
+\end{subfigure}
+\hspace*{\fill}
+\end{figure}
+\begin{itemize}[•]
+\item The first picture shows the all symptoms screen that is displayed after clicking on the "+" button in the symptom box under the calendar in the Homepage screen. 
+\item After clicking on a specific symptom, a form will appear. The second picture shows this form that the user needs to complete in order to be able to add a new symptom in the selected day. 
+\item It's necessary set all the parameters: intensity, frequency and when the symptom occurs in order to click on the "save" button.
+\end{itemize}
+\clearpage
+\item [ 2)Add Dish page]
+\
+\
+\
+\begin{figure}[h!]
+\centering
+\hspace*{\fill}
+\begin{subfigure}[tl]{0.3\linewidth}
+\includegraphics[width=\linewidth]{addDish1.PNG}
+\caption{\textbf{Add dish}}
+\end{subfigure}\hfill
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{addDish5.PNG}
+\caption{\textbf{Search Dishes}}
+\end{subfigure}
+\hspace*{\fill}
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{addDish2.PNG}
+\caption{\textbf{Create dish}}
+\end{subfigure}
+\hspace*{\fill}
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{addDish3.PNG}
+\caption{\textbf{Scanned dish}}
+\end{subfigure}
+\hspace*{\fill}
+\end{figure}
+\\
+\begin{itemize}[•]
+\item The first picture shows the five  ways to add a new dish in a specific mealtime of selected day. Three methods are similar and consists of a research of dish into a list(Search,favourite and created dishes buttons) the last two ones are two actions that the user can do. The user in fact can scan the barcode of a dish or can create a customizable dish inserting an image, a name, the list of ingredients and their quantity. 
+\item The three searching ways are displayed with the same design. In each of them there is the list of dishes with which the user can interact. Clicking on one of the dishes, a popup will open that asks for the eaten quantity.
+\item After clicking on "create" button, a form will appear. The picture shows this form that the user needs to complete in order to be able to add a new dish in the selected day.  This form let the user to customize a new dish with an image that can take with his/her camera or uploading an image from the  gallery, inserting a name and the list of ingredients.
+\item The last picture shows the page of a dish scanned by the user with all the informations that have been collected by the Open Food Facts database. If the user wants, he/she can also insert other ingredients.
+\end{itemize}
+
+\item [ 2)Visualize statistics]
+\
+\
+\
+\begin{figure}[h!]
+\centering
+\hspace*{\fill}
+\begin{subfigure}[tl]{0.3\linewidth}
+\includegraphics[width=\linewidth]{statistics1.PNG}
+\caption{\textbf{All symptoms}}
+\end{subfigure}\hfill
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{statistics2.PNG}
+\caption{\textbf{Add symptom}}
+\end{subfigure}
+\hspace*{\fill}
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{statistics3.PNG}
+\caption{\textbf{Set parameters}}
+\end{subfigure}
+\hspace*{\fill}
+\end{figure}
+\begin{itemize}[•]
+\item 
+\item 
+\item 
+\end{itemize}
+
+
+\end{description}
 
 
 \section{Implementation,Integration and Test Plan:}
