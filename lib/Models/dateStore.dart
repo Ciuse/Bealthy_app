@@ -81,9 +81,6 @@ abstract class _DateStoreBase with Store {
   @action
   void removeIllnesses(SymptomStore symptomStore,DateTime day){
     if(symptomStore.symptomListOfSpecificDay.length==0){
-      print(illnesses.keys);
-      print("giornoNOsotro"+ day.toString());
-
       illnesses.remove(day);
     }
   }
@@ -134,7 +131,6 @@ abstract class _DateStoreBase with Store {
   @action
   void fixDate(DateTime date){
     String dateSlug ="${date.year.toString()}-${date.month.toString().padLeft(2,'0')}-${date.day.toString().padLeft(2,'0')}";
-    print(dateSlug);
   }
 
 @action

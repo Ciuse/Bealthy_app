@@ -77,7 +77,9 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
         ),
         body: SingleChildScrollView(
             controller: _controller,
-            child: Column(
+            child:Container(
+                color: Colors.white,
+                child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -86,7 +88,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                     key: this._formKey,
                     child:
                     Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -98,7 +100,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                   labelText: 'Name',
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius: new BorderRadius.circular(15.0),
                                     borderSide: new BorderSide(
                                     ),
                                   ),
@@ -126,7 +128,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                   labelText: 'Description',
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius: new BorderRadius.circular(15.0),
                                     borderSide: new BorderSide(
                                     ),
                                   ),
@@ -150,7 +152,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                   labelText: 'Diet',
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius: new BorderRadius.circular(15.0),
                                     borderSide: new BorderSide(
                                     ),
                                   ),
@@ -170,7 +172,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                   labelText: 'Medical Cure',
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius: new BorderRadius.circular(15.0),
                                     borderSide: new BorderSide(
                                     ),
                                   ),
@@ -212,7 +214,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                   labelText: "Enter Starting date of treatment",
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius: new BorderRadius.circular(15.0),
                                     borderSide: new BorderSide(
                                     ),
                                   ),
@@ -265,7 +267,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                   labelText: "Enter Ending date of treatment",
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
+                                    borderRadius: new BorderRadius.circular(15.0),
                                     borderSide: new BorderSide(
                                     ),
                                   ),
@@ -305,11 +307,11 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                       }
 
                     },
-                    child: Text('Create'),
+                    child: Text('CREATE'),
                   ),
                 ),
               ],
-            )));
+                ))));
 
   }
 }

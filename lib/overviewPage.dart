@@ -295,19 +295,15 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   }
 
   void selectPreviousDay() {
-    print("current day: ${dateStore.overviewDefaultLastDate}");
     animationStartPos= -1.2;
     context.read<DateStore>().previousDayOverview();
-    print("previous day: ${dateStore.overviewDefaultLastDate}");
     overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
   }
 
   void selectNextDay() {
-    print("current day: ${dateStore.overviewDefaultLastDate}");
     animationStartPos= 1.2;
     context.read<DateStore>().nextDayOverview();
-    print("next day: ${dateStore.overviewDefaultLastDate}");
     overviewStore = new OverviewStore(timeSelected: dateStore.timeSelected);
     overviewStore.initializeSymptomsMap(dateStore);
   }

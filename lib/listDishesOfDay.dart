@@ -323,10 +323,6 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
             ]));
 
   }
-
-  void modify(){
-    print("modify");
-  }
 }
 
 

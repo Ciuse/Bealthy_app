@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:Bealthy_app/Database/dish.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
-import 'package:Bealthy_app/Database/fileImageDish.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

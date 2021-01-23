@@ -104,12 +104,10 @@ class _DishPageState extends State<DishPage>{
     var cameraStatus = await Permission.camera.status;
     var galleryStatus = await Permission.storage.status;
 
-    print(galleryStatus);
     if (!cameraStatus.isGranted)
       {await Permission.camera.request();}
 
     if(!galleryStatus.isGranted){
-      print("richiesta permessi");
       await Permission.storage.request();
     }
 

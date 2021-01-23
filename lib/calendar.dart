@@ -51,7 +51,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
 
   Future<void> waitIllnesses() async{
 
-   await dateStore.initIllnesses().then((value) => print(dateStore.illnesses));
+   await dateStore.initIllnesses();
   }
 
   @override
@@ -67,7 +67,6 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _getNewSymptomAndDish(DateTime day) {
-    dateStore.calendarSelectedDate = day;
     context.read<MealTimeStore>().initDishesOfMealTimeList(day);
     context.read<SymptomStore>().initSymptomDay(day);
   }
@@ -76,10 +75,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format) {
-
     dateStore.calendarSelectedDate=DateTime.now();
-    context.read<MealTimeStore>().initDishesOfMealTimeList(dateStore.calendarSelectedDate);
-    context.read<TreatmentStore>().initTreatmentsList( dateStore.calendarSelectedDate);
+
   }
 
   ReactionDisposer reactToDataChange(){
@@ -87,7 +84,9 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
       dateNormalized=DateTime.utc(value.year, value.month, value.day, 12),
       if(context.read<SymptomStore>().storeInitialized)
         {
-          _calendarController.setSelectedDay(dateNormalized, isProgrammatic: false),
+          setState((){
+            _calendarController.setSelectedDay(dateNormalized, isProgrammatic: false);
+          }),
           _getNewSymptomAndDish(dateNormalized),
         }
     });
@@ -102,15 +101,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Palette.bealthyColorScheme.primaryVariant, width: 2.5,style: BorderStyle.solid)
       ),
-      child: new ListView(
-
-        shrinkWrap: true,
-        children: <Widget>[
-          // Switch out 2 lines below to play with TableCalendar's settings
-          //-----------------------
-          //_buildTableCalendar(),
-          Observer(builder: (_) =>_buildTableCalendarWithBuilders()),
-        ],),);
+      child: Observer(builder: (_) =>_buildTableCalendarWithBuilders()),
+    );
   }
 
 

@@ -204,7 +204,6 @@ class _AddMealState extends State<AddMeal>{
   void scanBarCodeAndCheckPermission() async{
     var cameraStatus = await Permission.camera.status;
 
-    print(cameraStatus);
     if (!cameraStatus.isGranted)
     {await Permission.camera.request();}
 
@@ -249,7 +248,6 @@ class _AddMealState extends State<AddMeal>{
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           "#ff6666", "Cancel", true, ScanMode.BARCODE);
-      print(barcodeScanRes);
     } on PlatformException {
       errorPlatform=true;
     }
@@ -342,9 +340,10 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
         appBar: AppBar(
           title: Text("Favourites"),
         ),
-        body: Column(
-            children:[Container(
-              child:
+        body: Container(
+          color: Colors.white,
+          child:Column(
+            children:[
             Observer(
               builder: (_) {
                 switch (foodStore.loadInitFavouriteDishesList.status) {
@@ -458,9 +457,10 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                                 }
 
                               },
-                              title: Text(foodStore.yourFavouriteDishList[index].name,style: TextStyle(fontSize: 22.0)),
-                            subtitle:  Observer(builder: (_) =>Text(foodStore.mapIngredientsStringDish[foodStore.yourFavouriteDishList[index]].stringIngredients)),
-                              leading: foodStore.isSubstring("User", foodStore.yourFavouriteDishList[index].id)?
+                            title: Text(foodStore.yourFavouriteDishList[index].name,maxLines: 1, overflow: TextOverflow.ellipsis,),
+                            subtitle:  Observer(builder: (_) =>Text(foodStore.mapIngredientsStringDish[foodStore.yourFavouriteDishList[index]].stringIngredients,maxLines: 2, overflow: TextOverflow.ellipsis,)),
+                            isThreeLine:true,
+                            leading: foodStore.isSubstring("User", foodStore.yourFavouriteDishList[index].id)?
                               FutureBuilder(
                                   future: getImage(foodStore.yourFavouriteDishList[index].id),
                                   builder: (context, remoteString) {
@@ -514,8 +514,8 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                     return CircularProgressIndicator();
                 }
               },
-            ))])
-    );
+            )])
+    ));
   }
 }
 
@@ -584,11 +584,11 @@ class _YourDishListState extends State<YourDishList> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Your Dish"),
+          title: Text("Created"),
         ),
-        body: Column(children:[
-          Container(
-              child:
+        body: Container(
+        color: Colors.white,
+        child:Column(children:[
               Observer(
                 builder: (_) {
                   switch (foodStore.loadInitCreatedYourDishesList.status) {
@@ -702,8 +702,9 @@ class _YourDishListState extends State<YourDishList> {
                                  }
 
                                },
-                                title: Text(foodStore.yourCreatedDishList[index].name,style: TextStyle(fontSize: 22.0)),
-                               subtitle:  Observer(builder: (_) =>Text(foodStore.mapIngredientsStringDish[foodStore.yourCreatedDishList[index]].stringIngredients)),
+                                title: Text(foodStore.yourCreatedDishList[index].name,maxLines: 1, overflow: TextOverflow.ellipsis,),
+                               subtitle:  Observer(builder: (_) =>Text(foodStore.mapIngredientsStringDish[foodStore.yourCreatedDishList[index]].stringIngredients,maxLines: 2, overflow: TextOverflow.ellipsis,)),
+                               isThreeLine:true,
                                 leading:
                                 FutureBuilder(
                                     future: getImage(foodStore.yourCreatedDishList[index].id),
@@ -741,9 +742,9 @@ class _YourDishListState extends State<YourDishList> {
                       return CircularProgressIndicator();
                   }
                 },
-              )),
+              ),
           ],),
-    );
+    ));
   }
 }
 

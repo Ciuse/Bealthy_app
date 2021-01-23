@@ -114,140 +114,156 @@ class _CreateNewDishState extends State<CreateNewDish> {
         body: SingleChildScrollView(
             reverse: true,
             child:
-    Form(
-        key: this._formKey,
-    child:Padding(
-                padding: EdgeInsets.only(top:8,right:8,left:8,bottom: bottom),
-                child:
-                Column(
-                    children: [
-                      Container(
-                        width: 200,
-                        height: 200,
-                        child: Observer(builder: (_) =>Container(
-                            alignment: Alignment.center ,
-                            child: Stack(
-                                children: [
-                                  Container
-                                    (width: 150,
-                                      height: 150,
-                                      decoration: new BoxDecoration(
-                                        borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
-                                        border: new Border.all(
-                                          color: Palette.bealthyColorScheme.primaryVariant,
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                      child: ClipOval(
-                                        child: dish.imageFile==null? null:
-                                        Image.file(dish.imageFile, fit:BoxFit.cover),
-                                      )
+            Form(
+                key: this._formKey,
+                child:Padding(
+                    padding: EdgeInsets.only(top:4,right:8,left:8,bottom: bottom),
+                    child:
+                    Column(
+                        children: [
+                          Card(
+                              margin: EdgeInsets.all(0),
+                              child: Container(
+
+                                alignment: Alignment.center ,
+
+                                child: Observer(builder: (_) =>Container(
+                                    alignment: Alignment.center ,
+                                    child: Stack(
+                                        children: [
+                                          Container
+                                            (width: 150,
+                                              height: 150,
+                                              decoration: new BoxDecoration(
+                                                borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                border: new Border.all(
+                                                  color: Palette.bealthyColorScheme.primaryVariant,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                              child: ClipOval(
+                                                child: dish.imageFile==null? null:
+                                                Image.file(dish.imageFile, fit:BoxFit.cover),
+                                              )
+                                          ),
+
+                                          Stack(
+                                              children:  <Widget>[
+                                                Container(
+                                                    margin: const EdgeInsets.only(left: 125,top:125),
+                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                                        color: Palette.bealthyColorScheme.secondary)),]
+
+                                          )
+                                        ])
+
+                                )),
+                              )),
+                          SizedBox(height: 8,),
+                          Card(
+                              margin: EdgeInsets.all(0),
+
+                              child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child:TextFormField(
+                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                maxLength: 25,
+                                controller: nameCt,
+                                decoration: new InputDecoration(
+                                  labelText: 'Name',
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(15.0),
+                                    borderSide: new BorderSide(
+                                    ),
                                   ),
+                                  //fillColor: Colors.green
+                                ),
+                                validator: (val) {
+                                  if(val.length==0) {
+                                    return "Name cannot be empty";
+                                  }else{
+                                    return null;
+                                  }
+                                },
+                                keyboardType: TextInputType.text,
 
-                                  Stack(
-                                      children:  <Widget>[
-                                        Container(
-                                            margin: const EdgeInsets.only(left: 125,top:125),
-                                            child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                              color: Palette.bealthyColorScheme.secondary)),]
+                              ))),
+                      SizedBox(height: 8,),
 
-                                  )
-                                ])
 
-                        )),
-                      ),
+                      Observer(builder: (_) =>Card(
+                        margin: EdgeInsets.all(0),
+                          child: Column(children: [
+                            Padding(
+                                padding: const EdgeInsets.all(16),
+                                child:DropdownSearch<String>(
+                                  mode: Mode.MENU,
+                                  dropdownSearchDecoration:  new InputDecoration(
+                                    fillColor: Colors.white,
+                                    contentPadding: EdgeInsets.all(10),
+                                    border: new OutlineInputBorder(
+                                      borderRadius: new BorderRadius.circular(15.0),
+                                      borderSide: new BorderSide(
+                                      ),
+                                    ),
+                                    //fillColor: Colors.green
+                                  ),
+                                  //  showSearchBox: true,
+                                  items: ingredientStore.ingredientsName,
+                                  label: "Select ingredient",
+                                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                                  validator:  (val) {
+                                    if(ingredientStore.ingredientListOfDish.length==0) {
+                                      return "Insert at least one ingredient";
+                                    }else{
+                                      return null;
+                                    }
+                                  },
+                                  onChanged: (String ingredient) {
+                                    selectedItemIngredient="";
+                                    ingredientStore.ingredientListOfDish.add(ingredientStore.getIngredientFromName(ingredient));
+                                    ingredientStore.ingredientsName.remove(ingredient);
 
-                      TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        maxLength: 25,
-                        controller: nameCt,
-                        decoration: new InputDecoration(
-                          labelText: 'Name',
-                          fillColor: Colors.white,
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(
-                            ),
-                          ),
-                          //fillColor: Colors.green
-                        ),
-                        validator: (val) {
-                          if(val.length==0) {
-                            return "Name cannot be empty";
-                          }else{
-                            return null;
-                          }
-                        },
-                        keyboardType: TextInputType.text,
-                        style: new TextStyle(
-                          fontFamily: "Poppins",
-                        ),
-                      ),
-                      SizedBox(height: 20,),
-                      DropdownSearch<String>(
-                        mode: Mode.MENU,
-                        dropdownSearchDecoration:  new InputDecoration(
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.all(10),
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(
-                            ),
-                          ),
-                          //fillColor: Colors.green
-                        ),
-                        //  showSearchBox: true,
-                        items: ingredientStore.ingredientsName,
-                        label: "Select ingredient",
-                        autoValidateMode: AutovalidateMode.onUserInteraction,
-                        validator:  (val) {
-                          if(ingredientStore.ingredientListOfDish.length==0) {
-                            return "Insert at least one ingredient";
-                          }else{
-                            return null;
-                          }
-                        },
-                        onChanged: (String ingredient) {
-                          selectedItemIngredient="";
-                          ingredientStore.ingredientListOfDish.add(ingredientStore.getIngredientFromName(ingredient));
-                          ingredientStore.ingredientsName.remove(ingredient);
-
-                        },
-                      ),
-                      Padding(padding: EdgeInsets.all(10)),
-
-                      Observer(builder: (_) =>ListView.separated(
-                          separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(
-                              height: 10,
-                            );
-                          },
-                          shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
-                          itemCount: ingredientStore.ingredientListOfDish.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Dismissible(
-                              key: Key(ingredientStore.ingredientListOfDish[index].id),
-                              background: Container(
-                                alignment: AlignmentDirectional.centerEnd,
-                                color: Palette.bealthyColorScheme.error,
-                                child: Icon(Icons.delete, color: Colors.white),
-                              ),
-                              child: ingredient(ingredientStore.ingredientListOfDish[index], index),
-                              onDismissed: (direction){
-                                ingredientStore.ingredientsName.add(ingredientStore.ingredientListOfDish[index].name);
-                                ingredientStore.ingredientListOfDish.removeAt(index);
-                              },
-                            );
-                          }
-                      )),
+                                  },
+                                )),
+                            ListView.separated(
+                                    separatorBuilder: (BuildContext context, int index) {
+                                      return
+                                      Divider(
+                                        height: 0,
+                                        thickness: 0.5,
+                                        indent: 20,
+                                        endIndent: 20,
+                                        color: Colors.black38,
+                                      );
+                                    },
+                                    shrinkWrap: true,
+                                    physics: ClampingScrollPhysics(),
+                                    itemCount: ingredientStore.ingredientListOfDish.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return Dismissible(
+                                        key: Key(ingredientStore.ingredientListOfDish[index].id),
+                                        background: Container(
+                                          alignment: AlignmentDirectional.centerEnd,
+                                          color: Palette.bealthyColorScheme.error,
+                                          child: Icon(Icons.delete, color: Colors.white),
+                                        ),
+                                        child: ingredient(ingredientStore.ingredientListOfDish[index], index),
+                                        onDismissed: (direction){
+                                          ingredientStore.ingredientsName.add(ingredientStore.ingredientListOfDish[index].name);
+                                          ingredientStore.ingredientListOfDish.removeAt(index);
+                                        },
+                                      );
+                                    }
+                                ) ],))),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: ElevatedButton(
                           onPressed: () {
                             if (this._formKey.currentState.validate()) {
                               return showDialog(
-                                barrierDismissible: false,
+                                  barrierDismissible: false,
                                   context: context,
                                   builder: (_) =>
                                   new AlertDialog(
@@ -279,7 +295,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                               );
                             }
                           },
-                          child: Text('Create'),
+                          child: Text('CREATE'),
                         ),
                       ),
                     ]
@@ -295,6 +311,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
     return Observer(builder: (_) =>Column(
       children: [
         Container(
+          padding: EdgeInsets.symmetric(horizontal: 0,vertical: 8),
             child:
             ListTile(
               title: Text(ingredient.name),
@@ -307,6 +324,16 @@ class _CreateNewDishState extends State<CreateNewDish> {
                       key: Key(ingredient.id),
                       items: quantityList,
                       label: "Quantity",
+                      dropdownSearchDecoration:  new InputDecoration(
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.all(10),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          borderSide: new BorderSide(
+                          ),
+                        ),
+                        //fillColor: Colors.green
+                      ),
                       popupTitle:Padding(
                           padding: EdgeInsets.all(16),
                           child:Text("Select ingredient quantity",textAlign: TextAlign.center,)),
@@ -326,14 +353,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                       }
                   )),
             )),
-        index!=ingredientStore.ingredientListOfDish.length-1?
-        Divider(
-          height: 4,
-          thickness: 0.5,
-          indent: 20,
-          endIndent: 20,
-          color: Colors.black38,
-        ):Container(),
+
       ],
     ));
   }

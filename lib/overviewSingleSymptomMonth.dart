@@ -52,16 +52,15 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
-                          margin: EdgeInsets.only(top: 10,bottom: 10 ),
                           width:double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow:[
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.6), //color of shadow
-                                spreadRadius: 2, //spread radius
+                                color: Colors.grey.withOpacity(0.4), //color of shadow
+                                spreadRadius: 1, //spread radius
                                 blurRadius: 3, // blur radius
-                                offset: Offset(0, 4), // changes position of shadow
+                                offset: Offset(2, 4),// changes position of shadow
                                 //first paramerter of offset is left-right
                           //second parameter is top to down
                         )],
@@ -77,14 +76,14 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                             color: Colors.white,
                             boxShadow:[
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.6), //color of shadow
-                                spreadRadius: 2, //spread radius
+                                color: Colors.grey.withOpacity(0.4), //color of shadow
+                                spreadRadius: 1, //spread radius
                                 blurRadius: 3, // blur radius
-                                offset: Offset(0, 4), // changes position of shadow
+                                offset: Offset(2, 4),// changes position of shadow
                                 //first paramerter of offset is left-right
                                 //second parameter is top to down
                               )],
-                            borderRadius: BorderRadius.all(Radius.circular(15)), //border corner radius
+                            borderRadius: BorderRadius.all(Radius.circular(5)), //border corner radius
                           ),
                           child:
                           Column(
@@ -103,6 +102,8 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                           child:
                           OutlinedButton(
                             child:Text("Show All"),
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.white),),
                             onPressed: () {
                               graphStore.touchedIndex = -1;
 

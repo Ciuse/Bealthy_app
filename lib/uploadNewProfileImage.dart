@@ -41,7 +41,6 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
 
 
     if(!galleryStatus.isGranted){
-      print("richiesta permessi");
       await Permission.storage.request();
     }
 
@@ -57,7 +56,6 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
   void checkPermissionOpenCamera() async{
     var cameraStatus = await Permission.camera.status;
 
-    print(cameraStatus);
     if (!cameraStatus.isGranted)
     {await Permission.camera.request();}
 

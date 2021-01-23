@@ -219,17 +219,23 @@ bool findIngredient(Ingredient ingredient){
                             trailing: TextButton(child:
                             Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Observer(builder: (_) =>widget.dish.name==null? Text(barCodeScannerStore.productFromQuery.productName, textAlign: TextAlign.left)
-                                    : Text(widget.dish.name)),
-                                Icon(Icons.mode_rounded,),
+                              children: [Expanded(
+                                flex:2,
+                                  child:
+                                  Observer(builder: (_) =>widget.dish.name==null? Text(barCodeScannerStore.productFromQuery.productName, textAlign: TextAlign.left)
+                                      : Text(widget.dish.name,maxLines:2,softWrap: false,overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,))),
+                                SizedBox(width: 8,),
+                                Flexible(
+                                    flex: 1,
+                                    child: Icon(Icons.mode_rounded,)),
                               ],
                             ),
                                 onPressed: () =>{
                                   showDialog(
                                     context: context,
                                     builder: (_) =>  new  AlertDialog(
-                                      title: Center(child: Text("Modify the name of ${widget.dish.name}",style: TextStyle(fontWeight: FontWeight.bold,),)),
+
+                                      title: Center(child: Text("Change dish name",style: TextStyle(fontWeight: FontWeight.bold,),)),
                                       content: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -238,11 +244,12 @@ bool findIngredient(Ingredient ingredient){
                                             child: TextFormField(
                                               autovalidateMode: AutovalidateMode.disabled,
                                               controller: titleCt,
+                                              maxLength: 25,
                                               decoration: new InputDecoration(
                                                 labelText: 'Name',
                                                 fillColor: Colors.white,
                                                 border: new OutlineInputBorder(
-                                                  borderRadius: new BorderRadius.circular(25.0),
+                                                  borderRadius: new BorderRadius.circular(15.0),
                                                   borderSide: new BorderSide(
                                                   ),
                                                 ),
@@ -282,9 +289,9 @@ bool findIngredient(Ingredient ingredient){
                                 })
                         )),
                         ingredientsWidget(),
-                        SizedBox(height: 20,),
+                        SizedBox(height: 8,),
                       Container(
-                          height: 100,
+                          height: 95,
                           child:Card(child:Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -295,17 +302,18 @@ bool findIngredient(Ingredient ingredient){
                           title: Text("Add ingredients!"),
                         )),
                         Expanded(
-                            flex:4,
+                            flex:5,
                             child:
                             Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(16),
                                 child:DropdownSearch<String>(
                               mode: Mode.MENU,
                               dropdownSearchDecoration:  new InputDecoration(
+                                labelText: "Select",
                                 fillColor: Colors.white,
-                                contentPadding: EdgeInsets.all(10),
+                                contentPadding: EdgeInsets.all(4),
                                 border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
+                                  borderRadius: new BorderRadius.circular(15.0),
                                   borderSide: new BorderSide(
                                   ),
                                 ),
@@ -313,7 +321,6 @@ bool findIngredient(Ingredient ingredient){
                               ),
                               //  showSearchBox: true,
                               items: ingredientStore.ingredientsName,
-                              label: "Select ingredient",
                               autoValidateMode: AutovalidateMode.onUserInteraction,
                               validator:  (val) {
                                 if(barCodeScannerStore.ingredients.length==0) {
@@ -497,11 +504,12 @@ bool findIngredient(Ingredient ingredient){
                               children: [
                                 Container(
                                     child:
-                            Observer(builder: (_) =>ListTile(
+                                    Observer(builder: (_) =>ListTile(
                                       title: Text(barCodeScannerStore.ingredients[index].name),
-                                      leading: Image(image:AssetImage("images/ingredients/" + barCodeScannerStore.ingredients[index].id + ".png"), height: 40,width:40,),
+                                      leading: Image(image:AssetImage("images/ingredients/" + barCodeScannerStore.ingredients[index].id + ".png"), height: 35,width:35,),
                                       trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
+
                                         children: [
                                           TextButton(child:
                                           Row(
@@ -562,6 +570,8 @@ bool findIngredient(Ingredient ingredient){
                                                 )
                                               }),
                                           IconButton(
+                                            splashRadius: 20,
+                                            padding: EdgeInsets.all(0),
                                             icon: Icon(Icons.delete),
                                             onPressed: (){
                                               showDialog(
@@ -600,7 +610,7 @@ bool findIngredient(Ingredient ingredient){
                                     ))),
                                 index!=barCodeScannerStore.ingredients.length-1?
                                 Divider(
-                                  height: 4,
+                                  height: 0,
                                   thickness: 0.5,
                                   indent: 20,
                                   endIndent: 20,

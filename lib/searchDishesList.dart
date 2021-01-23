@@ -42,7 +42,6 @@ class _SearchDishesListState extends State<SearchDishesList>{
     foodStore.initSearchAllDishList(ingredientStore);
     foodStore.resultsList.clear();
     _onSearchChanged();
-    
 
   }
 
@@ -124,9 +123,10 @@ class _SearchDishesListState extends State<SearchDishesList>{
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Search Dish"),
+          title: Text("Search"),
         ),
         body: Container(
+          color: Colors.white,
             child: Column(
               children: <Widget>[
                 TextField(
@@ -155,6 +155,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                               ),
                             );
                           case FutureStatus.fulfilled:
+                            searchResultList();
                             return Expanded(child: Observer(builder: (_) => ListView.separated(
                                 separatorBuilder: (BuildContext context, int index) {
                                   return Divider(
@@ -250,9 +251,10 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                       }
 
                                     },
-                                      title: Text(foodStore.resultsList[index].name,style: TextStyle(fontSize: 22.0)),
-                                      subtitle:  Observer(builder: (_) =>Text(foodStore.mapIngredientsStringDish[foodStore.resultsList[index]].stringIngredients)),
-                                      leading: foodStore.isSubstring("User", foodStore.resultsList[index].id)?
+                                    title: Text(foodStore.resultsList[index].name,maxLines: 1, overflow: TextOverflow.ellipsis,),
+                                    subtitle:  Observer(builder: (_) =>Text(foodStore.mapIngredientsStringDish[foodStore.resultsList[index]].stringIngredients,maxLines: 2, overflow: TextOverflow.ellipsis,)),
+                                    isThreeLine:true,
+                                    leading: foodStore.isSubstring("User", foodStore.resultsList[index].id)?
                                       FutureBuilder(
                                           future: getImage(foodStore.resultsList[index].id),
                                           builder: (context, remoteString) {

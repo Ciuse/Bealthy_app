@@ -94,36 +94,36 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return SingleChildScrollView(child: 
       Column(
         children: [
-          Divider(height: 30),
           descriptionText(),
-          Divider(height: 30),
           symptomsText(),
-          Divider(height: 30),
-          ElevatedButton(
+          Padding(
+    padding: const EdgeInsets.only(top:4,bottom: 8),
+    child: ElevatedButton(
             onPressed: () {
               Navigator.push<void>(context,
                   MaterialPageRoute(builder: (context) => OverviewPage(lastDayOfWeek: date,)));
             },
-            child: Text('See overview'),
-          )
+
+            child: Text('STATISTICS'),
+          ))
         ]));
   }
 
   Widget descriptionText(){
     return  Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(15),
-        margin: EdgeInsets.only(top: 15, left: 10,right: 10, bottom: 5 ),
+        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.all(8),
         width:double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20), //border corner radius
+          borderRadius: BorderRadius.circular(5), //border corner radius
           boxShadow:[
             BoxShadow(
-              color: Colors.grey.withOpacity(0.6), //color of shadow
-              spreadRadius: 4, //spread radius
-              blurRadius: 6, // blur radius
-              offset: Offset(0, 4), // changes position of shadow
+              color: Colors.grey.withOpacity(0.4), //color of shadow
+              spreadRadius: 1, //spread radius
+              blurRadius: 3, // blur radius
+              offset: Offset(2, 4), // changes position of shadow
               //first paramerter of offset is left-right
               //second parameter is top to down
             ),
@@ -144,18 +144,18 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   Widget symptomsText(){
     return  Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(15),
-        margin: EdgeInsets.only(top: 5, left: 10,right: 10, bottom: 5 ),
+        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.all(8),
         width:double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20), //border corner radius
+          borderRadius: BorderRadius.circular(5), //border corner radius
           boxShadow:[
             BoxShadow(
-              color: Colors.grey.withOpacity(0.6), //color of shadow
-              spreadRadius: 4, //spread radius
-              blurRadius: 6, // blur radius
-              offset: Offset(0, 4), // changes position of shadow
+              color: Colors.grey.withOpacity(0.4), //color of shadow
+              spreadRadius: 1, //spread radius
+              blurRadius: 3, // blur radius
+              offset: Offset(2, 4), // changes position of shadow
               //first paramerter of offset is left-right
               //second parameter is top to down
             ),
@@ -174,8 +174,10 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
   Widget modifyWidget(SymptomStore symptomStore) {
     return SingleChildScrollView(child: Container(
-      padding: EdgeInsets.symmetric(vertical: 15),
-        child: Column(
+      padding: EdgeInsets.all( 4 ),
+        child: Card(
+            elevation: 3,
+            child:Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text("Intensity",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
@@ -210,12 +212,14 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             Divider(height: 10),
             Align(
                 alignment: Alignment.centerRight,
-                child:TextButton(
-                  style: TextButton.styleFrom(primary: Palette.bealthyColorScheme.secondary),
-              child:Text('RESET VALUES'),
-              onPressed: ()=>widget.symptom.resetTempValue(),)),
+                child:Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: TextButton(
+                      style: TextButton.styleFrom(primary: Palette.bealthyColorScheme.secondary),
+                      child:Text('RESET VALUES'),
+                      onPressed: ()=>widget.symptom.resetTempValue(),))),
             Observer(builder: (_) =>  Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: ElevatedButton(
                   onPressed: !widget.symptom.isModifyButtonActive?  null :  () => buttonActivated(symptomStore),
                   child: !widget.symptom.isModeRemove ? Text('SAVE'):Text('REMOVE'),
@@ -224,7 +228,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                 )
             ))
           ],
-        )));
+        ))));
   }
 
 

@@ -384,6 +384,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                       ),
                     ),
                     Card(
+                      elevation: 0,
                         child: Column(
                             children:[
                               ListTile(
@@ -411,7 +412,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                             )),
                                         index!=ingredientStore.ingredientListOfDish.length-1?
                                         Divider(
-                                          height: 4,
+                                          height: 0,
                                           thickness: 0.5,
                                           indent: 20,
                                           endIndent: 20,

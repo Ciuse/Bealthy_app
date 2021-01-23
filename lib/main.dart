@@ -1,27 +1,26 @@
 import 'package:Bealthy_app/Database/symptomOverviewGraphStore.dart';
 import 'package:Bealthy_app/treatmentPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:move_to_background/move_to_background.dart';
+import 'package:provider/provider.dart';
+
 import 'Login/config/palette.dart';
 import 'Login/screens/splash.dart';
 import 'Models/barCodeScannerStore.dart';
-import 'Models/mealTimeStore.dart';
-import 'Models/overviewStore.dart';
-import 'Models/symptomStore.dart';
-import 'Models/treatmentStore.dart';
-import 'Models/userStore.dart';
-import 'overviewPage.dart';
-import 'package:flutter/material.dart';
-import 'homePage.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:provider/provider.dart';
 import 'Models/dateStore.dart';
 import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
+import 'Models/mealTimeStore.dart';
+import 'Models/symptomStore.dart';
+import 'Models/treatmentStore.dart';
+import 'Models/userStore.dart';
+import 'homePage.dart';
+import 'overviewPage.dart';
 import 'personalPage.dart';
 
 FirebaseAuth auth = FirebaseAuth.instance;
@@ -139,6 +138,7 @@ class MyApp extends StatelessWidget {
                       )
                   ),
                   bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                    backgroundColor: Colors.white,
                     unselectedItemColor: Palette.bealthyColorScheme.onBackground,
                     selectedItemColor: Palette.bealthyColorScheme.primary,
                     type: BottomNavigationBarType.shifting
@@ -190,10 +190,12 @@ class _MyHomePageState extends State<HomePage> {
   FoodStore foodStore;
   IngredientStore ingredientStore;
   int _selectedIndex = 0;
+  TreatmentStore treatmentStore;
 
   void initState() {
     super.initState();
-   dateStore = Provider.of<DateStore>(context, listen: false);
+    treatmentStore=  Provider.of<TreatmentStore>(context, listen: false);
+    dateStore = Provider.of<DateStore>(context, listen: false);
     foodStore = Provider.of<FoodStore>(context, listen: false);
     dateStore.initializeIllnesses=false;
     foodStore.storeCreatedYourDishInitialized = false;
@@ -203,6 +205,8 @@ class _MyHomePageState extends State<HomePage> {
     userStore.initUserDb();
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
     ingredientStore.initStore();
+    treatmentStore.initTreatmentsList( dateStore.calendarSelectedDate);
+
   }
 
   final List<Widget> _widgetOptions = <Widget>[
@@ -235,18 +239,25 @@ class _MyHomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
+            backgroundColor: Colors.white,
             icon: Icon(Icons.calendar_today_sharp),
             label: 'Calendar',
           ),
           BottomNavigationBarItem(
+            backgroundColor: Colors.white,
+
             icon: Icon(Icons.stacked_bar_chart),
             label: 'Statistics',
           ),
           BottomNavigationBarItem(
+            backgroundColor: Colors.white,
+
             icon: Icon(Icons.medical_services_outlined),
             label: 'Treatments',
           ),
           BottomNavigationBarItem(
+            backgroundColor: Colors.white,
+
             icon: Icon(Icons.person_outline),
             label: 'Personal Info',
           ),

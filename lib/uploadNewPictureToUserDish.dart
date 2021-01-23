@@ -40,7 +40,6 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
 
 
     if(!galleryStatus.isGranted){
-      print("richiesta permessi");
       await Permission.storage.request();
     }
 
@@ -56,7 +55,6 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
   void checkPermissionOpenCamera() async{
     var cameraStatus = await Permission.camera.status;
 
-    print(cameraStatus);
     if (!cameraStatus.isGranted)
     {await Permission.camera.request();}
 

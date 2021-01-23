@@ -286,7 +286,6 @@ abstract class _SymptomStoreBase with Store {
         .get()
         .then((doc) {
       if (doc.exists) {
-        print(doc.data());
         occurrence= doc.get("occurrence") +1;
         updateOccurrenceSymptom(symptom.id,occurrence);
       } else {

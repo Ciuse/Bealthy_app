@@ -55,17 +55,21 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
           ],
         ),
         body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(child: Observer(builder: (_) => _symptomsContent()),
-            ),
-          ],
-        )
+              mainAxisSize: MainAxisSize.min,
+              children: [
 
-    ));
+                Flexible(child: Observer(builder: (_) => _symptomsContent()),
+                ),
+              ],
+            ))
+
+    );
   }
   Widget _symptomsContent() {
-    return ReorderableListView(
+    return Container(
+      color: Colors.white,
+        child:ReorderableListView(
+
         padding: EdgeInsets.symmetric(vertical: 8),
         children: [
           for(var symptom in symptomStore.symptomList )
@@ -92,6 +96,6 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
         onReorder: (oldIndex, newIndex) {
           symptomStore.reorderList(oldIndex, newIndex);
         }
-    );
+    ));
   }
 }
