@@ -9,22 +9,25 @@
 \contentsline {subsection}{\numberline {2.1}Overview}{11}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}High level components}{11}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}Component view}{12}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Runtime view}{14}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Sequence Diagram 1}{14}{subsubsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.5}Styles and patterns}{16}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Overall Architecture}{16}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Design decisions and patterns}{17}{subsubsection.2.5.2}%
-\contentsline {subsection}{\numberline {2.6}Software System Attributes}{19}{subsection.2.6}%
-\contentsline {subsubsection}{\numberline {2.6.1}Reliability}{19}{subsubsection.2.6.1}%
-\contentsline {subsubsection}{\numberline {2.6.2}Availability}{19}{subsubsection.2.6.2}%
-\contentsline {subsubsection}{\numberline {2.6.3}Security}{19}{subsubsection.2.6.3}%
-\contentsline {subsubsection}{\numberline {2.6.4}Maintainability}{19}{subsubsection.2.6.4}%
-\contentsline {subsubsection}{\numberline {2.6.5}Portability}{19}{subsubsection.2.6.5}%
-\contentsline {section}{\numberline {3}Specific Requirement}{20}{section.3}%
-\contentsline {subsection}{\numberline {3.1}User characteristics}{20}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}User Interface Design}{20}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Implementation,Integration and Test Plan:}{26}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Elements to be integrated}{26}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Integration Testing Strategy}{26}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Component Integration}{26}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Used Tools}{26}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {2.3.1}High Level Widget structure}{12}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}More detailed widget structure }{13}{subsubsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.4}Runtime view}{15}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Sequence Diagram 1}{15}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Sequence Diagram 2}{17}{subsubsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.5}Styles and patterns}{19}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Overall Architecture}{19}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Design decisions and patterns}{20}{subsubsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.6}Software System Attributes}{22}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}Reliability}{22}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Availability}{22}{subsubsection.2.6.2}%
+\contentsline {subsubsection}{\numberline {2.6.3}Security}{22}{subsubsection.2.6.3}%
+\contentsline {subsubsection}{\numberline {2.6.4}Maintainability}{22}{subsubsection.2.6.4}%
+\contentsline {subsubsection}{\numberline {2.6.5}Portability}{22}{subsubsection.2.6.5}%
+\contentsline {section}{\numberline {3}Specific Requirement}{23}{section.3}%
+\contentsline {subsection}{\numberline {3.1}User characteristics}{23}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}User Interface Design}{23}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Implementation,Integration and Test Plan:}{29}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Elements to be integrated}{29}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Integration Testing Strategy}{29}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Component Integration}{29}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Used Tools}{29}{subsection.4.4}%

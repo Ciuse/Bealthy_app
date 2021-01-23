@@ -255,45 +255,58 @@ The external databases,Firebase and OpenFoodFact, are interrogated by our applic
 \end{itemize}
 
 \subsection{Component view}
-
+\subsubsection{High Level Widget structure}
 \null
 \vspace{\stretch{2}}
 \begin{figure}[ht!]
 \centering
 \includegraphics[height=14cm, width=\linewidth]{ComponentViewDiagram.png}
-\caption{Component Diagram}
+\caption{Widget Diagram}
 \end{figure}  
 \vspace{\stretch{5}}
 \clearpage
+The following diagram represents the main widgets that make up our application.
+The first widget you have when you open the application is a router that redirects the view either to the login or to the home page based on whether you are already authenticated or not.
+The login widget implements the methods and ui to allow the user to register and log in through the methods that Firebase provides.
+The Main application instead consists of 4 main widgets, Home Page, Statistics Page, Treatment Page, and Profile Page, which are connected by a Bottom Navigation Bar.
+The home page is linked to a widget that controls dishes (viewing and creation) and a widget that controls symptoms (viewing and creation).
+The statistics page through a graph controller implements various widgets to show data in pie and bar graphs.
+All widgets that deal with dynamic data are connected to a set of widgets enclosed in "Mobx Stores" which take care of holding the observable data and invoking functions to get it through Firebase and to update it locally once the response is received.
+The profile and dishes pages are linked with a widget that handles all the part about getting a photo through the phone camera and uploading it to the Firestone Database.
+\subsubsection{More detailed widget structure }
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=14cm, width=\linewidth]{ComponentDettagliato.png}
+\caption{more detailed widget diagram}
+\end{figure}
 
-
-\begin{itemize}[•]
-\item Client:  the client’s device (mobile app).
-\item Administrator: the administrator’s device (mobile app).
-\end{itemize}
 \clearpage
 
 \subsection{Runtime view}
-In the following Sequence Diagram for simplicity and clarity, some steps have been omitted in the communication between the components external to the main system and the router; as the main aspects of communication, between the User and the Travlendar system, have been dealt with in the RASD document.
 
-\null
-\vspace{\stretch{2}}
 \subsubsection{Sequence Diagram 1}
-This Sequence Diagram deals with the addition of an appointment by the customer. The request is taken on board by the router, which communicates with the appointments component and will show the user the form to fill in the data concerning his new event.\\
-Subsequently, after the user has inserted the various information, the Appointment Controller component will check that it does not overlap with an existing one, in case the Notification Manager will send the user an error.\\
-If the appointment is valid, the data worker will be asked to save the new appointment on the database and the latter will be responsible for providing the travel calculator with all the data necessary to calculate the trip from the previous position to that of the appointment, with the means and preferences that the user has selected.\\
-If it is possible to solve the calculation, the travel itinerary will be saved and the user will receive a confirmation message; if not, it will be notified with a warning.
-\vspace{\stretch{5}}
-\\
+This sequence diagram illustrates what happens after the user changes the day through the calendar.
+Clicking on a day in the calendar invokes a Date Store method that updates the observable variable containing the date with the selected date. This causes the UI to be notified of the change through Mobx. The home page reacts by rebuilding through the Observer Widget only the part of the calendar that has changed, while the Calendar reacts through a Mobx reaction by invoking two methods, one to update the list of dishes with those of the selected day, and the other to update the list of symptoms with the selected day.
+The methods access the respective Store which invokes queries to firebase to get the data based on the selected day. Once the data is obtained the stores update the local observable lists triggering the Mobx notify which invokes in the UI a rebuild of the changed data through the Observers.
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[height=19cm, width=\linewidth]{SQ1.jpg}
+\includegraphics[height=19cm, width=\linewidth]{SequenceCalendarClick.png}
 \caption{Sequence Diagram 1}
 \end{figure}  
 \clearpage
-
-
+\subsubsection{Sequence Diagram 2}
+This sequence diagram illustrates the steps for the user to create a new dish.
+The action starts with the user pressing the "+" button on the homepage next to the "Breakfast" sign. The Navigator pushes the "Add Dish Page" in which the user presses on "Create Dish" and the Navigator pushes the "Create Dish" page.
+In this last page the user will have to insert a photo of the dish, the name of the dish, and the ingredients of which it is composed.
+Pressing on the camera icon invokes the Navigator which pushes the page where the user can take the photo, after agreeing to the permissions to use the camera. Once the photo is taken and the "Crop" is confirmed, the user clicks on Save Image and returns to the dish creation screen. 
+Once all the data have been inserted and the "Create" button has been pressed, the form validator will check all the fields, and in the case of an error it will signal it to the user; while in the case of confirmation the Food Store will be invoked and once it has received the new dish created it will save it on Firebase, and update the list of local dishes, thus causing a rebuild through the MobX notify of the list of dishes observable on the homepage.
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=19cm, width=\linewidth]{SequenceCreateDish.png}
+\caption{Sequence Diagram 2}
+\end{figure}  
+\clearpage
 
 \subsection{Styles and patterns}
 \subsubsection{Overall Architecture}

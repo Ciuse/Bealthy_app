@@ -8,22 +8,25 @@
 \BOOKMARK [2][-]{subsection.2.1}{Overview}{section.2}% 8
 \BOOKMARK [2][-]{subsection.2.2}{High level components}{section.2}% 9
 \BOOKMARK [2][-]{subsection.2.3}{Component view}{section.2}% 10
-\BOOKMARK [2][-]{subsection.2.4}{Runtime view}{section.2}% 11
-\BOOKMARK [3][-]{subsubsection.2.4.1}{Sequence Diagram 1}{subsection.2.4}% 12
-\BOOKMARK [2][-]{subsection.2.5}{Styles and patterns}{section.2}% 13
-\BOOKMARK [3][-]{subsubsection.2.5.1}{Overall Architecture}{subsection.2.5}% 14
-\BOOKMARK [3][-]{subsubsection.2.5.2}{Design decisions and patterns}{subsection.2.5}% 15
-\BOOKMARK [2][-]{subsection.2.6}{Software System Attributes}{section.2}% 16
-\BOOKMARK [3][-]{subsubsection.2.6.1}{Reliability}{subsection.2.6}% 17
-\BOOKMARK [3][-]{subsubsection.2.6.2}{Availability}{subsection.2.6}% 18
-\BOOKMARK [3][-]{subsubsection.2.6.3}{Security}{subsection.2.6}% 19
-\BOOKMARK [3][-]{subsubsection.2.6.4}{Maintainability}{subsection.2.6}% 20
-\BOOKMARK [3][-]{subsubsection.2.6.5}{Portability}{subsection.2.6}% 21
-\BOOKMARK [1][-]{section.3}{Specific Requirement}{}% 22
-\BOOKMARK [2][-]{subsection.3.1}{User characteristics}{section.3}% 23
-\BOOKMARK [2][-]{subsection.3.2}{User Interface Design}{section.3}% 24
-\BOOKMARK [1][-]{section.4}{Implementation,Integration and Test Plan:}{}% 25
-\BOOKMARK [2][-]{subsection.4.1}{Elements to be integrated}{section.4}% 26
-\BOOKMARK [2][-]{subsection.4.2}{Integration Testing Strategy}{section.4}% 27
-\BOOKMARK [2][-]{subsection.4.3}{Component Integration}{section.4}% 28
-\BOOKMARK [2][-]{subsection.4.4}{Used Tools}{section.4}% 29
+\BOOKMARK [3][-]{subsubsection.2.3.1}{High Level Widget structure}{subsection.2.3}% 11
+\BOOKMARK [3][-]{subsubsection.2.3.2}{More detailed widget structure }{subsection.2.3}% 12
+\BOOKMARK [2][-]{subsection.2.4}{Runtime view}{section.2}% 13
+\BOOKMARK [3][-]{subsubsection.2.4.1}{Sequence Diagram 1}{subsection.2.4}% 14
+\BOOKMARK [3][-]{subsubsection.2.4.2}{Sequence Diagram 2}{subsection.2.4}% 15
+\BOOKMARK [2][-]{subsection.2.5}{Styles and patterns}{section.2}% 16
+\BOOKMARK [3][-]{subsubsection.2.5.1}{Overall Architecture}{subsection.2.5}% 17
+\BOOKMARK [3][-]{subsubsection.2.5.2}{Design decisions and patterns}{subsection.2.5}% 18
+\BOOKMARK [2][-]{subsection.2.6}{Software System Attributes}{section.2}% 19
+\BOOKMARK [3][-]{subsubsection.2.6.1}{Reliability}{subsection.2.6}% 20
+\BOOKMARK [3][-]{subsubsection.2.6.2}{Availability}{subsection.2.6}% 21
+\BOOKMARK [3][-]{subsubsection.2.6.3}{Security}{subsection.2.6}% 22
+\BOOKMARK [3][-]{subsubsection.2.6.4}{Maintainability}{subsection.2.6}% 23
+\BOOKMARK [3][-]{subsubsection.2.6.5}{Portability}{subsection.2.6}% 24
+\BOOKMARK [1][-]{section.3}{Specific Requirement}{}% 25
+\BOOKMARK [2][-]{subsection.3.1}{User characteristics}{section.3}% 26
+\BOOKMARK [2][-]{subsection.3.2}{User Interface Design}{section.3}% 27
+\BOOKMARK [1][-]{section.4}{Implementation,Integration and Test Plan:}{}% 28
+\BOOKMARK [2][-]{subsection.4.1}{Elements to be integrated}{section.4}% 29
+\BOOKMARK [2][-]{subsection.4.2}{Integration Testing Strategy}{section.4}% 30
+\BOOKMARK [2][-]{subsection.4.3}{Component Integration}{section.4}% 31
+\BOOKMARK [2][-]{subsection.4.4}{Used Tools}{section.4}% 32
