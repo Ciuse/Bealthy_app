@@ -137,6 +137,7 @@ abstract class _TreatmentStoreBase with Store {
 
   @action
   Future<void> calculateTreatmentEndedStatistics(SymptomStore symptomStore) async{
+    mapSymptomPercentage.clear();
     symptomStore.symptomList.forEach((symptom) {
       if(symptomStore.mapSymptomBeforeTreatment.containsKey(symptom.id)){
         if(symptomStore.mapSymptomTreatment.containsKey(symptom.id)){
