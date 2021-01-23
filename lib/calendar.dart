@@ -82,13 +82,12 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   ReactionDisposer reactToDataChange(){
     return reaction((_) => dateStore.calendarSelectedDate, (value) => {
       dateNormalized=DateTime.utc(value.year, value.month, value.day, 12),
-      if(context.read<SymptomStore>().storeInitialized)
-        {
+
           setState((){
             _calendarController.setSelectedDay(dateNormalized, isProgrammatic: false);
           }),
           _getNewSymptomAndDish(dateNormalized),
-        }
+
     });
   }
 

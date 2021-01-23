@@ -25,11 +25,11 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
   TreatmentStore treatmentStore;
   SymptomStore symptomStore;
   DateStore dateStore;
-DateTime startingDateTreatment;
-DateTime endingDateTreatment;
-DateTime startingDateBeforeTreatment;
+  DateTime startingDateTreatment;
+  DateTime endingDateTreatment;
+  DateTime startingDateBeforeTreatment;
   DateTime endingDateBeforeTreatment;
-int rangeDaysLength;
+  int rangeDaysLength;
   @override
   void initState() {
 
@@ -43,9 +43,19 @@ int rangeDaysLength;
       rangeDaysLength = dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment).length;
       startingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: rangeDaysLength*2));
       endingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: 1));
-      symptomStore.initBeforeTreatmentMap(dateStore.returnDaysOfAWeekOrMonth(startingDateBeforeTreatment, endingDateBeforeTreatment));
-      symptomStore.initTreatmentMap(dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment));
+      waitForMap().then((value) => treatmentStore.calculateTreatmentEndedStatistics(symptomStore));
+
     }
+
+  }
+
+  Future<void> waitForMap() async{
+   await Future.wait([
+      symptomStore.initBeforeTreatmentMap
+        (dateStore.returnDaysOfAWeekOrMonth(startingDateBeforeTreatment, endingDateBeforeTreatment)),
+      symptomStore.initTreatmentMap
+        (dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment))
+    ]);
 
   }
 
@@ -81,7 +91,23 @@ int rangeDaysLength;
                 Observer(builder: (_) =>treatmentBeforeMap()),
                 Observer(builder: (_) =>treatmentMap()),
               ])): Container(),
+          widget.treatmentCompleted?Observer(
+                builder: (_) =>
+                Expanded(child:ListView(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    children: [for(var symptom in treatmentStore.mapSymptomPercentage.keys )
+                      ListTile(
+                        title: treatmentStore.mapSymptomPercentage[symptom].percentageSymptom!=null?Text((treatmentStore.mapSymptomPercentage[symptom].percentageSymptom)
+                            .toStringAsFixed(2)+"%"):
+                        treatmentStore.mapSymptomPercentage[symptom].disappeared==true?
+                        Text(("HEY TI é SCOMPARSO IL SINTOMO! GG")):
+                        treatmentStore.mapSymptomPercentage[symptom].appeared==true?
+                        Text(("SFIGATO")):Container(),
+                        subtitle:Text(symptom),
+                      )]
+                )
 
+            )):Container(),
           ]))),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -130,7 +156,7 @@ int rangeDaysLength;
             padding: EdgeInsets.symmetric(vertical: 8),
             children: [for(var symptom in symptomStore.mapSymptomTreatment.keys )
             ListTile(
-                title: Text((symptomStore.mapSymptomTreatment[symptom].severitySymptom/symptomStore.mapSymptomTreatment[symptom].occurrenceSymptom).toStringAsFixed(2)),
+                title: Text((symptomStore.mapSymptomTreatment[symptom].fractionSeverityOccurrence).toStringAsFixed(2)),
               subtitle:Text(symptom),
               )]
         ));
@@ -161,7 +187,7 @@ int rangeDaysLength;
             padding: EdgeInsets.symmetric(vertical: 8),
             children: [for(var symptom in symptomStore.mapSymptomBeforeTreatment.keys )
               ListTile(
-                title: Text((symptomStore.mapSymptomBeforeTreatment[symptom].severitySymptom/symptomStore.mapSymptomBeforeTreatment[symptom].occurrenceSymptom).toStringAsFixed(2)),
+                title: Text((symptomStore.mapSymptomBeforeTreatment[symptom].fractionSeverityOccurrence).toStringAsFixed(2)),
                 subtitle:Text(symptom),
               )]
         ));

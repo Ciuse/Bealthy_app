@@ -43,6 +43,23 @@ mixin _$TreatmentStore on _TreatmentStoreBase, Store {
     });
   }
 
+  final _$mapSymptomPercentageAtom =
+      Atom(name: '_TreatmentStoreBase.mapSymptomPercentage');
+
+  @override
+  ObservableMap<String, ObservableValues> get mapSymptomPercentage {
+    _$mapSymptomPercentageAtom.reportRead();
+    return super.mapSymptomPercentage;
+  }
+
+  @override
+  set mapSymptomPercentage(ObservableMap<String, ObservableValues> value) {
+    _$mapSymptomPercentageAtom.reportWrite(value, super.mapSymptomPercentage,
+        () {
+      super.mapSymptomPercentage = value;
+    });
+  }
+
   final _$initTreatmentsListAsyncAction =
       AsyncAction('_TreatmentStoreBase.initTreatmentsList');
 
@@ -79,6 +96,24 @@ mixin _$TreatmentStore on _TreatmentStoreBase, Store {
         .run(() => super.removeTreatmentCreatedByUser(treatment));
   }
 
+  final _$getLastTreatmentIdAsyncAction =
+      AsyncAction('_TreatmentStoreBase.getLastTreatmentId');
+
+  @override
+  Future<int> getLastTreatmentId() {
+    return _$getLastTreatmentIdAsyncAction
+        .run(() => super.getLastTreatmentId());
+  }
+
+  final _$calculateTreatmentEndedStatisticsAsyncAction =
+      AsyncAction('_TreatmentStoreBase.calculateTreatmentEndedStatistics');
+
+  @override
+  Future<void> calculateTreatmentEndedStatistics(SymptomStore symptomStore) {
+    return _$calculateTreatmentEndedStatisticsAsyncAction
+        .run(() => super.calculateTreatmentEndedStatistics(symptomStore));
+  }
+
   final _$_TreatmentStoreBaseActionController =
       ActionController(name: '_TreatmentStoreBase');
 
@@ -97,7 +132,8 @@ mixin _$TreatmentStore on _TreatmentStoreBase, Store {
   String toString() {
     return '''
 treatmentsInProgressList: ${treatmentsInProgressList},
-treatmentsCompletedList: ${treatmentsCompletedList}
+treatmentsCompletedList: ${treatmentsCompletedList},
+mapSymptomPercentage: ${mapSymptomPercentage}
     ''';
   }
 }

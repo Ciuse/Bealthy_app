@@ -27,7 +27,6 @@ class _SymptomsBarState extends State<SymptomsBar>{
     super.initState();
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
     symptomStore.initStore(widget.day);
-    symptomStore.initSymptomDay(widget.day);
   }
 
 
@@ -78,67 +77,70 @@ class _SymptomsBarState extends State<SymptomsBar>{
                       flex:2,
                       child:  Observer(
                         builder: (_) {
-                          switch (symptomStore.loadSymptomDay.status) {
-                            case FutureStatus.rejected:
-                              return Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('Oops something went wrong'),
-                                    RaisedButton(
-                                      child: Text('Retry'),
-                                      onPressed: () async {
+                          if(symptomStore.loadSymptomDay!=null){
+                            switch (symptomStore.loadSymptomDay.status) {
+                              case FutureStatus.rejected:
+                                return Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('Oops something went wrong'),
+                                      RaisedButton(
+                                        child: Text('Retry'),
+                                        onPressed: () async {
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              case FutureStatus.fulfilled:
+                                return  Observer(builder: (_) => Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16),
+                                    child:symptomStore.symptomListOfSpecificDay.length!=0?ListView.separated(
+                                      separatorBuilder: (BuildContext context, int index) {
+                                        return SizedBox(
+                                          width: 16,
+                                        );
                                       },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            case FutureStatus.fulfilled:
-                              return  Observer(builder: (_) => Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16),
-                                  child:symptomStore.symptomListOfSpecificDay.length!=0?ListView.separated(
-                                    separatorBuilder: (BuildContext context, int index) {
-                                      return SizedBox(
-                                        width: 16,
-                                      );
-                                    },
-                                    itemCount: symptomStore.symptomListOfSpecificDay.length,
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    physics: ClampingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      return Observer(builder: (_) => Container(
-                                          alignment: Alignment.center,
-                                          color: Colors.transparent,
-                                          child:  RawMaterialButton(
-                                            constraints : const BoxConstraints(minWidth: 50.0, minHeight: 50.0),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(20),
-                                                side: BorderSide(color:  Palette.bealthyColorScheme.primaryVariant, width: 2, style: BorderStyle.solid)
-                                            ),
-                                            onPressed: () => {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomListOfSpecificDay[index])
-                                                  ))
-                                            },
-                                            elevation: 5.0,
-                                            child: ImageIcon(
-                                              AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
-                                              size: 35.0,
-                                            ),
+                                      itemCount: symptomStore.symptomListOfSpecificDay.length,
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Observer(builder: (_) => Container(
+                                            alignment: Alignment.center,
+                                            color: Colors.transparent,
+                                            child:  RawMaterialButton(
+                                              constraints : const BoxConstraints(minWidth: 50.0, minHeight: 50.0),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                  side: BorderSide(color:  Palette.bealthyColorScheme.primaryVariant, width: 2, style: BorderStyle.solid)
+                                              ),
+                                              onPressed: () => {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomListOfSpecificDay[index])
+                                                    ))
+                                              },
+                                              elevation: 5.0,
+                                              child: ImageIcon(
+                                                AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
+                                                size: 35.0,
+                                              ),
 
-                                          )),
-                                      );
-                                    },
-                                  ):Center(child:Text("No symptoms this day",style: TextStyle(fontSize: 20),))));
-                            case FutureStatus.pending:
-                            default:
-                              return Center(child:CircularProgressIndicator());
-                          }
+                                            )),
+                                        );
+                                      },
+                                    ):Center(child:Text("No symptoms this day",style: TextStyle(fontSize: 20),))));
+                              case FutureStatus.pending:
+                              default:
+                                return Center(child:CircularProgressIndicator());
+                            }
+                          }else{
+                            return Container();}
                         },
                       )
-                      //
+                    //
 
                   )),
                 ]

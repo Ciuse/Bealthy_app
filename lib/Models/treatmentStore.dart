@@ -1,8 +1,10 @@
+import 'package:Bealthy_app/Database/observableValues.dart';
 import 'package:Bealthy_app/Database/treatment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
+import 'symptomStore.dart';
 
 // Include generated file
 part 'treatmentStore.g.dart';
@@ -24,6 +26,9 @@ abstract class _TreatmentStoreBase with Store {
   var treatmentsInProgressList = new ObservableList<Treatment>();
   @observable
   var treatmentsCompletedList = new ObservableList<Treatment>();
+
+  @observable
+  var mapSymptomPercentage = new ObservableMap<String,ObservableValues>();
 
   @action
   Future<void> initTreatmentsList(DateTime day) async {
@@ -106,6 +111,7 @@ abstract class _TreatmentStoreBase with Store {
     treatmentsCompletedList.removeWhere((element) => element.id == treatment.id);
   }
 
+  @action
   Future<int> getLastTreatmentId() async {
     return await FirebaseFirestore.instance .collection("UserTreatments")
         .doc(auth.currentUser.uid)
@@ -125,6 +131,53 @@ abstract class _TreatmentStoreBase with Store {
       }
       return toReturn;
     });
+
+  }
+
+
+  @action
+  Future<void> calculateTreatmentEndedStatistics(SymptomStore symptomStore) async{
+    symptomStore.symptomList.forEach((symptom) {
+      if(symptomStore.mapSymptomBeforeTreatment.containsKey(symptom.id)){
+        if(symptomStore.mapSymptomTreatment.containsKey(symptom.id)){
+          if(symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence>=symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)
+          {
+            double percentage = ((symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
+                -symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
+                symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)*100;
+            ObservableValues observableValues= new ObservableValues();
+            observableValues.percentageSymptom=percentage;
+            mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
+          }
+          else{
+            double percentage = ((-symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
+                +symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
+                symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence)*100;
+            ObservableValues observableValues= new ObservableValues();
+            observableValues.percentageSymptom=-percentage;
+            mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
+          }
+        }else{
+          ObservableValues observableValues= new ObservableValues();
+          observableValues.disappeared=true;
+          mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
+        }
+      }
+      else{
+        if(symptomStore.mapSymptomTreatment.containsKey(symptom.id)){
+          ObservableValues observableValues= new ObservableValues();
+          observableValues.appeared=true;
+          mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
+        }
+        else{
+          ObservableValues observableValues= new ObservableValues();
+          observableValues.appeared=false;
+          observableValues.disappeared=false;
+          mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
+        }
+      }
+    });
+
 
   }
 

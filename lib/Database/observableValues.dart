@@ -20,4 +20,16 @@ abstract class _ObservableValuesBase with Store {
   @observable
   int occurrenceSymptom;
 
+  @observable
+  double fractionSeverityOccurrence;
+
+  @observable
+  double percentageSymptom;
+
+  @observable
+  bool disappeared=false;
+
+  @observable
+  bool appeared=false;
+
 }
