@@ -675,7 +675,7 @@ class PieChart2State extends State<PieChartSample2> {
     SymptomStore symptomStore = Provider.of<SymptomStore>(context);
     return Observer(builder: (_) => Card(
 
-        elevation: 3,
+        elevation: 0,
         margin: EdgeInsets.all(4),
         child: Column(children: [
           ListTile(

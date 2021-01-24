@@ -137,7 +137,7 @@ class PieChartIngredientState extends State<PieChartIngredient> {
   Widget build(BuildContext context) {
     IngredientStore ingredientStore = Provider.of<IngredientStore>(context);
     return Observer(builder: (_) => Card(
-      elevation: 3,
+      elevation: 0,
       margin: EdgeInsets.all(4),
       child: Column(children: [
       ListTile(

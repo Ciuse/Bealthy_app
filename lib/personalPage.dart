@@ -109,9 +109,10 @@ class _PersonalPageState extends State<PersonalPage>{
         body: SingleChildScrollView(child: Center(
             child: Column(
                 children: [
-                  Container(
-                    width: 200,
-                    height: 200,
+            Card(
+                elevation: 0,
+                child:Column(children: [
+              Container(
                     child: Observer(builder: (_) =>Container(
                         alignment: Alignment.center ,
                         child: Stack(
@@ -256,16 +257,10 @@ class _PersonalPageState extends State<PersonalPage>{
                           }
                         },
                       )),
-                  Divider(
-                    height: 2,
-                    thickness: 0.5,
-                    color: Colors.black87,
-                  ),
+                 ],)),
                   Container(
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
                     margin: const EdgeInsets.only(
-                        top: 30, left: 20.0, right: 20.0, bottom: 20.0),
+                        top: 16, ),
                     child: ElevatedButton(
                       onPressed: () {
                         context.signOut();
