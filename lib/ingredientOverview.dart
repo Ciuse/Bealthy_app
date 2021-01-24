@@ -141,11 +141,11 @@ class PieChartIngredientState extends State<PieChartIngredient> {
       margin: EdgeInsets.all(4),
       child: Column(children: [
       ListTile(
-      title: const Text('% Ingredients eaten'),
+        leading: Icon(Icons.pie_chart),
+        title: const Text('Ingredients eaten (%)'),
     ),
          Row(
           children: <Widget>[
-
             Expanded(
                 child: Observer(builder: (_) =>PieChart(
                   PieChartData(

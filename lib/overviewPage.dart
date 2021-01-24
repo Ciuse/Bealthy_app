@@ -679,7 +679,8 @@ class PieChart2State extends State<PieChartSample2> {
         margin: EdgeInsets.all(4),
         child: Column(children: [
           ListTile(
-            title: const Text('% Symptoms experienced'),
+            leading: Icon(Icons.pie_chart),
+            title: const Text('Symptom occurrences (%)'),
           ),
         Row(
           children: <Widget>[
