@@ -274,6 +274,10 @@ The statistics page through a graph controller implements various widgets to sho
 All widgets that deal with dynamic data are connected to a set of widgets enclosed in "Mobx Stores" which take care of holding the observable data and invoking functions to get it through Firebase and to update it locally once the response is received.
 The profile and dishes pages are linked with a widget that handles all the part about getting a photo through the phone camera and uploading it to the Firestone Database.
 \subsubsection{More detailed widget structure }
+The diagram shows the main widgets that are used by the following Sequence diagrams.
+This diagram shows the main widgets on our home page and the stores through which data is taken to be displayed as the day changes (explanation in sequence diagram number 1).
+The other main widget that the diagram deals with is the page for adding a dish to a meal. The add screen has 5 other widgets.
+In sequence diagram number 2 we treat the dish creation widget by highlighting the stores it uses to save the information on firebase of the new dish and to invoke the rebuild of the pages that will contain the newly created dish. In addition, the widget for creating a dish is connected to a component that manages the whole part related to take a picture with the phone camera.
 \begin{figure}[ht!]
 \centering
 \includegraphics[height=14cm, width=\linewidth]{ComponentDettagliato.png}
@@ -333,9 +337,9 @@ All of these classes coordinate the application, process commands, make logical 
 \begin{itemize}
 \item We decided to use a \textbf{2 two tier architecture} because our application does not need a real external server to process the data or do complex calculations. The app does not need a lot of computing power. The data collected on the online database is downloaded as often as needed and is reorganised in such a way as to show statistics. In the end, these are relatively simple and inexpensive calculations.
 \item We decided to use \textbf{Flutter} because it is Google’s UI toolkit used for building natively compiled applications for mobile from a single codebase. It is characterize by a fast development that allow to
-use a rich set of fully-customizable widgets in order to build native interfaces.
+use a rich set of fully-customizable widgets in order to build multiplatform interfaces(iOS and Android)
 \item Flutter provides a lot of flexibility in deciding how to organize and architect apps. We decided to use the library \textbf{MobX} because it is a popular state management library for Dart and Flutter apps. It has also been recognized as a Flutter Favorite package.
-MobX relies on 3 core concepts: Observables, Actions and Reactions. Observables represent the reactive state of your application. Actions are semantic operations that modify these observables and Reactions are the listeners that "react" to the change in Observables, by updating UI or firing network operations. Reactions are considered as the side-effects in a MobX-based application.
+MobX relies on 3 core concepts: Observables, Actions and Reactions. Observables represent the reactive state of your application. Actions are semantic operations that modify these observables and Reactions are the listeners that "react" to the change in Observables, by updating UI or firing network operations. Reactions are considered as the side-effects in a MobX-based application. We have also chosen to use MobX because our application has to deal with dynamic data both because it can be continuously modified and because the more data the user adds, the more detailed the graphs will be with the percentages we show the user. MobX therefore allows us to observe this data and to rebuild each time only the UI directly concerned.
 \begin{figure}[ht!]
 \centering
 \includegraphics[height=7cm, width=12cm]{MobX.png}
@@ -453,7 +457,7 @@ The application is designed for all those users who suffer from eating problems 
 \item It's necessary set all the parameters: intensity, frequency and when the symptom occurs in order to click on the "save" button.
 \end{itemize}
 \clearpage
-\item [ 2)Add Dish page]
+\item [ 3)Add Dish page]
 \
 \
 \
@@ -488,7 +492,29 @@ The application is designed for all those users who suffer from eating problems 
 \item The last picture shows the page of a dish scanned by the user with all the informations that have been collected by the Open Food Facts database. If the user wants, he/she can also insert other ingredients.
 \end{itemize}
 
-\item [ 2)Visualize statistics]
+\item [ 4)Add treatment]
+\
+\
+\
+\begin{figure}[h!]
+\centering
+\hspace*{\fill}
+\begin{subfigure}[tl]{0.3\linewidth}
+\includegraphics[width=\linewidth]{treatments1.PNG}
+\caption{\textbf{Treatments}}
+\end{subfigure}\hfill
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{treatments4.PNG}
+\caption{\textbf{Add treatment form}}
+\end{subfigure}
+\hspace*{\fill}
+\end{figure}
+\begin{itemize}[•]
+\item The user can add a medical treatment or diet by clicking on the "+" button in the current treatments box. A form will open. The description, diet and medical cure are optional fields while everything else is compulsory as the dates are needed to show the user the percentage trend of symptoms before and after the end of these treatments. The user can then assess the effectiveness or otherwise of that particular treatment. 
+\end{itemize}
+
+\clearpage
+\item [ 5)Visualize statistics]
 \
 \
 \
@@ -497,25 +523,65 @@ The application is designed for all those users who suffer from eating problems 
 \hspace*{\fill}
 \begin{subfigure}[tl]{0.3\linewidth}
 \includegraphics[width=\linewidth]{statistics1.PNG}
-\caption{\textbf{All symptoms}}
+\caption{\textbf{Symptoms}}
 \end{subfigure}\hfill
 \begin{subfigure}[tr]{0.3\linewidth}
 \includegraphics[width=\linewidth]{statistics2.PNG}
-\caption{\textbf{Add symptom}}
+\caption{\textbf{Ingredients}}
 \end{subfigure}
 \hspace*{\fill}
 \begin{subfigure}[tr]{0.3\linewidth}
 \includegraphics[width=\linewidth]{statistics3.PNG}
-\caption{\textbf{Set parameters}}
+\caption{\textbf{Correlation between symptom and ingredients}}
 \end{subfigure}
 \hspace*{\fill}
 \end{figure}
 \begin{itemize}[•]
-\item 
-\item 
-\item 
+\item The statistics screen is divided into two tab bars: the first one shows the graph of the percentages of the symptoms and the second one that of the ingredients. The user can change the period for which the percentages are displayed using the menu at the top right. He can choose between week, month or set a date period through the use of a calendar. To change the week or month, he/she can use the side arrows under the tab bar while to change the date range, simply click on the calendar icon.
+The symptom graph shows the user the percentages with which a symptom occurred in that time period. The ingredient graph shows the percentage of an ingredient eaten by the user.
+\item By clicking on a specific symptom, below the pie chart with all the percentages, another bar chart will open showing the correlation between this symptom and the ingredients consumed by the user in the selected time period. The height of the bars indicates the value of the severity of the symptom on that day. If the user clicks on any day, the ingredients and their occurrences will be displayed below the graph.
 \end{itemize}
 
+\item [ 6)Visualize treatments]
+\
+\
+\
+\begin{figure}[h!]
+\centering
+\hspace*{\fill}
+\begin{subfigure}[tl]{0.3\linewidth}
+\includegraphics[width=\linewidth]{treatments1.PNG}
+\caption{\textbf{Treatments}}
+\end{subfigure}\hfill
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{treatments2.PNG}
+\caption{\textbf{Completed }}
+\end{subfigure}
+\hspace*{\fill}
+\begin{subfigure}[tr]{0.3\linewidth}
+\includegraphics[width=\linewidth]{treatments3.PNG}
+\caption{\textbf{In progress}}
+\end{subfigure}
+\hspace*{\fill}
+\end{figure}
+\begin{itemize}[•]
+\item The treatment screen shows the user all their medical/dietary treatments: both those still in progress and those completed. 
+\item By clicking on any treatment still in progress, the user will be able to view its details. 
+\item If the user clicks on a completed treatment, in addition to the general information, he/she will also be shown the percentage progress of the symptoms: which ones have improved, which ones have worsened. The user can then assess the effectiveness or otherwise of that particular treatment. 
+\end{itemize}
+\clearpage
+
+\item [ 7)Personal page]
+\
+\
+\
+\begin{figure}[h!]
+\centering
+\includegraphics[width=6cm,height=12cm]{PersonalPage.PNG}
+\end{figure}
+\begin{itemize}[•]
+\item The last screen concerns the user's personal information. The only action he can take is to add a profile picture. However, he can view some recap information since he started using the app: the average days he has been sickest with a severity value above 3 on a scale of one to ten and the 3 symptoms that have appeared most frequently.
+\end{itemize}
 
 \end{description}
 
