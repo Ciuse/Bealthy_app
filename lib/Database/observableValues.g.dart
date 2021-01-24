@@ -57,12 +57,79 @@ mixin _$ObservableValues on _ObservableValuesBase, Store {
     });
   }
 
+  final _$fractionSeverityOccurrenceAtom =
+      Atom(name: '_ObservableValuesBase.fractionSeverityOccurrence');
+
+  @override
+  double get fractionSeverityOccurrence {
+    _$fractionSeverityOccurrenceAtom.reportRead();
+    return super.fractionSeverityOccurrence;
+  }
+
+  @override
+  set fractionSeverityOccurrence(double value) {
+    _$fractionSeverityOccurrenceAtom
+        .reportWrite(value, super.fractionSeverityOccurrence, () {
+      super.fractionSeverityOccurrence = value;
+    });
+  }
+
+  final _$percentageSymptomAtom =
+      Atom(name: '_ObservableValuesBase.percentageSymptom');
+
+  @override
+  double get percentageSymptom {
+    _$percentageSymptomAtom.reportRead();
+    return super.percentageSymptom;
+  }
+
+  @override
+  set percentageSymptom(double value) {
+    _$percentageSymptomAtom.reportWrite(value, super.percentageSymptom, () {
+      super.percentageSymptom = value;
+    });
+  }
+
+  final _$disappearedAtom = Atom(name: '_ObservableValuesBase.disappeared');
+
+  @override
+  bool get disappeared {
+    _$disappearedAtom.reportRead();
+    return super.disappeared;
+  }
+
+  @override
+  set disappeared(bool value) {
+    _$disappearedAtom.reportWrite(value, super.disappeared, () {
+      super.disappeared = value;
+    });
+  }
+
+  final _$appearedAtom = Atom(name: '_ObservableValuesBase.appeared');
+
+  @override
+  bool get appeared {
+    _$appearedAtom.reportRead();
+    return super.appeared;
+  }
+
+  @override
+  set appeared(bool value) {
+    _$appearedAtom.reportWrite(value, super.appeared, () {
+      super.appeared = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 stringIngredients: ${stringIngredients},
 severitySymptom: ${severitySymptom},
-occurrenceSymptom: ${occurrenceSymptom}
+occurrenceSymptom: ${occurrenceSymptom},
+fractionSeverityOccurrence: ${fractionSeverityOccurrence},
+percentageSymptom: ${percentageSymptom},
+disappeared: ${disappeared},
+appeared: ${appeared}
     ''';
   }
 }

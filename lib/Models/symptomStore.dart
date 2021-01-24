@@ -51,8 +51,10 @@ abstract class _SymptomStoreBase with Store {
   Future<void> initStore(DateTime day) async {
     if (!storeInitialized) {
       
-      await _getSymptomList().then((value) => {initializeColorMap(),initSymptomDay(day)});
-      storeInitialized = true;
+      await _getSymptomList().then((value) => {
+        initializeColorMap(),initSymptomDay(day),
+      storeInitialized = true,
+      });
     }
   }
 
@@ -134,7 +136,7 @@ abstract class _SymptomStoreBase with Store {
   }
 
   Future<void>asyncGetSymptomValue(List<DateTime> dates,String symptomId) async {
-    await Future.wait(dates.map((date)=>_fillTreatmentMap(date,symptomId)));
+    await Future.wait(dates.map((date)=>_fillTreatmentMap(date,symptomId))).then((value) => calculateFractionTreatment(symptomId));
   }
 
   @action
@@ -148,11 +150,19 @@ abstract class _SymptomStoreBase with Store {
   }
 
   Future<void>asyncGetSymptomValueBeforeTreatment(List<DateTime> dates,String symptomId) async {
-    await Future.wait(dates.map((date)=>_fillBeforeTreatmentMap(date,symptomId)));
+    await Future.wait(dates.map((date)=>_fillBeforeTreatmentMap(date,symptomId))).then((value) => calculateFractionBefore(symptomId) );
   }
 
 
+  void calculateFractionBefore(String symptomId){
+    if(mapSymptomBeforeTreatment.containsKey(symptomId))
+    mapSymptomBeforeTreatment[symptomId].fractionSeverityOccurrence = mapSymptomBeforeTreatment[symptomId].severitySymptom / mapSymptomBeforeTreatment[symptomId].occurrenceSymptom;
+  }
 
+  void calculateFractionTreatment(String symptomId){
+    if(mapSymptomTreatment.containsKey(symptomId))
+    mapSymptomTreatment[symptomId].fractionSeverityOccurrence = mapSymptomTreatment[symptomId].severitySymptom / mapSymptomTreatment[symptomId].occurrenceSymptom;
+  }
   @action
   double mealTimeValueSymptom(Symptom symptom){
     double value;
@@ -197,13 +207,11 @@ abstract class _SymptomStoreBase with Store {
             symptomCreated.setMealTimeBoolList();
             symptomCreated.overviewValue = ((symptomCreated.intensity)*(symptomCreated.frequency)*mealTimeValueSymptom(symptomCreated))*0.4;
             if(mapSymptomTreatment.keys.isEmpty || mapSymptomTreatment[symptomId]==null){
-              print("entrato if");
               ObservableValues symptomValue = new ObservableValues();
               symptomValue.occurrenceSymptom = 1;
               symptomValue.severitySymptom = symptomCreated.overviewValue;
               mapSymptomTreatment.putIfAbsent(symptomId, () => symptomValue);
             }else{
-              print("entrato else");
               mapSymptomTreatment[symptomId].occurrenceSymptom = mapSymptomTreatment[symptomId].occurrenceSymptom +1;
               mapSymptomTreatment[symptomId].severitySymptom = mapSymptomTreatment[symptomId].severitySymptom + symptomCreated.overviewValue;
             }
@@ -229,13 +237,11 @@ abstract class _SymptomStoreBase with Store {
         symptomCreated.setMealTimeBoolList();
         symptomCreated.overviewValue = ((symptomCreated.intensity)*(symptomCreated.frequency)*mealTimeValueSymptom(symptomCreated))*0.4;
         if(mapSymptomBeforeTreatment.keys.isEmpty || mapSymptomBeforeTreatment[symptomId]==null){
-          print("entrato if");
           ObservableValues symptomValue = new ObservableValues();
           symptomValue.occurrenceSymptom = 1;
           symptomValue.severitySymptom = symptomCreated.overviewValue;
           mapSymptomBeforeTreatment.putIfAbsent(symptomId, () => symptomValue);
         }else{
-          print("entrato else");
           mapSymptomBeforeTreatment[symptomId].occurrenceSymptom = mapSymptomBeforeTreatment[symptomId].occurrenceSymptom +1;
           mapSymptomBeforeTreatment[symptomId].severitySymptom = mapSymptomBeforeTreatment[symptomId].severitySymptom + symptomCreated.overviewValue;
         }
