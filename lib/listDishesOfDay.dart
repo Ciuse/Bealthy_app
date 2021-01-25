@@ -44,12 +44,13 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     final mealTimeStore = Provider.of<MealTimeStore>(context);
     final ingredientStore = Provider.of<IngredientStore>(context);
     return Container(
+      padding: EdgeInsets.only(top: 8),
         child:Column(
           children:<Widget>[
             for( var element in MealTime.values )
               Observer(builder: (_) => Padding(
-        padding: EdgeInsets.only(left: 8,right: 8,top: 16),
-        child:listViewForAMealTime(element, mealTimeStore,ingredientStore))),
+                  padding: EdgeInsets.only(left: 8,right: 8,bottom: 16),
+                  child:listViewForAMealTime(element, mealTimeStore,ingredientStore))),
 
           ],
 
@@ -203,24 +204,9 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   }
 
   Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore,IngredientStore ingredientStore ){
-    return  Container(
-        alignment: Alignment.center,
-        width:double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5), //border corner radius
-          boxShadow:[
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.6), //color of shadow
-              spreadRadius: 1.3, //spread radius
-              blurRadius: 3.5, // blur radius
-              offset: Offset(2, 4), // changes position of shadow
-              //first paramerter of offset is left-right
-              //second parameter is top to down
-            ),
-            //you can set more BoxShadow() here
-          ],
-        ),
+    return  Card(
+        elevation: 3,
+        margin: EdgeInsets.all(0),
         child: Column(
             children:[
               dynamicListTile(mealTime.index), // per ogni meal time setto un testo e un'icona diversa
@@ -229,11 +215,13 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                   physics: ClampingScrollPhysics(),
                   itemCount: mealTimeStore.getDishesOfMealTimeList(mealTime.index).length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Dismissible(
+                    return Container(
+                        padding:EdgeInsets.only(left: 16,right: 16, bottom: 16),
+                        child:Dismissible(
                       key: Key(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].name),
                       background: Container(
-                        margin:  EdgeInsets.symmetric(horizontal: 10 ),
-                        padding: EdgeInsets.symmetric(horizontal: 10 ),
+
+                        padding: EdgeInsets.symmetric(horizontal: 10, ),
                         decoration: BoxDecoration(
                           color: Palette.bealthyColorScheme.error,
                           borderRadius: BorderRadius.circular(5),),
@@ -241,11 +229,11 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                         child: Icon(Icons.delete, color: Colors.white),
                       ),
                       child: Card(
+                        margin: EdgeInsets.all(0),
                         shape:  RoundedRectangleBorder(
                           side: BorderSide(color: Palette.bealthyColorScheme.primaryVariant, width: 1),
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        margin: EdgeInsets.only(left: 16,right: 16, bottom: 16),
                         child: ListTile(
                           shape:  RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -314,7 +302,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                       onDismissed: (direction){
                         mealTimeStore.removeDishOfMealTimeListOfSpecificDay(mealTime.index, mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index], widget.day);
                       },
-                    );
+                    ));
 
                   }
 

@@ -74,13 +74,12 @@ class _PersonalPageState extends State<PersonalPage>{
     return Row(
       children: [
         Observer(builder: (_) => Container(
-            padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
-            width: 70,
+            padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
             alignment: Alignment.center,
             color: Colors.transparent,
             child:  ImageIcon(
             AssetImage("images/Symptoms/" +userStore.personalPageSymptomsList[index].id+".png" ),
-            size: 28.0,
+            size: 32.0,
           ),
         ),
 
@@ -106,7 +105,8 @@ class _PersonalPageState extends State<PersonalPage>{
         appBar: AppBar(
           title: const Text('Personal info'),
         ),
-        body: SingleChildScrollView(child: Center(
+        body: SingleChildScrollView(child: Container(
+          padding: EdgeInsets.all(4),
             child: Column(
                 children: [
             Card(
@@ -123,8 +123,8 @@ class _PersonalPageState extends State<PersonalPage>{
                                   decoration: new BoxDecoration(
                                     borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                     border: new Border.all(
-                                      color: Colors.black,
-                                      width: 4.0,
+                                        color: Palette.bealthyColorScheme.primaryVariant,
+                                        width: 1.5,
                                     ),
                                   ),
                                   child: ClipOval(
@@ -159,8 +159,8 @@ class _PersonalPageState extends State<PersonalPage>{
                                   children:  <Widget>[
                                     Container(
                                         margin: const EdgeInsets.only(left: 125,top:125),
-                                        child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42,
-                                          color: Colors.black,)),]
+                                        child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                          color: Palette.bealthyColorScheme.secondary,)),]
 
                               )
                             ])
@@ -170,7 +170,6 @@ class _PersonalPageState extends State<PersonalPage>{
                   Divider(
                     height: 2,
                     thickness: 0.5,
-                    color: Colors.black87,
                   ),
                   Container(
                     height: 50,
@@ -198,8 +197,8 @@ class _PersonalPageState extends State<PersonalPage>{
                                     );
                                   case FutureStatus.fulfilled:
                                     return ListTile(
-                                      title: Text("Average sick days in the last month: "+ userStore.sickDays.length.toString()),
-                                      leading: Icon(Icons.sick,color: Colors.black,),
+                                      title: Text("Average sick days last month: "+ userStore.sickDays.length.toString()),
+                                     // leading: Icon(Icons.sick,color: Colors.black,),
                                     );
                                   case FutureStatus.pending:
                                   default:
@@ -212,13 +211,15 @@ class _PersonalPageState extends State<PersonalPage>{
                   Divider(
                     height: 2,
                     thickness: 0.5,
-                    color: Colors.black87,
                   ),
                   Container(
-                    padding: EdgeInsets.all(15.0),
+                    padding: EdgeInsets.all(0.0),
                     alignment: Alignment.centerLeft,
-                      child:Text("THREE MOST RELEVANT SYMPTOMS:",style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
+                      child:
+                      ListTile(
+                        title: Text("Most relevant symptoms: "),
+                        // leading: Icon(Icons.sick,color: Colors.black,),
+                  )),
                   Container(
                       child: Observer(
                         builder: (_) {
@@ -247,7 +248,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                   userStore.personalPageSymptomsList.length>0? symptom(userStore.personalPageSymptomsList.length-1): Container(),
                                   userStore.personalPageSymptomsList.length>1? symptom(userStore.personalPageSymptomsList.length-2): Container(),
                                   userStore.personalPageSymptomsList.length>2? symptom(userStore.personalPageSymptomsList.length-3): Container(),
-                                  SizedBox(height: 8,),
+                                  SizedBox(height: 0,),
                                 ],
                               );
                             case FutureStatus.pending:
@@ -260,13 +261,13 @@ class _PersonalPageState extends State<PersonalPage>{
                  ],)),
                   Container(
                     margin: const EdgeInsets.only(
-                        top: 16, ),
+                        top: 8, ),
                     child: ElevatedButton(
                       onPressed: () {
                         context.signOut();
                         Navigator.of(context).pushReplacement(AuthScreen.route);
                       },
-                      child: Text('Sign out'),
+                      child: Text('LOGOUT'),
                     ),
                   ),
                 ]

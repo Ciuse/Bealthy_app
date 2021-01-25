@@ -261,7 +261,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                 Container(
 
                                                     margin: const EdgeInsets.only(left: 125,top:125),
-                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42, color: Palette.bealthyColorScheme.secondary,
+                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42, color: Palette.bealthyColorScheme.secondary,
                                                       )),]
 
                                           )

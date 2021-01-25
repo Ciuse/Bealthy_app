@@ -68,7 +68,9 @@ class IngredientOverviewState extends State<IngredientOverview> {
       return Column(
         children: [
           PieChartIngredient(overviewStore: widget.overviewStore,),
-          SizedBox( // Horizontal ListView
+          Container(
+            // Horizontal ListView
+              padding: EdgeInsets.symmetric(horizontal: 8),
               height: 80,
               child: Observer(builder: (_) =>
                   ListView.builder(
@@ -79,7 +81,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
                     itemBuilder: (context, index) {
                       return
                           Container(
-                              width: 70,
+                              padding: EdgeInsets.only(right: 16),
                               alignment: Alignment.center,
                               color: Colors.transparent,
                               child: RawMaterialButton(
@@ -90,16 +92,17 @@ class IngredientOverviewState extends State<IngredientOverview> {
                                 fillColor: Colors.white,
                                 child:
                                 Container(
-                                    height: 28.0,
+                                    height: 26.0,
                                     child:  ClipOval(
                                         child: Image(
                                           fit: BoxFit.fill,
                                           image: AssetImage("images/ingredients/" + widget.overviewStore.totalOccurrenceIngredient.keys.elementAt(index) + ".png"),
                                         )
                                     )),
-                                padding: EdgeInsets.all(15.0),
-                                shape: CircleBorder(),
-
+                                constraints : const BoxConstraints(minWidth: 55.0, minHeight: 55.0),
+                                shape:RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
                               ));
                     },
                   ),
@@ -185,7 +188,7 @@ class PieChartIngredientState extends State<PieChartIngredient> {
               ],
             ),
             const SizedBox(
-              width: 28,
+              width: 16,
             ),
 
           ],

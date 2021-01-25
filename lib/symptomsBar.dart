@@ -35,29 +35,18 @@ class _SymptomsBarState extends State<SymptomsBar>{
 
     return
       Container(
-        height: 130,
-          margin: EdgeInsets.only(left: 8,right: 8,top:8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5), //border corner radius
-            boxShadow:[
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.6), //color of shadow
-                spreadRadius: 1.3, //spread radius
-                blurRadius: 3.5, // blur radius
-                offset: Offset(2, 4), // changes position of shadow
-                //first paramerter of offset is left-right
-                //second parameter is top to down
-              ),
-              //you can set more BoxShadow() here
-            ],
-          ),
+        padding: EdgeInsets.all(8),
+          height: 140,
+          child: Card(
+          elevation: 3,
+          margin: EdgeInsets.all(0),
           child:Column(
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
-                    flex:2,
+                    flex:3,
                     child:ListTile(
                       title: Text("Symptoms",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
                       leading: Icon(Icons.sick,color: Colors.black),
@@ -74,7 +63,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                 Container(
                   child:
                   Expanded(
-                      flex:2,
+                      flex:5,
                       child:  Observer(
                         builder: (_) {
                           if(symptomStore.loadSymptomDay!=null){
@@ -122,7 +111,6 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                                     MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomListOfSpecificDay[index])
                                                     ))
                                               },
-                                              elevation: 5.0,
                                               child: ImageIcon(
                                                 AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
                                                 size: 35.0,
@@ -144,7 +132,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
 
                   )),
                 ]
-          ));
+          )));
 
   }
 }
