@@ -24,7 +24,7 @@ class _PersonalPageState extends State<PersonalPage>{
   final Color orange = Color(0xfffb6900);
   final Color green = Colors.green;
   final Color lightBlue = Colors.lightBlueAccent;
-  var storage = FirebaseStorage.instance;
+  var storage;
   UserStore userStore;
   DateStore dateStore;
 
@@ -63,6 +63,7 @@ class _PersonalPageState extends State<PersonalPage>{
       initializing: () => Text('Loading'),
     );
     try {
+      storage = FirebaseStorage.instance;
       return await storage.ref(userUid+"/UserProfileImage/UserProfileImage.jpg").getDownloadURL();
     }
     catch (e) {

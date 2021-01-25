@@ -45,10 +45,12 @@ abstract class _DateStoreBase with Store {
   bool initializeIllnesses=false;
 
   Future<void> initIllnesses()async{
-    if(initializeIllnesses==false){
-      illnesses.clear();
-      initializeIllnesses=true;
-      return await ObservableFuture(getAllSickDay());
+    if(auth.currentUser!=null) {
+      if (initializeIllnesses == false) {
+        illnesses.clear();
+        initializeIllnesses = true;
+        return await ObservableFuture(getAllSickDay());
+      }
     }
   }
 

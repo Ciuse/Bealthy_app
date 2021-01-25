@@ -36,14 +36,17 @@ abstract class _UserStoreBase with Store {
   ObservableFuture loadSickDayMonth;
 
   Future<void> initUserDb() async{
-    profileImage=null;
-    await Future.wait([_initDishCreated(),
-      _initDishFavourite(),
-      _initUserSymptom(),
-      _initUserDish(),
-      _initUserSymptomsOccurrence(),
-      _initUserTreatment(),
-    ]);
+    if(auth.currentUser!=null) {
+      profileImage = null;
+      await Future.wait([
+        _initDishCreated(),
+        _initDishFavourite(),
+        _initUserSymptom(),
+        _initUserDish(),
+        _initUserSymptomsOccurrence(),
+        _initUserTreatment(),
+      ]);
+    }
   }
 
   Future<void> _initDishCreated() async{
@@ -112,9 +115,12 @@ abstract class _UserStoreBase with Store {
 
   @action
   Future<void> _occurrenceInit() async{
-    await _getSymptomListForPersonalPage()
-        .then((value) =>
-        personalPageSymptomsList.sort((a, b) => a.occurrence.compareTo(b.occurrence)));
+    if(auth.currentUser!=null) {
+      await _getSymptomListForPersonalPage()
+          .then((value) =>
+          personalPageSymptomsList.sort((a, b) =>
+              a.occurrence.compareTo(b.occurrence)));
+    }
   }
 
 @action
@@ -146,9 +152,13 @@ double calculatePercentageSymptom(Symptom symptom){
 
   @action
   Future<void> _getAverageSickDays(List<DateTime> dateTimeList ) async {
-    numOfSickDaysInMonth=0;
-    sickDays.clear();
-    await  Future.wait(dateTimeList.map(getSickDay));
+    if(auth.currentUser!=null)
+    {
+      numOfSickDaysInMonth=0;
+      sickDays.clear();
+      await  Future.wait(dateTimeList.map(getSickDay));
+    }
+
 
   }
   @action

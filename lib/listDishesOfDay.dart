@@ -22,7 +22,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   List<String> dishListChoices = ["information","modify"];
   List<String> quantityList;
-  var storage = FirebaseStorage.instance;
+  var storage;
   @override
   void initState() {
     super.initState();
@@ -196,6 +196,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
       initializing: () => Text('Loading'),
     );
     try {
+      storage = FirebaseStorage.instance;
       return await storage.ref(userUid+"/DishImage/" + dishId + ".jpg").getDownloadURL();
     }
     catch (e) {
@@ -205,6 +206,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   Widget listViewForAMealTime(MealTime mealTime, MealTimeStore mealTimeStore,IngredientStore ingredientStore ){
     return  Card(
+        key:Key("listViewForAMealTime"),
         elevation: 3,
         margin: EdgeInsets.all(0),
         child: Column(
