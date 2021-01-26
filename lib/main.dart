@@ -26,6 +26,9 @@ import 'personalPage.dart';
 FirebaseAuth auth = FirebaseAuth.instance;
 
 void main() async {
+
+
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // Obtain a list of the available cameras on the device.
@@ -125,15 +128,17 @@ class MyApp extends StatelessWidget {
                   ),
                   textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                       textStyle: TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                       )
                     )
                   ),
                   elevatedButtonTheme: ElevatedButtonThemeData(
                       style: TextButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 32),
                           textStyle: TextStyle(
-                            fontSize: 18,
+                            fontSize: 17,
                           )
                       )
                   ),

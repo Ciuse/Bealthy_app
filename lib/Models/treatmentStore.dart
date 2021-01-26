@@ -34,8 +34,10 @@ abstract class _TreatmentStoreBase with Store {
 
   @action
   Future<void> initTreatmentsList(DateTime day) async {
-
+    if(auth.currentUser!=null) {
       await _getTreatmentsList(day);
+
+    }
 
   }
 

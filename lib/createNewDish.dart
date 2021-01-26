@@ -122,6 +122,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                     Column(
                         children: [
                           Card(
+                            elevation: 0,
                               margin: EdgeInsets.all(0),
                               child: Container(
 
@@ -161,6 +162,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                               )),
                           SizedBox(height: 8,),
                           Card(
+
                               margin: EdgeInsets.all(0),
 
                               child: Padding(

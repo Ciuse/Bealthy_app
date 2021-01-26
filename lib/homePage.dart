@@ -95,7 +95,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
               SliverList(
                 delegate: SliverChildListDelegate([
                   ListDishesOfDay(day: dateModel.calendarSelectedDate),
-                  Container(height: MediaQuery.of(context).size.height-632,),
+                  Container(height: MediaQuery.of(context).size.height>=632?MediaQuery.of(context).size.height-632:0),
 
                 ]),
               ),

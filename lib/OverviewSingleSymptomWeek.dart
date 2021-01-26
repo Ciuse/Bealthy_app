@@ -64,15 +64,15 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                           ),
                           child: BarChartSymptom(symptomId: widget.symptomId,overviewStore: widget.overviewStore,)),
                       Observer(builder: (_) =>Container(
-                          height: 120,
+                          height: 130,
                           margin: EdgeInsets.only(top: 10,bottom: 10 ),
-                          padding: EdgeInsets.only(top:5,left: 6,right: 6 , bottom: 5 ),
+                          padding: EdgeInsets.only(top:8,left: 8,right: 8 , bottom: 8 ),
                           width:double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             boxShadow:[
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.4), //color of shadow
+                                color: Colors.grey.withOpacity(0.0), //color of shadow
                                 spreadRadius: 1, //spread radius
                                 blurRadius: 3, // blur radius
                                 offset: Offset(2, 4), // changes position of shadow

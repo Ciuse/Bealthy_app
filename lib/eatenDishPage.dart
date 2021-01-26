@@ -194,33 +194,36 @@ class _EatenDishPageState extends State<EatenDishPage>{
               )
             ],
           ),
-          body: SingleChildScrollView(
+            body: SingleChildScrollView(
               physics: ScrollPhysics(),
-              child: Column(
-                  children: [
-                    Card(
-                      child: widget.createdByUser? FutureBuilder(
-                          future: getImage(),
-                          builder: (context, remoteString) {
-                            if (remoteString.connectionState != ConnectionState.waiting) {
-                              if (remoteString.hasError) {
-                                return Observer(builder: (_) =>Container(
-                                    alignment: Alignment.center ,
-                                    child: Stack(
-                                        children: [
-                                          Container
-                                            (width: 150,
-                                              height: 150,
-                                              decoration: new BoxDecoration(
-                                                borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
-                                                border: new Border.all(
-                                                  color: Palette.bealthyColorScheme.primaryVariant,
-                                                  width: 1.5,
-                                                ),
-                                              ),
-                                              child: ClipOval(
-                                                child: widget.dish.imageFile==null? null:
-                                                Image.file(widget.dish.imageFile,  fit: BoxFit.cover,),)),
+              child:   Container(
+                padding: EdgeInsets.all(4),
+                  child:Column(
+                      children: [
+                        Card(
+                          elevation: 0,
+                          child: widget.createdByUser? FutureBuilder(
+                              future: getImage(),
+                              builder: (context, remoteString) {
+                                if (remoteString.connectionState != ConnectionState.waiting) {
+                                  if (remoteString.hasError) {
+                                    return Observer(builder: (_) =>Container(
+                                        alignment: Alignment.center ,
+                                        child: Stack(
+                                            children: [
+                                              Container
+                                                (width: 150,
+                                                  height: 150,
+                                                  decoration: new BoxDecoration(
+                                                    borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                    border: new Border.all(
+                                                      color: Palette.bealthyColorScheme.primaryVariant,
+                                                      width: 1.5,
+                                                    ),
+                                                  ),
+                                                  child: ClipOval(
+                                                    child: widget.dish.imageFile==null? null:
+                                                    Image.file(widget.dish.imageFile,  fit: BoxFit.cover,),)),
 
                                           Stack(
                                               children:  <Widget>[
@@ -258,7 +261,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                 Container(
 
                                                     margin: const EdgeInsets.only(left: 125,top:125),
-                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.photo_camera), iconSize: 42, color: Palette.bealthyColorScheme.secondary,
+                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42, color: Palette.bealthyColorScheme.secondary,
                                                       )),]
 
                                           )
@@ -315,6 +318,8 @@ class _EatenDishPageState extends State<EatenDishPage>{
                     ),
 
                     Card(
+                      elevation: 2,
+
                       // height: 50,
                       // alignment: Alignment.center,
                       child:Observer(builder: (_) =>ListTile(
@@ -431,7 +436,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
 
               )),
 
-        ));
+        )));
   }
 }
 

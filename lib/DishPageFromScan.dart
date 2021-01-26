@@ -131,16 +131,16 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
     barCodeScannerStore.initIngredients(ingredientStore, foodStore);
   }
 
-bool findIngredient(Ingredient ingredient){
+  bool findIngredient(Ingredient ingredient){
     bool toReturn = false;
     barCodeScannerStore.ingredients.forEach((element) {
       if(element.id==ingredient.id){
         toReturn = true;
         return toReturn;
-    }
+      }
     });
     return toReturn;
-}
+  }
 
 
   @override
@@ -152,298 +152,303 @@ bool findIngredient(Ingredient ingredient){
       appBar: AppBar(
         title:  Text(barCodeScannerStore.scanBarcode),
       ),
-      body: OKToast( child: Container(
-              child:
-              Observer(
-                builder: (_) {
-              switch (barCodeScannerStore.loadProduct.status) {
-                case FutureStatus.rejected:
-                  return Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Oops something went wrong'),
-                        RaisedButton(
-                          child: Text('Retry'),
-                          onPressed: () async {
-                          },
-                        ),
-                      ],
+      body: OKToast( child:
+      Observer(
+        builder: (_) {
+          switch (barCodeScannerStore.loadProduct.status) {
+            case FutureStatus.rejected:
+              return Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Oops something went wrong'),
+                    RaisedButton(
+                      child: Text('Retry'),
+                      onPressed: () async {
+                      },
                     ),
-                  );
-                case FutureStatus.fulfilled:
-                  if(barCodeScannerStore.productFromQuery!=null){
-                  initializeDishFromProduct();
-                  Ingredient toAdd;
-                  return SingleChildScrollView(
-                      physics: ScrollPhysics(),
-                  child:Column(
-                      children: [
-                        Container(
-                          width: 200,
-                          height: 200,
-                          child: Observer(builder: (_) =>Container(
-                              alignment: Alignment.center ,
-                              child: Stack(
-                                  children: [
-                                    Container
-                                      (width: 150,
-                                        height: 150,
-                                        decoration: new BoxDecoration(
-                                          borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
-                                          border: new Border.all(
-                                            color: Palette.bealthyColorScheme.primaryVariant,
-                                            width: 1.5,
-                                          ),
-                                        ),
-                                        child: ClipOval(
-                                          child: widget.dish.imageFile==null? null:
-                                          Image.file(widget.dish.imageFile, fit: BoxFit.cover,),
-                                        )
-                                    ),
-
-                                    Stack(
-                                        children:  <Widget>[
-                                          Container(
-                                              margin: const EdgeInsets.only(left: 125,top:125),
-                                              child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
-                                                color: Palette.bealthyColorScheme.secondary,)),]
-                                    )
-                                  ])
-
-                          )),
-                        ),
-                        Card(child:
-                        ListTile(
-                            title: Text("Name: ",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
-                            trailing: TextButton(child:
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [Expanded(
-                                flex:2,
-                                  child:
-                                  Observer(builder: (_) =>widget.dish.name==null? Text(barCodeScannerStore.productFromQuery.productName, textAlign: TextAlign.left)
-                                      : Text(widget.dish.name,maxLines:2,softWrap: false,overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,))),
-                                SizedBox(width: 8,),
-                                Flexible(
-                                    flex: 1,
-                                    child: Icon(Icons.mode_rounded,)),
-                              ],
-                            ),
-                                onPressed: () =>{
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) =>  new  AlertDialog(
-
-                                      title: Center(child: Text("Change dish name",style: TextStyle(fontWeight: FontWeight.bold,),)),
-                                      content: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children : <Widget>[
-                                          Expanded(
-                                            child: TextFormField(
-                                              autovalidateMode: AutovalidateMode.disabled,
-                                              controller: titleCt,
-                                              maxLength: 25,
-                                              decoration: new InputDecoration(
-                                                labelText: 'Name',
-                                                fillColor: Colors.white,
-                                                border: new OutlineInputBorder(
-                                                  borderRadius: new BorderRadius.circular(15.0),
-                                                  borderSide: new BorderSide(
-                                                  ),
-                                                ),
-                                                //fillColor: Colors.green
-                                              ),
-                                              validator: (val) {
-                                                if(val.length==0) {
-                                                  return "Name cannot be empty";
-                                                }else{
-                                                  return null;
-                                                }
-                                              },
-                                              keyboardType: TextInputType.text,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      contentPadding: EdgeInsets.only(top: 8, left: 10, right: 10),
-                                      actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-                                      actions: [
-                                        FlatButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text('CANCEL'),
-                                        ),
-                                        FlatButton(
-                                          onPressed: () {
-                                            widget.dish.name= titleCt.text;
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text('ACCEPT'),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                })
-                        )),
-                        ingredientsWidget(),
-                        SizedBox(height: 8,),
-                      Container(
-                          height: 95,
-                          child:Card(child:Row(
-                        mainAxisSize: MainAxisSize.min,
+                  ],
+                ),
+              );
+            case FutureStatus.fulfilled:
+              if(barCodeScannerStore.productFromQuery!=null){
+                initializeDishFromProduct();
+                Ingredient toAdd;
+                return SingleChildScrollView(
+                    physics: ScrollPhysics(),
+                    child:Column(
                         children: [
-                        Flexible(
-                            fit: FlexFit.loose,
-                          flex:5,
-                            child: ListTile(
-                          title: Text("Add ingredients!"),
-                        )),
-                        Expanded(
-                            flex:5,
-                            child:
-                            Padding(
-                                padding: const EdgeInsets.all(16),
-                                child:DropdownSearch<String>(
-                              mode: Mode.MENU,
-                              dropdownSearchDecoration:  new InputDecoration(
-                                labelText: "Select",
-                                fillColor: Colors.white,
-                                contentPadding: EdgeInsets.all(4),
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(15.0),
-                                  borderSide: new BorderSide(
+                          Container(
+                              padding: EdgeInsets.only(top: 4,left: 4,right: 4),
+                              child: Card(
+                                elevation: 0,
+                                child:Observer(builder: (_) =>Container(
+                                    alignment: Alignment.center ,
+                                    child: Stack(
+                                        children: [
+                                          Container
+                                            (width: 150,
+                                              height: 150,
+                                              decoration: new BoxDecoration(
+                                                borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                border: new Border.all(
+                                                  color: Palette.bealthyColorScheme.primaryVariant,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                              child: ClipOval(
+                                                child: widget.dish.imageFile==null? null:
+                                                Image.file(widget.dish.imageFile, fit: BoxFit.cover,),
+                                              )
+                                          ),
+
+                                          Stack(
+                                              children:  <Widget>[
+                                                Container(
+                                                    margin: const EdgeInsets.only(left: 125,top:125),
+                                                    child:IconButton(padding: EdgeInsets.all(2),onPressed: openCamera, icon: Icon(Icons.add_a_photo_outlined), iconSize: 42,
+                                                      color: Palette.bealthyColorScheme.secondary,)),]
+                                          )
+                                        ])
+
+                                )),
+                              )),
+                          Container(
+                              padding: EdgeInsets.symmetric(horizontal: 4,vertical: 2),
+                              child: Card(child:
+                              ListTile(
+                                  title: Text("Name: ",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
+                                  trailing: TextButton(child:
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [Expanded(
+                                        flex:2,
+                                        child:
+                                        Observer(builder: (_) =>widget.dish.name==null? Text(barCodeScannerStore.productFromQuery.productName, textAlign: TextAlign.left)
+                                            : Text(widget.dish.name,maxLines:2,softWrap: false,overflow: TextOverflow.ellipsis,textAlign: TextAlign.end,))),
+                                      SizedBox(width: 8,),
+                                      Flexible(
+                                          flex: 1,
+                                          child: Icon(Icons.mode_rounded,)),
+                                    ],
                                   ),
-                                ),
-                                //fillColor: Colors.green
-                              ),
-                              //  showSearchBox: true,
-                              items: ingredientStore.ingredientsName,
-                              autoValidateMode: AutovalidateMode.onUserInteraction,
-                              validator:  (val) {
-                                if(barCodeScannerStore.ingredients.length==0) {
-                                  return "Insert at least one ingredient";
-                                }else{
-                                  return null;
-                                }
-                              },
-                              onChanged: (String ingredient)=> {
-                                selectedItemIngredient="",
-                                if(!findIngredient(ingredientStore.getIngredientFromName(ingredient))){
-                                  toAdd = ingredientStore.getIngredientFromName(ingredient),
-                                  toAdd.qty=Quantity.Normal.toString().split('.').last,
-                                  barCodeScannerStore.ingredients.add(toAdd),
-                                  ingredientStore.ingredientsName.remove(ingredient),
-                                }else{
-                                  showDialog(
+                                      onPressed: () =>{
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) =>  new  AlertDialog(
+
+                                            title: Center(child: Text("Change dish name",style: TextStyle(fontWeight: FontWeight.bold,),)),
+                                            content: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children : <Widget>[
+                                                Expanded(
+                                                  child: TextFormField(
+                                                    autovalidateMode: AutovalidateMode.disabled,
+                                                    controller: titleCt,
+                                                    maxLength: 25,
+                                                    decoration: new InputDecoration(
+                                                      labelText: 'Name',
+                                                      fillColor: Colors.white,
+                                                      border: new OutlineInputBorder(
+                                                        borderRadius: new BorderRadius.circular(15.0),
+                                                        borderSide: new BorderSide(
+                                                        ),
+                                                      ),
+                                                      //fillColor: Colors.green
+                                                    ),
+                                                    validator: (val) {
+                                                      if(val.length==0) {
+                                                        return "Name cannot be empty";
+                                                      }else{
+                                                        return null;
+                                                      }
+                                                    },
+                                                    keyboardType: TextInputType.text,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            contentPadding: EdgeInsets.only(top: 8, left: 10, right: 10),
+                                            actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                            actions: [
+                                              FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text('CANCEL'),
+                                              ),
+                                              FlatButton(
+                                                onPressed: () {
+                                                  widget.dish.name= titleCt.text;
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('ACCEPT'),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      })
+                              ))),
+                          Container(
+                              padding: EdgeInsets.symmetric(horizontal: 4,vertical: 2),
+                              child: ingredientsWidget()),
+                          Container(
+                              padding: EdgeInsets.symmetric(horizontal: 4,vertical: 2),
+                              child: Container(
+                                  height: 95,
+                                  child:Card(child:Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Flexible(
+                                          fit: FlexFit.loose,
+                                          flex:5,
+                                          child: ListTile(
+                                            title: Text("Add ingredients!"),
+                                          )),
+                                      Expanded(
+                                          flex:5,
+                                          child:
+                                          Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child:DropdownSearch<String>(
+                                                mode: Mode.MENU,
+                                                dropdownSearchDecoration:  new InputDecoration(
+                                                  labelText: "Select",
+                                                  fillColor: Colors.white,
+                                                  contentPadding: EdgeInsets.all(4),
+                                                  border: new OutlineInputBorder(
+                                                    borderRadius: new BorderRadius.circular(15.0),
+                                                    borderSide: new BorderSide(
+                                                    ),
+                                                  ),
+                                                  //fillColor: Colors.green
+                                                ),
+                                                //  showSearchBox: true,
+                                                items: ingredientStore.ingredientsName,
+                                                autoValidateMode: AutovalidateMode.onUserInteraction,
+                                                validator:  (val) {
+                                                  if(barCodeScannerStore.ingredients.length==0) {
+                                                    return "Insert at least one ingredient";
+                                                  }else{
+                                                    return null;
+                                                  }
+                                                },
+                                                onChanged: (String ingredient)=> {
+                                                  selectedItemIngredient="",
+                                                  if(!findIngredient(ingredientStore.getIngredientFromName(ingredient))){
+                                                    toAdd = ingredientStore.getIngredientFromName(ingredient),
+                                                    toAdd.qty=Quantity.Normal.toString().split('.').last,
+                                                    barCodeScannerStore.ingredients.add(toAdd),
+                                                    ingredientStore.ingredientsName.remove(ingredient),
+                                                  }else{
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (_) =>
+                                                        new AlertDialog(
+                                                          title: Center(child: Text("Ingredient already inserted")),
+                                                          contentPadding: EdgeInsets.only(top: 8, left: 10, right: 10),
+                                                          actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                                          actions: [
+                                                            FlatButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(context);
+                                                              },
+                                                              child: Text('OK'),
+                                                            ),
+                                                          ],
+                                                        )),
+
+                                                  }
+
+
+                                                },
+                                              ))),
+                                    ],)))),
+
+
+
+                          barCodeScannerStore.scanBarcode != "-1"? Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: ElevatedButton(
+                                child:  Text('ADD DISH'),
+                                style: ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.primary),
+                                onPressed: (){
+                                  return showDialog(
                                       context: context,
-                                      builder: (_) =>
-                                      new AlertDialog(
-                                        title: Center(child: Text("Ingredient already inserted")),
-                                        contentPadding: EdgeInsets.only(top: 8, left: 10, right: 10),
+                                      builder: (_) =>  new AlertDialog(
+                                        title: Text('Select the quantity eaten'),
+                                        content: Observer(builder: (_) => Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+
+                                            for (int i = 0; i < Quantity.values.length; i++)
+                                              ListTile(
+                                                title: Text(
+                                                  Quantity.values[i].toString().split('.').last,
+                                                ),
+                                                leading: Radio(
+                                                  value: i,
+                                                  groupValue: widget.dish.valueShowDialog,
+                                                  onChanged: (int value) {
+                                                    widget.dish.valueShowDialog=value;
+                                                  },
+                                                ),
+                                              ),
+                                            Divider(
+                                              height: 4,
+                                              thickness: 0.8,
+                                              color: Colors.black,
+                                            ),
+                                          ],
+                                        )),
+                                        contentPadding: EdgeInsets.only(top: 8),
                                         actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
                                         actions: [
                                           FlatButton(
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: Text('OK'),
+                                            child: Text('CANCEL'),
+                                          ),
+                                          FlatButton(
+                                            onPressed: () {
+                                              setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
+                                              foodStore.addNewDishScannedByUser(widget.dish, barCodeScannerStore.ingredients,ingredientStore);
+                                              if(widget.dish.imageFile!=null){
+                                                uploadImageToFirebase(context,widget.dish.imageFile);
+                                              }
+                                              mealTimeStore.addScannedDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
+                                                  .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
+                                              );
+                                            },
+                                            child: Text('ADD DISH'),
                                           ),
                                         ],
-                                      )),
-
-                                }
-
-
-                              },
-                            ))),
-                      ],))),
-
-
-
-                        barCodeScannerStore.scanBarcode != "-1"? Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5.0),
-                            child: ElevatedButton(
-                              onPressed: (){
-                                return showDialog(
-                                    context: context,
-                                    builder: (_) =>  new AlertDialog(
-                                      title: Text('Select the quantity eaten'),
-                                      content: Observer(builder: (_) => Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-
-                                          for (int i = 0; i < Quantity.values.length; i++)
-                                            ListTile(
-                                              title: Text(
-                                                Quantity.values[i].toString().split('.').last,
-                                              ),
-                                              leading: Radio(
-                                                value: i,
-                                                groupValue: widget.dish.valueShowDialog,
-                                                onChanged: (int value) {
-                                                  widget.dish.valueShowDialog=value;
-                                                },
-                                              ),
-                                            ),
-                                          Divider(
-                                            height: 4,
-                                            thickness: 0.8,
-                                            color: Colors.black,
-                                          ),
-                                        ],
-                                      )),
-                                      contentPadding: EdgeInsets.only(top: 8),
-                                      actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-                                      actions: [
-                                        FlatButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text('CANCEL'),
-                                        ),
-                                        FlatButton(
-                                          onPressed: () {
-                                            setQuantityAndMealTimeToDish(quantityList[widget.dish.valueShowDialog]);
-                                            foodStore.addNewDishScannedByUser(widget.dish, barCodeScannerStore.ingredients,ingredientStore);
-                                            if(widget.dish.imageFile!=null){
-                                              uploadImageToFirebase(context,widget.dish.imageFile);
-                                            }
-                                            mealTimeStore.addScannedDishOfMealTimeListOfSpecificDay(widget.dish, dateStore.calendarSelectedDate)
-                                                .then((value) => Navigator.of(context).popUntil((route) => route.isFirst)
-                                            );
-                                          },
-                                          child: Text('ADD DISH'),
-                                        ),
-                                      ],
-                                    )
-                                );
-                              },
-                              child:  Text('ADD DISH'),
-                              style: ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.primary),
-                            )
-                        ): Container()
-                      ]
-                  )
-                  );
-                  }
-                  else{
-                    return Center(
-                        child: Container(
-                          padding: EdgeInsets.all(40),
-                            child:Text("Can't find any product with this barcode in our Database: "+ barCodeScannerStore.scanBarcode )
-                    ));
-                  }
-                  break;
-                case FutureStatus.pending:
-                default:
-                  return Center(child:CircularProgressIndicator());
+                                      )
+                                  );
+                                },
+                                       )
+                          ): Container()
+                        ]
+                    )
+                );
               }
-            },
-          )
-          )),
+              else{
+                return Center(
+                    child: Container(
+                        padding: EdgeInsets.all(40),
+                        child:Text("Can't find any product with this barcode in our Database: "+ barCodeScannerStore.scanBarcode )
+                    ));
+              }
+              break;
+            case FutureStatus.pending:
+            default:
+              return Center(child:CircularProgressIndicator());
+          }
+        },
+
+      )),
     );
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'Login/config/palette.dart';
+
 class HeaderScrollStyle {
   /// Responsible for making title Text centered.
   final bool centerHeaderTitle;
@@ -88,9 +90,9 @@ class HeaderScrollStyle {
     this.rightChevronPadding = const EdgeInsets.all(12.0),
     this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.leftChevronIcon = const Icon(Icons.chevron_left, color: Colors.black),
+    this.leftChevronIcon = const Icon(Icons.chevron_left, color: Palette.primaryDark),
     this.rightChevronIcon =
-    const Icon(Icons.chevron_right, color: Colors.black),
+    const Icon(Icons.chevron_right, color: Palette.primaryDark),
     this.decoration = const BoxDecoration(
       color: Colors.white,
       borderRadius: const BorderRadius.all(const Radius.circular(5)),

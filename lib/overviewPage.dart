@@ -9,6 +9,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'Database/enumerators.dart';
+import 'Login/config/palette.dart';
 import 'Models/dateStore.dart';
 import 'Models/symptomStore.dart';
 import 'OverviewSingleSymptomDay.dart';
@@ -503,7 +504,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   Widget _buildHeaderPicker(DateTime firstDay, DateTime lastDay) {
     final children = [
-
+      SizedBox(width: 50,),
       Expanded(
         child: GestureDetector(
           onTap: ()=>{
@@ -519,7 +520,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         ),
       ),
       CustomIconButtonOur(
-        icon: Icon(Icons.today,size: 30,),
+        icon: Icon(Icons.today,size: 24,),
         onTap: ()=> showDateRangePicker(
           context: context,
           currentDate: DateTime.now(),
@@ -563,8 +564,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return Column(
       children: [
       PieChartSample2(overviewStore: overviewStore),
-      SizedBox( // Horizontal ListView
+      Container( // Horizontal ListView
           height: 80,
+          padding: EdgeInsets.symmetric(horizontal: 8),
           child: Observer(builder: (_) =>
               ListView.builder(
                 itemCount: overviewStore.totalOccurrenceSymptom.length,
@@ -573,8 +575,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                 physics: ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Observer(builder: (_) =>
+
                       Container(
-                          width: 70,
+                        padding: EdgeInsets.only(right: 16),
                           alignment: Alignment.center,
                           color: Colors.transparent,
                           child: RawMaterialButton(
@@ -590,15 +593,17 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                                       Container()
                                   ))
                             },
-                            elevation: 5.0,
+                            elevation: 4,
                             fillColor: Colors.white,
                             child: ImageIcon(
                               AssetImage("images/Symptoms/" +
                                   overviewStore.totalOccurrenceSymptom.keys.elementAt(index) + ".png"),
                               size: 28.0,
                             ),
-                            padding: EdgeInsets.all(15.0),
-                            shape: CircleBorder(),
+                            constraints : const BoxConstraints(minWidth: 55.0, minHeight: 55.0),
+                            shape:RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                            ),
 
                           )),
                   );
@@ -675,7 +680,7 @@ class PieChart2State extends State<PieChartSample2> {
     SymptomStore symptomStore = Provider.of<SymptomStore>(context);
     return Observer(builder: (_) => Card(
 
-        elevation: 3,
+        elevation: 0,
         margin: EdgeInsets.all(4),
         child: Column(children: [
           ListTile(
@@ -722,7 +727,7 @@ class PieChart2State extends State<PieChartSample2> {
                   ),
               ],
             ),  const SizedBox(
-              width: 28,
+              width: 16,
             ),
 
           ],

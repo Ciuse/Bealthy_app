@@ -120,7 +120,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
           borderRadius: BorderRadius.circular(5), //border corner radius
           boxShadow:[
             BoxShadow(
-              color: Colors.grey.withOpacity(0.4), //color of shadow
+              color: Colors.grey.withOpacity(0.0), //color of shadow
               spreadRadius: 1, //spread radius
               blurRadius: 3, // blur radius
               offset: Offset(2, 4), // changes position of shadow
@@ -152,7 +152,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
           borderRadius: BorderRadius.circular(5), //border corner radius
           boxShadow:[
             BoxShadow(
-              color: Colors.grey.withOpacity(0.4), //color of shadow
+              color: Colors.grey.withOpacity(0.0), //color of shadow
               spreadRadius: 1, //spread radius
               blurRadius: 3, // blur radius
               offset: Offset(2, 4), // changes position of shadow
@@ -176,7 +176,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return SingleChildScrollView(child: Container(
       padding: EdgeInsets.all( 4 ),
         child: Card(
-            elevation: 3,
+            elevation: 0,
             child:Column(
           mainAxisSize: MainAxisSize.min,
           children: [
