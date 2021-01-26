@@ -2,8 +2,6 @@ import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -22,8 +20,7 @@ class SymptomPage extends StatefulWidget {
 }
 
 class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin {
-  var storage = FirebaseStorage.instance;
-  final FirebaseFirestore fb = FirebaseFirestore.instance;
+
   TabController _tabController;
   DateTime date;
 
@@ -221,7 +218,10 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             Observer(builder: (_) =>  Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: ElevatedButton(
-                  onPressed: !widget.symptom.isModifyButtonActive?  null :  () => buttonActivated(symptomStore),
+                  key:Key("buttonSaveRemove"),
+                  onPressed: !widget.symptom.isModifyButtonActive?  null :  () {
+                    buttonActivated(symptomStore);
+                  } ,
                   child: !widget.symptom.isModeRemove ? Text('SAVE'):Text('REMOVE'),
                   style: !widget.symptom.isModeRemove?ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.primary)
                       :ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.error),
@@ -287,12 +287,15 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
         if((widget.symptom.frequencyTemp == 0 && widget.symptom.intensityTemp == 0) &&
             !widget.symptom.isPresentAtLeastOneTrue()){
           return showDialog(
+
               context: context,
               builder: (_) =>  new AlertDialog(
+                key:Key("alertDialog"),
                 title: new Text(widget.symptom.name),
                 content: new Text("Are you sure to remove it?"),
                 actions: <Widget>[
                   FlatButton(
+                    key:Key("flatButtonRemoveSymptom"),
                     child: Text('REMOVE'),
                     onPressed: () {
                       //dateStore.removeIllnesses(symptomStore, date);
@@ -312,10 +315,12 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
   }
 
   void reactButtonEnabled(){
+
     reaction((_) => {widget.symptom.frequencyTemp, widget.symptom.intensityTemp,
       widget.symptom.mealTimeBoolListTemp.forEach((element) {
         element.isSelected;
       })}, (_) => {
+
       if (!widget.symptom.isSymptomSelectDay) {
         if ((widget.symptom.frequencyTemp > 0 && widget.symptom.intensityTemp > 0) &&
             widget.symptom.isPresentAtLeastOneTrue()){
@@ -331,6 +336,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             widget.symptom.isModifyButtonActive = true
           } else
             {
+
               if((widget.symptom.frequencyTemp == 0 &&
                   widget.symptom.intensityTemp == 0) &&
                   !widget.symptom.isPresentAtLeastOneTrue()){

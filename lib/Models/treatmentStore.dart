@@ -36,9 +36,7 @@ abstract class _TreatmentStoreBase with Store {
   Future<void> initTreatmentsList(DateTime day) async {
     if(auth.currentUser!=null) {
       await _getTreatmentsList(day);
-
     }
-
   }
 
   String fixDate(DateTime date) {

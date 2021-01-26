@@ -25,8 +25,8 @@ class AllSymptomsPage extends StatefulWidget {
 }
 
 class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerProviderStateMixin{
-  var storage = FirebaseStorage.instance;
-  final FirebaseFirestore fb = FirebaseFirestore.instance;
+
+
   DateStore dateStore;
   SymptomStore symptomStore;
   double animationStartPos=0;
@@ -58,27 +58,29 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
               mainAxisSize: MainAxisSize.min,
               children: [
 
-                Flexible(child: Observer(builder: (_) => _symptomsContent()),
+                Flexible(child: Observer(builder: (_) => symptomsContent()),
                 ),
               ],
             ))
 
     );
   }
-  Widget _symptomsContent() {
+  Widget symptomsContent() {
     return Container(
+        key:Key("symptomsContent"),
       color: Colors.white,
         child:ReorderableListView(
 
         padding: EdgeInsets.symmetric(vertical: 8),
         children: [
-          for(var symptom in symptomStore.symptomList )
+
+          for(var symptom in symptomStore.symptomList)
             Padding(
-              key: Key(symptom.id),
+              key:Key(symptom.name),
               padding: EdgeInsets.only(top: 4,bottom: 4),
               child:
               ListTile(
-
+                key:Key(symptom.id),
                 title: Text(symptom.name, style: TextStyle(fontSize: 20.0)),
                 leading: ImageIcon(
                   AssetImage("images/Symptoms/" +symptomStore.symptomList[symptomStore.getIndexFromSymptomsList(symptom, symptomStore.symptomList)].id+".png" ),
@@ -87,8 +89,7 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
                 ),
                 onTap: ()=> Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptom)
-                    )
+                    MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptom))
                 ),
               ),
             )

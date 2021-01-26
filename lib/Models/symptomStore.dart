@@ -405,39 +405,46 @@ abstract class _SymptomStoreBase with Store {
 
   @action
   Future<void> updateSymptom(Symptom symptom, DateTime date) async {
+
     String day = fixDate(date);
     createStringMealTime(symptom);
     if(symptom.isSymptomSelectDay){
-      await (FirebaseFirestore.instance
-          .collection("UserSymptoms")
-          .doc(auth.currentUser.uid)
-          .collection("DaySymptoms")
-          .doc(day)
-          .collection("Symptoms")
-          .doc(symptom.id)
-          .set(symptom.toMapDaySymptom()));
+      if(auth.currentUser!=null){
+        await (FirebaseFirestore.instance
+            .collection("UserSymptoms")
+            .doc(auth.currentUser.uid)
+            .collection("DaySymptoms")
+            .doc(day)
+            .collection("Symptoms")
+            .doc(symptom.id)
+            .set(symptom.toMapDaySymptom()));
+      }
+
     }else{
-      await (FirebaseFirestore.instance
-          .collection("UserSymptoms")
-          .doc(auth.currentUser.uid)
-          .collection("DaySymptoms")
-          .doc(day)
-          .set({"virtual": true}));
+      if(auth.currentUser!=null){
+        await (FirebaseFirestore.instance
+            .collection("UserSymptoms")
+            .doc(auth.currentUser.uid)
+            .collection("DaySymptoms")
+            .doc(day)
+            .set({"virtual": true}));
 
-      await (FirebaseFirestore.instance
-          .collection("UserSymptoms")
-          .doc(auth.currentUser.uid)
-          .collection("DaySymptoms")
-          .doc(day)
-          .collection("Symptoms")
-          .doc(symptom.id)
-          .set(symptom.toMapDaySymptom()));
+        await (FirebaseFirestore.instance
+            .collection("UserSymptoms")
+            .doc(auth.currentUser.uid)
+            .collection("DaySymptoms")
+            .doc(day)
+            .collection("Symptoms")
+            .doc(symptom.id)
+            .set(symptom.toMapDaySymptom()));
 
-      incrementingOccurrenceSymptom(symptom);
-      symptom.isSymptomSelectDay=true;
-      symptomListOfSpecificDay.add(symptom);
+        incrementingOccurrenceSymptom(symptom);
+      }
 
-    }
+        symptom.isSymptomSelectDay=true;
+        symptomListOfSpecificDay.add(symptom);
+
+     }
 
   }
 
@@ -461,18 +468,22 @@ abstract class _SymptomStoreBase with Store {
   @action
   Future<void> removeSymptomOfSpecificDay(Symptom symptom, DateTime date) async {
     String dayFix = fixDate(date);
-    await (FirebaseFirestore.instance
-        .collection("UserSymptoms")
-        .doc(auth.currentUser.uid)
-        .collection("DaySymptoms")
-        .doc(dayFix)
-        .collection("Symptoms")
-        .doc(symptom.id)
-        .delete());
+    if(auth.currentUser!=null){
+      await (FirebaseFirestore.instance
+          .collection("UserSymptoms")
+          .doc(auth.currentUser.uid)
+          .collection("DaySymptoms")
+          .doc(dayFix)
+          .collection("Symptoms")
+          .doc(symptom.id)
+          .delete());
+
+      decrementingOccurrenceSymptom(symptom);
+    }
 
     symptom.resetValue();
     symptomListOfSpecificDay.removeWhere((element) => symptom.id == element.id);
-    decrementingOccurrenceSymptom(symptom);
+
   }
 
   void initializeColorMap(){
