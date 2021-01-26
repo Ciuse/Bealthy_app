@@ -30,6 +30,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
   DateTime startingDateBeforeTreatment;
   DateTime endingDateBeforeTreatment;
   int rangeDaysLength;
+  var mapSymptoms;
   @override
   void initState() {
 
@@ -37,25 +38,16 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
     treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
     dateStore = Provider.of<DateStore>(context, listen: false);
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
-    if(widget.treatmentCompleted){
-      startingDateTreatment = dateStore.setDateFromString(widget.treatment.startingDay);
-      endingDateTreatment = dateStore.setDateFromString(widget.treatment.endingDay);
-      rangeDaysLength = dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment).length;
-      startingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: rangeDaysLength*2));
-      endingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: 1));
-      waitForMap().then((value) => treatmentStore.calculateTreatmentEndedStatistics(symptomStore));
 
-    }
-
-  }
-
-  Future<void> waitForMap() async{
-   await Future.wait([
-      symptomStore.initBeforeTreatmentMap
-        (dateStore.returnDaysOfAWeekOrMonth(startingDateBeforeTreatment, endingDateBeforeTreatment)),
-     symptomStore.initTreatmentMap
-       (dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment))
-   ]);
+    // if(widget.treatmentCompleted){
+    //   startingDateTreatment = dateStore.setDateFromString(widget.treatment.startingDay);
+    //   endingDateTreatment = dateStore.setDateFromString(widget.treatment.endingDay);
+    //   rangeDaysLength = dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment).length;
+    //   startingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: rangeDaysLength*2));
+    //   endingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: 1));
+    //   waitForMap().then((value) => treatmentStore.calculateTreatmentEndedStatistics(symptomStore));
+    //
+    // }
 
   }
 
@@ -111,7 +103,8 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
           Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-              treatmentDescriptionWidget(),
+                treatmentDescriptionWidget(),
+                Observer(builder: (_) =>treatmentValuesSymptom()),
                 // widget.treatmentCompleted? Container(
                 //     child:Row(
                 //         mainAxisSize: MainAxisSize.min,
@@ -127,80 +120,15 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                 //           Observer(builder: (_) =>treatmentBeforeMap()),
                 //           Observer(builder: (_) =>treatmentMap()),
                 //         ])): Container(),
-                widget.treatmentCompleted?Observer(
-                    builder: (_) =>
-                        Card(child:
-                        Column(children: [
-                          ListTile(
-                            leading: Icon(Icons.show_chart),
-                            title: Text("Statistics report",),
-                          ),
 
-                        ListView(
-                            physics: ClampingScrollPhysics(),
-                            shrinkWrap: true,
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            children: [for(var symptom in treatmentStore.mapSymptomPercentage.keys )
-                              (treatmentStore.mapSymptomPercentage[symptom].percentageSymptom!=null||
-                                  treatmentStore.mapSymptomPercentage[symptom].appeared==true
-                                  ||treatmentStore.mapSymptomPercentage[symptom].disappeared==true)?
-
-                              Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child:
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child:Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 16),
-                                            child:ImageIcon(
-                                              AssetImage("images/Symptoms/" +symptom +".png" ),
-                                              size: 35.0,
-                                            )),),
-                                      Expanded(
-                                          flex: 1,
-                                          child: treatmentStore.mapSymptomPercentage[symptom].percentageSymptom!=null?
-                                          treatmentStore.mapSymptomPercentage[symptom].percentageSymptom>=0? Text("Aggravation"):
-                                          treatmentStore.mapSymptomPercentage[symptom].percentageSymptom<0?Text("Improvement"):
-                                          Container():
-                                          treatmentStore.mapSymptomPercentage[symptom].disappeared==true?
-                                          Text(("Sympton not more present")):
-                                          treatmentStore.mapSymptomPercentage[symptom].appeared==true?
-                                          Text(("New symptom appeared")):Container()),
-                                      Expanded(
-                                          flex:1 ,
-                                          child: Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 30),
-                                              child:
-                                              AspectRatio(
-                                                  aspectRatio: 1,
-                                                  child:ClipOval(
-                                                      child:(Container(
-
-
-                                                          color:treatmentStore.mapSymptomPercentage[symptom].percentageSymptom!=null?
-                                                          treatmentStore.mapSymptomPercentage[symptom].percentageSymptom<0? Colors.green:
-                                                          treatmentStore.mapSymptomPercentage[symptom].percentageSymptom>=0?Colors.red:Colors.white:
-                                                          Colors.white,
-                                                          child: Center(
-                                                              child:
-                                                              treatmentStore.mapSymptomPercentage[symptom].percentageSymptom!=null?Text((treatmentStore.mapSymptomPercentage[symptom].percentageSymptom)
-                                                                  .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),):Container()))))))),
-                                    ],
-                                  )
-
-                              ):Container(),
-                            ]
-                        )  ],)
-
-                        )):Container(),
               ]))),
     );
   }
 
-  Widget treatmentMap(){
-    switch (symptomStore.loadTreatmentMap.status) {
+
+
+  Widget treatmentValuesSymptom(){
+    switch (symptomStore.loadTreatments.status) {
       case FutureStatus.rejected:
         return Container(
           child: Column(
@@ -216,53 +144,77 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
           ),
         );
       case FutureStatus.fulfilled:
-        return Expanded(child:ListView(
-            physics: ClampingScrollPhysics(),
+        if(widget.treatmentCompleted){
+          mapSymptoms= symptomStore.mapTreatments[widget.treatment.id].mapSymptomPercentage;
+        }
+        return widget.treatmentCompleted?Observer(
+            builder: (_) =>
+                Card(child:
+                Column(children: [
+                  ListTile(
+                    leading: Icon(Icons.show_chart),
+                    title: Text("Statistics report",),
+                  ),
 
-            shrinkWrap: true,
+                  ListView(
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      children: [for(var symptom in mapSymptoms.keys )
+                        (mapSymptoms[symptom].percentageSymptom!=null||
+                            mapSymptoms[symptom].appeared==true
+                            ||mapSymptoms[symptom].disappeared==true)?
 
-            padding: EdgeInsets.symmetric(vertical: 8),
-            children: [for(var symptom in symptomStore.mapSymptomTreatment.keys )
-            ListTile(
-                title: Text((symptomStore.mapSymptomTreatment[symptom].fractionSeverityOccurrence).toStringAsFixed(2)),
-              subtitle:Text(symptom),
-              )]
-        ));
-      case FutureStatus.pending:
-      default:
-        return Center(child:CircularProgressIndicator());
-    }
-  }
+                        Padding(
+                            padding: EdgeInsets.all(8),
+                            child:
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child:Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 16),
+                                      child:ImageIcon(
+                                        AssetImage("images/Symptoms/" +symptom +".png" ),
+                                        size: 35.0,
+                                      )),),
+                                Expanded(
+                                    flex: 1,
+                                    child: mapSymptoms[symptom].percentageSymptom!=null?
+                                    mapSymptoms[symptom].percentageSymptom>=0? Text("Aggravation"):
+                                    mapSymptoms[symptom].percentageSymptom<0?Text("Improvement"):
+                                    Container():
+                                    mapSymptoms[symptom].disappeared==true?
+                                    Text(("Sympton not more present")):
+                                    mapSymptoms[symptom].appeared==true?
+                                    Text(("New symptom appeared")):Container()),
+                                Expanded(
+                                    flex:1 ,
+                                    child: Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 30),
+                                        child:
+                                        AspectRatio(
+                                            aspectRatio: 1,
+                                            child:ClipOval(
+                                                child:(Container(
 
-  Widget treatmentBeforeMap(){
-    switch (symptomStore.loadBeforeTreatmentMap.status) {
-      case FutureStatus.rejected:
-        return Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Oops something went wrong'),
-              RaisedButton(
-                child: Text('Retry'),
-                onPressed: () async {
-                },
-              ),
-            ],
-          ),
-        );
-      case FutureStatus.fulfilled:
-        return Expanded(child:ListView(
-            physics: ClampingScrollPhysics(),
 
-            shrinkWrap: true,
+                                                    color:mapSymptoms[symptom].percentageSymptom!=null?
+                                                    mapSymptoms[symptom].percentageSymptom<0? Colors.green:
+                                                    mapSymptoms[symptom].percentageSymptom>=0?Colors.red:Colors.white:
+                                                    Colors.white,
+                                                    child: Center(
+                                                        child:
+                                                        mapSymptoms[symptom].percentageSymptom!=null?Text((mapSymptoms[symptom].percentageSymptom)
+                                                            .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),):Container()))))))),
+                              ],
+                            )
 
-            padding: EdgeInsets.symmetric(vertical: 8),
-            children: [for(var symptom in symptomStore.mapSymptomBeforeTreatment.keys )
-              ListTile(
-                title: Text((symptomStore.mapSymptomBeforeTreatment[symptom].fractionSeverityOccurrence).toStringAsFixed(2)),
-                subtitle:Text(symptom),
-              )]
-        ));
+                        ):Container(),
+                      ]
+                  )  ],)
+
+                )):Container();
       case FutureStatus.pending:
       default:
         return Center(child:CircularProgressIndicator());

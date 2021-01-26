@@ -4,7 +4,7 @@ import 'package:Bealthy_app/treatmentToAdd.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-
+import 'Models/symptomStore.dart';
 import 'Models/treatmentStore.dart';
 
 
@@ -17,13 +17,26 @@ class TreatmentPage extends StatefulWidget {
 
 class _TreatmentPageState extends State<TreatmentPage>{
   TreatmentStore treatmentStore;
+  SymptomStore symptomStore;
+  DateStore dateStore;
 
   @override
   void initState() {
 
     super.initState();
     treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
+    dateStore = Provider.of<DateStore>(context, listen: false);
+    symptomStore = Provider.of<SymptomStore>(context, listen: false);
 
+    if(!treatmentStore.storeInitialized) {
+      treatmentStore.storeInitialized=true;
+      treatmentStore
+          .initTreatmentsList(dateStore.calendarSelectedDate)
+          .then((value) {
+        symptomStore.initTreatments(treatmentStore.treatmentsCompletedList,
+            dateStore, treatmentStore, symptomStore);
+      });
+    }
   }
 
   @override

@@ -74,6 +74,21 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
+  final _$mapTreatmentsAtom = Atom(name: '_SymptomStoreBase.mapTreatments');
+
+  @override
+  ObservableMap<String, ObservableValues> get mapTreatments {
+    _$mapTreatmentsAtom.reportRead();
+    return super.mapTreatments;
+  }
+
+  @override
+  set mapTreatments(ObservableMap<String, ObservableValues> value) {
+    _$mapTreatmentsAtom.reportWrite(value, super.mapTreatments, () {
+      super.mapTreatments = value;
+    });
+  }
+
   final _$loadSymptomDayAtom = Atom(name: '_SymptomStoreBase.loadSymptomDay');
 
   @override
@@ -105,6 +120,21 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
+  final _$loadTreatmentsAtom = Atom(name: '_SymptomStoreBase.loadTreatments');
+
+  @override
+  ObservableFuture<dynamic> get loadTreatments {
+    _$loadTreatmentsAtom.reportRead();
+    return super.loadTreatments;
+  }
+
+  @override
+  set loadTreatments(ObservableFuture<dynamic> value) {
+    _$loadTreatmentsAtom.reportWrite(value, super.loadTreatments, () {
+      super.loadTreatments = value;
+    });
+  }
+
   final _$loadBeforeTreatmentMapAtom =
       Atom(name: '_SymptomStoreBase.loadBeforeTreatmentMap');
 
@@ -119,6 +149,21 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     _$loadBeforeTreatmentMapAtom
         .reportWrite(value, super.loadBeforeTreatmentMap, () {
       super.loadBeforeTreatmentMap = value;
+    });
+  }
+
+  final _$completerAtom = Atom(name: '_SymptomStoreBase.completer');
+
+  @override
+  Completer<dynamic> get completer {
+    _$completerAtom.reportRead();
+    return super.completer;
+  }
+
+  @override
+  set completer(Completer<dynamic> value) {
+    _$completerAtom.reportWrite(value, super.completer, () {
+      super.completer = value;
     });
   }
 
@@ -152,6 +197,16 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   Future<void> _getSymptomsOfADay(DateTime date) {
     return _$_getSymptomsOfADayAsyncAction
         .run(() => super._getSymptomsOfADay(date));
+  }
+
+  final _$initTreatmentsAsyncAction =
+      AsyncAction('_SymptomStoreBase.initTreatments');
+
+  @override
+  Future<void> initTreatments(List<Treatment> treatments, DateStore dateStore,
+      TreatmentStore treatmentStore, SymptomStore symptomStore) {
+    return _$initTreatmentsAsyncAction.run(() => super
+        .initTreatments(treatments, dateStore, treatmentStore, symptomStore));
   }
 
   final _$initTreatmentMapAsyncAction =
@@ -241,6 +296,17 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   }
 
   @override
+  Future<void> waitForFutures() {
+    final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
+        name: '_SymptomStoreBase.waitForFutures');
+    try {
+      return super.waitForFutures();
+    } finally {
+      _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   double mealTimeValueSymptom(Symptom symptom) {
     final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
         name: '_SymptomStoreBase.mealTimeValueSymptom');
@@ -280,9 +346,12 @@ symptomList: ${symptomList},
 symptomListOfSpecificDay: ${symptomListOfSpecificDay},
 mapSymptomTreatment: ${mapSymptomTreatment},
 mapSymptomBeforeTreatment: ${mapSymptomBeforeTreatment},
+mapTreatments: ${mapTreatments},
 loadSymptomDay: ${loadSymptomDay},
 loadTreatmentMap: ${loadTreatmentMap},
-loadBeforeTreatmentMap: ${loadBeforeTreatmentMap}
+loadTreatments: ${loadTreatments},
+loadBeforeTreatmentMap: ${loadBeforeTreatmentMap},
+completer: ${completer}
     ''';
   }
 }

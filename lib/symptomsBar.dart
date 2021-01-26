@@ -26,7 +26,6 @@ class _SymptomsBarState extends State<SymptomsBar>{
   void initState() {
     super.initState();
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
-    symptomStore.initStore(widget.day);
   }
 
 

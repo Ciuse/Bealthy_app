@@ -30,9 +30,13 @@ abstract class _TreatmentStoreBase with Store {
   @observable
   var mapSymptomPercentage = new ObservableMap<String,ObservableValues>();
 
+  bool storeInitialized = false;
+
   @action
   Future<void> initTreatmentsList(DateTime day) async {
-      _getTreatmentsList(day);
+
+      await _getTreatmentsList(day);
+
   }
 
   String fixDate(DateTime date) {

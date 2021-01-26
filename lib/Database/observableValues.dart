@@ -32,4 +32,7 @@ abstract class _ObservableValuesBase with Store {
   @observable
   bool appeared=false;
 
+  @observable
+  var mapSymptomPercentage = new ObservableMap<String,ObservableValues>();
+
 }

@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/observableValues.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
+import 'package:Bealthy_app/Database/treatment.dart';
+import 'package:Bealthy_app/Models/dateStore.dart';
+import 'package:Bealthy_app/Models/treatmentStore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -35,6 +38,9 @@ abstract class _SymptomStoreBase with Store {
   @observable
   var mapSymptomBeforeTreatment = new ObservableMap<String,ObservableValues>();
 
+  @observable
+  var mapTreatments = new ObservableMap<String,ObservableValues>();
+
   Map colorSymptomsMap = new Map<String , Color>();
 
 
@@ -45,7 +51,13 @@ abstract class _SymptomStoreBase with Store {
   ObservableFuture loadTreatmentMap;
 
   @observable
+  ObservableFuture loadTreatments;
+
+  @observable
   ObservableFuture loadBeforeTreatmentMap;
+
+  @observable
+  var completer = new Completer();
 
   @action
   Future<void> initStore(DateTime day) async {
@@ -126,31 +138,85 @@ abstract class _SymptomStoreBase with Store {
   }
 
   @action
+  Future<void> initTreatments(List<Treatment> treatments,DateStore dateStore,TreatmentStore treatmentStore,SymptomStore symptomStore) async {
+    mapTreatments.clear();
+    return loadTreatments = ObservableFuture(asyncForEachTreatment(treatments,dateStore,treatmentStore,symptomStore));
+  }
+
+  Future<void>asyncForEachTreatment(List<Treatment> treatments,DateStore dateStore,TreatmentStore treatmentStore,SymptomStore symptomStore) async {
+    await Future.forEach(treatments, (treatment) => waitForMap(treatment,dateStore,treatmentStore,symptomStore));
+
+  }
+
+  Future<void>waitTwoMapsTreatment(Treatment treatment,DateStore dateStore) async {
+    DateTime startingDateTreatment = dateStore.setDateFromString(
+        treatment.startingDay);
+    DateTime endingDateTreatment = dateStore.setDateFromString(
+        treatment.endingDay);
+    int rangeDaysLength = dateStore
+        .returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment)
+        .length;
+    DateTime startingDateBeforeTreatment = startingDateTreatment.subtract(
+        Duration(days: rangeDaysLength * 2));
+    DateTime endingDateBeforeTreatment = startingDateTreatment.subtract(
+        Duration(days: 1));
+    List<Future> futures = [];
+    futures.add(initBeforeTreatmentMap(dateStore.returnDaysOfAWeekOrMonth(
+        startingDateBeforeTreatment, endingDateBeforeTreatment)),);
+    futures.add( initTreatmentMap(dateStore.returnDaysOfAWeekOrMonth(
+        startingDateTreatment, endingDateTreatment)));
+    return await   Future.wait(futures);
+  }
+
+  Future<void> waitForMap(Treatment treatment,DateStore dateStore,TreatmentStore treatmentStore,SymptomStore symptomStore) async {
+    return await waitTwoMapsTreatment(treatment,dateStore)
+   .then((value) {
+      ObservableValues values = new ObservableValues();
+      treatmentStore.calculateTreatmentEndedStatistics(symptomStore);
+      values.mapSymptomPercentage.addAll(treatmentStore.mapSymptomPercentage);
+      mapTreatments.putIfAbsent(treatment.id, () => values);
+    } );
+  }
+
+
+  @action
+  Future<void> waitForFutures(){
+
+  }
+
+
+
+  @action
   Future<void> initTreatmentMap(List<DateTime> days) async {
     mapSymptomTreatment.clear();
-    return loadTreatmentMap = ObservableFuture(asyncForEachSymptoms(days));
+    return await asyncForEachSymptoms(days);
   }
 
   Future<void>asyncForEachSymptoms(List<DateTime> dates) async {
-    await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValue(dates,symptom.id)));
+    return await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValue(dates,symptom.id)));
   }
 
+
+
+
   Future<void>asyncGetSymptomValue(List<DateTime> dates,String symptomId) async {
-    await Future.wait(dates.map((date)=>_fillTreatmentMap(date,symptomId))).then((value) => calculateFractionTreatment(symptomId));
+    return await Future.wait(dates.map((date)=>_fillTreatmentMap(date,symptomId))).then((value) => calculateFractionTreatment(symptomId));
   }
 
   @action
   Future<void> initBeforeTreatmentMap(List<DateTime> days) async {
     mapSymptomBeforeTreatment.clear();
-    return loadBeforeTreatmentMap = ObservableFuture(asyncForEachSymptomsBeforeTreatment(days));
+   return await asyncForEachSymptomsBeforeTreatment(days);
   }
 
   Future<void>asyncForEachSymptomsBeforeTreatment(List<DateTime> dates) async {
-    await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValueBeforeTreatment(dates,symptom.id)));
+
+    return await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValueBeforeTreatment(dates,symptom.id)));
   }
 
   Future<void>asyncGetSymptomValueBeforeTreatment(List<DateTime> dates,String symptomId) async {
-    await Future.wait(dates.map((date)=>_fillBeforeTreatmentMap(date,symptomId))).then((value) => calculateFractionBefore(symptomId) );
+
+    return await Future.wait(dates.map((date)=>_fillBeforeTreatmentMap(date,symptomId))).then((value) => calculateFractionBefore(symptomId) );
   }
 
 
@@ -230,6 +296,7 @@ abstract class _SymptomStoreBase with Store {
         .collection("Symptoms").doc(symptomId)
         .get()
         .then((querySnapshot) {
+
       if(querySnapshot.exists){
         Symptom symptomCreated = new Symptom(id: symptomId, intensity: querySnapshot.get("intensity"),frequency: querySnapshot.get("frequency"));
         symptomCreated.initStore();

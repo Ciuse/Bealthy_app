@@ -191,6 +191,7 @@ class _MyHomePageState extends State<HomePage> {
   IngredientStore ingredientStore;
   int _selectedIndex = 0;
   TreatmentStore treatmentStore;
+  SymptomStore symptomStore;
 
   void initState() {
     super.initState();
@@ -203,9 +204,11 @@ class _MyHomePageState extends State<HomePage> {
     foodStore.storeSearchAllDishInitialized = false;
     UserStore userStore = Provider.of<UserStore>(context, listen: false);
     userStore.initUserDb();
+    symptomStore = Provider.of<SymptomStore>(context, listen: false);
+    symptomStore.initStore(DateTime.now());
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
     ingredientStore.initStore();
-    treatmentStore.initTreatmentsList( dateStore.calendarSelectedDate);
+
 
   }
 

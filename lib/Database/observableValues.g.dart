@@ -120,6 +120,23 @@ mixin _$ObservableValues on _ObservableValuesBase, Store {
     });
   }
 
+  final _$mapSymptomPercentageAtom =
+      Atom(name: '_ObservableValuesBase.mapSymptomPercentage');
+
+  @override
+  ObservableMap<String, ObservableValues> get mapSymptomPercentage {
+    _$mapSymptomPercentageAtom.reportRead();
+    return super.mapSymptomPercentage;
+  }
+
+  @override
+  set mapSymptomPercentage(ObservableMap<String, ObservableValues> value) {
+    _$mapSymptomPercentageAtom.reportWrite(value, super.mapSymptomPercentage,
+        () {
+      super.mapSymptomPercentage = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
@@ -129,7 +146,8 @@ occurrenceSymptom: ${occurrenceSymptom},
 fractionSeverityOccurrence: ${fractionSeverityOccurrence},
 percentageSymptom: ${percentageSymptom},
 disappeared: ${disappeared},
-appeared: ${appeared}
+appeared: ${appeared},
+mapSymptomPercentage: ${mapSymptomPercentage}
     ''';
   }
 }
