@@ -54,7 +54,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
   Widget build(BuildContext context) {
     final dateModel = Provider.of<DateStore>(context);
     return Scaffold(
-      appBar: AppBar(
+      appBar: MediaQuery.of(context).orientation==Orientation.portrait?AppBar(
         title: const Text('Bealthy'),
         actions: <Widget>[
           new Padding(
@@ -62,63 +62,112 @@ class _HomePageWidgetState extends State<HomePageWidget>{
             child: Observer(builder: (_) => _buildActions()),
           ),
         ],
-      ),
-      body: Container(
-          child:
-              Stack(children: [
-          CustomScrollView(
-            controller: scrollControllerStore.scrollController,
-            slivers: <Widget>[
-              SliverAppBar(
-                iconTheme: IconThemeData(
-                  color: Colors.black,
+      ):null,
+        body: OrientationBuilder(
+            builder: (context, orientation) {
+              return orientation == Orientation.portrait
+                  ? Container(
+                  child:
+                  Stack(children: [
+                    CustomScrollView(
+                      controller: scrollControllerStore.scrollController,
+                      slivers: <Widget>[
+                        SliverAppBar(
+                          iconTheme: IconThemeData(
+                            color: Colors.black,
+                          ),
+                          backgroundColor: Palette.bealthyColorScheme.background,
+                          expandedHeight: 298,
+                          flexibleSpace: FlexibleSpaceBar(
+                            collapseMode: CollapseMode.pin,
+                            stretchModes: [StretchMode.blurBackground],
+                            background: Container(
+                              margin: EdgeInsets.all(8),
+                              child: CalendarHomePage(),
+                            ),
+
+                          ),
+                        ),
+
+                        SliverList(
+                          delegate: SliverChildListDelegate([
+                            Observer(
+                                builder: (_) =>
+                                    SymptomsBar(
+                                        day: dateModel.calendarSelectedDate)),
+                          ]),
+                        ),
+                        SliverList(
+                          delegate: SliverChildListDelegate([
+                            ListDishesOfDay(day: dateModel.calendarSelectedDate),
+                            Container(height: MediaQuery
+                                .of(context)
+                                .size
+                                .height >= 632 ? MediaQuery
+                                .of(context)
+                                .size
+                                .height - 632 : 0),
+
+                          ]),
+                        ),
+
+                        // Observer(builder: (_) => SliverPersistentHeader(
+                        //   pinned: true,
+                        //   delegate: _SliverAppBarDelegate(
+                        //     minHeight: scrollControllerStore.offset>240?70.0:0,
+                        //     maxHeight: scrollControllerStore.offset>240?70.0:0,
+                        //     child: scrollControllerStore.offset>240?_buildHeaderDay(dateStore.calendarSelectedDate):Container(),
+                        //
+                        //   ),
+                        // )),
+                      ],
+                    ), Observer(
+                        builder: (_) =>
+                        scrollControllerStore.offset > 220 ?
+                        Positioned(
+                            top: 0,
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: 70,
+                            child: _buildHeaderDay(
+                                dateStore.calendarSelectedDate)) : Container())
+                  ],)) :
+
+
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+
+                  children: [
+                Expanded(
+                    flex: 10,
+                    child:
+                    Column(children: [
+                      Padding(
+                          padding: EdgeInsets.only(top:8,left: 8),
+                          child:
+                          CalendarHomePage()),
+                      Observer(
+                          builder: (_) =>
+                              SymptomsBar(
+                                  day: dateModel.calendarSelectedDate))
+                ],)
                 ),
-                backgroundColor: Palette.bealthyColorScheme.background,
-                expandedHeight: 298,
-                flexibleSpace: FlexibleSpaceBar(
-                  collapseMode: CollapseMode.pin,
-                  stretchModes: [StretchMode.blurBackground],
-                  background: Container(
-                   margin: EdgeInsets.all(8),
-                    child:CalendarHomePage(),
-                  ),
+                Expanded(
+                    flex: 9,
 
-                ),
-              ),
+                    child:
+                  ListView(children: [
 
-              SliverList(
-                delegate: SliverChildListDelegate([
-                Observer(
-                builder: (_) =>SymptomsBar(day: dateModel.calendarSelectedDate)),
-                ]),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  ListDishesOfDay(day: dateModel.calendarSelectedDate),
-                  Container(height: MediaQuery.of(context).size.height>=632?MediaQuery.of(context).size.height-632:0),
+                    ListDishesOfDay(day: dateModel.calendarSelectedDate)
+                  ],)
+                )
 
-                ]),
-              ),
+              ]);
 
-              // Observer(builder: (_) => SliverPersistentHeader(
-              //   pinned: true,
-              //   delegate: _SliverAppBarDelegate(
-              //     minHeight: scrollControllerStore.offset>240?70.0:0,
-              //     maxHeight: scrollControllerStore.offset>240?70.0:0,
-              //     child: scrollControllerStore.offset>240?_buildHeaderDay(dateStore.calendarSelectedDate):Container(),
-              //
-              //   ),
-              // )),
-            ],
-          ),Observer(
-                    builder: (_) =>scrollControllerStore.offset>220?
-                    Positioned(
-                        top: 0,
-                        width: MediaQuery.of(context).size.width,
-                        height:70,
-                        child:_buildHeaderDay(dateStore.calendarSelectedDate)):Container())],)),
 
-    );
+            }));
   }
   Widget _buildHeaderDay(DateTime day) {
     final children = [

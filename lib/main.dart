@@ -241,39 +241,83 @@ class _MyHomePageState extends State<HomePage> {
           MoveToBackground.moveTaskToBack();
           return false;},
         child:Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            backgroundColor: Colors.white,
-            icon: Icon(Icons.calendar_today_sharp),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.white,
 
-            icon: Icon(Icons.stacked_bar_chart),
-            label: 'Statistics',
+          appBar: MediaQuery.of(context).orientation==Orientation.portrait?null:AppBar(
+            title: Text("Bealthy"),
           ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.white,
+          body: OrientationBuilder(
+              builder: (context, orientation) {
+                return orientation == Orientation.portrait
+                    ?Center(
+                  child: _widgetOptions.elementAt(_selectedIndex),
+                ):Row(
+                  children: <Widget>[
+                    NavigationRail(
+                      selectedIndex: _selectedIndex,
+                      onDestinationSelected: (int index) {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
+                      labelType: NavigationRailLabelType.selected,
+                      destinations: [
+                        NavigationRailDestination(
+                          icon: Icon(Icons.calendar_today_sharp),
+                          label: Text('Calendar'),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.stacked_bar_chart),
+                          label: Text('Statistics'),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.medical_services_outlined),
+                          label: Text('Treatments'),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.person_outline),
+                          label: Text('Profile'),
+                        ),
+                      ],
+                    ),
+                    VerticalDivider(thickness: 1, width: 1),
+                    // This is the main content.
+                    Expanded(
+                      child: Center(
+                        child: _widgetOptions.elementAt(_selectedIndex),
+                      ),
+                    )
+                  ],
+                );}),
+          bottomNavigationBar: MediaQuery.of(context).orientation==Orientation.portrait?BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                backgroundColor: Colors.white,
+                icon: Icon(Icons.calendar_today_sharp),
+                label: 'Calendar',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.white,
 
-            icon: Icon(Icons.medical_services_outlined),
-            label: 'Treatments',
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.white,
+                icon: Icon(Icons.stacked_bar_chart),
+                label: 'Statistics',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.white,
 
-            icon: Icon(Icons.person_outline),
-            label: 'Personal Info',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _bottomBarOnTapped,
-      ),
-    ));
+                icon: Icon(Icons.medical_services_outlined),
+                label: 'Treatments',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.white,
+
+                icon: Icon(Icons.person_outline),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _bottomBarOnTapped,
+          ):null,
+        ));
   }
 }
 

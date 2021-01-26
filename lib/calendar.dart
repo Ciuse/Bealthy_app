@@ -109,7 +109,7 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   Widget _buildTableCalendarWithBuilders() {
 
     return TableCalendar(
-      rowHeight: 40,
+      rowHeight: MediaQuery.of(context).orientation==Orientation.portrait?40:45,
       locale: 'en_US',
       calendarController: _calendarController,
       events: dateStore.illnesses,

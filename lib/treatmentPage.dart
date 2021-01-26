@@ -42,9 +42,9 @@ class _TreatmentPageState extends State<TreatmentPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: MediaQuery.of(context).orientation==Orientation.portrait?AppBar(
           title: const Text('Treatments'),
-        ),
+        ):null,
         body:
         Column(
             mainAxisSize: MainAxisSize.min,

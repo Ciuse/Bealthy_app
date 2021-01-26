@@ -81,7 +81,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(length: 2, child: Scaffold(
-        appBar: AppBar(
+        appBar: MediaQuery.of(context).orientation==Orientation.portrait?AppBar(
           title: Text("Statistics",),
           actions: <Widget>[
             Container(
@@ -119,7 +119,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
             ],
           controller: _tabController,
         ),
-      ),
+      ):null,
         body:Container(
             margin: EdgeInsets.symmetric(horizontal: 4,vertical: 8),
             child:

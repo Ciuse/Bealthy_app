@@ -2,6 +2,7 @@ import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:Bealthy_app/symptomPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:drag_and_drop_gridview/devdrag.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -31,6 +32,11 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
   SymptomStore symptomStore;
   double animationStartPos=0;
 
+  int variableSet = 0;
+  ScrollController _scrollController;
+  double width;
+  double height;
+
   void initState() {
     super.initState();
     dateStore = Provider.of<DateStore>(context, listen: false);
@@ -54,49 +60,108 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
               icon: Icon(Icons.info_outline),)
           ],
         ),
-        body: Column(
+        body: MediaQuery
+            .of(context)
+            .orientation == Orientation.portrait
+            ? Column(
               mainAxisSize: MainAxisSize.min,
               children: [
 
                 Flexible(child: Observer(builder: (_) => symptomsContent()),
                 ),
               ],
-            ))
+            ):DragAndDropGridView(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              childAspectRatio: 1,
+            ),
+            padding: EdgeInsets.all(32),
+            controller: _scrollController,
+            itemCount: symptomStore.symptomList.length,
+            itemBuilder: (context, index) => Card(
+                elevation: 2,
+                child: LayoutBuilder(
+                    builder: (context, costrains) {
+
+                      if (variableSet == 0) {
+                        height = costrains.maxHeight;
+                        width = costrains.maxWidth;
+                        variableSet++;
+                      }
+                      return  GestureDetector(
+                          onTap: () =>
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) =>
+                                      SymptomPage(symptom: symptomStore.symptomList[index])
+                                  )
+                              ),
+                          child:Container(
+                          width: width,
+                          height: height,
+                          child:Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                            Image(
+                                height: height/2,
+                                width: width/2,
+                                image:AssetImage("images/Symptoms/" +
+                                    symptomStore.symptomList[index].id + ".png")
+
+                            ),
+                            Text(symptomStore.symptomList[index].name),
+
+                          ],)));
+                    },
+                )),
+            onWillAccept: (oldIndex, newIndex) => true,
+            onReorder: (oldIndex, newIndex) {
+              symptomStore.reorderList(oldIndex, newIndex);
+            })
+
+    )
 
     );
   }
   Widget symptomsContent() {
     return Container(
+        color: Colors.white,
+        child: ReorderableListView(
         key:Key("symptomsContent"),
-      color: Colors.white,
-        child:ReorderableListView(
 
-        padding: EdgeInsets.symmetric(vertical: 8),
-        children: [
+            padding: EdgeInsets.symmetric(vertical: 8),
+            children: [
+              for(var symptom in symptomStore.symptomList )
+                Padding(
+                  key: Key(symptom.id),
+                  padding: EdgeInsets.only(top: 4, bottom: 4),
+                  child:
+                  ListTile(
 
-          for(var symptom in symptomStore.symptomList)
-            Padding(
-              key:Key(symptom.name),
-              padding: EdgeInsets.only(top: 4,bottom: 4),
-              child:
-              ListTile(
-                key:Key(symptom.id),
-                title: Text(symptom.name, style: TextStyle(fontSize: 20.0)),
-                leading: ImageIcon(
-                  AssetImage("images/Symptoms/" +symptomStore.symptomList[symptomStore.getIndexFromSymptomsList(symptom, symptomStore.symptomList)].id+".png" ),
-                  size: 35.0,
-                  color: symptom.isSymptomSelectDay?Palette.bealthyColorScheme.primaryVariant:null,
-                ),
-                onTap: ()=> Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptom))
-                ),
-              ),
-            )
-        ],
-        onReorder: (oldIndex, newIndex) {
-          symptomStore.reorderList(oldIndex, newIndex);
-        }
-    ));
+                    title: Text(symptom.name, style: TextStyle(fontSize: 20.0)),
+                    leading: ImageIcon(
+                      AssetImage("images/Symptoms/" +
+                          symptomStore.symptomList[symptomStore
+                              .getIndexFromSymptomsList(
+                              symptom, symptomStore.symptomList)].id + ".png"),
+                      size: 35.0,
+                      color: symptom.isSymptomSelectDay ? Palette
+                          .bealthyColorScheme.primaryVariant : null,
+                    ),
+                    onTap: () =>
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                SymptomPage(symptom: symptom)
+                            )
+                        ),
+                  ),
+                )
+            ],
+            onReorder: (oldIndex, newIndex) {
+              symptomStore.reorderList(oldIndex, newIndex);
+            }
+        ));
+
   }
 }

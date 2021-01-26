@@ -56,19 +56,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return DefaultTabController(length: 2, child: Scaffold(
       appBar: AppBar(
         title: Text(widget.symptom.name),
-        actions: [
-          Container(
-              width: 50,
-              height: 50,
-              child:  ClipOval(
-                  child: Image(
-                    image: AssetImage("images/Symptoms/" +widget.symptom.id+".png" ),
-                  )
-              ))
-        ],
-
         bottom: TabBar(
-
           tabs: [
             Tab(text: "Modify"),
             Tab(text: "Description")

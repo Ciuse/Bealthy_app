@@ -149,72 +149,78 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
         }
         return widget.treatmentCompleted?Observer(
             builder: (_) =>
-                Card(child:
-                Column(children: [
-                  ListTile(
-                    leading: Icon(Icons.show_chart),
-                    title: Text("Statistics report",),
-                  ),
+            Container(
+                padding: EdgeInsets.only(left: 4,right: 4,bottom: 4,top: 0),
+                child:
+                Card(
+                  elevation: 0,
 
-                  ListView(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      children: [for(var symptom in mapSymptoms.keys )
-                        (mapSymptoms[symptom].percentageSymptom!=null||
-                            mapSymptoms[symptom].appeared==true
-                            ||mapSymptoms[symptom].disappeared==true)?
+                    child:
+                    Column(children: [
+                      ListTile(
+                        leading: Icon(Icons.show_chart),
+                        title: Text("Statistics report",),
+                      ),
 
-                        Padding(
-                            padding: EdgeInsets.all(8),
-                            child:
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child:Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 16),
-                                      child:ImageIcon(
-                                        AssetImage("images/Symptoms/" +symptom +".png" ),
-                                        size: 35.0,
-                                      )),),
-                                Expanded(
-                                    flex: 1,
-                                    child: mapSymptoms[symptom].percentageSymptom!=null?
-                                    mapSymptoms[symptom].percentageSymptom>=0? Text("Aggravation"):
-                                    mapSymptoms[symptom].percentageSymptom<0?Text("Improvement"):
-                                    Container():
-                                    mapSymptoms[symptom].disappeared==true?
-                                    Text(("Sympton not more present")):
-                                    mapSymptoms[symptom].appeared==true?
-                                    Text(("New symptom appeared")):Container()),
-                                Expanded(
-                                    flex:1 ,
-                                    child: Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 30),
-                                        child:
-                                        AspectRatio(
-                                            aspectRatio: 1,
-                                            child:ClipOval(
-                                                child:(Container(
+                      ListView(
+                          physics: ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          children: [for(var symptom in mapSymptoms.keys )
+                            (mapSymptoms[symptom].percentageSymptom!=null||
+                                mapSymptoms[symptom].appeared==true
+                                ||mapSymptoms[symptom].disappeared==true)?
+
+                            Padding(
+                                padding: EdgeInsets.all(6),
+                                child:
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child:Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 16),
+                                          child:ImageIcon(
+                                            AssetImage("images/Symptoms/" +symptom +".png" ),
+                                            size: 35.0,
+                                          )),),
+                                    Expanded(
+                                        flex: 1,
+                                        child: mapSymptoms[symptom].percentageSymptom!=null?
+                                        mapSymptoms[symptom].percentageSymptom>=0? Text("Aggravation"):
+                                        mapSymptoms[symptom].percentageSymptom<0?Text("Improvement"):
+                                        Container():
+                                        mapSymptoms[symptom].disappeared==true?
+                                        Text(("Sympton not more present")):
+                                        mapSymptoms[symptom].appeared==true?
+                                        Text(("New symptom appeared")):Container()),
+                                    Expanded(
+                                        flex:1 ,
+                                        child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 30),
+                                            child:
+                                            AspectRatio(
+                                                aspectRatio: 1,
+                                                child:ClipOval(
+                                                    child:(Container(
 
 
-                                                    color:mapSymptoms[symptom].percentageSymptom!=null?
-                                                    mapSymptoms[symptom].percentageSymptom<0? Colors.green:
-                                                    mapSymptoms[symptom].percentageSymptom>=0?Colors.red:Colors.white:
-                                                    Colors.white,
-                                                    child: Center(
-                                                        child:
-                                                        mapSymptoms[symptom].percentageSymptom!=null?Text((mapSymptoms[symptom].percentageSymptom)
-                                                            .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),):Container()))))))),
-                              ],
-                            )
+                                                        color:mapSymptoms[symptom].percentageSymptom!=null?
+                                                        mapSymptoms[symptom].percentageSymptom<0? Color(0xff00C853):
+                                                        mapSymptoms[symptom].percentageSymptom>=0?Color(0xffDD2C00):Colors.white:
+                                                        Colors.white,
+                                                        child: Center(
+                                                            child:
+                                                            mapSymptoms[symptom].percentageSymptom!=null?Text((mapSymptoms[symptom].percentageSymptom)
+                                                                .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),):Container()))))))),
+                                  ],
+                                )
 
-                        ):Container(),
-                      ]
-                  )  ],)
+                            ):Container(),
+                          ]
+                      )  ],)
 
-                )):Container();
+                ))):Container();
       case FutureStatus.pending:
       default:
         return Center(child:CircularProgressIndicator());
@@ -224,7 +230,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
 
   Widget descriptionWidget(){
     return Column(
-        children: [
+      children: [
           ListTile(
             leading: Icon(Icons.description),
             title: Text("Description of this treatment: ",),
@@ -298,7 +304,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Text(
-              'Ending date: '+ widget.treatment.endingDay,
+              'Ending date:   '+ widget.treatment.endingDay,
               textAlign: TextAlign.left,
               style: TextStyle(color: Colors.black.withOpacity(0.6)),
             ),
@@ -312,7 +318,10 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
     return Padding(
       padding: EdgeInsets.all(4),
       child:
-      Card(child:Column(
+      Card(
+          elevation: 0,
+
+          child:Column(
           children:[Container(
               padding: EdgeInsets.only(bottom:16),
               child:

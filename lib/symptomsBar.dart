@@ -35,18 +35,15 @@ class _SymptomsBarState extends State<SymptomsBar>{
     return
       Container(
         padding: EdgeInsets.all(8),
-          height: 140,
           child: Card(
           elevation: 3,
           margin: EdgeInsets.all(0),
           child:Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Flexible(
-                    flex:3,
-                    child:ListTile(
+               ListTile(
                       title: Text("Symptoms",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
                       leading: Icon(Icons.sick,color: Colors.black),
                       trailing: IconButton(
@@ -58,17 +55,15 @@ class _SymptomsBarState extends State<SymptomsBar>{
                               MaterialPageRoute(builder: (context) => AllSymptomsPage()))
                         },
                       ),
-                    )),
-                Container(
-                  child:
-                  Expanded(
-                      flex:5,
-                      child:  Observer(
+                    ),
+
+                  Observer(
                         builder: (_) {
                           if(symptomStore.loadSymptomDay!=null){
                             switch (symptomStore.loadSymptomDay.status) {
                               case FutureStatus.rejected:
                                 return Container(
+
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -82,9 +77,14 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                   ),
                                 );
                               case FutureStatus.fulfilled:
-                                return  Observer(builder: (_) => Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 16),
-                                    child:symptomStore.symptomListOfSpecificDay.length!=0?ListView.separated(
+                                return  OrientationBuilder(
+                                  builder: (context, orientation) {
+                                    return MediaQuery.of(context).orientation == Orientation.portrait
+                                        ?Container(
+
+                                    margin: EdgeInsets.only(bottom: 16,top:8,right: 16,left: 16),
+                                    height: 50,
+                                    child:Observer(builder: (_) => symptomStore.symptomListOfSpecificDay.length!=0?ListView.separated(
                                       separatorBuilder: (BuildContext context, int index) {
                                         return SizedBox(
                                           width: 16,
@@ -95,7 +95,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                       shrinkWrap: true,
                                       physics: ClampingScrollPhysics(),
                                       itemBuilder: (context, index) {
-                                        return Observer(builder: (_) => Container(
+                                        return Container(
                                             alignment: Alignment.center,
                                             color: Colors.transparent,
                                             child:  RawMaterialButton(
@@ -111,14 +111,55 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                                     ))
                                               },
                                               child: ImageIcon(
-                                                AssetImage("images/Symptoms/" +symptomStore.symptomList[index].id+".png" ),
+                                                AssetImage("images/Symptoms/" +symptomStore.symptomListOfSpecificDay[index].id+".png" ),
                                                 size: 35.0,
                                               ),
 
-                                            )),
+                                            ),
                                         );
                                       },
-                                    ):Center(child:Text("No symptoms this day",style: TextStyle(fontSize: 20),))));
+                                    ):Center(child:Text("No symptoms this day",style: TextStyle(fontSize: 20),)))
+                                    ):Container(
+                                        margin: EdgeInsets.only(bottom: 16,top:8,right: 16,left: 16),
+                                        child:Observer(builder: (_) => symptomStore.symptomListOfSpecificDay.length!=0?
+                                        GridView.builder(
+                                          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 4,
+                                            mainAxisSpacing: 16,
+                                            crossAxisSpacing: 16,
+                                          childAspectRatio: 1.5
+                                          ),
+                                          itemCount: symptomStore.symptomListOfSpecificDay.length,
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          physics: ClampingScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                              alignment: Alignment.center,
+                                              color: Colors.transparent,
+                                              child:  RawMaterialButton(
+                                                constraints : const BoxConstraints(minWidth: 60.0, minHeight: 60.0),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(20),
+                                                    side: BorderSide(color:  Palette.bealthyColorScheme.primaryVariant, width: 2, style: BorderStyle.solid)
+                                                ),
+                                                onPressed: () => {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(builder: (context) => SymptomPage(symptom: symptomStore.symptomListOfSpecificDay[index])
+                                                      ))
+                                                },
+                                                child: ImageIcon(
+                                                  AssetImage("images/Symptoms/" +symptomStore.symptomListOfSpecificDay[index].id+".png" ),
+                                                  size: 40.0,
+                                                ),
+
+                                              ),
+                                            );
+                                          },
+                                        ):Center(child:Text("No symptoms this day",style: TextStyle(fontSize: 20),)))
+                                    );
+                                  });
                               case FutureStatus.pending:
                               default:
                                 return Center(child:CircularProgressIndicator());
@@ -129,7 +170,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                       )
                     //
 
-                  )),
+
                 ]
           )));
 

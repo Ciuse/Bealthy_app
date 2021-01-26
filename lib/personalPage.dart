@@ -103,9 +103,9 @@ class _PersonalPageState extends State<PersonalPage>{
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Personal info'),
-        ),
+        appBar: MediaQuery.of(context).orientation==Orientation.portrait?AppBar(
+          title: const Text('Profile'),
+        ):null,
         body: SingleChildScrollView(child: Container(
           padding: EdgeInsets.all(4),
             child: Column(
