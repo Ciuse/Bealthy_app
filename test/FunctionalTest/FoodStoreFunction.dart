@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import '../firebaseMock.dart';
+import '../WidgetTest/firebaseMock.dart';
 
 void main() {
   setupFirebaseAuthMocks();
