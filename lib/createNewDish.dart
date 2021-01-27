@@ -182,8 +182,8 @@ class _CreateNewDishState extends State<CreateNewDish> {
                                   //fillColor: Colors.green
                                 ),
                                 validator: (val) {
-                                  if(val.length==0) {
-                                    return "Name cannot be empty";
+                                  if(val.length==0 || val.length>25) {
+                                    return "Name incorrect";
                                   }else{
                                     return null;
                                   }
@@ -275,6 +275,7 @@ class _CreateNewDishState extends State<CreateNewDish> {
                                     actions: [
                                       FlatButton(
                                         onPressed: () {
+
                                           Navigator.pop(context);
                                         },
                                         child: Text('CANCEL'),
@@ -319,7 +320,10 @@ class _CreateNewDishState extends State<CreateNewDish> {
               title: Text(ingredient.name),
               subtitle:Text(ingredient.qty),
               leading: Image(image:AssetImage("images/ingredients/" + ingredient.id + ".png"), height: 40,width:40,),
-              trailing:
+              trailing:Row(
+                  mainAxisSize: MainAxisSize.min,
+
+                  children: [
               Container(
                   width: 140,
                   child:DropdownSearch<String>(
@@ -354,6 +358,40 @@ class _CreateNewDishState extends State<CreateNewDish> {
                         ingredient.qty=quantity;
                       }
                   )),
+                    IconButton(
+                      splashRadius: 20,
+                      padding: EdgeInsets.all(0),
+                      icon: Icon(Icons.delete),
+                      onPressed: (){
+                        showDialog(
+                            context: context,
+                            builder: (_) =>  new AlertDialog(
+                              title: Text('Delete ingredient'),
+                              contentPadding: EdgeInsets.only(top: 8),
+                              actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                              actions: [
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('CANCEL'),
+                                ),
+                                FlatButton(
+                                  onPressed: () {
+                                    ingredientStore.ingredientsName.add(ingredientStore.ingredientListOfDish[index].name);
+                                    ingredientStore.ingredientListOfDish.removeAt(index);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('DELETE'),
+                                ),
+                              ],
+                            )
+                        );
+
+                      },
+                    ),
+                  ]
+              ),
             )),
 
       ],

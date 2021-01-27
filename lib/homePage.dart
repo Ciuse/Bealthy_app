@@ -54,6 +54,10 @@ class _HomePageWidgetState extends State<HomePageWidget>{
   @override
   Widget build(BuildContext context) {
     final dateModel = Provider.of<DateStore>(context);
+    print( MediaQuery.of(context).orientation);
+    print(MediaQuery.of(context).size.height);
+    print(MediaQuery.of(context).size.width);
+
     return Scaffold(
       appBar: MediaQuery.of(context).orientation==Orientation.portrait?AppBar(
         title: const Text('Bealthy'),

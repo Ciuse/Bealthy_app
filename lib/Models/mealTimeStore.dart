@@ -150,21 +150,23 @@ abstract class _MealTimeStoreBase with Store {
 
   @action
   Future<void> addDishOfMealTimeListOfSpecificDay(Dish dish, DateTime day) async {
-    String dayFix = fixDate(day);
-    await (FirebaseFirestore.instance
-        .collection('UserDishes')
-        .doc(auth.currentUser.uid)
-        .collection("DayDishes")
-        .doc(dayFix).set({"virtual": true}));
+    if(auth.currentUser!=null){
+      String dayFix = fixDate(day);
+      await (FirebaseFirestore.instance
+          .collection('UserDishes')
+          .doc(auth.currentUser.uid)
+          .collection("DayDishes")
+          .doc(dayFix).set({"virtual": true}));
 
-    await (FirebaseFirestore.instance
-        .collection('UserDishes')
-        .doc(auth.currentUser.uid)
-        .collection("DayDishes")
-        .doc(dayFix)
-        .collection(dish.mealTime.toString().split('.').last)
-        .doc(dish.id)
-        .set(dish.toMapDayDishes()));
+      await (FirebaseFirestore.instance
+          .collection('UserDishes')
+          .doc(auth.currentUser.uid)
+          .collection("DayDishes")
+          .doc(dayFix)
+          .collection(dish.mealTime.toString().split('.').last)
+          .doc(dish.id)
+          .set(dish.toMapDayDishes()));
+    }
 
     getDishesOfMealTimeList(selectedMealTime.index).add(dish);
   }

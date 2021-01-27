@@ -26,16 +26,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:ui' as ui;
 import 'firebaseMock.dart';
 
 void main() {
   setupFirebaseAuthMocks();
+  final TestWidgetsFlutterBinding binding =
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
     await Firebase.initializeApp();
   });
 
   testWidgets('Home page bottom nav bar', (WidgetTester tester) async {
+    binding.window.physicalSizeTestValue = Size(600, 800);
+    binding.window.devicePixelRatioTestValue = 1.0;
+    final _providerKey = GlobalKey();
     // Build our app and trigger a frame.
     await tester.pumpWidget(MultiProvider(providers: [
       Provider<DateStore>(
@@ -65,9 +70,10 @@ void main() {
       Provider<BarCodeScannerStore>(
         create: (_) => BarCodeScannerStore(),
       ),
-    ], child:MaterialApp( home: HomePage()),
-    ),);
+    ],
+        child: new MaterialApp(home: new HomePage())
 
+    ),);
 
     final addIconFinder = find.byIcon(Icons.add);
     final addIconFinder2 = find.byIcon(Icons.breakfast_dining);

@@ -1,18 +1,16 @@
-import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'Database/dish.dart';
 import 'Database/enumerators.dart';
 import 'Models/dateStore.dart';
+import 'Models/mealTimeStore.dart';
 import 'Models/foodStore.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:Bealthy_app/dishPage.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
-
 import 'Models/ingredientStore.dart';
-import 'Models/mealTimeStore.dart';
+
 
 class SearchDishesList extends StatefulWidget {
   @override
@@ -23,7 +21,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
 
 
   TextEditingController _searchController = TextEditingController();
-  var storage = FirebaseStorage.instance;
+
   FoodStore foodStore;
   IngredientStore ingredientStore;
   MealTimeStore mealTimeStore;
@@ -86,7 +84,9 @@ class _SearchDishesListState extends State<SearchDishesList>{
       }
 
     }else{
+
       showResults.addAll(foodStore.dishesListFromDBAndUser);
+
     }
     foodStore.resultsList.clear();
     showResults.forEach((element) {
@@ -103,6 +103,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
       initializing: () => Text('Loading'),
     );
     try {
+      var storage = FirebaseStorage.instance;
       return await storage.ref(userUid+"/DishImage/" + dishId + ".jpg").getDownloadURL();
     }
     catch (e) {
@@ -155,8 +156,10 @@ class _SearchDishesListState extends State<SearchDishesList>{
                               ),
                             );
                           case FutureStatus.fulfilled:
+
                             searchResultList();
                             return Expanded(child: Observer(builder: (_) => ListView.separated(
+                                key:Key("ListView"),
                                 separatorBuilder: (BuildContext context, int index) {
                                   return Divider(
                                     height: 4,
@@ -166,12 +169,14 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                 itemBuilder: (context, index) {
 
                                   return ListTile(
+
                                     onTap: ()=> {
                                       if(!mealTimeStore.checkIfDishIsPresent(foodStore.resultsList[index])){
                                         showDialog(
                                             context: context,
                                             builder: (_) =>
                                             new AlertDialog(
+                                              key: Key("alertDialog"),
                                               title: Text('Select the quantity eaten'),
                                               content: Observer(builder: (_) => Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -224,6 +229,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                             context: context,
                                             builder: (_) =>
                                             new AlertDialog(
+                                              key: Key("alertDialogDishPresent"),
                                               title: Text('Dish already present'),
                                               content:Column(
                                                 mainAxisSize: MainAxisSize.min,

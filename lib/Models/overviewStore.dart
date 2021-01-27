@@ -5,7 +5,9 @@ import 'package:Bealthy_app/Database/dish.dart';
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:Bealthy_app/Database/symptom.dart';
+import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
+import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:mobx/mobx.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -84,8 +86,81 @@ abstract class _OverviewBase with Store {
     }
   }
 
+@action
+Ingredient initIngredientMapSymptomsValue(String ingredientId,List<DateTime> dates,SymptomStore symptomStore){
+  Ingredient toReturn = new Ingredient();
+  toReturn.id=ingredientId;
+    symptomStore.symptomList.forEach((symptom) {
+      toReturn.ingredientMapSymptomsValue.putIfAbsent(symptom.id, () => 0);
+    });
 
+dates.forEach((day) {
+  mapSymptomsOverviewPeriod[day].forEach((symptom) {
+    bool found = false;
+    mapIngredientsOverviewPeriod[day].forEach((ingredient) {
+      found= false;
+      if(ingredient.id==ingredientId){
+        if(symptom.mealTime.contains(ingredient.mealTime)){
+          found=true;
+          toReturn.ingredientMapSymptomsValue[symptom.id] = toReturn.ingredientMapSymptomsValue[symptom.id]+1;
+        }
 
+      }
+
+    });
+
+  });
+});
+return toReturn;
+}
+
+@action
+void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient,SymptomStore symptomStore){
+  dates.forEach((day) {
+    mapIngredientsOverviewPeriod[day].forEach((ingr) {
+    if(ingr.id==ingredient.id){
+      symptomStore.symptomList.forEach((sym) {
+        int count=0;
+        mapSymptomsOverviewPeriod[day].forEach((element) {
+          if(element.id!=sym.id){
+            count = count+1;
+          }
+        });
+        //il sintomo non è presente proprio in questo giorno quindi gli tolgo -0.25
+        if(count==mapSymptomsOverviewPeriod[day].length){
+          ingredient.ingredientMapSymptomsValue[sym.id] = ingredient.ingredientMapSymptomsValue[sym.id]-0.25;
+        }else{
+          if(!mapSymptomsOverviewPeriod[day].firstWhere((element) => sym.id==element.id).mealTime.contains(ingr.mealTime)){
+            ingredient.ingredientMapSymptomsValue[sym.id] = ingredient.ingredientMapSymptomsValue[sym.id]-0.25;
+          }
+        }
+      });
+
+    };
+    });
+  });}
+
+  @action
+  void initIngredientMapSymptomsValue3 (List<DateTime> dates,Ingredient ingredient,SymptomStore symptomStore){
+    dates.forEach((day) {
+      mapSymptomsOverviewPeriod[day].forEach((symptom) {
+        int count = 0;
+        bool found = false;
+        symptom.mealTime.forEach((element) {
+          found=false;
+        mapIngredientsOverviewPeriod[day].forEach((ingr){
+
+            if(ingredient.id==ingr.id && !found && element==ingr.mealTime){
+              count = count+1;
+              found = true;      //numero di volte che sono stato male e ho mangiato in quel mealtime il cibo X
+            }
+          });
+
+        });
+        ingredient.ingredientMapSymptomsValue[symptom.id] = ingredient.ingredientMapSymptomsValue[symptom.id]-0.5*(symptom.mealTime.length-count);
+      });
+    });
+  }
 
   @action
   Future<void> initializeSymptomsMap(DateStore dateStore) async {

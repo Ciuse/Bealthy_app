@@ -99,6 +99,23 @@ mixin _$Ingredient on _IngredientBase, Store {
     });
   }
 
+  final _$ingredientMapSymptomsValueAtom =
+      Atom(name: '_IngredientBase.ingredientMapSymptomsValue');
+
+  @override
+  ObservableMap<String, double> get ingredientMapSymptomsValue {
+    _$ingredientMapSymptomsValueAtom.reportRead();
+    return super.ingredientMapSymptomsValue;
+  }
+
+  @override
+  set ingredientMapSymptomsValue(ObservableMap<String, double> value) {
+    _$ingredientMapSymptomsValueAtom
+        .reportWrite(value, super.ingredientMapSymptomsValue, () {
+      super.ingredientMapSymptomsValue = value;
+    });
+  }
+
   final _$totalQuantityAtom = Atom(name: '_IngredientBase.totalQuantity');
 
   @override
@@ -123,6 +140,7 @@ it_Name: ${it_Name},
 qty: ${qty},
 valueShowDialog: ${valueShowDialog},
 mealTime: ${mealTime},
+ingredientMapSymptomsValue: ${ingredientMapSymptomsValue},
 totalQuantity: ${totalQuantity}
     ''';
   }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-
+import 'package:Bealthy_app/overviewSingleIngredient.dart';
 import 'Models/dateStore.dart';
 import 'Models/overviewStore.dart';
 import 'overviewPage.dart';
@@ -87,6 +87,11 @@ class IngredientOverviewState extends State<IngredientOverview> {
                               child: RawMaterialButton(
                                 onPressed: () =>
                                 {
+                                  Navigator.push(
+                                      context,MaterialPageRoute(builder: (context) => OverviewSingleIngredient(ingredientId: widget.overviewStore.totalOccurrenceIngredient.keys.elementAt(index),
+                                    startingDate: dateStore.overviewFirstDate,
+                                    endingDate: dateStore.overviewDefaultLastDate,
+                                  overviewStore:widget.overviewStore,))),
                                 },
                                 elevation: 5.0,
                                 fillColor: Colors.white,

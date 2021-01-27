@@ -311,6 +311,45 @@ mixin _$OverviewStore on _OverviewBase, Store {
       ActionController(name: '_OverviewBase');
 
   @override
+  Ingredient initIngredientMapSymptomsValue(
+      String ingredientId, List<DateTime> dates, SymptomStore symptomStore) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.initIngredientMapSymptomsValue');
+    try {
+      return super
+          .initIngredientMapSymptomsValue(ingredientId, dates, symptomStore);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void initIngredientMapSymptomsValue2(
+      List<DateTime> dates, Ingredient ingredient, SymptomStore symptomStore) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.initIngredientMapSymptomsValue2');
+    try {
+      return super
+          .initIngredientMapSymptomsValue2(dates, ingredient, symptomStore);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void initIngredientMapSymptomsValue3(
+      List<DateTime> dates, Ingredient ingredient, SymptomStore symptomStore) {
+    final _$actionInfo = _$_OverviewBaseActionController.startAction(
+        name: '_OverviewBase.initIngredientMapSymptomsValue3');
+    try {
+      return super
+          .initIngredientMapSymptomsValue3(dates, ingredient, symptomStore);
+    } finally {
+      _$_OverviewBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   int totalNumOfSymptomList() {
     final _$actionInfo = _$_OverviewBaseActionController.startAction(
         name: '_OverviewBase.totalNumOfSymptomList');
