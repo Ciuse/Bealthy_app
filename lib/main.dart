@@ -168,7 +168,7 @@ class MyApp extends StatelessWidget {
 
               title: _title,
               home: LitAuthState(
-                authenticated: HomePage(),
+                authenticated: HomePage(startingIndex: 0),
                 unauthenticated: SplashScreen(),
               ),
             )));
@@ -177,10 +177,11 @@ class MyApp extends StatelessWidget {
 
 /// This is the stateful widget that the main application instantiates.
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  final int startingIndex;
+  const HomePage({Key key,this.startingIndex}) : super(key: key);
 
   static MaterialPageRoute get route => MaterialPageRoute(
-    builder: (context) => const HomePage(),
+    builder: (context) => const HomePage(startingIndex: 0,),
   );
 
   @override
@@ -194,12 +195,13 @@ class _MyHomePageState extends State<HomePage> {
   DateStore dateStore;
   FoodStore foodStore;
   IngredientStore ingredientStore;
-  int _selectedIndex = 0;
+  int _selectedIndex=0;
   TreatmentStore treatmentStore;
   SymptomStore symptomStore;
 
   void initState() {
     super.initState();
+    _selectedIndex=widget.startingIndex;
     treatmentStore=  Provider.of<TreatmentStore>(context, listen: false);
     dateStore = Provider.of<DateStore>(context, listen: false);
     foodStore = Provider.of<FoodStore>(context, listen: false);
@@ -213,7 +215,6 @@ class _MyHomePageState extends State<HomePage> {
     symptomStore.initStore(DateTime.now());
     ingredientStore = Provider.of<IngredientStore>(context, listen: false);
     ingredientStore.initStore();
-
 
   }
 

@@ -75,45 +75,50 @@ class _AllSymptomsPageState extends State<AllSymptomsPage>  with SingleTickerPro
               crossAxisCount: 4,
               childAspectRatio: 1,
             ),
-            padding: EdgeInsets.all(32),
+            padding: EdgeInsets.all(16),
             controller: _scrollController,
             itemCount: symptomStore.symptomList.length,
-            itemBuilder: (context, index) => Card(
-                elevation: 2,
-                child: LayoutBuilder(
-                    builder: (context, costrains) {
+            itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.all(16),
+                    child:Card(
+                      margin: EdgeInsets.all(0),
+                        elevation: 2,
+                        child: LayoutBuilder(
+                          builder: (context, costrains) {
 
-                      if (variableSet == 0) {
-                        height = costrains.maxHeight;
-                        width = costrains.maxWidth;
-                        variableSet++;
-                      }
-                      return  GestureDetector(
-                          onTap: () =>
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) =>
-                                      SymptomPage(symptom: symptomStore.symptomList[index])
-                                  )
-                              ),
-                          child:Container(
-                          width: width,
-                          height: height,
-                          child:Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                            Image(
-                                height: height/2,
-                                width: width/2,
-                                image:AssetImage("images/Symptoms/" +
-                                    symptomStore.symptomList[index].id + ".png")
+                            if (variableSet == 0) {
+                              height = costrains.maxHeight;
+                              width = costrains.maxWidth;
+                              variableSet++;
+                            }
+                            return  Container(
+                                width: width-8,
+                                height: height-8,
+                                child:TextButton(
+                                onPressed: () =>
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) =>
+                                        SymptomPage(symptom: symptomStore.symptomList[index])
+                                    )
+                                ),
+                            child:Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Image(
+                                        height: height/2,
+                                        width: width/2,
+                                        color: symptomStore.symptomList[index].isSymptomSelectDay ? Palette
+                                            .bealthyColorScheme.primaryVariant : null,
+                                        image:AssetImage("images/Symptoms/" +
+                                            symptomStore.symptomList[index].id + ".png")
 
-                            ),
-                            Text(symptomStore.symptomList[index].name),
+                                    ),
+                                    Text(symptomStore.symptomList[index].name, style: TextStyle(fontSize: 20),),
 
-                          ],)));
-                    },
-                )),
+                                  ],)));
+                          },
+                        ))),
             onWillAccept: (oldIndex, newIndex) => true,
             onReorder: (oldIndex, newIndex) {
               symptomStore.reorderList(oldIndex, newIndex);

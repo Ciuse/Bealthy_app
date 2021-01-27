@@ -2,6 +2,7 @@ import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
+import 'package:Bealthy_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -26,7 +27,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
   OverviewStore overviewStore;
   DateStore dateStore;
-
+  AppBar appBar;
   void initState() {
     super.initState();
     _tabController = getTabController();
@@ -36,7 +37,19 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     widget.symptom.frequencyTemp = widget.symptom.frequency;
     widget.symptom.copyOriginalToTempMealtime();
     widget.symptom.isModeRemove=false;
+     appBar = AppBar(
+      title: Text(widget.symptom.name),
+      bottom: TabBar(
+        tabs: [
+          Tab(text: "Modify"),
+          Tab(text: "Description")
+        ],
+        controller: _tabController,
+      ),
+    );
+
   }
+
 
   @override
   void dispose() {
@@ -54,20 +67,15 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     reactButtonEnabled();
     final symptomStore = Provider.of<SymptomStore>(context);
     return DefaultTabController(length: 2, child: Scaffold(
-      appBar: AppBar(
-        title: Text(widget.symptom.name),
-        bottom: TabBar(
-          tabs: [
-            Tab(text: "Modify"),
-            Tab(text: "Description")
-          ],
-          controller: _tabController,
-        ),
-      ),
+      appBar: appBar,
       body: TabBarView(
         controller: _tabController,
         children: [
-          modifyWidget(symptomStore),
+          MediaQuery
+              .of(context)
+              .orientation == Orientation.portrait
+              ?modifyPortraitWidget(symptomStore):
+          modifyLandscapeWidget(symptomStore),
           descriptionWidget(),
         ],
       ),
@@ -76,29 +84,42 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
 
 
   Widget descriptionWidget() {
-    return SingleChildScrollView(child: 
-      Column(
-        children: [
-          descriptionText(),
-          symptomsText(),
-          Padding(
-    padding: const EdgeInsets.only(top:4,bottom: 8),
-    child: ElevatedButton(
-            onPressed: () {
-              Navigator.push<void>(context,
-                  MaterialPageRoute(builder: (context) => OverviewPage(lastDayOfWeek: date,)));
-            },
+    return SingleChildScrollView(
 
-            child: Text('STATISTICS'),
-          ))
-        ]));
+        child:ConstrainedBox(
+            constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height-appBar.bottom.preferredSize.height-
+                    appBar.preferredSize.height
+            ),
+            child:
+            Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  descriptionText(),
+                  symptomsText(),
+                  Padding(
+                      padding: EdgeInsets.only(top:4,bottom: 8),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          WidgetsBinding.instance.addPostFrameCallback(
+                                (_) =>
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            HomePage(startingIndex: 1,))),
+                          );
+                        },
+                        child: Text('STATISTICS'),
+                      ))
+                ])));
   }
 
   Widget descriptionText(){
     return  Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(16),
-        margin: EdgeInsets.all(8),
+        margin: MediaQuery.of(context).orientation == Orientation.portrait?EdgeInsets.all(16):
+        EdgeInsets.symmetric(vertical:16,horizontal: 64),
         width:double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -120,7 +141,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
               Text("Description",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
               SizedBox(height: 10,),
 
-              Text(widget.symptom.description,textAlign: TextAlign.justify,),
+              Text(widget.symptom.description,textAlign: TextAlign.justify, style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait?null:20)),
             ]
         )
     );
@@ -130,7 +151,8 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
     return  Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(16),
-        margin: EdgeInsets.all(8),
+        margin: MediaQuery.of(context).orientation == Orientation.portrait?EdgeInsets.all(16):
+        EdgeInsets.symmetric(vertical:16,horizontal: 64),
         width:double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -151,13 +173,13 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             children:[
               Text("Related Symptoms & Signs",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
               SizedBox(height: 10,),
-              Text(widget.symptom.symptoms,textAlign: TextAlign.justify),
+              Text(widget.symptom.symptoms,textAlign: TextAlign.justify, style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait?null:20),),
             ]
         )
     );
   }
 
-  Widget modifyWidget(SymptomStore symptomStore) {
+  Widget modifyPortraitWidget(SymptomStore symptomStore) {
     return SingleChildScrollView(child: Container(
       padding: EdgeInsets.all( 4 ),
         child: Card(
@@ -216,10 +238,88 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                 )
             ))
           ],
-        ))));
+            ))));
   }
 
+  Widget modifyLandscapeWidget(SymptomStore symptomStore) {
+    return Container(
+        padding: EdgeInsets.all( 4 ),
+        child: Card(
+            elevation: 0,
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    Expanded(child:
+                    Padding(
+                        padding:EdgeInsets.all(16),
+                        child:Column(children: [
+                        Text("Intensity",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
+                        Observer(builder: (_) =>
+                      Slider.adaptive(
+                        divisions: 5,
+                        value: widget.symptom.intensityTemp.toDouble(),
+                        label: Intensity.values[widget.symptom.intensityTemp].toString().split('.').last,
+                        min: 0,
+                        max: 5,
+                        onChanged: (val) {
+                          widget.symptom.intensityTemp = val.toInt();
+                        },
+                      )),
+                      Divider(height: 80),
+                      Text("Frequency",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
+                      Observer(builder: (_) =>
+                          Slider(
+                            divisions: 5,
+                            value: widget.symptom.frequencyTemp.toDouble(),
+                            label: Frequency.values[widget.symptom.frequencyTemp].toString().split('.').last,
+                            min: 0,
+                            max: 5,
+                            onChanged: (val) {
+                              widget.symptom.frequencyTemp = val.toInt();
+                            },
+                          )),
+                    ],))),
+                    Expanded(child:
+                    Padding(
+                        padding:EdgeInsets.all(16),
+                        child:Column(children: [
+                      Text("Select symptom occurrence",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
+                      SizedBox(height: 10,),
+                      mealTimeList(widget.symptom),
 
+                    ],)
+                    )),
+
+                  ],),
+                  Align(
+                      alignment: Alignment.center,
+                      child:Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: TextButton(
+                            style: TextButton.styleFrom(primary: Palette.bealthyColorScheme.secondary),
+                            child:Text('RESET VALUES'),
+                            onPressed: ()=>widget.symptom.resetTempValue(),))),
+                  Observer(builder: (_) =>  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+          child: ElevatedButton(
+            key:Key("buttonSaveRemove"),
+            onPressed: !widget.symptom.isModifyButtonActive?  null :  () {
+              buttonActivated(symptomStore);
+            } ,
+            child: !widget.symptom.isModeRemove ? Text('SAVE'):Text('REMOVE'),
+            style: !widget.symptom.isModeRemove?ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.primary)
+                :ElevatedButton.styleFrom(primary: Palette.bealthyColorScheme.error),
+          )
+      ))
+    ]
+    )
+    )
+    );
+  }
 
   bool areMealTimeBoolListsEqual(){
     int count = 0;
