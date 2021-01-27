@@ -75,7 +75,6 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
   }
 
   void _onCalendarCreated(DateTime first, DateTime last, CalendarFormat format) {
-    dateStore.calendarSelectedDate=DateTime.now();
 
   }
 

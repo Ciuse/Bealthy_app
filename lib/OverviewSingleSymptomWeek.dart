@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:Bealthy_app/Login/config/palette.dart';
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
@@ -110,14 +112,16 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
   }
 
   Widget buildIngredientRow(){
-
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
+    Map<String,int> sortedTotalMap= widget.overviewStore.sortTotalOccurrenceIngredientBySymptom();
+    Map<String,int> sortedDayMap= widget.overviewStore.sortDayOccurrenceIngredientBySymptom();
+
     return graphStore.touchedIndex==-1?
     ListView(
 
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in widget.overviewStore.totalOccurrenceIngredientBySymptom.keys )
+          for(var ingredient in sortedTotalMap.keys.toList() )
             Column(children: [ Container(
                 width: 50,
                 height: 50,
@@ -126,16 +130,15 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                       image: AssetImage("images/ingredients/" + ingredient + ".png"),
                     )
                 )),
-              Text(widget.overviewStore.totalOccurrenceIngredientBySymptom[ingredient].toString())
+              Text(sortedTotalMap[ingredient].toString())
             ])
-
         ])
         : widget.overviewStore.dayOccurrenceIngredientBySymptom.keys.length==0
         ? Text("NO INGREDIENT THIS DAY")
         :ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in widget.overviewStore.dayOccurrenceIngredientBySymptom.keys )
+          for(var ingredient in sortedDayMap.keys )
             Column(children: [
               Container(
                   width: 50,
@@ -145,7 +148,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                         image: AssetImage("images/ingredients/" + ingredient + ".png"),
                       )
                   )),
-              Text(widget.overviewStore.dayOccurrenceIngredientBySymptom[ingredient].toString())
+              Text(sortedDayMap[ingredient].toString())
             ],
             )
         ]);

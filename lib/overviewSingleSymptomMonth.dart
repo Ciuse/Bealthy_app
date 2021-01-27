@@ -114,13 +114,14 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
   }
 
   Widget buildIngredientRow(){
-
+    Map<String,int> sortedTotalMap= widget.overviewStore.sortTotalOccurrenceIngredientBySymptom();
+    Map<String,int> sortedDayMap= widget.overviewStore.sortDayOccurrenceIngredientBySymptom();
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
     return graphStore.touchedIndex==-1?
     ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in widget.overviewStore.totalOccurrenceIngredientBySymptom.keys )
+          for(var ingredient in sortedTotalMap.keys )
             Column(children: [ Container(
               margin: EdgeInsets.symmetric(horizontal: 5),
                 width: 50,
@@ -130,7 +131,7 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                       image: AssetImage("images/ingredients/" + ingredient + ".png"),
                     )
                 )),
-              Text(widget.overviewStore.totalOccurrenceIngredientBySymptom[ingredient].toString())
+              Text(sortedTotalMap[ingredient].toString())
             ])
 
         ])
@@ -139,7 +140,7 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
         :ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          for(var ingredient in widget.overviewStore.dayOccurrenceIngredientBySymptom.keys )
+          for(var ingredient in sortedDayMap.keys )
             Column(children: [
               Container(
                   width: 50,
@@ -149,7 +150,7 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                         image: AssetImage("images/ingredients/" + ingredient + ".png"),
                       )
                   )),
-              Text(widget.overviewStore.dayOccurrenceIngredientBySymptom[ingredient].toString())
+              Text(sortedDayMap[ingredient].toString())
             ],
             )
         ]);
