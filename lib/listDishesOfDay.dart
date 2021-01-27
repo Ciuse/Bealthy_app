@@ -23,12 +23,17 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   List<String> dishListChoices = ["information","modify"];
   List<String> quantityList;
   DateStore dateStore;
+  MealTimeStore mealTimeStore;
+
   var storage;
   @override
   void initState() {
     super.initState();
     quantityList= getQuantityName();
     dateStore = Provider.of<DateStore>(context, listen: false);
+    mealTimeStore = Provider.of<MealTimeStore>(context, listen: false);
+    print(widget.day);
+    mealTimeStore.initDishesOfMealTimeList(widget.day);
   }
 
   List<String> getQuantityName(){
@@ -43,7 +48,6 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   @override
   Widget build(BuildContext context) {
-    final mealTimeStore = Provider.of<MealTimeStore>(context);
     final ingredientStore = Provider.of<IngredientStore>(context);
     return Container(
       padding: EdgeInsets.only(top: 8),
@@ -62,7 +66,6 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
   }
 
   dynamicListTile(int index){
-    final mealTimeStore = Provider.of<MealTimeStore>(context);
     switch(index) {
       case 0: {
         return ListTile(
@@ -316,5 +319,3 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   }
 }
-
-
