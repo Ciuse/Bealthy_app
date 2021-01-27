@@ -197,36 +197,44 @@ void setBooleanQuantityDish(){
 
   @action
   Future<void> _getDishesFromDBAndUser(IngredientStore ingredientStore) async {
-    await (FirebaseFirestore.instance
-        .collection('Dishes').orderBy("name")
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-
-        Dish i = new Dish(id:result.id,name:result.get("name") ,qty: "",);
-        ObservableValues value = new ObservableValues(stringIngredients: "");
-        mapIngredientsStringDish.putIfAbsent(i, () => value);
-        dishesListFromDBAndUser.add(i);
-        initializeIngredients(i,ingredientStore);
-      }
-      );
-    }));
-    await (FirebaseFirestore.instance
-        .collection('DishesCreatedByUsers')
-        .doc(auth.currentUser.uid).collection("Dishes").orderBy("name").get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((dish) {
-        Dish toAdd = new Dish(id: dish.id,
+    if(auth.currentUser!=null) {
+      await (FirebaseFirestore.instance
+          .collection('Dishes')
+          .orderBy("name")
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((result) {
+          Dish i = new Dish(
+            id: result.id,
+            name: result.get("name"),
+            qty: "",
+          );
+          ObservableValues value = new ObservableValues(stringIngredients: "");
+          mapIngredientsStringDish.putIfAbsent(i, () => value);
+          dishesListFromDBAndUser.add(i);
+          initializeIngredients(i, ingredientStore);
+        });
+      }));
+      await (FirebaseFirestore.instance
+          .collection('DishesCreatedByUsers')
+          .doc(auth.currentUser.uid)
+          .collection("Dishes")
+          .orderBy("name")
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((dish) {
+          Dish toAdd = new Dish(
+            id: dish.id,
             name: dish.get("name"),
             qty: null,
-            );
-        ObservableValues value = new ObservableValues(stringIngredients: "");
-        mapIngredientsStringDish.putIfAbsent(toAdd, () => value);
-        dishesListFromDBAndUser.add(toAdd);
-        initializeIngredients(toAdd,ingredientStore);
-      });
-    })
-    );
+          );
+          ObservableValues value = new ObservableValues(stringIngredients: "");
+          mapIngredientsStringDish.putIfAbsent(toAdd, () => value);
+          dishesListFromDBAndUser.add(toAdd);
+          initializeIngredients(toAdd, ingredientStore);
+        });
+      }));
+    }
   }
 
   @action

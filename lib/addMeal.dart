@@ -63,6 +63,7 @@ class _AddMealState extends State<AddMeal>{
                               elevation: 5,
                               child:
                           TextButton(
+                              key:Key("searchButton"),
                               style: TextButton.styleFrom(
                                 primary:  Palette.secondaryLight,
                               ),

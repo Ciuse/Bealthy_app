@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-
 import 'firebaseMock.dart';
+
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
@@ -23,7 +23,7 @@ void main() {
 
   testWidgets('All symptoms page test', (WidgetTester tester) async {
     final _providerKey = GlobalKey();
-    final _childKey = GlobalKey();
+
     await tester.pumpWidget(MultiProvider(providers: [
       Provider<DateStore>(
         create: (_) => DateStore(),
@@ -46,8 +46,8 @@ void main() {
     final addIconFinder = find.byIcon(Icons.info_outline);
     expect(addIconFinder, findsNWidgets(1));
 
-    final listViewForAMealTime = find.byKey(Key("symptomsContent"));
-    expect(listViewForAMealTime,findsNWidgets(1));
+    final symptomsContent = find.byKey(Key("symptomsContent"));
+    expect(symptomsContent,findsNWidgets(1));
 
     expect(find.byKey(Key(symptom.id)), findsNWidgets(1));
     await tester.tap(find.byType(ListTile));

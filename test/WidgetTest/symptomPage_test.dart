@@ -4,7 +4,6 @@ import 'package:Bealthy_app/Database/symptom.dart';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
-import 'package:Bealthy_app/allSymptomsPage.dart';
 import 'package:Bealthy_app/symptomPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
