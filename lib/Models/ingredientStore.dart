@@ -58,6 +58,16 @@ abstract class _IngredientStoreBase with Store {
     }
   }
 
+  @action
+  Ingredient returnIngredientFromId(String ingredientId){
+    Ingredient toReturn= new Ingredient();
+    ingredientList.forEach((element) {
+      if(element.id==ingredientId){
+        toReturn=element;
+      }
+    });
+    return toReturn;
+  }
 
   @action
   Future<void> getIngredients() async {
@@ -110,7 +120,8 @@ abstract class _IngredientStoreBase with Store {
       String ingredients="";
       querySnapshot.docs.forEach((ingredient) {
         Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
-        ingredients = ingredients+ i.name+", ";
+        ingredients = ingredients+ i.name;
+        ingredients = ingredients+ ",";
       }
       );
       return ingredients;
@@ -128,8 +139,10 @@ abstract class _IngredientStoreBase with Store {
         .get().then((querySnapshot) {
       String ingredients="";
       querySnapshot.docs.forEach((ingredient) {
+
         Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
-        ingredients = ingredients+ i.name+", ";
+        ingredients = ingredients+ i.name;
+        ingredients =  ingredients+",";
       }
       );
       return ingredients;

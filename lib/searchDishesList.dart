@@ -84,7 +84,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
       }
 
     }else{
-print("entrato");
+
       showResults.addAll(foodStore.dishesListFromDBAndUser);
 
     }
@@ -156,7 +156,7 @@ print("entrato");
                               ),
                             );
                           case FutureStatus.fulfilled:
-                            print("fulfilled");
+
                             searchResultList();
                             return Expanded(child: Observer(builder: (_) => ListView.separated(
                                 key:Key("ListView"),
@@ -229,6 +229,7 @@ print("entrato");
                                             context: context,
                                             builder: (_) =>
                                             new AlertDialog(
+                                              key: Key("alertDialogDishPresent"),
                                               title: Text('Dish already present'),
                                               content:Column(
                                                 mainAxisSize: MainAxisSize.min,

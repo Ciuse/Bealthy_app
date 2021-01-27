@@ -14,6 +14,8 @@ class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
   setupFirebaseAuthMocks();
+  final TestWidgetsFlutterBinding binding =
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
     await Firebase.initializeApp();
 
@@ -22,6 +24,8 @@ void main() {
   final mockObserver = MockNavigatorObserver();
 
   testWidgets('All symptoms page test', (WidgetTester tester) async {
+    binding.window.physicalSizeTestValue = Size(600, 800);
+    binding.window.devicePixelRatioTestValue = 1.0;
     final _providerKey = GlobalKey();
 
     await tester.pumpWidget(MultiProvider(providers: [

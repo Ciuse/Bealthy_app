@@ -183,6 +183,13 @@ void setBooleanQuantityDish(){
 
   }
 
+ String deleteLastCommaFromString(String str) {
+    if (str != null && str.length > 0 && str.substring(str.length - 1) == ',') {
+      print("entrato");
+      str = str.substring(0, str.length - 1);
+    }
+    return str;
+  }
 
   @action
   Future<void> initializeIngredients(Dish dish, IngredientStore ingredientStore)async {
@@ -192,7 +199,8 @@ void setBooleanQuantityDish(){
     }else{
       ingredients = await ingredientStore.getIngredientsStringFromDatabaseDish(dish);
     }
-    mapIngredientsStringDish[dish].stringIngredients = ingredients;
+
+    mapIngredientsStringDish[dish].stringIngredients = ingredients.substring(0, ingredients.length - 1);
   }
 
   @action

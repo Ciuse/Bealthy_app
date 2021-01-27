@@ -34,6 +34,8 @@ abstract class _IngredientBase with Store {
   int valueShowDialog = 0;
   @observable
   String mealTime;
+  @observable
+  var ingredientMapSymptomsValue = new ObservableMap<String, double>();
 
   @observable
   int totalQuantity;

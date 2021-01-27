@@ -302,6 +302,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
                       ),
                       onDismissed: (direction){
+
                         mealTimeStore.removeDishOfMealTimeListOfSpecificDay(mealTime.index, mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index], widget.day);
                       },
                     ));

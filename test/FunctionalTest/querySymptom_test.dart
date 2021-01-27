@@ -25,7 +25,7 @@ void main() {
   Symptom symptom = new Symptom();
   symptom.id="Symptom_1";
   Map<String, dynamic> symptomModel = { "id": symptom.id, "name": symptom.name, "description":symptom.description,"symptoms": symptom.symptoms};
-  Map<String, dynamic> responseSymptomMapReturn = { "id": symptom.id, "name": symptom.name, "description":symptom.description,"symptoms": symptom.symptoms};
+  Map<String, dynamic> responseSymptomMapReturn = { "id": "", "name": "", "description":"","symptoms": ""};
 
   MockFirestore instance;
   MockDocumentSnapshot mockDocumentSnapshot;
@@ -51,7 +51,7 @@ void main() {
     final result = await FirebaseFirestore.instance
         .collection('Symptoms')
         .doc("Symptom_1");
-    print(result.snapshots());
+
     //assert
     expect(result.id, responseSymptomMapReturn["id"]); //userModel is a object that is defined. Replace with you own model class object.
   });

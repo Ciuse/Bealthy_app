@@ -177,6 +177,17 @@ mixin _$IngredientStore on _IngredientStoreBase, Store {
   }
 
   @override
+  Ingredient returnIngredientFromId(String ingredientId) {
+    final _$actionInfo = _$_IngredientStoreBaseActionController.startAction(
+        name: '_IngredientStoreBase.returnIngredientFromId');
+    try {
+      return super.returnIngredientFromId(ingredientId);
+    } finally {
+      _$_IngredientStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String getIngredientIdFromName(String ingredientName) {
     final _$actionInfo = _$_IngredientStoreBaseActionController.startAction(
         name: '_IngredientStoreBase.getIngredientIdFromName');
