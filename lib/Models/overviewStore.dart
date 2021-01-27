@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:Bealthy_app/Database/dish.dart';
 import 'package:Bealthy_app/Database/enumerators.dart';
@@ -337,6 +338,7 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
         if (mapIngredientsOverviewPeriod.containsKey(dateTime) && mapIngredientsOverviewPeriod[dateTime].isNotEmpty) {
           mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
             if (currentSymptom.mealTime.contains(ingredient.mealTime)) {
+              print(ingredient.mealTime);
               if (!totalOccurrenceIngredientBySymptom.keys.contains(
                   ingredient.id)) {
                 totalOccurrenceIngredientBySymptom.putIfAbsent(
@@ -385,6 +387,7 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
       if(mapIngredientsOverviewPeriod.containsKey(dateTime) && mapIngredientsOverviewPeriod[dateTime].isNotEmpty) {
         mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
           if (currentSymptom.mealTime.contains(ingredient.mealTime)) {
+            
             if (!dayOccurrenceIngredientBySymptom.keys
                 .contains(ingredient.id)) {
               dayOccurrenceIngredientBySymptom.putIfAbsent(
@@ -571,7 +574,19 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
     }
   }
 
+  Map<String,int> sortTotalOccurrenceIngredientBySymptom(){
+    SplayTreeMap<String,int> sortedMap = SplayTreeMap<String,int>
+        .from(totalOccurrenceIngredientBySymptom, (b, a) => totalOccurrenceIngredientBySymptom[a] > totalOccurrenceIngredientBySymptom[b] ? 1 : -1 );
+    Map<String,int> returnMap = Map.from(sortedMap);
+    return returnMap;
+  }
 
+  Map<String,int> sortDayOccurrenceIngredientBySymptom(){
+    SplayTreeMap<String,int> sortedMap = SplayTreeMap<String,int>
+        .from(dayOccurrenceIngredientBySymptom, (b, a) => dayOccurrenceIngredientBySymptom[a] > dayOccurrenceIngredientBySymptom[b] ? 1 : -1 );
+    Map<String,int> returnMap = Map.from(sortedMap);
+    return returnMap;
+  }
   String fixDate(DateTime date) {
     String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(
         2, '0')}-${date.day.toString().padLeft(2, '0')}";

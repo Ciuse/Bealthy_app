@@ -34,6 +34,7 @@ class _HomePageWidgetState extends State<HomePageWidget>{
   void initState() {
     super.initState();
     dateStore = Provider.of<DateStore>(context, listen: false);
+    dateStore.calendarSelectedDate=DateTime.now();
     scrollControllerStore = new ScrollControllerStore();
     scrollControllerStore.scrollController.addListener(() {
       if (scrollControllerStore.scrollController.hasClients) {
