@@ -32,7 +32,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
     quantityList= getQuantityName();
     dateStore = Provider.of<DateStore>(context, listen: false);
     mealTimeStore = Provider.of<MealTimeStore>(context, listen: false);
-    mealTimeStore.initDishesOfMealTimeList(dateStore.calendarSelectedDate);
+    mealTimeStore.initDishesOfMealTimeList(DateTime.now());
   }
 
   List<String> getQuantityName(){
