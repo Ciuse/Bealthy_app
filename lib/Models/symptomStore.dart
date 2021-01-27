@@ -456,14 +456,30 @@ abstract class _SymptomStoreBase with Store {
     });
   }
 
+  @action
   void reorderList(int oldIndex, int newIndex){
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
     final Symptom item = symptomList.removeAt(oldIndex);
     symptomList.insert(newIndex, item);
+    sortSymptomDayList();
+
   }
 
+  @action
+  void sortSymptomDayList(){
+    int newIndex=0;
+    int oldIndex=0;
+    symptomList.forEach((mainElem) {
+      oldIndex=symptomListOfSpecificDay.indexWhere((element) => mainElem.id==element.id);
+      if(oldIndex!=-1) {
+        Symptom item = symptomListOfSpecificDay.removeAt(oldIndex);
+        symptomListOfSpecificDay.insert(newIndex, item);
+        newIndex++;
+      }
+    });
+  }
 
   @action
   Future<void> removeSymptomOfSpecificDay(Symptom symptom, DateTime date) async {

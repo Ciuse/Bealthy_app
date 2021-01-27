@@ -340,6 +340,28 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
   }
 
   @override
+  void reorderList(int oldIndex, int newIndex) {
+    final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
+        name: '_SymptomStoreBase.reorderList');
+    try {
+      return super.reorderList(oldIndex, newIndex);
+    } finally {
+      _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void sortSymptomDayList() {
+    final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
+        name: '_SymptomStoreBase.sortSymptomDayList');
+    try {
+      return super.sortSymptomDayList();
+    } finally {
+      _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 symptomList: ${symptomList},

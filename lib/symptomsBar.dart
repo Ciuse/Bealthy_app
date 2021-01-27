@@ -77,6 +77,7 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                   ),
                                 );
                               case FutureStatus.fulfilled:
+                                symptomStore.sortSymptomDayList();
                                 return  OrientationBuilder(
                                   builder: (context, orientation) {
                                     return MediaQuery.of(context).orientation == Orientation.portrait
