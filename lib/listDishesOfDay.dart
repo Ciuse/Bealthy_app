@@ -6,13 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'Database/enumerators.dart';
 import 'Login/config/palette.dart';
+import 'Models/dateStore.dart';
 import 'eatenDishPage.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 
 class ListDishesOfDay extends StatefulWidget {
-  final DateTime day;
-  ListDishesOfDay({@required this.day});
+  ListDishesOfDay();
 
   @override
   _ListDishesOfDayState createState() => _ListDishesOfDayState();
@@ -22,11 +22,13 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
   List<String> dishListChoices = ["information","modify"];
   List<String> quantityList;
+  DateStore dateStore;
   var storage;
   @override
   void initState() {
     super.initState();
     quantityList= getQuantityName();
+    dateStore = Provider.of<DateStore>(context, listen: false);
   }
 
   List<String> getQuantityName(){
@@ -302,7 +304,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
 
                       ),
                       onDismissed: (direction){
-                        mealTimeStore.removeDishOfMealTimeListOfSpecificDay(mealTime.index, mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index], widget.day);
+                        mealTimeStore.removeDishOfMealTimeListOfSpecificDay(mealTime.index, mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index], dateStore.calendarSelectedDate);
                       },
                     ));
 

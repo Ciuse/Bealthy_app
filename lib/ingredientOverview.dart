@@ -114,7 +114,9 @@ class IngredientOverviewState extends State<IngredientOverview> {
 
 
   Widget noIngredientsWidget(){
-    return Text("No Ingredients");
+    return Padding(
+        padding: EdgeInsets.all(16),
+        child:Text("There are no statistics about ingredients for this range of days",style: TextStyle(fontSize: 22),));
   }
 }
 class PieChartIngredient extends StatefulWidget {

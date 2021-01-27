@@ -121,7 +121,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         ),
       ):null,
         body:Container(
-            margin: EdgeInsets.symmetric(horizontal: 4,vertical: 8),
+            margin: MediaQuery.of(context).orientation==Orientation.portrait?
+            EdgeInsets.symmetric(horizontal: 4,vertical: 8):null,
             child:
             Observer(builder: (context) =>
             dateStore.timeSelected==TemporalTime.Day? dayOverviewBuild():
@@ -207,8 +208,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         curve: Curves.fastOutSlowIn,
         vsync: this,
         alignment: Alignment(0, -1),
-        child: _buildHorizontalSwipeWrapper(
-            child: overviewContent())
+        child: MediaQuery.of(context).orientation==Orientation.portrait?
+                overviewContent():overviewContentLandscape()
       );
     } else {
       return AnimatedSwitcher(
@@ -222,8 +223,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
             ),
           );
         },
-        child: _buildHorizontalSwipeWrapper(
-            child: overviewContent())
+        child: MediaQuery.of(context).orientation==Orientation.portrait?
+            overviewContent():overviewContentLandscape()
       );
     }
   }
@@ -251,14 +252,54 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     );
   }
 
+  Widget overviewContentLandscape(){
 
+    return SingleChildScrollView(
+
+        child:ConstrainedBox(
+        constraints: BoxConstraints(
+        minHeight: MediaQuery.of(context).size.height-
+        AppBar().preferredSize.height
+    ),
+    child:Container(
+        child: Observer(
+          builder: (_) {
+            switch (overviewStore.loadInitSymptomGraph.status) {
+              case FutureStatus.rejected:
+                return Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Oops something went wrong'),
+                      RaisedButton(
+                        child: Text('Retry'),
+                        onPressed: () async {
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              case FutureStatus.fulfilled:
+                return
+                Row(children: [
+                  Expanded(child: overviewStore.totalOccurrenceSymptom.length>0?
+                  symptomsWidget(): Center(child:noSymptomsWidget()),),
+                  Expanded(child:IngredientOverview(overviewStore: overviewStore,) ,),
+                ],);
+
+              case FutureStatus.pending:
+              default:
+                return Center(child:CircularProgressIndicator());
+            }
+          },
+        ))));
+  }
   Widget overviewContent (){
 
     return TabBarView(
       controller: _tabController,
       children: [
         Container(
-            margin: EdgeInsets.symmetric(vertical: 8),
             child: Observer(
               builder: (_) {
                 switch (overviewStore.loadInitSymptomGraph.status) {
@@ -277,7 +318,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                       ),
                     );
                   case FutureStatus.fulfilled:
-                    return overviewStore.totalOccurrenceSymptom.length>0? symptomsWidget() : noSymptomsWidget();
+                    return
+                      overviewStore.totalOccurrenceSymptom.length>0?
+                      symptomsWidget(): Center(child:noSymptomsWidget());
                   case FutureStatus.pending:
                   default:
                     return Center(child:CircularProgressIndicator());
@@ -292,7 +335,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     );
   }
   Widget noSymptomsWidget() {
-    return Text("No Symptoms");
+    return Padding(
+        padding: EdgeInsets.all(16),
+        child:Text("There are no statistics about symptoms for this range of days",style: TextStyle(fontSize: 22),));
   }
 
   void selectPreviousDay() {
@@ -611,7 +656,8 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
               ),
           )),
     ],
-    );
+    )
+    ;
   }
 
 }
