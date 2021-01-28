@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
+import 'Database/observableValues.dart';
 import 'Login/config/palette.dart';
 import 'Models/dateStore.dart';
 import 'Models/symptomStore.dart';
@@ -30,7 +31,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
   DateTime startingDateBeforeTreatment;
   DateTime endingDateBeforeTreatment;
   int rangeDaysLength;
-  var mapSymptoms;
+  Map<String,ObservableValues> mapSymptoms;
   @override
   void initState() {
 
@@ -161,7 +162,85 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                         leading: Icon(Icons.show_chart),
                         title: Text("Statistics report",),
                       ),
+                      MediaQuery.of(context).orientation==Orientation.landscape?GridView.builder(
+                        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 0,
+                            crossAxisSpacing: 16,
+                            childAspectRatio: (MediaQuery.of(context).size.width/MediaQuery.of(context).size.height)*2.5
+                        ),
+                        itemCount: mapSymptoms.keys.length,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Container(
+                            alignment: Alignment.center,
+                            color: Colors.transparent,
+                            child: (mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom!=null||
+                                mapSymptoms[mapSymptoms.keys.elementAt(index)].appeared==true
+                                ||mapSymptoms[mapSymptoms.keys.elementAt(index)].disappeared==true)?
 
+                            Padding(
+                                padding: EdgeInsets.all(16),
+                                child:
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child:Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 0),
+                                          child:ImageIcon(
+                                            AssetImage("images/Symptoms/" +mapSymptoms.keys.elementAt(index).toString() +".png" ),
+                                            size: 42.0,
+                                          )),),
+                                    Expanded(
+                                        flex: 1,
+                                        child: mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom!=null?
+                                        mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom>=0? Text("Aggravation"):
+                                        mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom<0?Text("Improvement"):
+                                        Container():
+                                        mapSymptoms[mapSymptoms.keys.elementAt(index)].disappeared==true?
+                                        Text(("Sympton not more present")):
+                                        mapSymptoms[mapSymptoms.keys.elementAt(index)].appeared==true?
+                                        Text(("New symptom appeared")):Container()),
+                                    Expanded(
+                                        flex:1 ,
+                                        child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 32),
+                                            child:
+                                            AspectRatio(
+                                                aspectRatio: 1,
+                                                child:ClipOval(
+                                                    child:(Container(
+
+
+                                                        color:mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom!=null?
+                                                        mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom<0? Color(0xff00C853):
+                                                        mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom>=0?Color(0xffDD2C00):Colors.white:
+                                                        Colors.white,
+                                                        child: Center(
+                                                            child:mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom!=null?
+                                                    mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom<0? Text((mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom)
+                                                        .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),):
+                                                    mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom>=0?Text("+"+(mapSymptoms[mapSymptoms.keys.elementAt(index)].percentageSymptom)
+                                                        .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),)
+                                                        : Container()
+                                                                : Container()
+                                                          )
+                                                    )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    ),
+                                  ],
+                                )
+
+                            ):Container(),
+                          );
+                        },
+                      ):
                       ListView(
                           physics: ClampingScrollPhysics(),
                           shrinkWrap: true,

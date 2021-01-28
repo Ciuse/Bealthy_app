@@ -40,9 +40,9 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+" Overview"),
+          title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+" Statistics"),
         ),
-        body:SingleChildScrollView(
+        body:MediaQuery.of(context).orientation==Orientation.portrait?SingleChildScrollView(
             child:Container(
                 margin: EdgeInsets.all(8),
                 child:
@@ -66,7 +66,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                           ),
                           child: BarChartSymptom(symptomId: widget.symptomId,overviewStore: widget.overviewStore,)),
                       Observer(builder: (_) =>Container(
-                          height: 130,
+                          height: 180,
                           margin: EdgeInsets.only(top: 10,bottom: 10 ),
                           padding: EdgeInsets.only(top:8,left: 8,right: 8 , bottom: 8 ),
                           width:double.infinity,
@@ -89,26 +89,66 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
-                              SizedBox(height: 10),
+                              SizedBox(height: 16),
                               Flexible(
                                   fit: FlexFit.loose,
                                   child: buildIngredientRow()),
+                              Container(
+                                  alignment: Alignment.centerRight,
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  child:
+                                  OutlinedButton(
+                                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(
+                                        Colors.white),),
+                                    child:Text("Show All"),
+                                    onPressed: () {
+                                      graphStore.touchedIndex = -1;
+
+                                    },))
                             ],)
                       )),
-                      Container(
-                          alignment: Alignment.centerRight,
-                          child:
-                          OutlinedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.white),),
-                            child:Text("Show All"),
-                            onPressed: () {
-                              graphStore.touchedIndex = -1;
 
-                            },)),
                     ]
                 ))
-        ));
+        ):Row(children: [
+          Expanded(child:Container(
+              padding: EdgeInsets.all(16),
+              child: Card(
+                  child: BarChartSymptom(
+                    symptomId: widget.symptomId,overviewStore: widget.overviewStore,)))),
+          Expanded(child:Observer(builder: (_) =>Container(
+              padding: EdgeInsets.all(16),
+              child: Card(
+                  child:
+                  Container(
+                      padding: EdgeInsets.all(16),
+                      child:Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
+                          SizedBox(height: 16),
+                          Container(
+                              height: 80,
+                              child:buildIngredientRow()),
+                          Container(
+                              alignment: Alignment.centerRight,
+                              child:
+                              OutlinedButton(
+                                child:Text("Show All"),
+                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.white),),
+                                onPressed: () {
+                                  graphStore.touchedIndex = -1;
+
+                                },))
+                        ],))
+              )))),
+
+        ],)
+
+    );
   }
 
   Widget buildIngredientRow(){
@@ -117,8 +157,9 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
     Map<String,int> sortedDayMap= widget.overviewStore.sortDayOccurrenceIngredientBySymptom();
 
     return graphStore.touchedIndex==-1?
+    widget.overviewStore.totalOccurrenceIngredientBySymptom.keys.length==0
+        ? Center(child: Text("NO INGREDIENT RELATED")):
     ListView(
-
         scrollDirection: Axis.horizontal,
         children: [
           for(var ingredient in sortedTotalMap.keys.toList() )
@@ -134,7 +175,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
             ])
         ])
         : widget.overviewStore.dayOccurrenceIngredientBySymptom.keys.length==0
-        ? Text("NO INGREDIENT THIS DAY")
+        ? Center(child: Text("NO INGREDIENT THIS DAY"))
         :ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -193,11 +234,11 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       child: Card(
         margin: EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        color: Theme.of(context).primaryColor,
+        color: Color(0xffffe0b2),
         child: Stack(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -242,7 +283,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       x: x,
       barRods: [
         BarChartRodData(
-          y: isTouched ? y + 1 : y+0.01, //todo: il 0.01 permette di cliccare quelli a 0-> lasciarlo o no?
+          y: isTouched ? y + 0.4 : y+0.01, //todo: il 0.01 permette di cliccare quelli a 0-> lasciarlo o no?
           colors: isTouched ? [Theme.of(context).accentColor] : [barColor],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
@@ -281,7 +322,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
                 weekDay = overviewStore.fixDate(dateStore.rangeDays[group.x.toInt()]);
 
               return BarTooltipItem(
-                  weekDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
+                  weekDay + '\n' + (rod.y - 0.4).toString(), TextStyle(color: Colors.yellow));
             }),
         allowTouchBarBackDraw: true,
         touchExtraThreshold: EdgeInsets.all(22),
@@ -315,10 +356,10 @@ class BarChartSymptomState extends State<BarChartSymptom> {
           getTitles: (value) {
             if (value == 0) {
               return '0';
+            } else if (value == 5) {
+              return '5';
             } else if (value == 10) {
               return '10';
-            } else if (value == 20) {
-              return '20';
             } else {
               return '';
             }

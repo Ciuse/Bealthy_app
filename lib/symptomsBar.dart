@@ -158,12 +158,20 @@ class _SymptomsBarState extends State<SymptomsBar>{
                                               ),
                                             );
                                           },
-                                        ):Center(child:Text("No symptoms this day",style: TextStyle(fontSize: 20),)))
-                                    );
+                                        ):Container(
+                                    height: 64,
+                                    child:Center(child:Text("No symptoms this day",style: TextStyle(fontSize: 20),)))
+                                    ));
                                   });
                               case FutureStatus.pending:
                               default:
-                                return Center(child:CircularProgressIndicator());
+                                return Container(
+                                    height: MediaQuery.of(context).orientation == Orientation.portrait
+                                        ?50:64,
+
+                                    margin: EdgeInsets.only(bottom: 16,top:8,right: 16,left: 16),
+                                    child:
+                                Center(child:CircularProgressIndicator()));
                             }
                           }else{
                             return Container();}

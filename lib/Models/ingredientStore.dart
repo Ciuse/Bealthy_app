@@ -121,7 +121,7 @@ abstract class _IngredientStoreBase with Store {
       querySnapshot.docs.forEach((ingredient) {
         Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
         ingredients = ingredients+ i.name;
-        ingredients = ingredients+ ",";
+        ingredients = ingredients+ ", ";
       }
       );
       return ingredients;
@@ -142,7 +142,7 @@ abstract class _IngredientStoreBase with Store {
 
         Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
         ingredients = ingredients+ i.name;
-        ingredients =  ingredients+",";
+        ingredients =  ingredients+", ";
       }
       );
       return ingredients;

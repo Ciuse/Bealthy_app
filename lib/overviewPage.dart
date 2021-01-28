@@ -209,7 +209,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         vsync: this,
         alignment: Alignment(0, -1),
         child: MediaQuery.of(context).orientation==Orientation.portrait?
-                overviewContent():overviewContentLandscape()
+        _buildHorizontalSwipeWrapper(child:overviewContent()):overviewContentLandscape()
       );
     } else {
       return AnimatedSwitcher(
@@ -224,7 +224,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           );
         },
         child: MediaQuery.of(context).orientation==Orientation.portrait?
-            overviewContent():overviewContentLandscape()
+        _buildHorizontalSwipeWrapper(child:overviewContent()):overviewContentLandscape()
       );
     }
   }
@@ -254,14 +254,16 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   Widget overviewContentLandscape(){
 
-    return SingleChildScrollView(
-
+    return Container(
+        padding: EdgeInsets.only(top:16),
+    child: SingleChildScrollView(
         child:ConstrainedBox(
         constraints: BoxConstraints(
         minHeight: MediaQuery.of(context).size.height-
-        AppBar().preferredSize.height
+        AppBar().preferredSize.height-120
     ),
     child:Container(
+      padding: EdgeInsets.all(16),
         child: Observer(
           builder: (_) {
             switch (overviewStore.loadInitSymptomGraph.status) {
@@ -284,6 +286,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                 Row(children: [
                   Expanded(child: overviewStore.totalOccurrenceSymptom.length>0?
                   symptomsWidget(): Center(child:noSymptomsWidget()),),
+                  SizedBox(width: 14,),
                   Expanded(child:IngredientOverview(overviewStore: overviewStore,) ,),
                 ],);
 
@@ -292,7 +295,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                 return Center(child:CircularProgressIndicator());
             }
           },
-        ))));
+        )))));
   }
   Widget overviewContent (){
 
@@ -300,6 +303,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
       controller: _tabController,
       children: [
         Container(
+    margin: EdgeInsets.symmetric(vertical: 4),
             child: Observer(
               builder: (_) {
                 switch (overviewStore.loadInitSymptomGraph.status) {
@@ -328,7 +332,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
               },
             )),
         Container(
-            margin: EdgeInsets.symmetric(vertical: 8),
+            margin: EdgeInsets.symmetric(vertical: 4),
             child: IngredientOverview(overviewStore: overviewStore,)
         )
       ],
@@ -398,7 +402,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return Observer(builder: (context) =>Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildHeaderWeek(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate),
+        MediaQuery.of(context).orientation==Orientation.portrait?
+        _buildHeaderWeek(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate):
+            _headerWeekLandscape(),
         Expanded(child: _buildContent())
 
         //Add this to give height
@@ -410,7 +416,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return Observer(builder: (_) =>Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildHeaderMonth(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate),
+        MediaQuery.of(context).orientation==Orientation.portrait?
+        _buildHeaderMonth(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate):
+        _headerMonthLandscape(),
         Expanded(child: _buildContent())
         //Add this to give height
       ],
@@ -421,11 +429,146 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
     return Observer(builder: (_) =>Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildHeaderPicker(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate),
+        MediaQuery.of(context).orientation==Orientation.portrait?
+        _buildHeaderPicker(dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate):
+        _headerPickerLandscape(),
         Expanded(child: _buildContent())
         //Add this to give height
       ],
     ));
+  }
+
+  Widget _headerWeekLandscape(){
+    return Row(children: [
+      Flexible(
+          flex: 1,
+          child:Container()),
+      Expanded(
+          flex: 4,
+          child:_buildHeaderWeek
+            (dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate)),
+      Flexible(
+          flex: 1,
+          child:Card(
+              margin: EdgeInsets.only(left: 16,right: 16),
+              elevation: 2,
+              child:
+              PopupMenuButton(
+                  offset: Offset(0,10),
+                  onSelected:  choiceAction,
+                  child: Container(
+
+                      padding: EdgeInsets.all(16),
+                      child: Observer(builder: (context) =>
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                            Text(dateStore.timeSelected.toString().split('.').last,textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 18,),),
+                            Icon(Icons.arrow_drop_down)
+                          ],)
+                      )
+                  ),
+                  itemBuilder: (BuildContext context)
+                  {
+                    return temporalList.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        textStyle:TextStyle(fontSize: 17,color: Colors.black),
+                        child: Text(choice),);
+                    }).toList();
+                  }
+              )))
+
+    ],);
+  }
+  Widget _headerMonthLandscape(){
+    return Row(children: [
+      Flexible(
+          flex: 1,
+          child:Container()),
+      Expanded(
+          flex: 4,
+          child:_buildHeaderMonth
+            (dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate)),
+      Flexible(
+          flex: 1,
+          child:Card(
+              margin: EdgeInsets.only(left: 16,right: 16),
+              elevation: 2,
+              child:
+              PopupMenuButton(
+                  offset: Offset(0,10),
+                  onSelected:  choiceAction,
+                  child: Container(
+
+                      padding: EdgeInsets.all(16),
+                      child: Observer(builder: (context) =>
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(dateStore.timeSelected.toString().split('.').last,textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 18,),),
+                              Icon(Icons.arrow_drop_down)
+                            ],)
+                      )
+                  ),
+                  itemBuilder: (BuildContext context)
+                  {
+                    return temporalList.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        textStyle:TextStyle(fontSize: 17,color: Colors.black),
+                        child: Text(choice),);
+                    }).toList();
+                  }
+              )))
+
+    ],);
+  }
+  Widget _headerPickerLandscape(){
+    return Row(children: [
+      Flexible(
+          flex: 1,
+          child:Container()),
+      Expanded(
+          flex: 4,
+          child:_buildHeaderPicker
+            (dateStore.overviewFirstDate,dateStore.overviewDefaultLastDate)),
+      Flexible(
+          flex: 1,
+          child:Card(
+              margin: EdgeInsets.only(left: 16,right: 16),
+              elevation: 2,
+              child:
+              PopupMenuButton(
+                  offset: Offset(0,10),
+                  onSelected:  choiceAction,
+                  child: Container(
+
+                      padding: EdgeInsets.all(16),
+                      child: Observer(builder: (context) =>
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(dateStore.timeSelected.toString().split('.').last,textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 18,),),
+                              Icon(Icons.arrow_drop_down)
+                            ],)
+                      )
+                  ),
+                  itemBuilder: (BuildContext context)
+                  {
+                    return temporalList.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        textStyle:TextStyle(fontSize: 17,color: Colors.black),
+                        child: Text(choice),);
+                    }).toList();
+                  }
+              )))
+
+    ],);
   }
 
   Widget _buildHeaderDay(DateTime day) {
@@ -728,15 +871,22 @@ class PieChart2State extends State<PieChartSample2> {
 
         elevation: 0,
         margin: EdgeInsets.all(4),
-        child: Column(children: [
+        child:  Column(
+            children: [
           ListTile(
             leading: Icon(Icons.pie_chart),
             title: const Text('Symptom occurrences (%)'),
           ),
-        Row(
+      ConstrainedBox(
+          constraints: MediaQuery.of(context).orientation==Orientation.portrait?BoxConstraints(
+          ):BoxConstraints(
+              maxHeight: 380
+          ),
+          child:Row(
           children: <Widget>[
             Expanded(
                 child: Observer(builder: (_) =>PieChart(
+
                   PieChartData(
                       pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
                         setState(() {
@@ -760,7 +910,7 @@ class PieChart2State extends State<PieChartSample2> {
                   ),
                 )),
               ),
-        Column(
+            Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -777,7 +927,7 @@ class PieChart2State extends State<PieChartSample2> {
             ),
 
           ],
-        ),
+        )),
     ]),
     ));
   }

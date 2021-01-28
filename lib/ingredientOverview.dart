@@ -154,7 +154,12 @@ class PieChartIngredientState extends State<PieChartIngredient> {
         leading: Icon(Icons.pie_chart),
         title: const Text('Ingredients eaten (%)'),
     ),
-         Row(
+        ConstrainedBox(
+            constraints: MediaQuery.of(context).orientation==Orientation.portrait?BoxConstraints(
+            ):BoxConstraints(
+                maxHeight: 380
+            ),
+          child:Row(
           children: <Widget>[
             Expanded(
                 child: Observer(builder: (_) =>PieChart(
@@ -199,7 +204,7 @@ class PieChartIngredientState extends State<PieChartIngredient> {
             ),
 
           ],
-         ),
+         )),
       ]),
     ));
   }

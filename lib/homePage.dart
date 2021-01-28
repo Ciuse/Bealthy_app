@@ -108,10 +108,10 @@ class _HomePageWidgetState extends State<HomePageWidget>{
                             Container(height: MediaQuery
                                 .of(context)
                                 .size
-                                .height >= 632 ? MediaQuery
+                                .height >= 652 ? MediaQuery
                                 .of(context)
                                 .size
-                                .height - 632 : 0),
+                                .height - 652 : 0),
 
                           ]),
                         ),

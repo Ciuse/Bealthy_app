@@ -175,10 +175,11 @@ abstract class _TreatmentStoreBase with Store {
           mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
         }
         else{
-          ObservableValues observableValues= new ObservableValues();
-          observableValues.appeared=false;
-          observableValues.disappeared=false;
-          mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
+          //non serve metterlo se non c è
+          // ObservableValues observableValues= new ObservableValues();
+          // observableValues.appeared=false;
+          // observableValues.disappeared=false;
+         // mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
         }
       }
     });

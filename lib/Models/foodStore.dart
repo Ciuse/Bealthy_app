@@ -200,7 +200,7 @@ void setBooleanQuantityDish(){
       ingredients = await ingredientStore.getIngredientsStringFromDatabaseDish(dish);
     }
 
-    mapIngredientsStringDish[dish].stringIngredients = ingredients.substring(0, ingredients.length - 1);
+    mapIngredientsStringDish[dish].stringIngredients = ingredients.substring(0, ingredients.length - 2);
   }
 
   @action

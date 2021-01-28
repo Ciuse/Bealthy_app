@@ -39,12 +39,16 @@ class _OverviewSingleSymptomDayState extends State<OverviewSingleSymptomDay>  {
         appBar: AppBar(
           title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+"\n"+"Overview"),
         ),
-        body: Column(
+        body: MediaQuery.of(context).orientation==Orientation.portrait?Column(
             children: <Widget>[BarChartSymptom(symptomId: widget.symptomId, overviewStore: widget.overviewStore,),
               Observer(builder: (_) =>Expanded(
                   child: buildIngredientRow() ))
             ]
-        )
+        ):
+        Row(children: [BarChartSymptom(symptomId: widget.symptomId, overviewStore: widget.overviewStore,),
+        Observer(builder: (_) =>Expanded(
+            child: buildIngredientRow() ))
+          ],)
     );
   }
 
