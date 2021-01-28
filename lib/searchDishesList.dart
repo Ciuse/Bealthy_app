@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'Database/dish.dart';
 import 'Database/enumerators.dart';
+import 'Login/config/palette.dart';
 import 'Models/dateStore.dart';
 import 'Models/mealTimeStore.dart';
 import 'Models/foodStore.dart';
@@ -133,7 +134,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                 TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search, color: Colors.black,)
+                    prefixIcon: Icon(Icons.search, color:Palette.bealthyColorScheme.secondary)
                   ),
                 ),
                 Container(
@@ -266,7 +267,21 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                           builder: (context, remoteString) {
                                             if (remoteString.connectionState != ConnectionState.waiting) {
                                               if (remoteString.hasError) {
-                                                return Text("Image not found");
+                                                return Container(
+                                                    width: 44,
+                                                    height: 44,
+                                                    decoration: new BoxDecoration(
+                                                      borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                      border: new Border.all(
+                                                        color: Palette.bealthyColorScheme.primaryVariant,
+                                                        width: 1.0,
+                                                      ),
+                                                    ),
+                                                    child: ClipOval(
+                                                        child: Image(
+                                                          fit: BoxFit.cover,
+                                                          image: AssetImage("images/defaultDish.png"),
+                                                        )));
                                               }
                                               else {
                                                 return Observer(builder: (_) =>Container
@@ -275,7 +290,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                                     decoration: new BoxDecoration(
                                                       borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                                       border: new Border.all(
-                                                        color: Colors.black,
+                                                        color: Palette.bealthyColorScheme.primaryVariant,
                                                         width: 1.0,
                                                       ),
                                                     ),
@@ -297,7 +312,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                                           decoration: new BoxDecoration(
                                             borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                                             border: new Border.all(
-                                              color: Colors.black,
+                                              color: Palette.bealthyColorScheme.primaryVariant,
                                               width: 1.0,
                                             ),
                                           ),

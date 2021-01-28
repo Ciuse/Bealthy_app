@@ -467,7 +467,21 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                                   builder: (context, remoteString) {
                                     if (remoteString.connectionState != ConnectionState.waiting) {
                                       if (remoteString.hasError) {
-                                        return Text("Image not found");
+                                        return Container(
+                                            width: 44,
+                                            height: 44,
+                                            decoration: new BoxDecoration(
+                                              borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                              border: new Border.all(
+                                                color: Palette.bealthyColorScheme.primaryVariant,
+                                                width: 1.0,
+                                              ),
+                                            ),
+                                            child: ClipOval(
+                                                child: Image(
+                                                  fit: BoxFit.cover,
+                                                  image: AssetImage("images/defaultDish.png"),
+                                                )));
                                       }
                                       else {
                                         return Observer(builder: (_) =>Container
@@ -712,7 +726,21 @@ class _YourDishListState extends State<YourDishList> {
                                     builder: (context, remoteString) {
                                       if (remoteString.connectionState != ConnectionState.waiting) {
                                         if (remoteString.hasError) {
-                                          return Text("Image not found");
+                                          return Container(
+                                              width: 44,
+                                              height: 44,
+                                              decoration: new BoxDecoration(
+                                                borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                border: new Border.all(
+                                                  color: Palette.bealthyColorScheme.primaryVariant,
+                                                  width: 1.0,
+                                                ),
+                                              ),
+                                              child: ClipOval(
+                                                  child: Image(
+                                                    fit: BoxFit.cover,
+                                                    image: AssetImage("images/defaultDish.png"),
+                                                  )));
                                         }
                                         else {
                                           return Observer(builder: (_) =>Container

@@ -222,7 +222,21 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                                     ),
                                                   ),
                                                   child: ClipOval(
-                                                    child: widget.dish.imageFile==null? null:
+                                                    child: widget.dish.imageFile==null? Container(
+                                                        width: 150,
+                                                        height: 150,
+                                                        decoration: new BoxDecoration(
+                                                          borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                                          border: new Border.all(
+                                                            color: Palette.bealthyColorScheme.primaryVariant,
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        child: ClipOval(
+                                                            child: Image(
+                                                              fit: BoxFit.cover,
+                                                              image: AssetImage("images/defaultDish.png"),
+                                                            ))):
                                                     Image.file(widget.dish.imageFile,  fit: BoxFit.cover,),)),
 
                                           Stack(
@@ -282,7 +296,21 @@ class _EatenDishPageState extends State<EatenDishPage>{
                           builder: (context,  AsyncSnapshot localData) {
                             if(localData.connectionState != ConnectionState.waiting ) {
                               if (localData.hasError) {
-                                return Text("Image not found");
+                                return Container(
+                                    width: 44,
+                                    height: 44,
+                                    decoration: new BoxDecoration(
+                                      borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                                      border: new Border.all(
+                                        color: Palette.bealthyColorScheme.primaryVariant,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    child: ClipOval(
+                                        child: Image(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage("images/defaultDish.png"),
+                                        )));
                               }
                               else {
                                 return Container(
