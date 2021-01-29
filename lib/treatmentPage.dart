@@ -68,6 +68,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                                   title: Text("TREATMENTS IN PROGRESS",style: TextStyle(fontWeight:FontWeight.bold,fontSize:16,)),
                                   leading: Icon(Icons.medical_services_outlined,color: Colors.black),
                                   trailing: IconButton(
+                                    key:Key("AddButton"),
                                     icon: Icon(Icons.add,color: Theme.of(context).accentColor,size: 30,),
                                     onPressed:(){
                                       Navigator.push(

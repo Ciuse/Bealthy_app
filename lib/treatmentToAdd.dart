@@ -25,6 +25,13 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
   TreatmentStore treatmentStore;
   int lastTreatmentNumber;
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormFieldState<String>> titleKey = GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> descriptionKey = GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> dietInfoKey = GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> medicalInfoKey = GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> startingDateKey = GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> endingDateKey = GlobalKey<FormFieldState<String>>();
+
 
   ScrollController _controller;
   @override
@@ -32,7 +39,10 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
     _controller = ScrollController();
     var dateStore = Provider.of<DateStore>(context, listen: false);
     treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
-    getLastNumber();
+    if(auth.currentUser!=null){
+      getLastNumber();
+    }
+
   }
 
   @override
@@ -93,6 +103,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               TextFormField(
+                                key: titleKey,
                                 maxLength: 25,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 controller: titleCt,
@@ -122,6 +133,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                               ),
                               TextFormField(
+                                key: descriptionKey,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 controller: descriptionTextCt,
                                 decoration: new InputDecoration(
@@ -144,6 +156,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                               ),
                               TextFormField(
+                                key: dietInfoKey,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 controller: dietInfoCt,
                                 maxLines: null,
@@ -166,6 +179,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                               ),
                               TextFormField(
+                                key: medicalInfoKey,
                                 autovalidateMode: AutovalidateMode.onUserInteraction,
                                 controller: medicalInfoCt,
                                 decoration: new InputDecoration(
@@ -188,6 +202,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                               ),
                               TextFormField(
+                                key: startingDateKey,
                                 readOnly: true,
                                 onTap: (){
                                   FocusScope.of(context).requestFocus(new FocusNode());
@@ -240,6 +255,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                               ),
                               TextFormField(
+                                key: endingDateKey,
                                 enabled: startingDateCt.text.length>0?true:false, //METTERE SOLO DOPO AVER SELEZIONATO LA PRIMA DATA
                                 readOnly: true,
                                 onTap: (){
@@ -300,6 +316,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (this._formKey.currentState.validate()) {
+                        print("val");
                         setState(() {
                           this._formKey.currentState.save();
                         });

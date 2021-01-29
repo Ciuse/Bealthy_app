@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:Bealthy_app/Models/dateStore.dart';
 import 'package:Bealthy_app/Models/ingredientStore.dart';
 import 'package:Bealthy_app/Models/mealTimeStore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -30,8 +29,7 @@ class EatenDishPage extends StatefulWidget {
 }
 
 class _EatenDishPageState extends State<EatenDishPage>{
-  var storage = FirebaseStorage.instance;
-  final FirebaseFirestore fb = FirebaseFirestore.instance;
+
   List<String> quantityList;
   List<CameraDescription> cameras;
   IngredientStore ingredientStore;
@@ -98,6 +96,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
         initializing: () => Text('Loading'),
       );
     try {
+      var storage = FirebaseStorage.instance;
       return await storage.ref(userUid+"/DishImage/" + widget.dish.id + ".jpg").getDownloadURL();
     }
     catch (e) {
@@ -151,6 +150,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                   }
               )),
               IconButton(
+                  key:Key("DeleteDishButton"),
                   icon: Icon(
                     Icons.delete,
                     color: Palette.bealthyColorScheme.onError,
@@ -159,6 +159,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                       return showDialog(
                           context: context,
                           builder: (_) =>  new AlertDialog(
+                              key:Key("AlertDialog"),
                               title: Text('Are you sure to remove it?'),
                               content:Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -181,6 +182,7 @@ class _EatenDishPageState extends State<EatenDishPage>{
                                   child: Text('CANCEL'),
                                 ),
                                 FlatButton(
+                                  key:Key("RemoveFlatButton"),
                                   child:Text('REMOVE'),
                                   onPressed: () {
 

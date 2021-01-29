@@ -4,7 +4,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
-
 import 'Database/observableValues.dart';
 import 'Login/config/palette.dart';
 import 'Models/dateStore.dart';
@@ -40,15 +39,6 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
     dateStore = Provider.of<DateStore>(context, listen: false);
     symptomStore = Provider.of<SymptomStore>(context, listen: false);
 
-    // if(widget.treatmentCompleted){
-    //   startingDateTreatment = dateStore.setDateFromString(widget.treatment.startingDay);
-    //   endingDateTreatment = dateStore.setDateFromString(widget.treatment.endingDay);
-    //   rangeDaysLength = dateStore.returnDaysOfAWeekOrMonth(startingDateTreatment, endingDateTreatment).length;
-    //   startingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: rangeDaysLength*2));
-    //   endingDateBeforeTreatment = startingDateTreatment.subtract(Duration(days: 1));
-    //   waitForMap().then((value) => treatmentStore.calculateTreatmentEndedStatistics(symptomStore));
-    //
-    // }
 
   }
 
@@ -59,6 +49,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
         title: Text("Treatment Details"),
         actions: <Widget>[
           IconButton(
+              key:Key("buttonRemove"),
               icon: Icon(
                 Icons.delete,
                 color: Palette.bealthyColorScheme.onError,
@@ -67,6 +58,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                 return showDialog(
                     context: context,
                     builder: (_) =>  new AlertDialog(
+                        key:Key("alertDialog"),
                         title: Text('Are you sure to remove it?'),
                         content:Column(
                           mainAxisSize: MainAxisSize.min,
@@ -105,7 +97,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
               mainAxisSize: MainAxisSize.min,
               children: [
                 treatmentDescriptionWidget(),
-                Observer(builder: (_) =>treatmentValuesSymptom()),
+                widget.treatmentCompleted? Observer(builder: (_) =>treatmentValuesSymptom()):Container(),
                 // widget.treatmentCompleted? Container(
                 //     child:Row(
                 //         mainAxisSize: MainAxisSize.min,

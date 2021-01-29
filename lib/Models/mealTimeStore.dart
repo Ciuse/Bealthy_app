@@ -134,16 +134,17 @@ abstract class _MealTimeStoreBase with Store {
 
   @action
   Future<void> removeDishOfMealTimeListOfSpecificDay(int index, Dish dish, DateTime date) async {
-    String dayFix = fixDate(date);
-    await (FirebaseFirestore.instance
-        .collection("UserDishes")
-        .doc(auth.currentUser.uid)
-        .collection("DayDishes")
-        .doc(dayFix)
-        .collection(dish.mealTime.toString().split('.').last)
-        .doc(dish.id)
-        .delete());
-
+    if(auth.currentUser!=null){
+      String dayFix = fixDate(date);
+      await (FirebaseFirestore.instance
+          .collection("UserDishes")
+          .doc(auth.currentUser.uid)
+          .collection("DayDishes")
+          .doc(dayFix)
+          .collection(dish.mealTime.toString().split('.').last)
+          .doc(dish.id)
+          .delete());
+    }
     getDishesOfMealTimeList(index).removeWhere((element) => element.id == dish.id);
 
   }
