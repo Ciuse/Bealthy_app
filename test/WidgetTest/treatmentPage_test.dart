@@ -71,7 +71,6 @@ void main() {
         endingDay: endingDateCt.text,
         descriptionText: descriptionTextCt.text,
       );
-      print(treatment);
       DateTime endingDay = setDateFromString(treatment.endingDay);
       if (DateTime.now().isBefore(endingDay)) {
         treatmentsInProgressList.add(treatment);
@@ -244,9 +243,7 @@ void main() {
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: ElevatedButton(
                           onPressed: () {
-                            print("entrato");
                             if (titleCt.text!=null && startingDateCt.text!=null&& endingDateCt.text!=null) {
-                              print("val");
 
                               _formKey.currentState.save();
 
