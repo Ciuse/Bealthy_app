@@ -135,6 +135,8 @@ class _CalendarHomePageState extends State<CalendarHomePage> with TickerProvider
         headerMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 8),
         headerPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 8),
         leftChevronMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 0),
+        leftChevronIcon :const Icon(Icons.chevron_left, color: Palette.secondaryLight),
+        rightChevronIcon :const Icon(Icons.chevron_right, color: Palette.secondaryLight),
         rightChevronMargin: EdgeInsets.symmetric(vertical: 0,horizontal: 0),
         centerHeaderTitle: true,
         formatButtonVisible: false,

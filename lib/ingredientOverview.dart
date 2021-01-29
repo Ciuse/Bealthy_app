@@ -55,7 +55,8 @@ class IngredientOverviewState extends State<IngredientOverview> {
               ),
             );
           case FutureStatus.fulfilled:
-            return widget.overviewStore.totalOccurrenceIngredient.length>0? ingredientsWidget() : noIngredientsWidget();
+            widget.overviewStore.sortIngredientByOccurrence();
+            return widget.overviewStore.sortedTotalOccurrenceIngredient.length>0? ingredientsWidget() : Center(child:noIngredientsWidget());
           case FutureStatus.pending:
           default:
             return Center(child:CircularProgressIndicator());
@@ -74,7 +75,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
               height: 80,
               child: Observer(builder: (_) =>
                   ListView.builder(
-                    itemCount: widget.overviewStore.totalOccurrenceIngredient.length<9 ? widget.overviewStore.totalOccurrenceIngredient.length : 8,
+                    itemCount: widget.overviewStore.sortedTotalOccurrenceIngredient.length<9 ? widget.overviewStore.sortedTotalOccurrenceIngredient.length : 8,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
@@ -88,7 +89,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
                                 onPressed: () =>
                                 {
                                   Navigator.push(
-                                      context,MaterialPageRoute(builder: (context) => OverviewSingleIngredient(ingredientId: widget.overviewStore.totalOccurrenceIngredient.keys.elementAt(index),
+                                      context,MaterialPageRoute(builder: (context) => OverviewSingleIngredient(ingredientId: widget.overviewStore.sortedTotalOccurrenceIngredient.keys.elementAt(index),
                                     startingDate: dateStore.overviewFirstDate,
                                     endingDate: dateStore.overviewDefaultLastDate,
                                   overviewStore:widget.overviewStore,))),
@@ -101,7 +102,7 @@ class IngredientOverviewState extends State<IngredientOverview> {
                                     child:  ClipOval(
                                         child: Image(
                                           fit: BoxFit.fill,
-                                          image: AssetImage("images/ingredients/" + widget.overviewStore.totalOccurrenceIngredient.keys.elementAt(index) + ".png"),
+                                          image: AssetImage("images/ingredients/" + widget.overviewStore.sortedTotalOccurrenceIngredient.keys.elementAt(index) + ".png"),
                                         )
                                     )),
                                 constraints : const BoxConstraints(minWidth: 55.0, minHeight: 55.0),
@@ -178,8 +179,9 @@ class PieChartIngredientState extends State<PieChartIngredient> {
                       show: false,
                     ),
                     sectionsSpace: 5,
+                    startDegreeOffset: -90,
                     centerSpaceRadius: 45,
-                    sections: widget.overviewStore.totalOccurrenceIngredient.length>0 ? showingSections(widget.overviewStore,ingredientStore) : null,
+                    sections: widget.overviewStore.sortedTotalOccurrenceIngredient.length>0 ? showingSections(widget.overviewStore,ingredientStore) : null,
                   ),
                 )),
               ),
@@ -188,7 +190,7 @@ class PieChartIngredientState extends State<PieChartIngredient> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children:[
-                for(var ingredientId in widget.overviewStore.totalOccurrenceIngredient.keys.take(8))
+                for(var ingredientId in widget.overviewStore.sortedTotalOccurrenceIngredient.keys.take(8))
                   Indicator2(
                     color: ingredientStore.colorIngredientMap[ingredientId],
                     text: ingredientStore.getIngredientFromList(ingredientId).name,
@@ -211,16 +213,16 @@ class PieChartIngredientState extends State<PieChartIngredient> {
 
   List<PieChartSectionData> showingSections(OverviewStore overviewStore,IngredientStore ingredientStore ) {
 
-    return List.generate(widget.overviewStore.totalOccurrenceIngredient.length<9 ? widget.overviewStore.totalOccurrenceIngredient.length : 8, (i) {
+    return List.generate(widget.overviewStore.sortedTotalOccurrenceIngredient.length<9 ? widget.overviewStore.sortedTotalOccurrenceIngredient.length : 8, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
 
 
       return PieChartSectionData(
-        color: ingredientStore.colorIngredientMap[overviewStore.totalOccurrenceIngredient.keys.elementAt(i)],
-        value: overviewStore.totalNumOfIngredientList()>0 ? (overviewStore.totalOccurrenceIngredient.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100 :1,
-        title: overviewStore.totalNumOfIngredientList()>0 ? '${((overviewStore.totalOccurrenceIngredient.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100).toStringAsFixed(1)}%' : '',
+        color: ingredientStore.colorIngredientMap[overviewStore.sortedTotalOccurrenceIngredient.keys.elementAt(i)],
+        value: overviewStore.totalNumOfIngredientList()>0 ? (overviewStore.sortedTotalOccurrenceIngredient.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100 :1,
+        title: overviewStore.totalNumOfIngredientList()>0 ? '${((overviewStore.sortedTotalOccurrenceIngredient.values.elementAt(i)/overviewStore.totalNumOfIngredientList())*100).toStringAsFixed(0)}%' : '',
         radius: radius,
         titleStyle: TextStyle(
             fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),

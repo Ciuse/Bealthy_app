@@ -204,15 +204,73 @@ abstract class _IngredientStoreBase with Store {
     ingredientList.forEach((element) {
       keys.add(element.id);
     });
-    List<Color> colorsOfChart = [Colors.red,Colors.cyanAccent, Colors.purple,Colors.deepOrange,
-      Colors.blueAccent, Colors.green,Colors.teal,Colors.pinkAccent,
-      Colors.blueGrey,Colors.black,Colors.orangeAccent, Colors.yellowAccent,
-      Colors.grey,Colors.lightBlueAccent,Colors.red,Colors.cyanAccent,
-      Colors.purple,Colors.deepOrange,Colors.blueAccent, Colors.green,
-      Colors.teal,Colors.pinkAccent,Colors.blueGrey,Colors.black,
-      Colors.orangeAccent, Colors.yellowAccent,Colors.red,Colors.cyanAccent,
-      Colors.purple,Colors.deepOrange,Colors.purple];
 
+    List<Color> colorsOfChart = [
+      Color(0xff90caf9),
+      Color(0xff81c784),
+      Color(0xfffff176),
+      Color(0xfff9a825),
+      Color(0xff40241a),
+      Color(0xff8b6b61),
+      Color(0xff9e9e9e),
+      Color(0xffffeb3b),
+      Color(0xff5d99c6),
+      Color(0xffffd699),
+      Color(0xffc1d5e0),
+      Color(0xffffff72),
+      Color(0xff42a5f5),
+      Color(0xff33691e),
+      Color(0xffaed581),
+      Color(0xffc67c00),
+      Color(0xffff6d00 ),
+      Color(0xff255d00),
+      Color(0xffffd600),
+      Color(0xffa7c0cd),
+      Color(0xff00c853),
+      Color(0xff9be7ff),
+      Color(0xffc3fdff),
+      Color(0xfff57f17),
+      Color(0xffbc5100),
+      Color(0xffff3d00),
+      Color(0xffb0bec5),
+      Color(0xffac0800),
+      Color(0xffa30000),
+      Color(0xfffbc02d),
+      Color(0xfffdd835),
+    ];
+
+
+    // I/flutter (28496): Anchovy -
+    // I/flutter (28496): Basil -
+    // I/flutter (28496): Butter -
+    // I/flutter (28496): Chicken -
+    // I/flutter (28496): Chocolate -
+    // I/flutter (28496): Cocoa -
+    // I/flutter (28496): Coconut -
+    // I/flutter (28496): Egg -
+    // I/flutter (28496): Fish -
+    // I/flutter (28496): Flour -
+    // I/flutter (28496): Garlic -
+    // I/flutter (28496): Lemon -
+    // I/flutter (28496): Milk -
+    // I/flutter (28496): Nuts -
+    // I/flutter (28496): Oil -
+    // I/flutter (28496): Pasta -
+    // I/flutter (28496): Peach -
+    // I/flutter (28496): Pear -
+    // I/flutter (28496): Potato -
+    // I/flutter (28496): Rice -
+    // I/flutter (28496): Salad -
+    // I/flutter (28496): Salt -
+    // I/flutter (28496): Shellfish -
+    // I/flutter (28496): Shrimps -
+    // I/flutter (28496): Soy -
+    // I/flutter (28496): Strawberry -
+    // I/flutter (28496): Sugar -
+    // I/flutter (28496): Tomato -
+    // I/flutter (28496): Vinegar -
+    // I/flutter (28496): Wheat -
+    // I/flutter (28496): corn -
 
     colorIngredientMap=Map.fromIterables(keys, colorsOfChart);
   }

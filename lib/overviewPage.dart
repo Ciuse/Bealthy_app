@@ -282,9 +282,10 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                   ),
                 );
               case FutureStatus.fulfilled:
+                overviewStore.sortSymptomByOccurrence();
                 return
                 Row(children: [
-                  Expanded(child: overviewStore.totalOccurrenceSymptom.length>0?
+                  Expanded(child: overviewStore.sortedTotalOccurrenceSymptom.length>0?
                   symptomsWidget(): Center(child:noSymptomsWidget()),),
                   SizedBox(width: 14,),
                   Expanded(child:IngredientOverview(overviewStore: overviewStore,) ,),
@@ -322,8 +323,9 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                       ),
                     );
                   case FutureStatus.fulfilled:
+                    overviewStore.sortSymptomByOccurrence();
                     return
-                      overviewStore.totalOccurrenceSymptom.length>0?
+                      overviewStore.sortedTotalOccurrenceSymptom.length>0?
                       symptomsWidget(): Center(child:noSymptomsWidget());
                   case FutureStatus.pending:
                   default:
@@ -749,6 +751,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   }
 
   Widget symptomsWidget() {
+
     return Column(
       children: [
       PieChartSample2(overviewStore: overviewStore),
@@ -757,7 +760,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Observer(builder: (_) =>
               ListView.builder(
-                itemCount: overviewStore.totalOccurrenceSymptom.length,
+                itemCount: overviewStore.sortedTotalOccurrenceSymptom.length,
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
@@ -774,10 +777,10 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) =>
-                                  dateStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
-                                  dateStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
-                                  dateStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
-                                  dateStore.timeSelected==TemporalTime.Picker? OverviewSingleSymptomMonth(symptomId: overviewStore.totalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
+                                  dateStore.timeSelected==TemporalTime.Day? OverviewSingleSymptomDay(symptomId: overviewStore.sortedTotalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
+                                  dateStore.timeSelected==TemporalTime.Week? OverviewSingleSymptomWeek(symptomId: overviewStore.sortedTotalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
+                                  dateStore.timeSelected==TemporalTime.Month? OverviewSingleSymptomMonth(symptomId: overviewStore.sortedTotalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
+                                  dateStore.timeSelected==TemporalTime.Picker? OverviewSingleSymptomMonth(symptomId: overviewStore.sortedTotalOccurrenceSymptom.keys.elementAt(index),overviewStore: overviewStore):
                                       Container()
                                   ))
                             },
@@ -785,7 +788,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                             fillColor: Colors.white,
                             child: ImageIcon(
                               AssetImage("images/Symptoms/" +
-                                  overviewStore.totalOccurrenceSymptom.keys.elementAt(index) + ".png"),
+                                  overviewStore.sortedTotalOccurrenceSymptom.keys.elementAt(index) + ".png"),
                               size: 28.0,
                             ),
                             constraints : const BoxConstraints(minWidth: 55.0, minHeight: 55.0),
@@ -902,11 +905,12 @@ class PieChart2State extends State<PieChartSample2> {
                       borderData: FlBorderData(
                         show: false,
                       ),
-                      sectionsSpace: 5,
-                      centerSpaceRadius: 45,
+                    sectionsSpace: 5,
+                    centerSpaceRadius: 45,
+                    startDegreeOffset: -90,
 
 
-                    sections: widget.overviewStore.totalOccurrenceSymptom.length>0 ? showingSections(widget.overviewStore, symptomStore) : 0,
+                    sections: widget.overviewStore.sortedTotalOccurrenceSymptom.length>0 ? showingSections(widget.overviewStore, symptomStore) : 0,
                   ),
                 )),
               ),
@@ -915,7 +919,7 @@ class PieChart2State extends State<PieChartSample2> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children:[
-                for(String symptomId in widget.overviewStore.totalOccurrenceSymptom.keys)
+                for(String symptomId in widget.overviewStore.sortedTotalOccurrenceSymptom.keys)
                   Indicator2(
                     color: symptomStore.colorSymptomsMap[symptomId],
                     text: symptomStore.getSymptomFromList(symptomId).name,
@@ -934,16 +938,16 @@ class PieChart2State extends State<PieChartSample2> {
 
   List<PieChartSectionData> showingSections(OverviewStore overviewStore, SymptomStore symptomStore) {
 
-    return List.generate(overviewStore.totalOccurrenceSymptom.length, (i) {
+    return List.generate(overviewStore.sortedTotalOccurrenceSymptom.length, (i) {
       final isTouched = i == touchedIndex;
       final double fontSize = isTouched ? 25 : 16;
       final double radius = isTouched ? 60 : 50;
 
 
         return PieChartSectionData(
-          color: symptomStore.colorSymptomsMap[overviewStore.totalOccurrenceSymptom.keys.elementAt(i)],
-          value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.totalOccurrenceSymptom.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
-          title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.totalOccurrenceSymptom.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(1)}%' : '',
+          color: symptomStore.colorSymptomsMap[overviewStore.sortedTotalOccurrenceSymptom.keys.elementAt(i)],
+          value: overviewStore.totalNumOfSymptomList()>0 ? (overviewStore.sortedTotalOccurrenceSymptom.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100 :1,
+          title: overviewStore.totalNumOfSymptomList()>0 ? '${((overviewStore.sortedTotalOccurrenceSymptom.values.elementAt(i)/overviewStore.totalNumOfSymptomList())*100).toStringAsFixed(0)}%' : '',
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),

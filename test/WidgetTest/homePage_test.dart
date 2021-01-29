@@ -71,7 +71,7 @@ void main() {
         create: (_) => BarCodeScannerStore(),
       ),
     ],
-        child: new MaterialApp(home: new HomePage())
+        child: new MaterialApp(home: new HomePage(startingIndex: 0,))
 
     ),);
 

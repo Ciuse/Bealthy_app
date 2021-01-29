@@ -164,6 +164,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
         children: [
           for(var ingredient in sortedTotalMap.keys.toList() )
             Column(children: [ Container(
+                margin: EdgeInsets.symmetric(horizontal:6),
                 width: 50,
                 height: 50,
                 child:  ClipOval(
@@ -182,6 +183,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
           for(var ingredient in sortedDayMap.keys )
             Column(children: [
               Container(
+                  margin: EdgeInsets.symmetric(horizontal:6),
                   width: 50,
                   height: 50,
                   child:  ClipOval(
@@ -283,7 +285,7 @@ class BarChartSymptomState extends State<BarChartSymptom> {
       x: x,
       barRods: [
         BarChartRodData(
-          y: isTouched ? y + 0.4 : y+0.01, //todo: il 0.01 permette di cliccare quelli a 0-> lasciarlo o no?
+          y: isTouched ? y + 0.2 : y, //todo: il 0.01 permette di cliccare quelli a 0-> lasciarlo o no?
           colors: isTouched ? [Theme.of(context).accentColor] : [barColor],
           width: width,
           backDrawRodData: BackgroundBarChartRodData(
@@ -312,17 +314,20 @@ class BarChartSymptomState extends State<BarChartSymptom> {
   BarChartData mainBarData(OverviewStore overviewStore) {
     DateStore dateStore = Provider.of<DateStore>(context);
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
-    SymptomStore symptomStore = Provider.of<SymptomStore>(context);
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
+
             tooltipBgColor: Colors.blueGrey,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
-              String weekDay;
-                weekDay = overviewStore.fixDate(dateStore.rangeDays[group.x.toInt()]);
-
-              return BarTooltipItem(
-                  weekDay + '\n' + (rod.y - 0.4).toString(), TextStyle(color: Colors.yellow));
+              if(groupIndex==graphStore.touchedIndex){
+                String monthDay;
+                monthDay = overviewStore.fixDate(dateStore.rangeDays[group.x.toInt()]);
+                return BarTooltipItem(
+                    monthDay + '\n' + (rod.y - 0.2).toString(), TextStyle(color: Colors.yellow));
+              }else{
+                return null;
+              }
             }),
         allowTouchBarBackDraw: true,
         touchExtraThreshold: EdgeInsets.all(22),

@@ -90,9 +90,9 @@ class HeaderScrollStyle {
     this.rightChevronPadding = const EdgeInsets.all(12.0),
     this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.leftChevronIcon = const Icon(Icons.chevron_left, color: Palette.primaryDark),
+    this.leftChevronIcon = const Icon(Icons.chevron_left, color: Palette.secondaryLight),
     this.rightChevronIcon =
-    const Icon(Icons.chevron_right, color: Palette.primaryDark),
+    const Icon(Icons.chevron_right, color: Palette.secondaryLight),
     this.decoration = const BoxDecoration(
       color: Colors.white,
       borderRadius: const BorderRadius.all(const Radius.circular(4)),
