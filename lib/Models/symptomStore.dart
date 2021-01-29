@@ -507,10 +507,23 @@ abstract class _SymptomStoreBase with Store {
     symptomList.forEach((element) {
       keys.add(element.id);
     });
-    List<Color> colorsOfChart = [Colors.red,Colors.cyanAccent, Colors.purple,Colors.yellow,Colors.blueAccent,
-      Colors.green,Colors.teal,Colors.pinkAccent];
-
-  
+    List<Color> colorsOfChart = [
+      Color(0xff4ebaaa),
+      Color(0xffedcd07),
+      Color(0xffaecb4d),
+      Color(0xffb9ec91),
+      Color(0xff006064),
+      Color(0xff68c291),
+      Color(0xff99004d),
+      Color(0xffd12e36),];
+    // Color(0xffdf78ef),
+    // Color(0xff795548),
+    // Color(0xffffd740),
+    // Color(0xff8bc34a),
+    // Color(0xff448aff),
+    // Color(0xff819ca9),
+    // Color(0xffff5252),
+    // Color(0xffffab40),];
     colorSymptomsMap=Map.fromIterables(keys, colorsOfChart);
   }
 

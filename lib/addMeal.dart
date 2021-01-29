@@ -52,17 +52,20 @@ class _AddMealState extends State<AddMeal>{
         body: OKToast( child: Container(
             child:SingleChildScrollView(
             child:Container(
-                margin: EdgeInsets.all(30),
+                margin: MediaQuery.of(context).orientation==Orientation.portrait?
+                EdgeInsets.all(30):EdgeInsets.symmetric(vertical: 40,horizontal: 90),
                 child: Column(
                     children: [
 
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(child:Card(
+                          Expanded(
+                              child:
+                          Card(
                               elevation: 5,
                               child:
-                          TextButton(
+                              TextButton(
                               key:Key("searchButton"),
                               style: TextButton.styleFrom(
                                 primary:  Palette.secondaryLight,
@@ -70,7 +73,10 @@ class _AddMealState extends State<AddMeal>{
                               onPressed: ()=> Navigator.push(
                                   context,MaterialPageRoute(builder: (context) => SearchDishesList())),
                               child:
-                              Column(
+                              Container(
+                                  padding: MediaQuery.of(context).orientation==Orientation.portrait?
+                                  EdgeInsets.all(8):EdgeInsets.symmetric(vertical: 32, horizontal: 8),
+                                  child:Column(
                                   mainAxisSize: MainAxisSize.min,
 
                                   children:[
@@ -78,12 +84,13 @@ class _AddMealState extends State<AddMeal>{
                                     Text("Search")
                                   ]
                               )
-                        ))),
-                          SizedBox(width: 20,),
+                        )))),
+                          MediaQuery.of(context).orientation==Orientation.portrait?
+                          SizedBox(width: 20,):SizedBox(width: 40,),
                           Expanded(child:Card(
                               elevation: 5,
                               child:
-                          TextButton(
+                              TextButton(
                               style: TextButton.styleFrom(
                                 primary:  Palette.secondaryLight,
                               ),
@@ -113,7 +120,10 @@ class _AddMealState extends State<AddMeal>{
                                       }
                                     },
                               child:
-                              Column(
+                              Container(
+                                  padding: MediaQuery.of(context).orientation==Orientation.portrait?
+                                  EdgeInsets.all(8):EdgeInsets.symmetric(vertical: 32, horizontal: 8),
+                                  child:Column(
                                   mainAxisSize: MainAxisSize.min,
 
                                   children:[
@@ -121,9 +131,10 @@ class _AddMealState extends State<AddMeal>{
                                     Text("Scan Barcode")
                                   ]
                               )
-                          )))
+                          ))))
                         ],),
-                      SizedBox(height: 20,),
+                      MediaQuery.of(context).orientation==Orientation.portrait?
+                      SizedBox(height: 20,):SizedBox(height: 40,),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -138,7 +149,10 @@ class _AddMealState extends State<AddMeal>{
                                       context,
                                       MaterialPageRoute(builder: (context) => FavouriteDishes())),
                                   child:
-                                  Column(
+                                  Container(
+                                      padding: MediaQuery.of(context).orientation==Orientation.portrait?
+                                      EdgeInsets.all(8):EdgeInsets.symmetric(vertical: 32, horizontal: 8),
+                                      child:Column(
                                   mainAxisSize: MainAxisSize.min,
 
                                   children:[
@@ -148,12 +162,13 @@ class _AddMealState extends State<AddMeal>{
                                     Text("Favourites")
                                   ]
                               )
-                          ))),
-                          SizedBox(width: 20,),
+                          )))),
+                          MediaQuery.of(context).orientation==Orientation.portrait?
+                          SizedBox(width: 20,):SizedBox(width: 40,),
                           Expanded(child:Card(
                               elevation: 5,
                               child:
-                          TextButton(
+                             TextButton(
                               style: TextButton.styleFrom(
                                 primary:  Palette.secondaryLight,
                               ),
@@ -163,7 +178,10 @@ class _AddMealState extends State<AddMeal>{
                                     MaterialPageRoute(builder: (context) => YourDishList()));
                               },
                               child:
-                              Column(
+                              Container(
+                                  padding: MediaQuery.of(context).orientation==Orientation.portrait?
+                                  EdgeInsets.all(8):EdgeInsets.symmetric(vertical: 32, horizontal: 8),
+                                  child:Column(
                                   mainAxisSize: MainAxisSize.min,
 
                                   children:[
@@ -173,14 +191,14 @@ class _AddMealState extends State<AddMeal>{
                                     Text("Created")
                                   ]
                               )
-                          )))
+                          ))))
                         ],),
-                      SizedBox(height: 20,),
-
+                      MediaQuery.of(context).orientation==Orientation.portrait?
+                      SizedBox(height: 20,):SizedBox(height: 40,),
                       Card(
                           elevation: 5,
                           child:
-                      TextButton(
+                          TextButton(
                           style: TextButton.styleFrom(
                             primary:  Palette.secondaryLight,
                           ),
@@ -190,12 +208,15 @@ class _AddMealState extends State<AddMeal>{
                                 MaterialPageRoute(builder: (context) => CreateNewDish()));
                           },
                           child:
-                          ListTile(
+                          Container(
+                              padding: MediaQuery.of(context).orientation==Orientation.portrait?
+                              EdgeInsets.all(8):EdgeInsets.symmetric(vertical: 32, horizontal: 8),
+                              child:ListTile(
                               leading: Icon(Icons.restaurant_menu, size: 50),
                               title: Text("Create Dish", style: TextStyle(color: Colors.black87),),
                               trailing: Icon(FontAwesomeIcons.chevronRight, size: 20,)
                           )
-                      ))
+                      )))
                     ]
                 )
             ))))

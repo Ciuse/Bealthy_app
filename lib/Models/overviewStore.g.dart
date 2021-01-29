@@ -76,6 +76,23 @@ mixin _$OverviewStore on _OverviewBase, Store {
     });
   }
 
+  final _$sortedTotalOccurrenceSymptomAtom =
+      Atom(name: '_OverviewBase.sortedTotalOccurrenceSymptom');
+
+  @override
+  Map<String, int> get sortedTotalOccurrenceSymptom {
+    _$sortedTotalOccurrenceSymptomAtom.reportRead();
+    return super.sortedTotalOccurrenceSymptom;
+  }
+
+  @override
+  set sortedTotalOccurrenceSymptom(Map<String, int> value) {
+    _$sortedTotalOccurrenceSymptomAtom
+        .reportWrite(value, super.sortedTotalOccurrenceSymptom, () {
+      super.sortedTotalOccurrenceSymptom = value;
+    });
+  }
+
   final _$dayOccurrenceSymptomAtom =
       Atom(name: '_OverviewBase.dayOccurrenceSymptom');
 
@@ -175,6 +192,23 @@ mixin _$OverviewStore on _OverviewBase, Store {
     _$totalOccurrenceIngredientAtom
         .reportWrite(value, super.totalOccurrenceIngredient, () {
       super.totalOccurrenceIngredient = value;
+    });
+  }
+
+  final _$sortedTotalOccurrenceIngredientAtom =
+      Atom(name: '_OverviewBase.sortedTotalOccurrenceIngredient');
+
+  @override
+  Map<String, int> get sortedTotalOccurrenceIngredient {
+    _$sortedTotalOccurrenceIngredientAtom.reportRead();
+    return super.sortedTotalOccurrenceIngredient;
+  }
+
+  @override
+  set sortedTotalOccurrenceIngredient(Map<String, int> value) {
+    _$sortedTotalOccurrenceIngredientAtom
+        .reportWrite(value, super.sortedTotalOccurrenceIngredient, () {
+      super.sortedTotalOccurrenceIngredient = value;
     });
   }
 
@@ -511,12 +545,14 @@ mapSymptomsOverviewPeriod: ${mapSymptomsOverviewPeriod},
 mapSymptomsOverviewDay: ${mapSymptomsOverviewDay},
 overviewSymptomList: ${overviewSymptomList},
 totalOccurrenceSymptom: ${totalOccurrenceSymptom},
+sortedTotalOccurrenceSymptom: ${sortedTotalOccurrenceSymptom},
 dayOccurrenceSymptom: ${dayOccurrenceSymptom},
 mapIngredientsOverviewPeriod: ${mapIngredientsOverviewPeriod},
 mapIngredientsOverviewDay: ${mapIngredientsOverviewDay},
 overviewDishList: ${overviewDishList},
 overviewIngredientList: ${overviewIngredientList},
 totalOccurrenceIngredient: ${totalOccurrenceIngredient},
+sortedTotalOccurrenceIngredient: ${sortedTotalOccurrenceIngredient},
 dayOccurrenceIngredientBySymptom: ${dayOccurrenceIngredientBySymptom},
 totalOccurrenceIngredientBySymptom: ${totalOccurrenceIngredientBySymptom},
 loadInitSymptomGraph: ${loadInitSymptomGraph},

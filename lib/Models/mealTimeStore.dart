@@ -108,15 +108,16 @@ abstract class _MealTimeStoreBase with Store {
 
   @action
   Future<void> _getDishesOfMealTimeListOfSpecificDay(int index, DateTime date) async {
-    String day = fixDate(date);
-    getDishesOfMealTimeList(index).clear();
-    await (FirebaseFirestore.instance
-        .collection('UserDishes')
-        .doc(auth.currentUser.uid).collection("DayDishes").doc(day).collection(
-        MealTime.values[index].toString().split('.').last)
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((dish) {
+    if(auth.currentUser!=null){
+      String day = fixDate(date);
+      getDishesOfMealTimeList(index).clear();
+      await (FirebaseFirestore.instance
+          .collection('UserDishes')
+          .doc(auth.currentUser.uid).collection("DayDishes").doc(day).collection(
+          MealTime.values[index].toString().split('.').last)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((dish) {
 
           Dish toAdd = new Dish(id: dish.id,
             name: dish.get("name"),
@@ -125,11 +126,13 @@ abstract class _MealTimeStoreBase with Store {
           );
           getDishesOfMealTimeList(index).add(toAdd);
 
-      }
+        }
 
+        );
+      })
       );
-    })
-    );
+    }
+
   }
 
   @action

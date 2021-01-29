@@ -158,7 +158,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                         gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 0,
-                            crossAxisSpacing: 16,
+                            crossAxisSpacing: 0,
                             childAspectRatio: (MediaQuery.of(context).size.width/MediaQuery.of(context).size.height)*2.5
                         ),
                         itemCount: mapSymptoms.keys.length,
@@ -281,9 +281,14 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                                                         mapSymptoms[symptom].percentageSymptom>=0?Color(0xffDD2C00):Colors.white:
                                                         Colors.white,
                                                         child: Center(
-                                                            child:
-                                                            mapSymptoms[symptom].percentageSymptom!=null?Text((mapSymptoms[symptom].percentageSymptom)
-                                                                .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),):Container()))))))),
+                                                            child:mapSymptoms[symptom].percentageSymptom!=null?
+                                                            mapSymptoms[symptom].percentageSymptom<0? Text((mapSymptoms[symptom].percentageSymptom)
+                                                                .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),):
+                                                            mapSymptoms[symptom].percentageSymptom>=0?Text("+"+(mapSymptoms[symptom].percentageSymptom)
+                                                                .toStringAsFixed(0)+"%",style: TextStyle(color:Colors.white,fontSize: 16,fontWeight: FontWeight.w500),)
+                                                                : Container()
+                                                                : Container()
+                                                        ))))))),
                                   ],
                                 )
 
@@ -301,13 +306,14 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
 
   Widget descriptionWidget(){
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
           ListTile(
             leading: Icon(Icons.description),
             title: Text("Description of this treatment: ",),
           ),
           Container(
-            margin: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.symmetric(vertical:4.0,horizontal: 24),
             child: Text(
               widget.treatment.descriptionText,
               textAlign: TextAlign.left,
@@ -321,13 +327,14 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
 
   Widget medicalWidget(){
     return   Column(
-        children: [
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
           ListTile(
             leading: Icon(FontAwesomeIcons.capsules),
             title: Text("Medical information: "),
           ),
           Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.symmetric(vertical:4.0,horizontal: 24),
             child: Text(
               widget.treatment.medicalInfoText,
               textAlign: TextAlign.left,
@@ -339,13 +346,14 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
   }
   Widget dietWidget(){
     return  Column(
-        children: [
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
           ListTile(
             leading: Icon(Icons.restaurant_outlined),
             title: Text("Diet information: "),
           ),
           Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.symmetric(vertical:4.0,horizontal: 24),
             child: Text(
               widget.treatment.dietInfoText,
               textAlign: TextAlign.left,
@@ -359,13 +367,15 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
 
   Widget datesWidget(){
     return  Column(
-        children: [
+      crossAxisAlignment: CrossAxisAlignment.start,
+
+      children: [
           ListTile(
             leading: Icon(FontAwesomeIcons.calendarDay),
             title: Text('Treatment dates: '),
           ),
           Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.symmetric(vertical:4.0,horizontal: 24),
             child: Text(
               'Starting date: '+ widget.treatment.startingDay,
               textAlign: TextAlign.left,
@@ -373,7 +383,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.symmetric(vertical:4.0,horizontal: 24),
             child: Text(
               'Ending date:   '+ widget.treatment.endingDay,
               textAlign: TextAlign.left,

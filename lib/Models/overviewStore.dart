@@ -49,6 +49,9 @@ abstract class _OverviewBase with Store {
   var totalOccurrenceSymptom = new ObservableMap<String, int>();
 
   @observable
+  Map<String,int> sortedTotalOccurrenceSymptom = new Map<String,int>();
+
+  @observable
   var dayOccurrenceSymptom = new SortedMap<String, int>();
 
   @observable
@@ -65,6 +68,9 @@ abstract class _OverviewBase with Store {
 
   @observable
   var totalOccurrenceIngredient = new ObservableMap<String, int>();
+
+  @observable
+  Map<String,int> sortedTotalOccurrenceIngredient = new Map<String,int>();
 
   @observable
   var dayOccurrenceIngredientBySymptom = new ObservableMap<String, int>();
@@ -587,6 +593,21 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
     Map<String,int> returnMap = Map.from(sortedMap);
     return returnMap;
   }
+
+  void sortSymptomByOccurrence(){
+    SplayTreeMap<String,int> sortedMap = SplayTreeMap<String,int>
+        .from(totalOccurrenceSymptom, (b, a) => totalOccurrenceSymptom[a] > totalOccurrenceSymptom[b] ? 1 : -1 );
+    sortedTotalOccurrenceSymptom = Map.from(sortedMap);
+    print(sortedTotalOccurrenceSymptom);
+  }
+
+  void sortIngredientByOccurrence(){
+    SplayTreeMap<String,int> sortedMap = SplayTreeMap<String,int>
+        .from(totalOccurrenceIngredient, (b, a) => totalOccurrenceIngredient[a] > totalOccurrenceIngredient[b] ? 1 : -1 );
+    sortedTotalOccurrenceIngredient = Map.from(sortedMap);
+    print(sortedTotalOccurrenceIngredient);
+  }
+
   String fixDate(DateTime date) {
     String dateSlug = "${date.year.toString()}-${date.month.toString().padLeft(
         2, '0')}-${date.day.toString().padLeft(2, '0')}";
