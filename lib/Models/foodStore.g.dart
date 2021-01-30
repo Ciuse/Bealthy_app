@@ -292,9 +292,9 @@ mixin _$FoodStore on _FoodStoreBase, Store {
       AsyncAction('_FoodStoreBase._getDishesFromDBAndUser');
 
   @override
-  Future<void> _getDishesFromDBAndUser(IngredientStore ingredientStore) {
+  Future<void> getDishesFromDBAndUser(IngredientStore ingredientStore) {
     return _$_getDishesFromDBAndUserAsyncAction
-        .run(() => super._getDishesFromDBAndUser(ingredientStore));
+        .run(() => super.getDishesFromDBAndUser(ingredientStore));
   }
 
   final _$_getYourDishesAsyncAction =

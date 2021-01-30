@@ -121,13 +121,13 @@ void setBooleanQuantityDish(){
     if (!storeSearchAllDishInitialized) {
       dishesListFromDBAndUser.clear();
       storeSearchAllDishInitialized = true;
-      return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser(ingredientStore));
+      return loadInitSearchAllDishesList = ObservableFuture(getDishesFromDBAndUser(ingredientStore));
     }
   }
 
   @action
   Future<void> retrySearchAllDishesList(IngredientStore ingredientStore) {
-    return loadInitSearchAllDishesList = ObservableFuture(_getDishesFromDBAndUser(ingredientStore));
+    return loadInitSearchAllDishesList = ObservableFuture(getDishesFromDBAndUser(ingredientStore));
   }
 
 
@@ -204,7 +204,7 @@ void setBooleanQuantityDish(){
   }
 
   @action
-  Future<void> _getDishesFromDBAndUser(IngredientStore ingredientStore) async {
+  Future<void> getDishesFromDBAndUser(IngredientStore ingredientStore) async {
     if(auth.currentUser!=null) {
       await (FirebaseFirestore.instance
           .collection('Dishes')
