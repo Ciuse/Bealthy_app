@@ -8,6 +8,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:provider/provider.dart';
+import "package:flutter/services.dart";
 
 import 'Login/config/palette.dart';
 import 'Login/screens/splash.dart';
@@ -29,11 +30,51 @@ void main() async {
 
 
 
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding binding = WidgetsFlutterBinding.ensureInitialized();
+  double height=binding.window.physicalSize.height;
+  double width=binding.window.physicalSize.width;
+
+  if(height>=width ){
+    if(width<1300) {
+      print("mobile1");
+      await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+          .then((_) {
+        runAppFunction();
+      });
+    }else{
+
+      print("tablet1");
+      await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight])
+          .then((_) async {
+            await SystemChrome.setEnabledSystemUIOverlays([]);
+            runAppFunction();
+      });
+    }
+
+  }else{
+
+    if(height<1300) {
+      print("mobile2");
+      await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+          .then((_) {
+        runAppFunction();
+      });
+    }else {
+      print("tablet2");
+      await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight])
+          .then((_) async {
+        await SystemChrome.setEnabledSystemUIOverlays([]);
+        runAppFunction();
+      });
+    }
+
+  }
+}
+
+Future<void> runAppFunction()async {
   await Firebase.initializeApp();
+  await initializeDateFormatting().then((_) => runApp(
 
-
-  initializeDateFormatting().then((_) => runApp(
       MultiProvider(providers: [
         Provider<DateStore>(
           create: (_) => DateStore(),
@@ -70,6 +111,8 @@ class MyApp extends StatelessWidget {
   static const String _title = 'Bealthy';
   @override
   Widget build(BuildContext context) {
+
+
     return WillPopScope(
         onWillPop: () async {
           MoveToBackground.moveTaskToBack();
@@ -83,6 +126,7 @@ class MyApp extends StatelessWidget {
             ),
             child:
             MaterialApp(
+
               theme: ThemeData.from(colorScheme: Palette.bealthyColorScheme,
                textTheme: TextTheme(
 
@@ -240,6 +284,7 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
         onWillPop: () async {
           MoveToBackground.moveTaskToBack();

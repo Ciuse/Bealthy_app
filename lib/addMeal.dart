@@ -95,29 +95,29 @@ class _AddMealState extends State<AddMeal>{
                                 primary:  Palette.secondaryLight,
                               ),
                                     onPressed: () async => {
-                                      // scanBarCodeAndCheckPermission(),
-                                      barCodeScannerStore.scanBarcode = "8000430138719",
-                                      if(barCodeScannerStore.scanBarcode != "-1") {
-                                        await barCodeScannerStore.getScannedDishes(
-                                            barCodeScannerStore.scanBarcode).then((dishDB) {
-                                          if (dishDB.id != null) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) =>
-                                                  DishPage(dish: dishDB, createdByUser: true,)),
-                                            );
-                                          } else {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) =>
-                                                  DishPageFromScan(barcode: barCodeScannerStore.scanBarcode)),
-                                            );
-                                          }
-                                        }),
-                                      }
-                                      else{
-                                        showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4)),
-                                      }
+                                       scanBarCodeAndCheckPermission(),
+                                      // barCodeScannerStore.scanBarcode = "8000430138719",
+                                      // if(barCodeScannerStore.scanBarcode != "-1") {
+                                      //   await barCodeScannerStore.getScannedDishes(
+                                      //       barCodeScannerStore.scanBarcode).then((dishDB) {
+                                      //     if (dishDB.id != null) {
+                                      //       Navigator.push(
+                                      //         context,
+                                      //         MaterialPageRoute(builder: (context) =>
+                                      //             DishPage(dish: dishDB, createdByUser: true,)),
+                                      //       );
+                                      //     } else {
+                                      //       Navigator.push(
+                                      //         context,
+                                      //         MaterialPageRoute(builder: (context) =>
+                                      //             DishPageFromScan(barcode: barCodeScannerStore.scanBarcode)),
+                                      //       );
+                                      //     }
+                                      //   }),
+                                      // }
+                                      // else{
+                                      //   showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4)),
+                                      // }
                                     },
                               child:
                               Container(
@@ -128,7 +128,9 @@ class _AddMealState extends State<AddMeal>{
 
                                   children:[
                                     Icon(FontAwesomeIcons.barcode, size: 75),
-                                    Text("Scan Barcode")
+                                    FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child:Text("Scan Barcode"))
                                   ]
                               )
                           ))))
@@ -547,7 +549,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                         })));
                   case FutureStatus.pending:
                   default:
-                    return CircularProgressIndicator();
+                    return Center(child:CircularProgressIndicator());
                 }
               },
             )])
@@ -789,7 +791,7 @@ class _YourDishListState extends State<YourDishList> {
                           })));
                     case FutureStatus.pending:
                     default:
-                      return CircularProgressIndicator();
+                      return Center(child:CircularProgressIndicator());
                   }
                 },
               ),
