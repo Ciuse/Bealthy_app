@@ -89,34 +89,38 @@ abstract class _TreatmentStoreBase with Store {
 
   @action
   Future<void> addNewTreatmentCreatedByUser(Treatment treatment) async {
-    await (firestoreInstance
-        .collection("UserTreatments")
-        .doc(auth.currentUser.uid)
-        .collection("Treatments")
-        .doc(treatment.id)
-        .set(treatment.toMapTreatment()));
-    DateTime endingDay = setDateFromString(treatment.endingDay);
-    if(DateTime.now().isBefore(endingDay)){
-      treatmentsInProgressList.add(treatment);
-    }else{
-      treatmentsCompletedList.add(treatment);
+    if (auth.currentUser != null) {
+      await (firestoreInstance
+          .collection("UserTreatments")
+          .doc(auth.currentUser.uid)
+          .collection("Treatments")
+          .doc(treatment.id)
+          .set(treatment.toMapTreatment()));
     }
+    DateTime endingDay = setDateFromString(treatment.endingDay);
+      if (DateTime.now().isBefore(endingDay)) {
+        treatmentsInProgressList.add(treatment);
+      } else {
+        treatmentsCompletedList.add(treatment);
+      }
   }
-
   @action
   Future<void> removeTreatmentCreatedByUser(Treatment treatment) async {
-    await (firestoreInstance
-        .collection("UserTreatments")
-        .doc(auth.currentUser.uid)
-        .collection("Treatments")
-        .doc(treatment.id)
-        .delete());
+    if(auth.currentUser!=null){
+      await (firestoreInstance
+          .collection("UserTreatments")
+          .doc(auth.currentUser.uid)
+          .collection("Treatments")
+          .doc(treatment.id)
+          .delete());
+    }
     treatmentsInProgressList.removeWhere((element) => element.id == treatment.id);
     treatmentsCompletedList.removeWhere((element) => element.id == treatment.id);
   }
 
   @action
   Future<int> getLastTreatmentId() async {
+
     return await FirebaseFirestore.instance .collection("UserTreatments")
         .doc(auth.currentUser.uid)
         .collection("Treatments")

@@ -98,18 +98,21 @@ abstract class _IngredientStoreBase with Store {
 
   @action
   Future<void> getIngredientsFromUserDish(Dish dish) async {
-    await (FirebaseFirestore.instance
-        .collection("DishesCreatedByUsers")
-        .doc(auth.currentUser.uid)
-        .collection("Dishes").doc(dish.id).collection("Ingredients").orderBy("name")
-        .get().then((querySnapshot) {
-      querySnapshot.docs.forEach((ingredient) {
-        Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
-        ingredientListOfDish.add(i);
+    if(auth.currentUser!=null){
+      await (FirebaseFirestore.instance
+          .collection("DishesCreatedByUsers")
+          .doc(auth.currentUser.uid)
+          .collection("Dishes").doc(dish.id).collection("Ingredients").orderBy("name")
+          .get().then((querySnapshot) {
+        querySnapshot.docs.forEach((ingredient) {
+          Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
+          ingredientListOfDish.add(i);
 
-      }
-      );
-    }));
+        }
+        );
+      }));
+    }
+
   }
 
   @action
