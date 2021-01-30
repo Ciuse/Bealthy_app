@@ -97,20 +97,20 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
                 children: [
                   descriptionText(),
                   symptomsText(),
-                  Padding(
-                      padding: EdgeInsets.only(top:4,bottom: 8),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          WidgetsBinding.instance.addPostFrameCallback(
-                                (_) =>
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            HomePage(startingIndex: 1,))),
-                          );
-                        },
-                        child: Text('STATISTICS'),
-                      ))
+                  // Padding(
+                  //     padding: EdgeInsets.only(top:4,bottom: 8),
+                  //     child: ElevatedButton(
+                  //       onPressed: () {
+                  //         WidgetsBinding.instance.addPostFrameCallback(
+                  //               (_) =>
+                  //               Navigator.of(context).pushReplacement(
+                  //                   MaterialPageRoute(
+                  //                       builder: (BuildContext context) =>
+                  //                           HomePage(startingIndex: 1,))),
+                  //         );
+                  //       },
+                  //       child: Text('STATISTICS'),
+                  //     ))
                 ])));
   }
 

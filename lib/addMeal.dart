@@ -96,29 +96,29 @@ class _AddMealState extends State<AddMeal>{
                                 primary:  Palette.secondaryLight,
                               ),
                                     onPressed: () async => {
-                                       scanBarCodeAndCheckPermission(),
-                                      // barCodeScannerStore.scanBarcode = "8000430138719",
-                                      // if(barCodeScannerStore.scanBarcode != "-1") {
-                                      //   await barCodeScannerStore.getScannedDishes(
-                                      //       barCodeScannerStore.scanBarcode).then((dishDB) {
-                                      //     if (dishDB.id != null) {
-                                      //       Navigator.push(
-                                      //         context,
-                                      //         MaterialPageRoute(builder: (context) =>
-                                      //             DishPage(dish: dishDB, createdByUser: true,)),
-                                      //       );
-                                      //     } else {
-                                      //       Navigator.push(
-                                      //         context,
-                                      //         MaterialPageRoute(builder: (context) =>
-                                      //             DishPageFromScan(barcode: barCodeScannerStore.scanBarcode)),
-                                      //       );
-                                      //     }
-                                      //   }),
-                                      // }
-                                      // else{
-                                      //   showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4)),
-                                      // }
+                                       // scanBarCodeAndCheckPermission(),
+                                      barCodeScannerStore.scanBarcode = "8009030055204",
+                                      if(barCodeScannerStore.scanBarcode != "-1") {
+                                        await barCodeScannerStore.getScannedDishes(
+                                            barCodeScannerStore.scanBarcode).then((dishDB) {
+                                          if (dishDB.id != null) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) =>
+                                                  DishPage(dish: dishDB, createdByUser: true,)),
+                                            );
+                                          } else {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (context) =>
+                                                  DishPageFromScan(barcode: barCodeScannerStore.scanBarcode)),
+                                            );
+                                          }
+                                        }),
+                                      }
+                                      else{
+                                        showToast("Failed To scan Barcode", position: ToastPosition.bottom, duration: Duration(seconds: 4)),
+                                      }
                                     },
                               child:
                               Container(
