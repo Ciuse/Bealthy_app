@@ -1,10 +1,12 @@
 import 'package:Bealthy_app/Models/ingredientStore.dart';
+import 'package:Bealthy_app/headerScrollStyle.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:Bealthy_app/overviewSingleIngredient.dart';
+import 'Login/config/palette.dart';
 import 'Models/dateStore.dart';
 import 'Models/overviewStore.dart';
 import 'overviewPage.dart';
@@ -21,7 +23,7 @@ class IngredientOverview extends StatefulWidget {
 class IngredientOverviewState extends State<IngredientOverview> {
   DateStore dateStore;
   double animationStartPos=0;
-
+  ScrollController _scrollController = new ScrollController();
   void initState() {
     super.initState();
     dateStore = Provider.of<DateStore>(context, listen: false);
@@ -66,56 +68,63 @@ class IngredientOverviewState extends State<IngredientOverview> {
   }
 
   Widget ingredientsWidget(){
-      return Column(
-        children: [
-          PieChartIngredient(overviewStore: widget.overviewStore,),
-          Container(
-            // Horizontal ListView
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              height: 80,
-              child: Observer(builder: (_) =>
+    return Column(
+      children: [
+        PieChartIngredient(overviewStore: widget.overviewStore,),
+        Container(
+          // Horizontal ListView
+          padding: EdgeInsets.symmetric(horizontal: 8,),
+          height: 90,
+          child: Observer(builder: (_) =>
+              MyScrollbar(
+                  scrollController:_scrollController,
+                  child:
                   ListView.builder(
+                    controller:_scrollController ,
                     itemCount: widget.overviewStore.sortedTotalOccurrenceIngredient.length<9 ? widget.overviewStore.sortedTotalOccurrenceIngredient.length : 8,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: ClampingScrollPhysics(),
                     itemBuilder: (context, index) {
                       return
-                          Container(
-                              padding: EdgeInsets.only(right: 16),
-                              alignment: Alignment.center,
-                              color: Colors.transparent,
-                              child: RawMaterialButton(
-                                onPressed: () =>
-                                {
-                                  Navigator.push(
-                                      context,MaterialPageRoute(builder: (context) => OverviewSingleIngredient(ingredientId: widget.overviewStore.sortedTotalOccurrenceIngredient.keys.elementAt(index),
-                                    startingDate: dateStore.overviewFirstDate,
-                                    endingDate: dateStore.overviewDefaultLastDate,
+                        Container(
+                            padding: EdgeInsets.only(right: 16),
+                            alignment: Alignment.center,
+                            color: Colors.transparent,
+                            child: RawMaterialButton(
+                              onPressed: () =>
+                              {
+                                Navigator.push(
+                                    context,MaterialPageRoute(builder: (context) => OverviewSingleIngredient(ingredientId: widget.overviewStore.sortedTotalOccurrenceIngredient.keys.elementAt(index),
+                                  startingDate: dateStore.overviewFirstDate,
+                                  endingDate: dateStore.overviewDefaultLastDate,
                                   overviewStore:widget.overviewStore,))),
-                                },
-                                elevation: 5.0,
-                                fillColor: Colors.white,
-                                child:
-                                Container(
-                                    height: 26.0,
-                                    child:  ClipOval(
-                                        child: Image(
-                                          fit: BoxFit.fill,
-                                          image: AssetImage("images/ingredients/" + widget.overviewStore.sortedTotalOccurrenceIngredient.keys.elementAt(index) + ".png"),
-                                        )
-                                    )),
-                                constraints : const BoxConstraints(minWidth: 55.0, minHeight: 55.0),
-                                shape:RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                              ));
+                              },
+                              elevation: 5.0,
+                              fillColor: Colors.white,
+                              child:
+                              Container(
+
+                                  child:  ClipOval(
+
+                                      child: Image(
+                                        height: 34.0,
+                                        width: 34.0,
+                                        fit: BoxFit.fitHeight,
+                                        image: AssetImage("images/ingredients/" + widget.overviewStore.sortedTotalOccurrenceIngredient.keys.elementAt(index) + ".png"),
+                                      )
+                                  )),
+                              constraints : const BoxConstraints(minWidth: 55.0, minHeight: 55.0),
+                              shape:RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ));
                     },
-                  ),
-              )),
-        ],
-      );
-    }
+                  ))),
+        ),
+      ],
+    );
+  }
 
 
 
@@ -153,12 +162,12 @@ class PieChartIngredientState extends State<PieChartIngredient> {
       child: Column(children: [
       ListTile(
         leading: Icon(Icons.pie_chart),
-        title: const Text('Ingredients eaten (%)'),
+        title: const Text('Ingredients eaten (%)',style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
     ),
         ConstrainedBox(
             constraints: MediaQuery.of(context).orientation==Orientation.portrait?BoxConstraints(
             ):BoxConstraints(
-                maxHeight: 380
+                maxHeight: 370
             ),
           child:Row(
           children: <Widget>[

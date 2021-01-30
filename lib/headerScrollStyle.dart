@@ -110,3 +110,23 @@ class HeaderScrollStyle {
 
 
 }
+
+class MyScrollbar extends StatelessWidget {
+  final ScrollController scrollController;
+  final Widget child;
+  MyScrollbar({
+    this.scrollController,
+    this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+            thickness: 2.5,
+            radius: Radius.circular(5),
+            controller: scrollController,
+            isAlwaysShown: true,
+            child: child);
+  }
+
+}

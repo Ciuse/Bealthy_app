@@ -1,4 +1,4 @@
-import 'package:Bealthy_app/DishPageFromScan.dart';
+import 'package:Bealthy_app/dishPageFromScan.dart';
 import 'package:Bealthy_app/Models/barCodeScannerStore.dart';
 import 'package:Bealthy_app/dishPage.dart';
 import 'package:Bealthy_app/searchDishesList.dart';

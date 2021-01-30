@@ -46,7 +46,6 @@ void main() {
     ),);
 
     var symptomStore = Provider.of<SymptomStore>(_providerKey.currentContext,listen: false);
-
     final elevatedButton = find.byKey(Key("buttonSaveRemove"));
     expect(elevatedButton,findsNWidgets(1));
 

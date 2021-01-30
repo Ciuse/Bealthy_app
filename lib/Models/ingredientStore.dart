@@ -213,6 +213,7 @@ abstract class _IngredientStoreBase with Store {
       Color(0xff40241a),
       Color(0xff8b6b61),
       Color(0xff9e9e9e),
+      Color(0xfffdd835),
       Color(0xffffeb3b),
       Color(0xff5d99c6),
       Color(0xffffd699),
@@ -222,7 +223,7 @@ abstract class _IngredientStoreBase with Store {
       Color(0xff33691e),
       Color(0xffaed581),
       Color(0xffc67c00),
-      Color(0xffff6d00 ),
+      Color(0xffff6d00),
       Color(0xff255d00),
       Color(0xffffd600),
       Color(0xffa7c0cd),
@@ -236,7 +237,6 @@ abstract class _IngredientStoreBase with Store {
       Color(0xffac0800),
       Color(0xffa30000),
       Color(0xfffbc02d),
-      Color(0xfffdd835),
     ];
 
 
@@ -247,6 +247,7 @@ abstract class _IngredientStoreBase with Store {
     // I/flutter (28496): Chocolate -
     // I/flutter (28496): Cocoa -
     // I/flutter (28496): Coconut -
+    // I/flutter (28496): Corn -
     // I/flutter (28496): Egg -
     // I/flutter (28496): Fish -
     // I/flutter (28496): Flour -
@@ -270,7 +271,6 @@ abstract class _IngredientStoreBase with Store {
     // I/flutter (28496): Tomato -
     // I/flutter (28496): Vinegar -
     // I/flutter (28496): Wheat -
-    // I/flutter (28496): corn -
 
     colorIngredientMap=Map.fromIterables(keys, colorsOfChart);
   }

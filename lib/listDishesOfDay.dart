@@ -72,10 +72,10 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
             mealTimeStore.changeCurrentMealTime(index);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Dinner.toString().split('.').last,)),
+              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Breakfast.toString().split('.').last,)),
             );
           },
-          title: Text(MealTime.Breakfast.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+          title: Text(MealTime.Breakfast.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
           leading: Icon(Icons.breakfast_dining,color: Colors.black),
           trailing:
           IconButton(
@@ -99,10 +99,10 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
             mealTimeStore.changeCurrentMealTime(index);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Dinner.toString().split('.').last,)),
+              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Lunch.toString().split('.').last,)),
             );
           },
-          title: Text(MealTime.Lunch.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+          title: Text(MealTime.Lunch.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
           leading: Icon(Icons.lunch_dining,color: Colors.black),
           trailing:
           IconButton(
@@ -126,10 +126,10 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
             mealTimeStore.changeCurrentMealTime(index);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Dinner.toString().split('.').last,)),
+              MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Snack.toString().split('.').last,)),
             );
           },
-          title: Text(MealTime.Snack.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+          title: Text(MealTime.Snack.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
           leading: Icon(Icons.fastfood_rounded,color: Colors.black),
           trailing:
           IconButton(
@@ -155,7 +155,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
               MaterialPageRoute(builder: (context) => AddMeal(title: MealTime.Dinner.toString().split('.').last,)),
             );
           },
-          title: Text(MealTime.Dinner.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic)),
+          title: Text(MealTime.Dinner.toString().split('.').last,style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
           leading: Icon(Icons.dinner_dining,color: Colors.black),
           trailing:
           IconButton(

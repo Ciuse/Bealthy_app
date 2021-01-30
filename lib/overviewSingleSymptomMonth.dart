@@ -8,6 +8,7 @@ import 'Database/symptom.dart';
 import 'Database/symptomOverviewGraphStore.dart';
 import 'Login/config/palette.dart';
 import 'Models/dateStore.dart';
+import 'headerScrollStyle.dart';
 
 class OverviewSingleSymptomMonth extends StatefulWidget {
   final String symptomId;
@@ -62,11 +63,11 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                                 blurRadius: 3, // blur radius
                                 offset: Offset(2, 4),// changes position of shadow
                                 //first paramerter of offset is left-right
-                          //second parameter is top to down
-                        )],
-                      borderRadius: BorderRadius.all(Radius.circular(5)), //border corner radius
-                    ),
-                    child: BarChartSymptom(symptomId: widget.symptomId,overviewStore: widget.overviewStore,)),
+                                //second parameter is top to down
+                              )],
+                            borderRadius: BorderRadius.all(Radius.circular(5)), //border corner radius
+                          ),
+                          child: BarChartSymptom(symptomId: widget.symptomId,overviewStore: widget.overviewStore,)),
                       Observer(builder: (_) =>Container(
                           height: 180,
                           margin: EdgeInsets.only(top: 10,bottom: 10 ),
@@ -90,11 +91,11 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                            Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
-                            SizedBox(height: 16),
-                            Flexible(
-                                fit: FlexFit.loose,
-                                child: buildIngredientRow()),
+                              Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
+                              SizedBox(height: 16),
+                              Flexible(
+                                  fit: FlexFit.loose,
+                                  child: buildIngredientRow()),
                               Container(
                                   alignment: Alignment.centerRight,
                                   padding: EdgeInsets.symmetric(horizontal: 8),
@@ -107,7 +108,7 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
                                       graphStore.touchedIndex = -1;
 
                                     },))
-                          ],)
+                            ],)
                       )),
 
                     ]
@@ -115,39 +116,39 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
         ):
         Row(children: [
           Expanded(child:Container(
-        padding: EdgeInsets.all(16),
-        child: Card(
-              child: BarChartSymptom(
-                symptomId: widget.symptomId,overviewStore: widget.overviewStore,)))),
-    Expanded(child:Observer(builder: (_) =>Container(
-    padding: EdgeInsets.all(16),
-    child: Card(
-              child:
-              Container(
-                  padding: EdgeInsets.all(16),
-                  child:Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
-                  SizedBox(height: 16),
+              padding: EdgeInsets.all(16),
+              child: Card(
+                  child: BarChartSymptom(
+                    symptomId: widget.symptomId,overviewStore: widget.overviewStore,)))),
+          Expanded(child:Observer(builder: (_) =>Container(
+              padding: EdgeInsets.all(16),
+              child: Card(
+                  child:
                   Container(
-                      height: 80,
-                      child:buildIngredientRow()),
-                   Container(
-                      alignment: Alignment.centerRight,
-                      child:
-                      OutlinedButton(
-                        child:Text("Show All"),
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.white),),
-                        onPressed: () {
-                          graphStore.touchedIndex = -1;
+                      padding: EdgeInsets.all(16),
+                      child:Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
+                          SizedBox(height: 16),
+                          Container(
+                              height: 80,
+                              child:buildIngredientRow()),
+                          Container(
+                              alignment: Alignment.centerRight,
+                              child:
+                              OutlinedButton(
+                                child:Text("Show All"),
+                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.white),),
+                                onPressed: () {
+                                  graphStore.touchedIndex = -1;
 
-                        },))
-                ],))
-          )))),
+                                },))
+                        ],))
+              )))),
 
         ],)
 
@@ -158,47 +159,55 @@ class _OverviewSingleSymptomMonthState extends State<OverviewSingleSymptomMonth>
     Map<String,int> sortedTotalMap= widget.overviewStore.sortTotalOccurrenceIngredientBySymptom();
     Map<String,int> sortedDayMap= widget.overviewStore.sortDayOccurrenceIngredientBySymptom();
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
+    ScrollController _scrollController = new ScrollController();
+
     return graphStore.touchedIndex==-1?
     widget.overviewStore.totalOccurrenceIngredientBySymptom.keys.length==0
         ? Center(child: Text("NO INGREDIENT RELATED")):
-    ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          for(var ingredient in sortedTotalMap.keys )
-            Column(children: [ Container(
-              margin: EdgeInsets.symmetric(horizontal:6),
-                width: 50,
-                height: 50,
-                child:  ClipOval(
-                    child: Image(
-                      image: AssetImage("images/ingredients/" + ingredient + ".png"),
-                    )
-                )),
-              Text(sortedTotalMap[ingredient].toString())
-            ])
+    MyScrollbar(
+        scrollController:_scrollController,
+        child:ListView(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            children: [
+              for(var ingredient in sortedTotalMap.keys )
+                Column(children: [ Container(
+                    margin: EdgeInsets.symmetric(horizontal:6),
+                    width: 50,
+                    height: 50,
+                    child:  ClipOval(
+                        child: Image(
+                          image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                        )
+                    )),
+                  Text(sortedTotalMap[ingredient].toString())
+                ])
 
-        ])
+            ]))
         : widget.overviewStore.dayOccurrenceIngredientBySymptom.keys.length==0
         ? Center(child: Text("NO INGREDIENT THIS DAY"))
-        :ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          for(var ingredient in sortedDayMap.keys )
-            Column(children: [
-              Container(
-                  margin: EdgeInsets.symmetric(horizontal: 6),
+        :MyScrollbar(
+        scrollController:_scrollController,
+        child:ListView(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            children: [
+              for(var ingredient in sortedDayMap.keys )
+                Column(children: [
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 6),
 
-                  width: 50,
-                  height: 50,
-                  child:  ClipOval(
-                      child: Image(
-                        image: AssetImage("images/ingredients/" + ingredient + ".png"),
-                      )
-                  )),
-              Text(sortedDayMap[ingredient].toString())
-            ],
-            )
-        ]);
+                      width: 50,
+                      height: 50,
+                      child:  ClipOval(
+                          child: Image(
+                            image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                          )
+                      )),
+                  Text(sortedDayMap[ingredient].toString())
+                ],
+                )
+            ]));
   }
 
 }

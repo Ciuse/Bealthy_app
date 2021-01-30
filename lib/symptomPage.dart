@@ -138,10 +138,10 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
         ),
         child: Column(
             children:[
-              Text("Description",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+              Text("Description",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),),
               SizedBox(height: 10,),
 
-              Text(widget.symptom.description,textAlign: TextAlign.justify, style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait?null:20)),
+              Text(widget.symptom.description,textAlign: TextAlign.justify, style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait?null:19)),
             ]
         )
     );
@@ -171,9 +171,9 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
         ),
         child: Column(
             children:[
-              Text("Related Symptoms & Signs",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+              Text("Related Symptoms & Signs",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),),
               SizedBox(height: 10,),
-              Text(widget.symptom.symptoms,textAlign: TextAlign.justify, style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait?null:20),),
+              Text(widget.symptom.symptoms,textAlign: TextAlign.justify, style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait?null:19),),
             ]
         )
     );

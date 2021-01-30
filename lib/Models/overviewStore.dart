@@ -134,10 +134,10 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
         });
         //il sintomo non è presente proprio in questo giorno quindi gli tolgo -0.25
         if(count==mapSymptomsOverviewPeriod[day].length){
-          ingredient.ingredientMapSymptomsValue[sym.id] = ingredient.ingredientMapSymptomsValue[sym.id]-0.25;
+          ingredient.ingredientMapSymptomsValue[sym.id] = ingredient.ingredientMapSymptomsValue[sym.id]-0.1;
         }else{
           if(!mapSymptomsOverviewPeriod[day].firstWhere((element) => sym.id==element.id).mealTime.contains(ingr.mealTime)){
-            ingredient.ingredientMapSymptomsValue[sym.id] = ingredient.ingredientMapSymptomsValue[sym.id]-0.25;
+            ingredient.ingredientMapSymptomsValue[sym.id] = ingredient.ingredientMapSymptomsValue[sym.id]-0.1;
           }
         }
       });
@@ -150,20 +150,20 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
   void initIngredientMapSymptomsValue3 (List<DateTime> dates,Ingredient ingredient,SymptomStore symptomStore){
     dates.forEach((day) {
       mapSymptomsOverviewPeriod[day].forEach((symptom) {
-        int count = 0;
+        double count = 0.0;
         bool found = false;
         symptom.mealTime.forEach((element) {
           found=false;
         mapIngredientsOverviewPeriod[day].forEach((ingr){
 
             if(ingredient.id==ingr.id && !found && element==ingr.mealTime){
-              count = count+1;
+              count = count+1.0;
               found = true;      //numero di volte che sono stato male e ho mangiato in quel mealtime il cibo X
             }
           });
 
         });
-        ingredient.ingredientMapSymptomsValue[symptom.id] = ingredient.ingredientMapSymptomsValue[symptom.id]-0.5*(symptom.mealTime.length-count);
+        ingredient.ingredientMapSymptomsValue[symptom.id] = ingredient.ingredientMapSymptomsValue[symptom.id]-(0.15*(symptom.mealTime.length.toDouble()-count));
       });
     });
   }
@@ -598,14 +598,12 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
     SplayTreeMap<String,int> sortedMap = SplayTreeMap<String,int>
         .from(totalOccurrenceSymptom, (b, a) => totalOccurrenceSymptom[a] > totalOccurrenceSymptom[b] ? 1 : -1 );
     sortedTotalOccurrenceSymptom = Map.from(sortedMap);
-    print(sortedTotalOccurrenceSymptom);
   }
 
   void sortIngredientByOccurrence(){
     SplayTreeMap<String,int> sortedMap = SplayTreeMap<String,int>
         .from(totalOccurrenceIngredient, (b, a) => totalOccurrenceIngredient[a] > totalOccurrenceIngredient[b] ? 1 : -1 );
     sortedTotalOccurrenceIngredient = Map.from(sortedMap);
-    print(sortedTotalOccurrenceIngredient);
   }
 
   String fixDate(DateTime date) {

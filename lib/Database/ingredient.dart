@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:mobx/mobx.dart';
 
@@ -38,7 +39,17 @@ abstract class _IngredientBase with Store {
   var ingredientMapSymptomsValue = new ObservableMap<String, double>();
 
   @observable
+  Map ingredientMapSymptomsValueFiltered;
+
+  @observable
   int totalQuantity;
+
+  void sortIngredientMapSymptoms(){
+    SplayTreeMap<String,double> sortedMap = SplayTreeMap<String,double>
+        .from(ingredientMapSymptomsValueFiltered, (b, a) => ingredientMapSymptomsValueFiltered[a] > ingredientMapSymptomsValueFiltered[b] ? 1 : -1 );
+    ingredientMapSymptomsValueFiltered = Map.from(sortedMap);
+    print(ingredientMapSymptomsValueFiltered);
+  }
 
   @action
   factory _IngredientBase.fromMap(Map<String, dynamic> json) =>

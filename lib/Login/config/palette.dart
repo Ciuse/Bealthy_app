@@ -21,6 +21,9 @@ class Palette {
   static const Color secondaryDoubleMoreLight = Color(0xfffcdcb0);
   static const Color secondaryThreeMoreLight = Color(0xfffef1df);
 
+  static const Color highLightColor = Color(0xffffcc99);
+  static const Color highLightColor2 = Color(0xffb2ebf2);
+
   static const Color errorDark = Color(0xffB00020);
   static const Color errorLight = Color(0xffFF8A80);
 

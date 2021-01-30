@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'Database/symptom.dart';
 import 'Database/symptomOverviewGraphStore.dart';
 import 'Models/dateStore.dart';
+import 'headerScrollStyle.dart';
 
 class OverviewSingleSymptomWeek extends StatefulWidget {
   final String symptomId;
@@ -155,46 +156,54 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
     Map<String,int> sortedTotalMap= widget.overviewStore.sortTotalOccurrenceIngredientBySymptom();
     Map<String,int> sortedDayMap= widget.overviewStore.sortDayOccurrenceIngredientBySymptom();
+    ScrollController _scrollController = new ScrollController();
 
     return graphStore.touchedIndex==-1?
     widget.overviewStore.totalOccurrenceIngredientBySymptom.keys.length==0
         ? Center(child: Text("NO INGREDIENT RELATED")):
-    ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          for(var ingredient in sortedTotalMap.keys.toList() )
-            Column(children: [ Container(
-                margin: EdgeInsets.symmetric(horizontal:6),
-                width: 50,
-                height: 50,
-                child:  ClipOval(
-                    child: Image(
-                      image: AssetImage("images/ingredients/" + ingredient + ".png"),
-                    )
-                )),
-              Text(sortedTotalMap[ingredient].toString())
-            ])
-        ])
+    MyScrollbar(
+        scrollController:_scrollController,
+        child:ListView(
+          controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            children: [
+              for(var ingredient in sortedTotalMap.keys.toList() )
+                Column(children: [ Container(
+                    margin: EdgeInsets.symmetric(horizontal:6),
+                    width: 50,
+                    height: 50,
+                    child:  ClipOval(
+                        child: Image(
+                          image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                        )
+                    )),
+                  Text(sortedTotalMap[ingredient].toString())
+                ])
+            ]))
         : widget.overviewStore.dayOccurrenceIngredientBySymptom.keys.length==0
         ? Center(child: Text("NO INGREDIENT THIS DAY"))
-        :ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          for(var ingredient in sortedDayMap.keys )
-            Column(children: [
-              Container(
-                  margin: EdgeInsets.symmetric(horizontal:6),
-                  width: 50,
-                  height: 50,
-                  child:  ClipOval(
-                      child: Image(
-                        image: AssetImage("images/ingredients/" + ingredient + ".png"),
-                      )
-                  )),
-              Text(sortedDayMap[ingredient].toString())
-            ],
-            )
-        ]);
+        :MyScrollbar(
+        scrollController:_scrollController,
+        child:ListView(
+            controller: _scrollController,
+
+            scrollDirection: Axis.horizontal,
+            children: [
+              for(var ingredient in sortedDayMap.keys )
+                Column(children: [
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal:6),
+                      width: 50,
+                      height: 50,
+                      child:  ClipOval(
+                          child: Image(
+                            image: AssetImage("images/ingredients/" + ingredient + ".png"),
+                          )
+                      )),
+                  Text(sortedDayMap[ingredient].toString())
+                ],
+                )
+            ]));
   }
 }
 

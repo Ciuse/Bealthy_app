@@ -198,7 +198,11 @@ class _PersonalPageState extends State<PersonalPage>{
                                     );
                                   case FutureStatus.fulfilled:
                                     return ListTile(
-                                      title: Text("Average sick days last month: "+ userStore.sickDays.length.toString()),
+                                      title: Row(children: [
+                                        Text("Average sick days last month:  ",
+                                            style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
+                                        Text(userStore.sickDays.length.toString(),
+                                            )],),
                                      // leading: Icon(Icons.sick,color: Colors.black,),
                                     );
                                   case FutureStatus.pending:
@@ -218,7 +222,7 @@ class _PersonalPageState extends State<PersonalPage>{
                     alignment: Alignment.centerLeft,
                       child:
                       ListTile(
-                        title: Text("Most relevant symptoms: "),
+                        title: Text("Most relevant symptoms: ",style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
                         // leading: Icon(Icons.sick,color: Colors.black,),
                   )),
                   Container(

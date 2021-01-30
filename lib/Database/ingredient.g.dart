@@ -116,6 +116,23 @@ mixin _$Ingredient on _IngredientBase, Store {
     });
   }
 
+  final _$ingredientMapSymptomsValueFilteredAtom =
+      Atom(name: '_IngredientBase.ingredientMapSymptomsValueFiltered');
+
+  @override
+  Map<dynamic, dynamic> get ingredientMapSymptomsValueFiltered {
+    _$ingredientMapSymptomsValueFilteredAtom.reportRead();
+    return super.ingredientMapSymptomsValueFiltered;
+  }
+
+  @override
+  set ingredientMapSymptomsValueFiltered(Map<dynamic, dynamic> value) {
+    _$ingredientMapSymptomsValueFilteredAtom
+        .reportWrite(value, super.ingredientMapSymptomsValueFiltered, () {
+      super.ingredientMapSymptomsValueFiltered = value;
+    });
+  }
+
   final _$totalQuantityAtom = Atom(name: '_IngredientBase.totalQuantity');
 
   @override
@@ -141,6 +158,7 @@ qty: ${qty},
 valueShowDialog: ${valueShowDialog},
 mealTime: ${mealTime},
 ingredientMapSymptomsValue: ${ingredientMapSymptomsValue},
+ingredientMapSymptomsValueFiltered: ${ingredientMapSymptomsValueFiltered},
 totalQuantity: ${totalQuantity}
     ''';
   }

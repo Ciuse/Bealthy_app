@@ -36,6 +36,11 @@ class _OverviewSingleIngredientState extends State<OverviewSingleIngredient>{
     ingredient.name = ingredientStore.getIngredientFromList(widget.ingredientId).name;
     widget.overviewStore.initIngredientMapSymptomsValue2(dateStore.returnDaysOfAWeekOrMonth(widget.startingDate, widget.endingDate),ingredient,symptomStore);
     widget.overviewStore.initIngredientMapSymptomsValue3(dateStore.returnDaysOfAWeekOrMonth(widget.startingDate, widget.endingDate),ingredient,symptomStore);
+
+    ingredient.ingredientMapSymptomsValueFiltered = Map.from(ingredient.ingredientMapSymptomsValue);
+    ingredient.ingredientMapSymptomsValueFiltered.removeWhere((key, value) => value<0);
+    ingredient.sortIngredientMapSymptoms();
+    print(ingredient.ingredientMapSymptomsValue);
   }
 
 
@@ -43,7 +48,7 @@ class _OverviewSingleIngredientState extends State<OverviewSingleIngredient>{
   Widget build(BuildContext context) {
     return   Scaffold(
             appBar: AppBar(
-              title: Text(ingredient.name),
+              title: Text(ingredient.name+" Statistics"),
 
             ),
             body: SingleChildScrollView(
@@ -58,51 +63,93 @@ class _OverviewSingleIngredientState extends State<OverviewSingleIngredient>{
                             child: Column(
                                 children:[
                                   ListTile(
-                                    title: Text("Ingredient Overview",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
-                                    subtitle: Text(dateStore.returnStringDate(widget.startingDate) +" "+dateStore.returnStringDate(widget.endingDate),style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
+                                    leading:MediaQuery.of(context).orientation==Orientation.landscape?Image(
+                                        height: 40,
+                                        width: 40,
+                                        image:AssetImage("images/ingredients/" +ingredient.id+".png")):null,
+                                    trailing:MediaQuery.of(context).orientation==Orientation.portrait?Image(
+                                        height: 40,
+                                        width: 40,
+                                        image:AssetImage("images/ingredients/" +ingredient.id+".png")):null,
+                                    title: Text("Symptoms correlated with "+ingredient.name,style: TextStyle(fontWeight:FontWeight.bold,fontSize:18)),
+                                    subtitle: Text("Period:"+dateStore.returnStringDate(widget.startingDate) +" "+dateStore.returnStringDate(widget.endingDate),style: TextStyle(fontSize:16)),
                                   ),
-                                  Divider(
-                                    thickness: 0.8,
-                                    color: Colors.black54,
-                                  ),
-                                  Observer(builder: (_) => ListView.builder
-                                    (
+
+                                  Observer(builder: (_) =>
+                                  MediaQuery.of(context).orientation==Orientation.portrait?
+
+                                  ListView.builder(
+                                      itemCount: ingredient.ingredientMapSymptomsValueFiltered.keys.length,
+                                      scrollDirection: Axis.vertical,
                                       shrinkWrap: true,
                                       physics: ClampingScrollPhysics(),
-                                      itemCount: ingredient.ingredientMapSymptomsValue.length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return Column(
-                                          children: [
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          alignment: Alignment.centerLeft,
+                                          child:
+                                          ListTile(
+                                              contentPadding: EdgeInsets.all(6),
+                                              leading: ImageIcon(
+                                                AssetImage("images/Symptoms/" +ingredient.ingredientMapSymptomsValueFiltered.keys.elementAt(index)+".png" ),
+                                                size: 38,color: Colors.black,),
+                                              title: Text(symptomStore.symptomList.firstWhere((element) => ingredient.ingredientMapSymptomsValueFiltered.keys.elementAt(index)==element.id).name),
+                                              subtitle: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  Text("Correlation: "),
+                                                  ingredient.ingredientMapSymptomsValueFiltered.values.elementAt(index)<5?
+                                                  Text("Low"):ingredient.ingredientMapSymptomsValueFiltered.values.elementAt(index)>=5?
+                                                  ingredient.ingredientMapSymptomsValueFiltered.values.elementAt(index)<10?Text("Medium"):
+                                                  Text("High") :
+                                                  Container()
+                                                ],)
+                                          ),
+                                        );}
+                                  ):
 
-                                            Container(
-                                                child:
-                                                ListTile(
-                                                  title: Text(symptomStore.symptomList.firstWhere((element) => ingredient.ingredientMapSymptomsValue.keys.elementAt(index)==element.id).name),
-                                                  subtitle: Text(ingredient.ingredientMapSymptomsValue.values.elementAt(index).toStringAsFixed(2)),
-                                                   )),
-                                            index!=ingredient.ingredientMapSymptomsValue.length-1?
-                                            Divider(
-                                              height: 0,
-                                              thickness: 0.5,
-                                              indent: 20,
-                                              endIndent: 20,
-                                              color: Colors.black38,
-                                            ):Container(),
-                                          ],
-                                        );
-                                      }
-                                  ))
+
+                                  GridView.builder(
+                                      gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisSpacing: 8 ,
+                                          crossAxisSpacing: 8,
+                                          childAspectRatio: (MediaQuery.of(context).size.width/MediaQuery.of(context).size.height)*2.5
+                                      ),
+                                      itemCount: ingredient.ingredientMapSymptomsValueFiltered.keys.length,
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          alignment: Alignment.centerLeft,
+                                          child:
+                                          ListTile(
+                                              contentPadding: EdgeInsets.all(6),
+                                              leading: ImageIcon(
+                                                AssetImage("images/Symptoms/" +ingredient.ingredientMapSymptomsValueFiltered.keys.elementAt(index)+".png" ),
+                                                size: 38,color: Colors.black,),
+                                              title: Text(symptomStore.symptomList.firstWhere((element) => ingredient.ingredientMapSymptomsValueFiltered.keys.elementAt(index)==element.id).name),
+                                              subtitle: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  Text("Correlation: "),
+                                                  ingredient.ingredientMapSymptomsValueFiltered.values.elementAt(index)<5?
+                                                  Text("Low"):ingredient.ingredientMapSymptomsValueFiltered.values.elementAt(index)>=5?
+                                                  ingredient.ingredientMapSymptomsValueFiltered.values.elementAt(index)<10?Text("Medium"):
+                                                  Text("High") :
+                                                  Container()
+                                                ],)
+                                          ),
+                                          );
+
+                                          ;})),
+
+
                                 ]
-                            )
-                        ),
 
-                        SizedBox(height: 20,)
+                            )),
 
-                      ]
-
-                  )),
-
-            ));
+                      ]))));
   }
 }
 

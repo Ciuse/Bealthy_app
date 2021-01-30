@@ -65,7 +65,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                                       MaterialPageRoute(builder: (context) => TreatmentToAdd()),
                                     );
                                   } ,
-                                  title: Text("TREATMENTS IN PROGRESS",style: TextStyle(fontWeight:FontWeight.bold,fontSize:16,)),
+                                  title: Text("Treatments in progress",style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
                                   leading: Icon(Icons.medical_services_outlined,color: Colors.black),
                                   trailing: IconButton(
                                     icon: Icon(Icons.add,color: Theme.of(context).accentColor,size: 30,),
@@ -128,7 +128,7 @@ class _TreatmentPageState extends State<TreatmentPage>{
                                 fit:FlexFit.loose,
                                 flex:2,
                                 child:ListTile(
-                                  title: Text("TREATMENT ENDED",style: TextStyle(fontWeight:FontWeight.bold,fontSize:16,)),
+                                  title: Text("Treatments ended",style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
                                   leading: Icon(Icons.medical_services,color: Colors.black87),
                                 )),
                             Divider(

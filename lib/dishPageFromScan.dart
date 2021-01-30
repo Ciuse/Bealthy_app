@@ -22,6 +22,8 @@ import 'Models/barCodeScannerStore.dart';
 import 'Models/foodStore.dart';
 import 'package:lit_firebase_auth/lit_firebase_auth.dart';
 
+import 'headerScrollStyle.dart';
+
 class DishPageFromScan extends StatefulWidget {
 
   final String barcode;
@@ -263,6 +265,7 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
   }
 
   Widget ingredientsWidget(){
+
     return Card(
         child: Column(
             children:[
@@ -295,134 +298,8 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                         ),
                       );
                     case FutureStatus.fulfilled:
-                      return  Observer(builder: (_) =>
-
-                          Expanded(child:ListView.builder
-                        (
-                          shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
-                          itemCount: barCodeScannerStore.ingredients.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              children: [
-                                Container(
-                                    child:
-                                    Observer(builder: (_) =>ListTile(
-                                      title: Text(barCodeScannerStore.ingredients[index].name),
-                                      leading: Image(image:AssetImage("images/ingredients/" + barCodeScannerStore.ingredients[index].id + ".png"), height: 35,width:35,),
-                                      trailing: Row(
-                                        mainAxisSize: MainAxisSize.min,
-
-                                        children: [
-                                          TextButton(child:
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(barCodeScannerStore.ingredients[index].qty, textAlign: TextAlign.left),
-                                              Icon(Icons.mode_rounded,),
-                                            ],
-                                          ),
-                                              onPressed: () =>{
-                                                barCodeScannerStore.ingredients[index].valueShowDialog=getQuantityEnumIndex(barCodeScannerStore.ingredients[index].qty),
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (_) =>  new AlertDialog(
-                                                      title: Text('Change Quantity'),
-                                                      content: Observer(builder: (_) => Column(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: <Widget>[
-
-                                                          for (int i = 0; i < Quantity.values.length; i++)
-                                                            ListTile(
-                                                              title: Text(
-                                                                Quantity.values[i].toString().split('.').last,
-                                                              ),
-                                                              leading: Radio(
-                                                                value: i,
-                                                                groupValue:  barCodeScannerStore.ingredients[index].valueShowDialog,
-                                                                onChanged: (int value) {
-                                                                  barCodeScannerStore.ingredients[index].valueShowDialog=value;
-                                                                },
-                                                              ),
-                                                            ),
-                                                          Divider(
-                                                            height: 4,
-                                                            thickness: 0.8,
-                                                            color: Colors.black,
-                                                          ),
-                                                        ],
-                                                      )),
-                                                      contentPadding: EdgeInsets.only(top: 8),
-                                                      actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-                                                      actions: [
-                                                        FlatButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(context);
-                                                          },
-                                                          child: Text('CANCEL'),
-                                                        ),
-                                                        FlatButton(
-                                                          onPressed: () {
-                                                            barCodeScannerStore.ingredients[index].qty=Quantity.values[barCodeScannerStore.ingredients[index].valueShowDialog].toString().split('.').last;
-                                                            Navigator.of(context).pop();
-                                                          },
-                                                          child: Text('ACCEPT'),
-                                                        ),
-                                                      ],
-                                                    )
-                                                )
-                                              }),
-                                          IconButton(
-                                            splashRadius: 20,
-                                            padding: EdgeInsets.all(0),
-                                            icon: Icon(Icons.delete),
-                                            onPressed: (){
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (_) =>  new AlertDialog(
-                                                    title: Text('Delete ingredient'),
-                                                    contentPadding: EdgeInsets.only(top: 8),
-                                                    actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
-                                                    actions: [
-                                                      FlatButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(context);
-                                                        },
-                                                        child: Text('CANCEL'),
-                                                      ),
-                                                      FlatButton(
-                                                        onPressed: () {
-                                                          String ingredientName = barCodeScannerStore.ingredients[index].name;
-                                                          barCodeScannerStore.ingredients.removeAt(index);
-                                                          if(!ingredientStore.ingredientsName.contains(ingredientName)){
-                                                            ingredientStore.ingredientsName.add(ingredientName);
-                                                          }
-
-                                                          Navigator.pop(context);
-                                                        },
-                                                        child: Text('DELETE'),
-                                                      ),
-                                                    ],
-                                                  )
-                                              );
-
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ))),
-                                index!=barCodeScannerStore.ingredients.length-1?
-                                Divider(
-                                  height: 0,
-                                  thickness: 0.5,
-                                  indent: 20,
-                                  endIndent: 20,
-                                  color: Colors.black38,
-                                ):Container(),
-                              ],
-                            );
-                          }
-                      )));
+                      return MediaQuery.of(context).orientation==Orientation.portrait?widgetIngredientList():
+                      Expanded(child: widgetIngredientList());
                     case FutureStatus.pending:
                     default:
                       return CircularProgressIndicator();
@@ -433,6 +310,141 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
             ]
         )
     );
+  }
+  
+  Widget widgetIngredientList(){
+    ScrollController _scrollController = new ScrollController();
+    return Observer(builder: (_) =>
+        MyScrollbar(
+            scrollController:_scrollController,
+            child:
+            ListView.builder
+              (
+                controller: _scrollController,
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemCount: barCodeScannerStore.ingredients.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      Container(
+                          child:
+                          Observer(builder: (_) =>ListTile(
+                            title: Text(barCodeScannerStore.ingredients[index].name),
+                            leading: Image(image:AssetImage("images/ingredients/" + barCodeScannerStore.ingredients[index].id + ".png"), height: 35,width:35,),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+
+                              children: [
+                                TextButton(child:
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(barCodeScannerStore.ingredients[index].qty, textAlign: TextAlign.left),
+                                    Icon(Icons.mode_rounded,),
+                                  ],
+                                ),
+                                    onPressed: () =>{
+                                      barCodeScannerStore.ingredients[index].valueShowDialog=getQuantityEnumIndex(barCodeScannerStore.ingredients[index].qty),
+                                      showDialog(
+                                          context: context,
+                                          builder: (_) =>  new AlertDialog(
+                                            title: Text('Change Quantity'),
+                                            content: Observer(builder: (_) => Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+
+                                                for (int i = 0; i < Quantity.values.length; i++)
+                                                  ListTile(
+                                                    title: Text(
+                                                      Quantity.values[i].toString().split('.').last,
+                                                    ),
+                                                    leading: Radio(
+                                                      value: i,
+                                                      groupValue:  barCodeScannerStore.ingredients[index].valueShowDialog,
+                                                      onChanged: (int value) {
+                                                        barCodeScannerStore.ingredients[index].valueShowDialog=value;
+                                                      },
+                                                    ),
+                                                  ),
+                                                Divider(
+                                                  height: 4,
+                                                  thickness: 0.8,
+                                                  color: Colors.black,
+                                                ),
+                                              ],
+                                            )),
+                                            contentPadding: EdgeInsets.only(top: 8),
+                                            actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                            actions: [
+                                              FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text('CANCEL'),
+                                              ),
+                                              FlatButton(
+                                                onPressed: () {
+                                                  barCodeScannerStore.ingredients[index].qty=Quantity.values[barCodeScannerStore.ingredients[index].valueShowDialog].toString().split('.').last;
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('ACCEPT'),
+                                              ),
+                                            ],
+                                          )
+                                      )
+                                    }),
+                                IconButton(
+                                  splashRadius: 20,
+                                  padding: EdgeInsets.all(0),
+                                  icon: Icon(Icons.delete),
+                                  onPressed: (){
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) =>  new AlertDialog(
+                                          title: Text('Delete ingredient'),
+                                          contentPadding: EdgeInsets.only(top: 8),
+                                          actionsPadding: EdgeInsets.only(bottom: 5,right: 5),
+                                          actions: [
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('CANCEL'),
+                                            ),
+                                            FlatButton(
+                                              onPressed: () {
+                                                String ingredientName = barCodeScannerStore.ingredients[index].name;
+                                                barCodeScannerStore.ingredients.removeAt(index);
+                                                if(!ingredientStore.ingredientsName.contains(ingredientName)){
+                                                  ingredientStore.ingredientsName.add(ingredientName);
+                                                }
+
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('DELETE'),
+                                            ),
+                                          ],
+                                        )
+                                    );
+
+                                  },
+                                ),
+                              ],
+                            ),
+                          ))),
+                      index!=barCodeScannerStore.ingredients.length-1?
+                      Divider(
+                        height: 0,
+                        thickness: 0.5,
+                        indent: 20,
+                        endIndent: 20,
+                        color: Colors.black38,
+                      ):Container(),
+                    ],
+                  );
+                }
+            )));
   }
 
   Widget widgetImageDishBarCode(){

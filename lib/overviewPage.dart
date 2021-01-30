@@ -12,8 +12,8 @@ import 'Database/enumerators.dart';
 import 'Login/config/palette.dart';
 import 'Models/dateStore.dart';
 import 'Models/symptomStore.dart';
-import 'OverviewSingleSymptomDay.dart';
-import 'OverviewSingleSymptomWeek.dart';
+import 'overviewSingleSymptomDay.dart';
+import 'overviewSingleSymptomWeek.dart';
 
 
 class OverviewPage extends StatefulWidget {
@@ -751,23 +751,27 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
   }
 
   Widget symptomsWidget() {
+    ScrollController _scrollController = new ScrollController();
 
     return Column(
       children: [
-      PieChartSample2(overviewStore: overviewStore),
-      Container( // Horizontal ListView
-          height: 80,
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: Observer(builder: (_) =>
-              ListView.builder(
-                itemCount: overviewStore.sortedTotalOccurrenceSymptom.length,
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Observer(builder: (_) =>
+        PieChartSample2(overviewStore: overviewStore),
+        Container( // Horizontal ListView
+            height: 90,
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Observer(builder: (_) =>
+                MyScrollbar(
+                  scrollController:_scrollController,
+                  child:ListView.builder(
+                    controller: _scrollController,
+                    itemCount: overviewStore.sortedTotalOccurrenceSymptom.length,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Observer(builder: (_) =>
 
-                      Container(
+                          Container(
                         padding: EdgeInsets.only(right: 16),
                           alignment: Alignment.center,
                           color: Colors.transparent,
@@ -800,7 +804,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
                   );
                 },
               ),
-          )),
+          ))),
     ],
     )
     ;
@@ -878,12 +882,12 @@ class PieChart2State extends State<PieChartSample2> {
             children: [
           ListTile(
             leading: Icon(Icons.pie_chart),
-            title: const Text('Symptom occurrences (%)'),
+            title: const Text('Symptom occurrences (%)',style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
           ),
       ConstrainedBox(
           constraints: MediaQuery.of(context).orientation==Orientation.portrait?BoxConstraints(
           ):BoxConstraints(
-              maxHeight: 380
+              maxHeight: 370
           ),
           child:Row(
           children: <Widget>[
