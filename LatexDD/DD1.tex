@@ -590,7 +590,15 @@ The symptom graph shows the user the percentages with which a symptom occurred i
 \subsection{Elements to be integrated}
 
 \subsection{Integration Testing Strategy}
-
+Flutter automated tests help ensure that app performs correctly before you publish it, while retaining your feature and bug fix velocity.
+Automated testing falls into a few categories:
+\begin{itemize}[•]
+\item A unit test tests a single function, method, or class.
+\item A widget test tests a single widget.
+\item An integration test tests a complete app or a large part of an app.
+\end{itemize}
+A widget test is more comprehensive than a unit test.
+For example, the Widget being tested should be able to receive and respond to user actions and events, perform layout, and instantiate child widgets. For that reason, we have decided to perform some widget tests in order to testing the most main  functionality that the user can do in our appplication as adding a dish, a treatment, a symptom or removing them.
 \subsection{Component Integration}
 
 \subsection{Used Tools}
