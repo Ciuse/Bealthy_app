@@ -276,10 +276,10 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
                     padding: EdgeInsets.only(right: 15),
                     child:Text("Quantity",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20))),
               ),
-              Divider(
+              Observer(builder: (_) =>barCodeScannerStore.ingredients.length>0?Divider(
                 thickness: 0.8,
                 color: Colors.black54,
-              ),
+              ):Container()),
               Observer(
                 builder: (_) {
                   switch (barCodeScannerStore.loadIngredients.status) {

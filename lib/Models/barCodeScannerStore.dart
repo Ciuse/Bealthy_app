@@ -66,17 +66,23 @@ abstract class _BarCodeScannerStoreBase with Store {
 
    @action
    Future<void> getIngredients(IngredientStore ingredientStore, FoodStore foodStore) async {
-
-      productFromQuery.ingredients.forEach((productIngredient) {
-         ingredientStore.ingredientList.forEach((ingredient) {
-            if(isSubstring(ingredient.name, productIngredient.id) || isSubstring(ingredient.it_Name, productIngredient.id)){
-               if(!ingredients.contains(ingredient)){
-                  ingredient.qty= Quantity.Normal.toString().split('.').last;
-                  ingredients.add(ingredient);
+      if(productFromQuery.ingredients!=null)
+      {
+         productFromQuery.ingredients.forEach((productIngredient) {
+            ingredientStore.ingredientList.forEach((ingredient) {
+               if (isSubstring(ingredient.name, productIngredient.id) ||
+                   isSubstring(ingredient.it_Name, productIngredient.id)) {
+                  if (!ingredients.contains(ingredient)) {
+                     ingredient.qty = Quantity.Normal
+                         .toString()
+                         .split('.')
+                         .last;
+                     ingredients.add(ingredient);
+                  }
                }
-            }
             });
-      });
+         });
+      }
 
    }
 
