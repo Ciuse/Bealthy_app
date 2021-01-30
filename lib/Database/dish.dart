@@ -4,7 +4,7 @@ import 'dart:io';
 
 part 'dish.g.dart';
 
-Dish clientFromMap(String str) => _DishBase.fromMap(json.decode(str));
+Dish dishFromMap(String str) => _DishBase.fromMap(json.decode(str));
 
 
 String clientToMap2(_DishBase data) => json.encode(data.toMapDishes());
@@ -13,7 +13,7 @@ String clientToMap4(_DishBase data) => json.encode(data.toMapDishesCreatedByUser
 
 
 
-// This is the class used by rest of your codebase
+
 class Dish = _DishBase with _$Dish;
 
 // The store-class
@@ -25,6 +25,8 @@ abstract class _DishBase with Store {
     this.mealTime,
     this.barcode,
   });
+
+
 
   @observable
   String id;
@@ -61,6 +63,11 @@ abstract class _DishBase with Store {
         mealTime: json["mealTime"],
       );
 
+   _DishBase.fromJson(Map<String, dynamic> json){
+      name = json['name'];
+      qty = json["qty"];
+      mealTime = json["mealTime"];
+  }
 
   Map<String, dynamic> toMapDishes() =>
       {

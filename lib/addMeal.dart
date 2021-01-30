@@ -91,6 +91,7 @@ class _AddMealState extends State<AddMeal>{
                               elevation: 5,
                               child:
                               TextButton(
+                                  key:Key("scanButton"),
                               style: TextButton.styleFrom(
                                 primary:  Palette.secondaryLight,
                               ),
@@ -144,6 +145,7 @@ class _AddMealState extends State<AddMeal>{
                               elevation: 5,
                               child:
                               TextButton(
+                                  key:Key("favouriteButton"),
                                   style: TextButton.styleFrom(
                                     primary:  Palette.secondaryLight,
                                   ),
@@ -171,6 +173,7 @@ class _AddMealState extends State<AddMeal>{
                               elevation: 5,
                               child:
                              TextButton(
+                                 key:Key("createdButton"),
                               style: TextButton.styleFrom(
                                 primary:  Palette.secondaryLight,
                               ),
@@ -201,6 +204,7 @@ class _AddMealState extends State<AddMeal>{
                           elevation: 5,
                           child:
                           TextButton(
+                              key:Key("createNewDishButton"),
                           style: TextButton.styleFrom(
                             primary:  Palette.secondaryLight,
                           ),

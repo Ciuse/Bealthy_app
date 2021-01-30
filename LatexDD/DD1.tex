@@ -344,6 +344,9 @@ MobX relies on 3 core concepts: Observables, Actions and Reactions. Observables 
 \centering
 \includegraphics[height=7cm, width=12cm]{MobX.png}
 \end{figure}
+\\
+\item We use Mobx together the concept of \textbf{Provider} in fact before running the app, we create a list of global providers. 
+The Provider package allows us to inject our store and retrieve them anywhere from our widget tree.
 \item We decided to use \textbf{Firebase Cloud Storage API} that let us to upload  users' data to firebase cloud and download it. It is a flexible and scalable NoSql database for mobile development. We protect the data for users logged in our app throght the use of certain rules with firebase authentication. Security, of course, is our first concern. All transfers are performed over a secure connection.
 Firebase SDKs for Cloud Storage add Google security to file uploads and downloads for your Firebase apps, regardless of network quality. We use that SDKs to store images and other user-generated content like dishes and symptoms. 
 Firebase Cloud is also use to share standard dishes and symptoms  between all logged users. We developers have to mantain them updated. 
@@ -377,26 +380,32 @@ The user of our application can scan the barcode of a food and thanks to the int
 
 \subsection{Software System Attributes} 
 
+\subsubsection{Usability}
+The age range of the users of our application is between 14 and 60 years old.
+Our software is designed to be as simple as possible with 4 main pages where there is all the information at your fingertips and few actions that can be performed on them.\\
+We have tried to make the insertion of the dishes fast and intuitive without the need to specify too precise times but only through 4 main moments of the meals.
+We have chosen only 8 symptoms to avoid too much dispersion in the choice and visualization of data.\\
+The symptoms chosen are the most common and related to the foods eaten.
+Also the insertion of symptoms consists in selecting only 3 values already pre-set without having to type anything.\\
+The graphs represent concepts simple to understand but at the same time very useful to the user such as the symptom that appears most often.
 \subsubsection{Reliability}
-The users age range is 16-40 years old, so the system will be designed to be always reliable:
-\begin{itemize}
-\item On workday, in the early morning (7-10) and in the late afternoon (16-19); 
-\item On weekend, from the midday to middle evening (11-16) and in the evening (19-24);
-\end{itemize}
-Because during the working day the user will use the application mainly for register his working or studying appointment and some personal engagements.\\
-While in the weekend the user will register his leisure events and night friends meeting.
+The system is designed to be always reliable, using an online database managed by google we are always aware if our information has been saved or received correctly 24 hours a day.
 
 \subsubsection{Availability}
-The system must guarantee a 24/7 service. Very small interrupt of the service during the day will be acceptable and tolerated. But when an issue occurs, the system must respond correctly after a maximum of 3 user attempts.
-\subsubsection{Security}
-Users credentials and external services account will be cryptate and stored in a reserved and protect area of the system database. Also, the privacy information about the user movement and his localization must be all encrypted and totally protected.
-\subsubsection{Maintainability}
-Our system uses many external APIs, so the maintainability of our software is very much dependent on this factor. Our system must always be updated with external API interfaces, and it must always be able to interpret and exploit the data it obtains from them.
-Generally, there should not be too much invasive maintenance processes, as it uses very popular APIs used by many other software, whose changes are often minimal and well documented.
-\subsubsection{Portability}
-The system in terms of portability shall be very flexible. The application logic and the system interfaces are abstractly separated; so, the application porting consist only in the re-adapting of the user interface with the new operating system.
-Also, could be necessary to reimplement some of the system interaction with the external services.\\
+The system, as far as the main information is concerned, guarantees a continuous and always available service by relying on Firebase as a remote server, which is managed by Google.\\
+Although the availability offered by Open Food Fact is lower, this does not preclude the use of the main functions of the application.
 
+\subsubsection{Security}
+Users credentials and external services account will be cryptate and stored in Firebasewhich uses a hashing system to save passwords and thus make them secure.
+
+\subsubsection{Maintainability}
+The maintenance of the application is divided into three parts.
+The first one is about data management, in particular periodically updating the default dishes we offer to users and adding some new symptoms if we notice that a large portion of users require them.\\
+The second part is about improving the algorithm we use to process user data to offer more and more accurate and reliable statistics.\\
+The third part is about keeping the application up to date with the various operating systems on which it runs (Android and iOS), while the part about databases and external systems is not our competition.
+\subsubsection{Portability}
+Our application offers a very high portability having leveraged Flutter as a programming platform that offers the possibility to easily develop for Android, iOS and Web.
+The data, having divided from the logic of presentation,  are easily shared by any platform a user wants to access them.
 \section{Specific Requirement}
 \subsection{User characteristics}
 The main actor that interact with the system is the \textbf{Registered User} of the application.\\
@@ -587,7 +596,7 @@ The symptom graph shows the user the percentages with which a symptom occurred i
 
 
 \section{Implementation,Integration and Test Plan:}
-\subsection{Elements to be integrated}
+
 
 \subsection{Integration Testing Strategy}
 Flutter automated tests help ensure that app performs correctly before you publish it, while retaining your feature and bug fix velocity.
@@ -599,7 +608,7 @@ Automated testing falls into a few categories:
 \end{itemize}
 A widget test is more comprehensive than a unit test.
 For example, the Widget being tested should be able to receive and respond to user actions and events, perform layout, and instantiate child widgets. For that reason, we have decided to perform some widget tests in order to testing the most main  functionality that the user can do in our appplication as adding a dish, a treatment, a symptom or removing them.
-\subsection{Component Integration}
+
 
 \subsection{Used Tools}
 \begin{itemize}
