@@ -1,0 +1,24 @@
+3.6 Software System Attributes
+
+3.6.1 Usability
+The age range of the users of our application is between 14 and 60 years old.
+Our software is designed to be as simple as possible with 4 main pages where there is all the information at your fingertips and few actions that can be performed on them.
+We have tried to make the insertion of the dishes fast and intuitive without the need to specify too precise times but only through 4 main moments of the meals.
+We have chosen only 8 symptoms to avoid too much dispersion in the choice and visualization of data.
+The symptoms chosen are the most common and related to the foods eaten.
+Also the insertion of symptoms consists in selecting only 3 values already pre-set without having to type anything.
+The graphs represent concepts simple to understand but at the same time very useful to the user such as the symptom that appears most often.
+3.6.2 Reliability
+The system is designed to be always reliable, using an online database managed by google we are always aware if our information has been saved or received correctly 24 hours a day.
+3.6.3 Availability
+Il sistema per quanto riguarda le informazioni principali garantisce un servizio continuativo e sempre disponibile affidandoci come server remoto a Firebase che è gestito da google.
+Anche se l' availability offerta da Open Food Fact è inferiore questo non preclude l'utilizzo delle funzioni principali dell'applicazione
+3.6.4 Security
+Users credentials and external services account will be cryptate and stored in Firebasewhich uses a hashing system to save passwords and thus make them secure.
+3.6.5 Maintainability
+The maintenance of the application is divided into three parts.
+The first one is about data management, in particular periodically updating the default dishes we offer to users and adding some new symptoms if we notice that a large portion of users require them.
+The second part is about improving the algorithm we use to process user data to offer more and more accurate and reliable statistics.
+The third part is about keeping the application up to date with the various operating systems on which it runs (Android and iOS), while the part about databases and external systems is not our competition.
+3.6.6 Portability
+Our application offers a very high portability having leveraged Flutter as a programming platform that offers the possibility to easily develop for Android, iOS and Web. And having divided the logic of presentation from the data they are easily shared by any platform a user wants to access them.

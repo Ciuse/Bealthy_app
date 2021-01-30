@@ -494,7 +494,9 @@ class _DishPageFromScanState extends State<DishPageFromScan>{
         padding: EdgeInsets.symmetric(horizontal: 4,vertical: 2),
         child: Card(child:
         ListTile(
-            title: Text("Name: ",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19)),
+            title:  FittedBox(
+                fit: BoxFit.fitWidth,
+                child:Text("Name: ",style: TextStyle(fontWeight:FontWeight.bold,fontSize:19))),
             trailing: TextButton(child:
             Row(
               mainAxisSize: MainAxisSize.min,
