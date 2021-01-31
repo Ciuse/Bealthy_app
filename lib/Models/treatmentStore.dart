@@ -147,11 +147,11 @@ abstract class _TreatmentStoreBase with Store {
   Future<void> calculateTreatmentEndedStatistics(Treatment treatment,SymptomStore symptomStore) async{
     mapSymptomPercentage.clear();
     symptomStore.symptomList.forEach((symptom) {
-      if(symptomStore.mapSymptomBeforeTreatment.containsKey(symptom.id)){
-        if(symptomStore.mapSymptomTreatment.containsKey(symptom.id)){
-          double percentage = ((symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
-              -symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
-              symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)*100;
+      if(treatment.mapSymptomBeforeTreatment.containsKey(symptom.id)){
+        if(treatment.mapSymptomTreatment.containsKey(symptom.id)){
+          double percentage = ((treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
+              -treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
+              treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)*100;
           ObservableValues observableValues= new ObservableValues();
           observableValues.percentageSymptom=percentage;
           mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
