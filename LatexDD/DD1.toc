@@ -29,4 +29,6 @@
 \contentsline {subsection}{\numberline {3.2}User Interface Design}{24}{subsection.3.2}%
 \contentsline {section}{\numberline {4}Implementation,Integration and Test Plan:}{33}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Integration Testing Strategy}{33}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Used Tools}{33}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.1.1}Widget tests}{33}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Functional tests}{35}{subsubsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.2}Used Tools}{36}{subsection.4.2}%

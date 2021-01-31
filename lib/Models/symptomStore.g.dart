@@ -41,39 +41,6 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     });
   }
 
-  final _$mapSymptomTreatmentAtom =
-      Atom(name: '_SymptomStoreBase.mapSymptomTreatment');
-
-  @override
-  ObservableMap<String, ObservableValues> get mapSymptomTreatment {
-    _$mapSymptomTreatmentAtom.reportRead();
-    return super.mapSymptomTreatment;
-  }
-
-  @override
-  set mapSymptomTreatment(ObservableMap<String, ObservableValues> value) {
-    _$mapSymptomTreatmentAtom.reportWrite(value, super.mapSymptomTreatment, () {
-      super.mapSymptomTreatment = value;
-    });
-  }
-
-  final _$mapSymptomBeforeTreatmentAtom =
-      Atom(name: '_SymptomStoreBase.mapSymptomBeforeTreatment');
-
-  @override
-  ObservableMap<String, ObservableValues> get mapSymptomBeforeTreatment {
-    _$mapSymptomBeforeTreatmentAtom.reportRead();
-    return super.mapSymptomBeforeTreatment;
-  }
-
-  @override
-  set mapSymptomBeforeTreatment(ObservableMap<String, ObservableValues> value) {
-    _$mapSymptomBeforeTreatmentAtom
-        .reportWrite(value, super.mapSymptomBeforeTreatment, () {
-      super.mapSymptomBeforeTreatment = value;
-    });
-  }
-
   final _$mapTreatmentsAtom = Atom(name: '_SymptomStoreBase.mapTreatments');
 
   @override
@@ -213,36 +180,39 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
       AsyncAction('_SymptomStoreBase.initTreatmentMap');
 
   @override
-  Future<void> initTreatmentMap(List<DateTime> days) {
+  Future<void> initTreatmentMap(Treatment treatment, List<DateTime> days) {
     return _$initTreatmentMapAsyncAction
-        .run(() => super.initTreatmentMap(days));
+        .run(() => super.initTreatmentMap(treatment, days));
   }
 
   final _$initBeforeTreatmentMapAsyncAction =
       AsyncAction('_SymptomStoreBase.initBeforeTreatmentMap');
 
   @override
-  Future<void> initBeforeTreatmentMap(List<DateTime> days) {
+  Future<void> initBeforeTreatmentMap(
+      Treatment treatment, List<DateTime> days) {
     return _$initBeforeTreatmentMapAsyncAction
-        .run(() => super.initBeforeTreatmentMap(days));
+        .run(() => super.initBeforeTreatmentMap(treatment, days));
   }
 
   final _$_fillTreatmentMapAsyncAction =
       AsyncAction('_SymptomStoreBase._fillTreatmentMap');
 
   @override
-  Future<void> _fillTreatmentMap(DateTime date, String symptomId) {
+  Future<void> _fillTreatmentMap(
+      Treatment treatment, DateTime date, String symptomId) {
     return _$_fillTreatmentMapAsyncAction
-        .run(() => super._fillTreatmentMap(date, symptomId));
+        .run(() => super._fillTreatmentMap(treatment, date, symptomId));
   }
 
   final _$_fillBeforeTreatmentMapAsyncAction =
       AsyncAction('_SymptomStoreBase._fillBeforeTreatmentMap');
 
   @override
-  Future<void> _fillBeforeTreatmentMap(DateTime date, String symptomId) {
+  Future<void> _fillBeforeTreatmentMap(
+      Treatment treatment, DateTime date, String symptomId) {
     return _$_fillBeforeTreatmentMapAsyncAction
-        .run(() => super._fillBeforeTreatmentMap(date, symptomId));
+        .run(() => super._fillBeforeTreatmentMap(treatment, date, symptomId));
   }
 
   final _$createOccurrenceSymptomAsyncAction =
@@ -290,17 +260,6 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
         name: '_SymptomStoreBase.getSymptomFromList');
     try {
       return super.getSymptomFromList(symptomId);
-    } finally {
-      _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Future<void> waitForFutures() {
-    final _$actionInfo = _$_SymptomStoreBaseActionController.startAction(
-        name: '_SymptomStoreBase.waitForFutures');
-    try {
-      return super.waitForFutures();
     } finally {
       _$_SymptomStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -366,8 +325,6 @@ mixin _$SymptomStore on _SymptomStoreBase, Store {
     return '''
 symptomList: ${symptomList},
 symptomListOfSpecificDay: ${symptomListOfSpecificDay},
-mapSymptomTreatment: ${mapSymptomTreatment},
-mapSymptomBeforeTreatment: ${mapSymptomBeforeTreatment},
 mapTreatments: ${mapTreatments},
 loadSymptomDay: ${loadSymptomDay},
 loadTreatmentMap: ${loadTreatmentMap},

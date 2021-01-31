@@ -28,4 +28,6 @@
 \BOOKMARK [2][-]{subsection.3.2}{User Interface Design}{section.3}% 28
 \BOOKMARK [1][-]{section.4}{Implementation,Integration and Test Plan:}{}% 29
 \BOOKMARK [2][-]{subsection.4.1}{Integration Testing Strategy}{section.4}% 30
-\BOOKMARK [2][-]{subsection.4.2}{Used Tools}{section.4}% 31
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Widget tests}{subsection.4.1}% 31
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Functional tests}{subsection.4.1}% 32
+\BOOKMARK [2][-]{subsection.4.2}{Used Tools}{section.4}% 33

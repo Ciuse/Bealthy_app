@@ -33,12 +33,6 @@ abstract class _SymptomStoreBase with Store {
   var symptomListOfSpecificDay = new ObservableList<Symptom>();
 
   @observable
-  var mapSymptomTreatment = new ObservableMap<String,ObservableValues>();
-
-  @observable
-  var mapSymptomBeforeTreatment = new ObservableMap<String,ObservableValues>();
-
-  @observable
   var mapTreatments = new ObservableMap<String,ObservableValues>();
 
   Map colorSymptomsMap = new Map<String , Color>();
@@ -79,7 +73,6 @@ abstract class _SymptomStoreBase with Store {
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((result) {
-
         Symptom i = new Symptom(id:result.id,name:result.get("name"),description:result.get("description"),symptoms: result.get("symptoms") );
         i.initStore();
         symptomList.add(i);
@@ -144,8 +137,8 @@ abstract class _SymptomStoreBase with Store {
   }
 
   Future<void>asyncForEachTreatment(List<Treatment> treatments,DateStore dateStore,TreatmentStore treatmentStore,SymptomStore symptomStore) async {
-    await Future.forEach(treatments, (treatment) => waitForMap(treatment,dateStore,treatmentStore,symptomStore));
-
+   // await Future.forEach(treatments, (treatment) => waitForMap(treatment,dateStore,treatmentStore,symptomStore));
+    await Future.wait(treatments.map((treatment)=> waitForMap(treatment,dateStore,treatmentStore,symptomStore)));
   }
 
   Future<void>waitTwoMapsTreatment(Treatment treatment,DateStore dateStore) async {
@@ -161,9 +154,9 @@ abstract class _SymptomStoreBase with Store {
     DateTime endingDateBeforeTreatment = startingDateTreatment.subtract(
         Duration(days: 1));
     List<Future> futures = [];
-    futures.add(initBeforeTreatmentMap(dateStore.returnDaysOfAWeekOrMonth(
+    futures.add(initBeforeTreatmentMap(treatment,dateStore.returnDaysOfAWeekOrMonth(
         startingDateBeforeTreatment, endingDateBeforeTreatment)),);
-    futures.add( initTreatmentMap(dateStore.returnDaysOfAWeekOrMonth(
+    futures.add( initTreatmentMap(treatment,dateStore.returnDaysOfAWeekOrMonth(
         startingDateTreatment, endingDateTreatment)));
     return await   Future.wait(futures);
   }
@@ -172,7 +165,7 @@ abstract class _SymptomStoreBase with Store {
     return await waitTwoMapsTreatment(treatment,dateStore)
    .then((value) {
       ObservableValues values = new ObservableValues();
-      treatmentStore.calculateTreatmentEndedStatistics(symptomStore);
+      treatmentStore.calculateTreatmentEndedStatistics(treatment,symptomStore);
       values.mapSymptomPercentage.addAll(treatmentStore.mapSymptomPercentage);
       mapTreatments.putIfAbsent(treatment.id, () => values);
     } );
@@ -180,54 +173,43 @@ abstract class _SymptomStoreBase with Store {
 
 
   @action
-  Future<void> waitForFutures(){
+  Future<void> initTreatmentMap(Treatment treatment,List<DateTime> days) async {
+    treatment.mapSymptomTreatment.clear();
+    return await asyncForEachSymptoms(treatment,days);
+  }
 
+  Future<void>asyncForEachSymptoms(Treatment treatment,List<DateTime> dates) async {
+    return await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValue(treatment,dates,symptom.id)));
   }
 
 
-
-  @action
-  Future<void> initTreatmentMap(List<DateTime> days) async {
-    mapSymptomTreatment.clear();
-    return await asyncForEachSymptoms(days);
-  }
-
-  Future<void>asyncForEachSymptoms(List<DateTime> dates) async {
-    return await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValue(dates,symptom.id)));
-  }
-
-
-
-
-  Future<void>asyncGetSymptomValue(List<DateTime> dates,String symptomId) async {
-    return await Future.wait(dates.map((date)=>_fillTreatmentMap(date,symptomId))).then((value) => calculateFractionTreatment(symptomId));
+  Future<void>asyncGetSymptomValue(Treatment treatment,List<DateTime> dates,String symptomId) async {
+    return await Future.wait(dates.map((date)=>_fillTreatmentMap(treatment,date,symptomId))).then((value) => calculateFractionTreatment(treatment,symptomId));
   }
 
   @action
-  Future<void> initBeforeTreatmentMap(List<DateTime> days) async {
-    mapSymptomBeforeTreatment.clear();
-   return await asyncForEachSymptomsBeforeTreatment(days);
+  Future<void> initBeforeTreatmentMap(Treatment treatment,List<DateTime> days) async {
+    treatment.mapSymptomBeforeTreatment.clear();
+   return await asyncForEachSymptomsBeforeTreatment(treatment,days);
   }
 
-  Future<void>asyncForEachSymptomsBeforeTreatment(List<DateTime> dates) async {
-
-    return await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValueBeforeTreatment(dates,symptom.id)));
+  Future<void>asyncForEachSymptomsBeforeTreatment(Treatment treatment,List<DateTime> dates) async {
+    return await Future.wait(symptomList.map((symptom)=> asyncGetSymptomValueBeforeTreatment(treatment,dates,symptom.id)));
   }
 
-  Future<void>asyncGetSymptomValueBeforeTreatment(List<DateTime> dates,String symptomId) async {
-
-    return await Future.wait(dates.map((date)=>_fillBeforeTreatmentMap(date,symptomId))).then((value) => calculateFractionBefore(symptomId) );
+  Future<void>asyncGetSymptomValueBeforeTreatment(Treatment treatment,List<DateTime> dates,String symptomId) async {
+    return await Future.wait(dates.map((date)=>_fillBeforeTreatmentMap(treatment,date,symptomId))).then((value) => calculateFractionBefore(treatment,symptomId) );
   }
 
 
-  void calculateFractionBefore(String symptomId){
-    if(mapSymptomBeforeTreatment.containsKey(symptomId))
-    mapSymptomBeforeTreatment[symptomId].fractionSeverityOccurrence = mapSymptomBeforeTreatment[symptomId].severitySymptom / mapSymptomBeforeTreatment[symptomId].occurrenceSymptom;
+  void calculateFractionBefore(Treatment treatment,String symptomId){
+    if(treatment.mapSymptomBeforeTreatment.containsKey(symptomId))
+      treatment.mapSymptomBeforeTreatment[symptomId].fractionSeverityOccurrence = treatment.mapSymptomBeforeTreatment[symptomId].severitySymptom / treatment.mapSymptomBeforeTreatment[symptomId].occurrenceSymptom;
   }
 
-  void calculateFractionTreatment(String symptomId){
-    if(mapSymptomTreatment.containsKey(symptomId))
-    mapSymptomTreatment[symptomId].fractionSeverityOccurrence = mapSymptomTreatment[symptomId].severitySymptom / mapSymptomTreatment[symptomId].occurrenceSymptom;
+  void calculateFractionTreatment(Treatment treatment,String symptomId){
+    if(treatment.mapSymptomTreatment.containsKey(symptomId))
+      treatment.mapSymptomTreatment[symptomId].fractionSeverityOccurrence = treatment.mapSymptomTreatment[symptomId].severitySymptom / treatment.mapSymptomTreatment[symptomId].occurrenceSymptom;
   }
   @action
   double mealTimeValueSymptom(Symptom symptom){
@@ -258,7 +240,7 @@ abstract class _SymptomStoreBase with Store {
 
 
   @action
-  Future<void> _fillTreatmentMap(DateTime date,String symptomId) async {
+  Future<void> _fillTreatmentMap(Treatment treatment,DateTime date,String symptomId) async {
     String day = fixDate(date);
     await (FirebaseFirestore.instance
         .collection('UserSymptoms')
@@ -272,14 +254,14 @@ abstract class _SymptomStoreBase with Store {
             symptomCreated.setMealTime(querySnapshot.get("mealTime"));
             symptomCreated.setMealTimeBoolList();
             symptomCreated.overviewValue = ((symptomCreated.intensity)*(symptomCreated.frequency)*mealTimeValueSymptom(symptomCreated))*0.4;
-            if(mapSymptomTreatment.keys.isEmpty || mapSymptomTreatment[symptomId]==null){
+            if(treatment.mapSymptomTreatment.keys.isEmpty || treatment.mapSymptomTreatment[symptomId]==null){
               ObservableValues symptomValue = new ObservableValues();
               symptomValue.occurrenceSymptom = 1;
               symptomValue.severitySymptom = symptomCreated.overviewValue;
-              mapSymptomTreatment.putIfAbsent(symptomId, () => symptomValue);
+              treatment.mapSymptomTreatment.putIfAbsent(symptomId, () => symptomValue);
             }else{
-              mapSymptomTreatment[symptomId].occurrenceSymptom = mapSymptomTreatment[symptomId].occurrenceSymptom +1;
-              mapSymptomTreatment[symptomId].severitySymptom = mapSymptomTreatment[symptomId].severitySymptom + symptomCreated.overviewValue;
+              treatment.mapSymptomTreatment[symptomId].occurrenceSymptom = treatment.mapSymptomTreatment[symptomId].occurrenceSymptom +1;
+              treatment.mapSymptomTreatment[symptomId].severitySymptom = treatment.mapSymptomTreatment[symptomId].severitySymptom + symptomCreated.overviewValue;
             }
           }
 
@@ -288,7 +270,7 @@ abstract class _SymptomStoreBase with Store {
   }
 
   @action
-  Future<void> _fillBeforeTreatmentMap(DateTime date,String symptomId) async {
+  Future<void> _fillBeforeTreatmentMap(Treatment treatment,DateTime date,String symptomId) async {
     String day = fixDate(date);
     await (FirebaseFirestore.instance
         .collection('UserSymptoms')
@@ -303,14 +285,14 @@ abstract class _SymptomStoreBase with Store {
         symptomCreated.setMealTime(querySnapshot.get("mealTime"));
         symptomCreated.setMealTimeBoolList();
         symptomCreated.overviewValue = ((symptomCreated.intensity)*(symptomCreated.frequency)*mealTimeValueSymptom(symptomCreated))*0.4;
-        if(mapSymptomBeforeTreatment.keys.isEmpty || mapSymptomBeforeTreatment[symptomId]==null){
+        if(treatment.mapSymptomBeforeTreatment.keys.isEmpty || treatment.mapSymptomBeforeTreatment[symptomId]==null){
           ObservableValues symptomValue = new ObservableValues();
           symptomValue.occurrenceSymptom = 1;
           symptomValue.severitySymptom = symptomCreated.overviewValue;
-          mapSymptomBeforeTreatment.putIfAbsent(symptomId, () => symptomValue);
+          treatment.mapSymptomBeforeTreatment.putIfAbsent(symptomId, () => symptomValue);
         }else{
-          mapSymptomBeforeTreatment[symptomId].occurrenceSymptom = mapSymptomBeforeTreatment[symptomId].occurrenceSymptom +1;
-          mapSymptomBeforeTreatment[symptomId].severitySymptom = mapSymptomBeforeTreatment[symptomId].severitySymptom + symptomCreated.overviewValue;
+          treatment.mapSymptomBeforeTreatment[symptomId].occurrenceSymptom = treatment.mapSymptomBeforeTreatment[symptomId].occurrenceSymptom +1;
+          treatment.mapSymptomBeforeTreatment[symptomId].severitySymptom = treatment.mapSymptomBeforeTreatment[symptomId].severitySymptom + symptomCreated.overviewValue;
         }
       }
 

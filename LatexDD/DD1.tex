@@ -599,15 +599,70 @@ The symptom graph shows the user the percentages with which a symptom occurred i
 
 
 \subsection{Integration Testing Strategy}
-Flutter automated tests help ensure that app performs correctly before you publish it, while retaining your feature and bug fix velocity.
+Flutter automated tests help ensure that app performs correctly before publish it.
 Automated testing falls into a few categories:
 \begin{itemize}[•]
 \item A unit test tests a single function, method, or class.
 \item A widget test tests a single widget.
 \item An integration test tests a complete app or a large part of an app.
 \end{itemize}
+\subsubsection{Widget tests}
 A widget test is more comprehensive than a unit test.
 For example, the Widget being tested should be able to receive and respond to user actions and events, perform layout, and instantiate child widgets. For that reason, we have decided to perform some widget tests in order to testing the most main  functionality that the user can do in our appplication as adding a dish, a treatment, a symptom or removing them.
+\begin{itemize}[•]
+\item \textbf{Example:} add new symptom test\\
+In this test we want to check that all the parameters required for the user to be able to add a new symptom on a given day have been entered. 
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=8cm]{inizializzareSymptomPage.PNG}
+\caption{Symptom page initialization}
+\medskip
+\small
+The test requires the creation of an instance of the symptom and the initialization of the relevant page "SymptomPage" with the providers it uses.
+\end{figure}
+\\
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=8cm]{symptomButtonSave.PNG}
+\caption{Setting symptom parameters}
+\medskip
+\small
+Once the page has been initialized, we simulate user interaction and set various parameters to the symptom. We expect the Save button to become clickable.
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=4cm]{CreazioneSymptom.PNG}
+\caption{Create new symptom}
+\medskip
+\small
+After clicking the Save button, we expect the length of the symptom list for that day to have increased by one unit and the last value entered to be the newly created symptom.
+\end{figure}
+
+\end{itemize}
+
+
+\clearpage
+\subsubsection{Functional tests}
+Our mobile app  needs to communicate with firebase and OpenFoodFacts databases. When we retrieve data from firebase store, we encapsule them in model classes like Dish, Symptom or Treatment in order to structure data. In order to do that we use jsonDecode() function (using the built-in JSON decoder in dart:convert).
+\\
+We pass the Firebase  JSON string  to the jsonDecode() function, and then looking up the values we need in the resulting Map<String, dynamic>. 
+For example the Dish.fromJson() constructor, is used for constructing a new Dish instance from a map structure. \\
+While, when we retrieve data from OpenFoodFacts, we use the package for flutter in order to  retrieve information about products, their ingredients and image with the function OpenFoodAPIClient.getProduct().
+During the testing part of our project we decided to test the json serialization for the firebase data and to test the function provided by OpenFoodFacts.
+\begin{itemize}[•]
+\item \textbf{Example:} new dish istance creation test\\
+In this test we want to check that all data retrieved from firebase DB are correctly encapsulated in our Dish class. 
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=10cm]{DishCreatedTest.PNG}
+\caption{Creation of Dish istance}
+\medskip
+\small
+\end{figure}
+\end{itemize}
 
 
 \subsection{Used Tools}
@@ -615,9 +670,9 @@ For example, the Widget being tested should be able to receive and respond to us
 \item StarUml 2.8.0
 \item Miktex 2.9.6361
 \item Texmaker 5.0.2
-\item DeepL
 \item GitHubDesktop 1.0.6
 \item AdobePhotoshop CC 2017
 \item Power Point
+\item Intellij
 \end{itemize}
 \end{document}
