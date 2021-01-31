@@ -288,12 +288,12 @@ mixin _$FoodStore on _FoodStoreBase, Store {
         .run(() => super.initializeIngredients(dish, ingredientStore));
   }
 
-  final _$_getDishesFromDBAndUserAsyncAction =
-      AsyncAction('_FoodStoreBase._getDishesFromDBAndUser');
+  final _$getDishesFromDBAndUserAsyncAction =
+      AsyncAction('_FoodStoreBase.getDishesFromDBAndUser');
 
   @override
   Future<void> getDishesFromDBAndUser(IngredientStore ingredientStore) {
-    return _$_getDishesFromDBAndUserAsyncAction
+    return _$getDishesFromDBAndUserAsyncAction
         .run(() => super.getDishesFromDBAndUser(ingredientStore));
   }
 

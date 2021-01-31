@@ -144,7 +144,7 @@ abstract class _TreatmentStoreBase with Store {
 
 
   @action
-  Future<void> calculateTreatmentEndedStatistics(SymptomStore symptomStore) async{
+  Future<void> calculateTreatmentEndedStatistics(Treatment treatment,SymptomStore symptomStore) async{
     mapSymptomPercentage.clear();
     symptomStore.symptomList.forEach((symptom) {
       if(symptomStore.mapSymptomBeforeTreatment.containsKey(symptom.id)){
@@ -163,7 +163,7 @@ abstract class _TreatmentStoreBase with Store {
         }
       }
       else{
-        if(symptomStore.mapSymptomTreatment.containsKey(symptom.id)){
+        if(treatment.mapSymptomTreatment.containsKey(symptom.id)){
           ObservableValues observableValues= new ObservableValues();
           observableValues.appeared=true;
           mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);

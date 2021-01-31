@@ -268,16 +268,13 @@ void main() {
       builder: (context) => YourWidgetToTest(context),
     ),)));
 
-
-
-    await tester.enterText(find.byKey(titleKey).first, "treatment1");
-    await tester.pump();
-    expect(titleKey.currentState.isValid, isTrue);
-
     await tester.enterText(find.byKey(titleKey).first, "");
     await tester.pump();
     expect(titleKey.currentState.isValid, isFalse);
 
+    await tester.enterText(find.byKey(titleKey).first, "treatment1");
+    await tester.pump();
+    expect(titleKey.currentState.isValid, isTrue);
 
     await tester.enterText(find.byKey(descriptionKey).first, "");
     await tester.pump();

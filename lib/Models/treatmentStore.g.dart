@@ -109,9 +109,10 @@ mixin _$TreatmentStore on _TreatmentStoreBase, Store {
       AsyncAction('_TreatmentStoreBase.calculateTreatmentEndedStatistics');
 
   @override
-  Future<void> calculateTreatmentEndedStatistics(SymptomStore symptomStore) {
-    return _$calculateTreatmentEndedStatisticsAsyncAction
-        .run(() => super.calculateTreatmentEndedStatistics(symptomStore));
+  Future<void> calculateTreatmentEndedStatistics(
+      Treatment treatment, SymptomStore symptomStore) {
+    return _$calculateTreatmentEndedStatisticsAsyncAction.run(
+        () => super.calculateTreatmentEndedStatistics(treatment, symptomStore));
   }
 
   final _$_TreatmentStoreBaseActionController =

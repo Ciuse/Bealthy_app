@@ -59,6 +59,12 @@ abstract class _IngredientBase with Store {
           qty: json["qty"]
       );
 
+  _IngredientBase.fromJson(Map<String, dynamic> json){
+    name = json['name'];
+    qty = json["qty"];
+    id = json["id"];
+  }
+
   Map<String, dynamic> toMap() =>
       {
         "id": id,

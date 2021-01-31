@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:Bealthy_app/Models/symptomStore.dart' as Sym;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
   final endingDateCt = TextEditingController();
   DateStore dateStore;
   TreatmentStore treatmentStore;
+  Sym.SymptomStore symptomStore;
   int lastTreatmentNumber;
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<String>> titleKey = GlobalKey<FormFieldState<String>>();
@@ -37,8 +39,9 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
   @override
   void initState() {
     _controller = ScrollController();
-    var dateStore = Provider.of<DateStore>(context, listen: false);
+    dateStore = Provider.of<DateStore>(context, listen: false);
     treatmentStore = Provider.of<TreatmentStore>(context, listen: false);
+    symptomStore = Provider.of<Sym.SymptomStore>(context, listen: false);
     if(auth.currentUser!=null){
       getLastNumber();
     }
@@ -73,6 +76,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
         medicalInfoText: medicalInfoCt.text,
       );
       treatmentStore.addNewTreatmentCreatedByUser(treatment);
+      symptomStore.waitForMap(treatment,dateStore,treatmentStore,symptomStore);
       Navigator.pop(context);
 
 
@@ -316,7 +320,6 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (this._formKey.currentState.validate()) {
-                        print("val");
                         setState(() {
                           this._formKey.currentState.save();
                         });
