@@ -144,24 +144,24 @@ abstract class _TreatmentStoreBase with Store {
 
 
   @action
-  Future<void> calculateTreatmentEndedStatistics(SymptomStore symptomStore) async{
+  Future<void> calculateTreatmentEndedStatistics(Treatment treatment,SymptomStore symptomStore) async{
     mapSymptomPercentage.clear();
     symptomStore.symptomList.forEach((symptom) {
-      if(symptomStore.mapSymptomBeforeTreatment.containsKey(symptom.id)){
-        if(symptomStore.mapSymptomTreatment.containsKey(symptom.id)){
-          if(symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence>=symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)
+      if(treatment.mapSymptomBeforeTreatment.containsKey(symptom.id)){
+        if(treatment.mapSymptomTreatment.containsKey(symptom.id)){
+          if(treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence>=treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)
           {
-            double percentage = ((symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
-                -symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
-                symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)*100;
+            double percentage = ((treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
+                -treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
+                treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)*100;
             ObservableValues observableValues= new ObservableValues();
             observableValues.percentageSymptom=percentage;
             mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
           }
           else{
-            double percentage = ((-symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
-                +symptomStore.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
-                symptomStore.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence)*100;
+            double percentage = ((-treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
+                +treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
+                treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence)*100;
             ObservableValues observableValues= new ObservableValues();
             observableValues.percentageSymptom=-percentage;
             mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
@@ -173,7 +173,7 @@ abstract class _TreatmentStoreBase with Store {
         }
       }
       else{
-        if(symptomStore.mapSymptomTreatment.containsKey(symptom.id)){
+        if(treatment.mapSymptomTreatment.containsKey(symptom.id)){
           ObservableValues observableValues= new ObservableValues();
           observableValues.appeared=true;
           mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);

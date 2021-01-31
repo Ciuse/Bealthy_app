@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/mealTimeBool.dart';
+import 'package:Bealthy_app/Database/observableValues.dart';
 import 'package:mobx/mobx.dart';
 
 part 'symptom.g.dart';
@@ -64,6 +65,7 @@ abstract class _SymptomBase with Store {
 
   @observable
   var mealTimeBoolList = new List<MealTimeBool>();
+
 
 
   @observable
@@ -201,6 +203,13 @@ abstract class _SymptomBase with Store {
           intensity: json["intensity"],
           frequency: json["frequency"]
       );
+
+  _SymptomBase.fromJson(Map<String, dynamic> json){
+    name = json['name'];
+    intensity = json["intensity"];
+    frequency = json["frequency"];
+    mealTime = json["mealTime"];
+  }
 
   Map<String, dynamic> toMapOccurrenceSymptom() =>
       {

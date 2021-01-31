@@ -18,8 +18,6 @@ void main() {
   setupFirebaseAuthMocks();
   setUpAll(() async {
     await Firebase.initializeApp();
-
-
   });
   final mockObserver = MockNavigatorObserver();
 
@@ -63,14 +61,16 @@ void main() {
     symptom.isModifyButtonActive =true;
     symptom.isModeRemove = false;
     await tester.pumpAndSettle();
+
     expect(find.text("SAVE"), findsNWidgets(1));
 
+    //clicco il bottone Save e mi aspetto che la lunghezza della lista dei sintomi di quel giorno sia aumentata di un'unità
+    //e che l'ultimo valore inserito sia il sintomo appena creato.
     int length =symptomStore.symptomListOfSpecificDay.length;
-
-
     await tester.tap(find.byKey(Key("buttonSaveRemove")));
     await tester.pumpAndSettle();
     expect(symptomStore.symptomListOfSpecificDay.length,length+1);
+    expect(symptomStore.symptomListOfSpecificDay.last,equals(symptom));
     expect(symptom.isSymptomSelectDay,true);
   });
 

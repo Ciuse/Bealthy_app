@@ -30,7 +30,7 @@ void main() {
   });
 
   testWidgets('Home page bottom nav bar', (WidgetTester tester) async {
-    binding.window.physicalSizeTestValue = Size(600, 800);
+    binding.window.physicalSizeTestValue = Size(800, 1000);
     binding.window.devicePixelRatioTestValue = 1.0;
     final _providerKey = GlobalKey();
     // Build our app and trigger a frame.

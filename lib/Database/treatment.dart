@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:Bealthy_app/Database/observableValues.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'dart:io';
@@ -41,7 +42,11 @@ abstract class _TreatmentBase with Store {
   String dietInfoText;
   @observable
   String medicalInfoText;
+  @observable
+  var mapSymptomTreatment = new ObservableMap<String,ObservableValues>();
 
+  @observable
+  var mapSymptomBeforeTreatment = new ObservableMap<String,ObservableValues>();
 
   @action
   String fixDate(DateTime date){

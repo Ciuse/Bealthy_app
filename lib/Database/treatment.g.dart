@@ -129,6 +129,39 @@ mixin _$Treatment on _TreatmentBase, Store {
     });
   }
 
+  final _$mapSymptomTreatmentAtom =
+      Atom(name: '_TreatmentBase.mapSymptomTreatment');
+
+  @override
+  ObservableMap<String, ObservableValues> get mapSymptomTreatment {
+    _$mapSymptomTreatmentAtom.reportRead();
+    return super.mapSymptomTreatment;
+  }
+
+  @override
+  set mapSymptomTreatment(ObservableMap<String, ObservableValues> value) {
+    _$mapSymptomTreatmentAtom.reportWrite(value, super.mapSymptomTreatment, () {
+      super.mapSymptomTreatment = value;
+    });
+  }
+
+  final _$mapSymptomBeforeTreatmentAtom =
+      Atom(name: '_TreatmentBase.mapSymptomBeforeTreatment');
+
+  @override
+  ObservableMap<String, ObservableValues> get mapSymptomBeforeTreatment {
+    _$mapSymptomBeforeTreatmentAtom.reportRead();
+    return super.mapSymptomBeforeTreatment;
+  }
+
+  @override
+  set mapSymptomBeforeTreatment(ObservableMap<String, ObservableValues> value) {
+    _$mapSymptomBeforeTreatmentAtom
+        .reportWrite(value, super.mapSymptomBeforeTreatment, () {
+      super.mapSymptomBeforeTreatment = value;
+    });
+  }
+
   final _$_TreatmentBaseActionController =
       ActionController(name: '_TreatmentBase');
 
@@ -164,7 +197,9 @@ startingDay: ${startingDay},
 endingDay: ${endingDay},
 descriptionText: ${descriptionText},
 dietInfoText: ${dietInfoText},
-medicalInfoText: ${medicalInfoText}
+medicalInfoText: ${medicalInfoText},
+mapSymptomTreatment: ${mapSymptomTreatment},
+mapSymptomBeforeTreatment: ${mapSymptomBeforeTreatment}
     ''';
   }
 }
