@@ -170,6 +170,25 @@ mixin _$FoodStore on _FoodStoreBase, Store {
     });
   }
 
+  final _$mapIngredientsStringDishWithoutCommasAtom =
+      Atom(name: '_FoodStoreBase.mapIngredientsStringDishWithoutCommas');
+
+  @override
+  ObservableMap<Dish, ObservableValues>
+      get mapIngredientsStringDishWithoutCommas {
+    _$mapIngredientsStringDishWithoutCommasAtom.reportRead();
+    return super.mapIngredientsStringDishWithoutCommas;
+  }
+
+  @override
+  set mapIngredientsStringDishWithoutCommas(
+      ObservableMap<Dish, ObservableValues> value) {
+    _$mapIngredientsStringDishWithoutCommasAtom
+        .reportWrite(value, super.mapIngredientsStringDishWithoutCommas, () {
+      super.mapIngredientsStringDishWithoutCommas = value;
+    });
+  }
+
   final _$resultsListAtom = Atom(name: '_FoodStoreBase.resultsList');
 
   @override
@@ -428,6 +447,7 @@ dessertsDishList: ${dessertsDishList},
 drinksDishList: ${drinksDishList},
 dishesListFromDBAndUser: ${dishesListFromDBAndUser},
 mapIngredientsStringDish: ${mapIngredientsStringDish},
+mapIngredientsStringDishWithoutCommas: ${mapIngredientsStringDishWithoutCommas},
 resultsList: ${resultsList},
 isSelected: ${isSelected},
 loadInitFavouriteDishesList: ${loadInitFavouriteDishesList},

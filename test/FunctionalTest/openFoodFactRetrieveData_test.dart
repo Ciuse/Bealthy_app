@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:Bealthy_app/Database/dish.dart';
 import 'package:Bealthy_app/Database/enumerators.dart';
 import 'package:Bealthy_app/Database/ingredient.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +60,8 @@ bool isSubstring(String s1, String s2) {
 
 
 Future<OFF.Product> getProductFromOpenFoodDB(String barcode) async {
-  OFF.ProductQueryConfiguration configuration = OFF.ProductQueryConfiguration(barcode, language: OFF.OpenFoodFactsLanguage.ENGLISH, fields: [OFF.ProductField.ALL]);
+  OFF.ProductQueryConfiguration configuration = OFF.ProductQueryConfiguration(barcode,
+      language: OFF.OpenFoodFactsLanguage.ENGLISH, fields: [OFF.ProductField.ALL]);
   print(configuration);
   OFF.ProductResult result =
   await OFF.OpenFoodAPIClient.getProduct(configuration);

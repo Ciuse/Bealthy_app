@@ -221,17 +221,6 @@ The user can enter a picture (using the mobile camera or uploading it from own i
 
 
 
-\subsection{Acronyms}
-\begin{itemize}
-\item\textit{API:} Application Programming Interface.
-\end{itemize}
-
-\subsection{Revision history}
-\begin{itemize}
-\item Version 1.0
-\end{itemize}
-
-
 \section{Architectural Design}
 \subsection{Overview}
 Bealthy application has a two tier architecture.
@@ -295,7 +284,7 @@ The methods access the respective Store which invokes queries to firebase to get
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[height=19cm, width=\linewidth]{SequenceCalendarClick.png}
+\includegraphics[height=11.5cm, width=\linewidth]{SequenceCalendarClick.png}
 \caption{Sequence Diagram 1}
 \end{figure}  
 \clearpage
@@ -307,7 +296,7 @@ Pressing on the camera icon invokes the Navigator which pushes the page where th
 Once all the data have been inserted and the "Create" button has been pressed, the form validator will check all the fields, and in the case of an error it will signal it to the user; while in the case of confirmation the Food Store will be invoked and once it has received the new dish created it will save it on Firebase, and update the list of local dishes, thus causing a rebuild through the MobX notify of the list of dishes observable on the homepage.
 \begin{figure}[ht!]
 \centering
-\includegraphics[height=19cm, width=\linewidth]{SequenceCreateDish.png}
+\includegraphics[height=14cm, width=\linewidth]{SequenceCreateDish.png}
 \caption{Sequence Diagram 2}
 \end{figure}  
 \clearpage
@@ -372,12 +361,12 @@ We used Flutter package for the Open Food Facts API. It can let us to Easily acc
 The user of our application can scan the barcode of a food and thanks to the integration of our system with Open Food Facts database we can show him/her the ingredients.
 \begin{figure}[ht!]
 \centering
-\includegraphics[height=7cm, width=8cm]{openfoodfacts.png}
+\includegraphics[height=3cm, width=4cm]{openfoodfacts.png}
 \end{figure}
 
 \end{itemize}
 
-
+\clearpage
 \subsection{Software System Attributes} 
 
 \subsubsection{Usability}
@@ -411,7 +400,8 @@ The data, having divided from the logic of presentation,  are easily shared by a
 The main actor that interact with the system is the \textbf{Registered User} of the application.\\
 The registered user can access to all the function of the application, and can link external available services to his account in the login page.\\
 The application is designed for all those users who suffer from eating problems or chronic disorders in their daily diet and who experience frequent symptoms. The application would help them monitor the chronic pattern of symptoms and identify a correlation between what they eat and the symptoms they experience so that they can follow a food diet that may alleviate their symptoms in some way. 
-\subsection{User Interface Design}
+\subsection{User Interface Design - Mobile device}
+We developed the app mainly vertically for this layout.
 \
 \begin{description}[leftmargin=1cm,rightmargin=1cm]
 \item [  1)Home page]
@@ -521,7 +511,6 @@ The application is designed for all those users who suffer from eating problems 
 \begin{itemize}[•]
 \item The user can add a medical treatment or diet by clicking on the "+" button in the current treatments box. A form will open. The description, diet and medical cure are optional fields while everything else is compulsory as the dates are needed to show the user the percentage trend of symptoms before and after the end of these treatments. The user can then assess the effectiveness or otherwise of that particular treatment. 
 \end{itemize}
-
 \clearpage
 \item [ 5)Visualize statistics]
 \
@@ -591,20 +580,50 @@ The symptom graph shows the user the percentages with which a symptom occurred i
 \begin{itemize}[•]
 \item The last screen concerns the user's personal information. The only action he can take is to add a profile picture. However, he can view some recap information since he started using the app: the average days he has been sickest with a severity value above 3 on a scale of one to ten and the 3 symptoms that have appeared most frequently.
 \end{itemize}
-
 \end{description}
+
+\clearpage
+
+
+\subsection{User Interface Design - Tablet device}
+We developed the app mainly horizontally for this second layout, repositioning the elements in such a way as to maintain a certain fluidity in the flow of actions that the user can do.\\
+The pages that have undergone the greatest change in the repositioning of elements are: the home page, the page with the dish information and the statistics page.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=12cm]{HomePageHorizontal.png}
+\caption{Home page tablet}
+\medskip
+\small
+We have decided to place the bottom bar on the left side of the screen so that the user can navigate easily and intuitively through the main pages of our application. On this page, the user can both view the history of the data he has entered in the calendar and add new data.
+\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=12cm]{dishPageHorizontal.png}
+\caption{Dish page tablet}
+\medskip
+\small
+On this page we have decided to divide the user-modifiable parts from the static and unmodifiable parts such as the ingredients.
+In particular, the image and the quantity of the dish have been placed on the left of the screen and the ingredients of the dish on the right.
+\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=12cm]{statisticsHorizontal.png}
+\caption{Statistics page tablet}
+\medskip
+\small
+The statistics page has been reorganised so that the two pie charts of symptoms and ingredients are compared on the same page. 
+\end{figure}
+
 
 
 \section{Implementation,Integration and Test Plan:}
-
-
 \subsection{Integration Testing Strategy}
 Flutter automated tests help ensure that app performs correctly before publish it.
 Automated testing falls into a few categories:
 \begin{itemize}[•]
-\item A unit test tests a single function, method, or class.
-\item A widget test tests a single widget.
-\item An integration test tests a complete app or a large part of an app.
+\item A \textbf{"unit test"} tests a single function, method, or class.
+\item A \textbf{"widget test"} tests a single widget.
+\item An \textbf{"integration test"} tests a complete app or a large part of an app.
 \end{itemize}
 \subsubsection{Widget tests}
 A widget test is more comprehensive than a unit test.
@@ -648,9 +667,9 @@ After clicking the Save button, we expect the length of the symptom list for tha
 \subsubsection{Functional tests}
 Our mobile app  needs to communicate with firebase and OpenFoodFacts databases. When we retrieve data from firebase store, we encapsule them in model classes like Dish, Symptom or Treatment in order to structure data. In order to do that we use jsonDecode() function (using the built-in JSON decoder in dart:convert).
 \\
-We pass the Firebase  JSON string  to the jsonDecode() function, and then looking up the values we need in the resulting Map<String, dynamic>. 
+We pass the Firebase  JSON string  to the jsonDecode() function, and then looking up the values we need in the resulting Map \textless String, dynamic\textgreater. 
 For example the Dish.fromJson() constructor, is used for constructing a new Dish instance from a map structure. \\
-While, when we retrieve data from OpenFoodFacts, we use the package for flutter in order to  retrieve information about products, their ingredients and image with the function OpenFoodAPIClient.getProduct().
+While, when we retrieve data from OpenFoodFacts, we use the package for flutter in order to  retrieve information about products, their ingredients and image with the function OpenFoodAPIClient.getProduct() that makes an asynchronous htpp call to their database.
 During the testing part of our project we decided to test the json serialization for the firebase data and to test the function provided by OpenFoodFacts.
 \begin{itemize}[•]
 \item \textbf{Example:} new dish istance creation test\\
@@ -662,17 +681,38 @@ In this test we want to check that all data retrieved from firebase DB are corre
 \medskip
 \small
 \end{figure}
+\clearpage
+\item \textbf{Check product from OpenFoodFacts}\\
+In this test we want to check the existing in the OpenFoodFacts DB of the dish that the user has scanned with barcode scanner.  
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=7cm]{OpenFoodFactsFunction.PNG}
+\caption{Function OpenFoodAPIClient.getProduct()}
+\medskip
+\small
+\end{figure}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth,height=7cm]{existingTestDishFromOpenFoodFacts.PNG}
+\caption{Check existing dish from OpeFoodFacts DB}
+\medskip
+\small
+\end{figure}
+
 \end{itemize}
-
-
+\clearpage
 \subsection{Used Tools}
 \begin{itemize}
-\item StarUml 2.8.0
+\item Intellij
+\item Flutter
+\item Android studio
+\item Firebase
+\item Draw.io 2.8.0
 \item Miktex 2.9.6361
 \item Texmaker 5.0.2
 \item GitHubDesktop 1.0.6
 \item AdobePhotoshop CC 2017
 \item Power Point
-\item Intellij
+
 \end{itemize}
 \end{document}

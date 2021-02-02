@@ -61,6 +61,9 @@ abstract class _FoodStoreBase with Store {
   var mapIngredientsStringDish = new ObservableMap<Dish,ObservableValues>();
 
   @observable
+  var mapIngredientsStringDishWithoutCommas = new ObservableMap<Dish,ObservableValues>();
+
+  @observable
   var resultsList = new ObservableList<Dish>();  //lista usata nella search bar per filtrare
 
   @observable
@@ -153,6 +156,7 @@ void setBooleanQuantityDish(){
 
     ObservableValues value = new ObservableValues(stringIngredients: "");
     mapIngredientsStringDish.putIfAbsent(dish, () => value);
+    mapIngredientsStringDishWithoutCommas.putIfAbsent(dish, () => value);
     dishesListFromDBAndUser.add(dish);
     yourCreatedDishList.add(dish);
     initializeIngredients(dish,ingredientStore);
@@ -177,6 +181,7 @@ void setBooleanQuantityDish(){
     });
     ObservableValues value = new ObservableValues(stringIngredients: "");
     mapIngredientsStringDish.putIfAbsent(dish, () => value);
+    mapIngredientsStringDishWithoutCommas.putIfAbsent(dish, () => value);
     dishesListFromDBAndUser.add(dish);
     yourCreatedDishList.add(dish);
     initializeIngredients(dish,ingredientStore);
@@ -219,6 +224,7 @@ void setBooleanQuantityDish(){
           );
           ObservableValues value = new ObservableValues(stringIngredients: "");
           mapIngredientsStringDish.putIfAbsent(i, () => value);
+          mapIngredientsStringDishWithoutCommas.putIfAbsent(i, () => value);
           dishesListFromDBAndUser.add(i);
           initializeIngredients(i, ingredientStore);
         });
@@ -238,6 +244,7 @@ void setBooleanQuantityDish(){
           );
           ObservableValues value = new ObservableValues(stringIngredients: "");
           mapIngredientsStringDish.putIfAbsent(toAdd, () => value);
+          mapIngredientsStringDishWithoutCommas.putIfAbsent(toAdd, () => value);
           dishesListFromDBAndUser.add(toAdd);
           initializeIngredients(toAdd, ingredientStore);
         });
@@ -258,6 +265,7 @@ void setBooleanQuantityDish(){
             );
         ObservableValues value = new ObservableValues(stringIngredients: "");
         mapIngredientsStringDish.putIfAbsent(toAdd, () => value);
+        mapIngredientsStringDishWithoutCommas.putIfAbsent(toAdd, () => value);
         yourCreatedDishList.add(toAdd);
         initializeIngredients(toAdd,ingredientStore);
       });
@@ -300,6 +308,7 @@ void setBooleanQuantityDish(){
         toAdd.setIsFavourite(true);
         ObservableValues value = new ObservableValues(stringIngredients: "");
         mapIngredientsStringDish.putIfAbsent(toAdd, () => value);
+        mapIngredientsStringDishWithoutCommas.putIfAbsent(toAdd, () => value);
         yourFavouriteDishList.add(toAdd);
         initializeIngredients(toAdd,ingredientStore);
       });
@@ -349,6 +358,7 @@ void setBooleanQuantityDish(){
 
     ObservableValues value = new ObservableValues(stringIngredients: "");
     mapIngredientsStringDish.putIfAbsent(dish, () => value);
+    mapIngredientsStringDishWithoutCommas.putIfAbsent(dish, () => value);
     yourFavouriteDishList.add(dish);
     initializeIngredients(dish,ingredientStore);
   }
