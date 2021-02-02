@@ -149,23 +149,13 @@ abstract class _TreatmentStoreBase with Store {
     symptomStore.symptomList.forEach((symptom) {
       if(treatment.mapSymptomBeforeTreatment.containsKey(symptom.id)){
         if(treatment.mapSymptomTreatment.containsKey(symptom.id)){
-          if(treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence>=treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)
-          {
-            double percentage = ((treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
-                -treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
-                treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)*100;
-            ObservableValues observableValues= new ObservableValues();
-            observableValues.percentageSymptom=percentage;
-            mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
-          }
-          else{
-            double percentage = ((-treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
-                +treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
-                treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence)*100;
-            ObservableValues observableValues= new ObservableValues();
-            observableValues.percentageSymptom=-percentage;
-            mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
-          }
+          double percentage = ((treatment.mapSymptomTreatment[symptom.id].fractionSeverityOccurrence
+              -treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)/
+              treatment.mapSymptomBeforeTreatment[symptom.id].fractionSeverityOccurrence)*100;
+          ObservableValues observableValues= new ObservableValues();
+          observableValues.percentageSymptom=percentage;
+          mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
+
         }else{
           ObservableValues observableValues= new ObservableValues();
           observableValues.disappeared=true;
@@ -183,7 +173,7 @@ abstract class _TreatmentStoreBase with Store {
           // ObservableValues observableValues= new ObservableValues();
           // observableValues.appeared=false;
           // observableValues.disappeared=false;
-         // mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
+          // mapSymptomPercentage.putIfAbsent(symptom.id, () => observableValues);
         }
       }
     });

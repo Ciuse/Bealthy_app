@@ -179,7 +179,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
         lastDate: DateTime.now().add(Duration(days: 0)),
         builder: (BuildContext context, Widget child) {
           return Theme(
-            data: ThemeData(
+            data: ThemeData.from(colorScheme: Palette.bealthyColorScheme
             ),
             child: child,
           );

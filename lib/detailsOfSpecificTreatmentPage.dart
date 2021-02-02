@@ -184,7 +184,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                                           padding: EdgeInsets.symmetric(horizontal: 0),
                                           child:ImageIcon(
                                             AssetImage("images/Symptoms/" +mapSymptoms.keys.elementAt(index).toString() +".png" ),
-                                            size: 42.0,
+                                            size: 58.0,
                                           )),),
                                     Expanded(
                                         flex: 1,
@@ -199,7 +199,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                                     Expanded(
                                         flex:1 ,
                                         child: Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 32),
+                                            padding: EdgeInsets.symmetric(horizontal: 40),
                                             child:
                                             AspectRatio(
                                                 aspectRatio: 1,

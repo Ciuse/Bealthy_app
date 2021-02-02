@@ -256,6 +256,7 @@ class _MyHomePageState extends State<HomePage> {
     foodStore.storeCreatedYourDishInitialized = false;
     foodStore.storeFavouriteDishInitialized = false;
     foodStore.storeSearchAllDishInitialized = false;
+    treatmentStore.storeInitialized =false;
     UserStore userStore = Provider.of<UserStore>(context, listen: false);
     userStore.initUserDb();
     symptomStore = Provider.of<SymptomStore>(context, listen: false);

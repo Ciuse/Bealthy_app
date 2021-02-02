@@ -165,8 +165,8 @@ class _UploadNewPictureToUserDishState extends State<UploadNewPictureToUserDish>
                               SizedBox(height: 20.0),
                               _imageFile != null
                                   ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  child:Image.file(_imageFile,)) : Image(image:AssetImage("images/placeholder-image.png"))
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  child:Image.file(_imageFile,width: 500,height: 500,)) : Image(image:AssetImage("images/placeholder-image.png"),)
                             ],)
                       ),),
                     uploadImageButton(context),

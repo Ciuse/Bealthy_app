@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'Database/treatment.dart';
+import 'Login/config/palette.dart';
 import 'Models/dateStore.dart';
 import 'Models/treatmentStore.dart';
 
@@ -217,7 +218,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                       lastDate: DateTime(2030,12),
                                       builder: (BuildContext context, Widget picker){
                                         return Theme(
-                                          data: ThemeData.light(),
+                                          data: ThemeData.from(colorScheme: Palette.bealthyColorScheme),
                                           child: picker,);
                                       })
                                       .then((selectedDate) {

@@ -259,7 +259,7 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                               builder: (context, remoteString) {
                                 if (remoteString.connectionState != ConnectionState.waiting) {
                                   if (remoteString.hasError) {
-                                    return Container(
+                                    return Observer(builder: (_) =>Container(
                                         width: 44,
                                         height: 44,
                                         decoration: new BoxDecoration(
@@ -270,9 +270,10 @@ class _ListDishesOfDayState extends State<ListDishesOfDay>{
                                           ),
                                         ),
                                         child: ClipOval(
-                                          child: Image(
+                                          child:mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile==null?Image(
                                           fit: BoxFit.cover,
                                           image: AssetImage("images/defaultDish.png"),
+                                        ):Image.file(mealTimeStore.getDishesOfMealTimeList(mealTime.index)[index].imageFile,  fit: BoxFit.cover,)
                                         )));
                                   }
                                   else {
