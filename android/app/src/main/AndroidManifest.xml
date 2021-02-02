@@ -15,8 +15,9 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Bealthy_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Bealthy"
+        android:icon="@mipmap/ic_launcher"
+        android:largeHeap="true">
 
         <activity
             android:name=".MainActivity"

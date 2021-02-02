@@ -490,12 +490,12 @@ abstract class _SymptomStoreBase with Store {
       keys.add(element.id);
     });
     List<Color> colorsOfChart = [
-      Color(0xff4ebaaa),
+      Color(0xff5abfb0),
       Color(0xffedcd07),
-      Color(0xffaecb4d),
-      Color(0xffb9ec91),
-      Color(0xff006064),
-      Color(0xff68c291),
+      Color(0xff6dcb4d),
+      Color(0xffabea7b),
+      Color(0xff007b80),
+      Color(0xff5cbc87),
       Color(0xff99004d),
       Color(0xffd12e36),];
     // Color(0xffdf78ef),
