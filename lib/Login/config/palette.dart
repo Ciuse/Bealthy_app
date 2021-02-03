@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+  import 'package:flutter/painting.dart';
 
-class Palette {
+  class Palette {
   static const Color darkBlue = Color(0xff1f9aad); //ora è il ligh
   static const Color lightBlue = Color(0xff13606c); //questo è il dark
   static const Color orange = Color(0xffFFA62B);
@@ -28,7 +28,7 @@ class Palette {
   static const Color errorLight = Color(0xffFF8A80);
 
   static const ColorScheme bealthyColorScheme = ColorScheme(
-    primary:Color(0xff0096a7),
+  primary:Color(0xff0096a7),
     primaryVariant: Color(0xff006878),
     onPrimary: Color(0xffFFFFFF),
     secondary: Color(0xffe26200),
