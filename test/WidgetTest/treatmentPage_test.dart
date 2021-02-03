@@ -71,8 +71,8 @@ void main() {
         endingDay: endingDateCt.text,
         descriptionText: descriptionTextCt.text,
       );
-      DateTime endingDay = setDateFromString(treatment.endingDay);
-      if (DateTime.now().isBefore(endingDay)) {
+      DateTime endingDate = setDateFromString(treatment.endingDay);
+      if (DateTime.now().isBefore(endingDate)) {
         treatmentsInProgressList.add(treatment);
       } else {
         treatmentsCompletedList.add(treatment);
@@ -248,6 +248,7 @@ void main() {
                               _formKey.currentState.save();
 
                               addTreatmentToUser(2);
+
                             }
 
                           },
@@ -289,8 +290,8 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    //apro il calendario setto una data e quindi mi aspetto che il campo sia valido
-    DateTime startingDay = DateTime(DateTime.now().year,DateTime.now().month,15) ;
+    //apro il calendario setto una data iniziale e quindi mi aspetto che il campo sia valido
+    DateTime startingDay = DateTime(DateTime.now().year,DateTime.now().month,1) ;
     await tester.tap(find.byKey(startingDateKey));
     await tester.pumpAndSettle();
     expect(find.byType(CalendarDatePicker), findsNWidgets(1));
@@ -303,7 +304,7 @@ void main() {
     await tester.pumpAndSettle();
 
     //apro il calendario setto una data finale e quindi mi aspetto che il campo sia valido
-    DateTime endingDay =  startingDay.add(Duration(days: 3));
+    DateTime endingDay =  startingDay.add(Duration(days: 2));
     await tester.tap(find.byKey(endingDateKey));
     await tester.pumpAndSettle();
     expect(find.byType(CalendarDatePicker), findsNWidgets(1));
@@ -316,7 +317,7 @@ void main() {
     ElevatedButton button = find.widgetWithText(ElevatedButton, 'CREATE').evaluate().first.widget;
     button.onPressed();
     await tester.pumpAndSettle();
-
+print(treatmentsCompletedList);
     expect(treatmentsCompletedList.length,length+1);
   });
 

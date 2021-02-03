@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:Bealthy_app/Database/dish.dart';
@@ -102,13 +103,10 @@ Ingredient initIngredientMapSymptomsValue(String ingredientId,List<DateTime> dat
 
 dates.forEach((day) {
   mapSymptomsOverviewPeriod[day].forEach((symptom) {
-    bool found = false;
     mapIngredientsOverviewPeriod[day].forEach((ingredient) {
-      found= false;
       if(ingredient.id==ingredientId){
         if(symptom.mealTime.contains(ingredient.mealTime)){
-          found=true;
-          toReturn.ingredientMapSymptomsValue[symptom.id] = toReturn.ingredientMapSymptomsValue[symptom.id]+1;
+          toReturn.ingredientMapSymptomsValue[symptom.id] = toReturn.ingredientMapSymptomsValue[symptom.id]+1.3;
         }
 
       }

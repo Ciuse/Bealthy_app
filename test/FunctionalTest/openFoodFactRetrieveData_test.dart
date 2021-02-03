@@ -82,7 +82,7 @@ Future<void> getIngredientsProductFromQuery(OFF.Product productFromQuery,List<In
       ingredientList.forEach((ingredient) {
         if (isSubstring(ingredient.name, productIngredient.id) ||
             isSubstring(ingredient.it_Name, productIngredient.id)) {
-          if(productFromQuery.barcode=="3017620422003"){
+          if(productFromQuery.barcode=="8076809500302"){
             if (!ingredientsExistingProduct.contains(ingredient)) {
               ingredient.qty = Quantity.Normal
                   .toString()
@@ -108,7 +108,7 @@ Future<void> getIngredientsProductFromQuery(OFF.Product productFromQuery,List<In
 
 Future<void> main() async {
   OFF.Product productFromQueryNotExisting = await getProductFromOpenFoodDB("3017620422007");
-  OFF.Product productFromQueryExisting = await getProductFromOpenFoodDB("3017620422003"); //nutella
+  OFF.Product productFromQueryExisting = await getProductFromOpenFoodDB("8076809500302"); //nutella
   OFF.Product productFromQueryExistingNoIngredients = await getProductFromOpenFoodDB("8009030055204"); //chiacchiere
   List<Ingredient> ingredientListFromOurDB = await getIngredients();
   await getIngredientsProductFromQuery(productFromQueryExisting,ingredientListFromOurDB);
@@ -118,7 +118,7 @@ Future<void> main() async {
   group("Product from OpenFoodFacts database test", ()
   {
     test('Check product existing file', () async {
-      expect(productFromQueryExisting.productName, equals("Nutella Ferrero"));
+      expect(productFromQueryExisting.productName, equals("Pan di Stelle"));
     });
 
     test('Verify product does not exist ', () async {
@@ -126,10 +126,10 @@ Future<void> main() async {
     });
 
     test('test list ingredients product with correspondence ', () async {
-      expect(productFromQueryExisting.productName, equals("Nutella Ferrero"));
+      expect(productFromQueryExisting.productName, equals("Pan di Stelle"));
       expect(productFromQueryExisting.ingredients.length, greaterThan(0));
       //il prodotto corrisponde alla nutella e il nostro algoritmo trova 4 corrispondenze di ingredienti
-      expect(ingredientsExistingProduct.length, equals(4));
+      expect(ingredientsExistingProduct.length, equals(7));
     });
 
     test('test list ingredients product , no correspondence', () async {
