@@ -122,27 +122,6 @@ class _SearchDishesListState extends State<SearchDishesList>{
     dish.qty = qty;
   }
 
-  bool isSubstring(String s1, String s2) {
-    int M = s1.length;
-    int N = s2.length;
-
-/* A loop to slide pat[] one by one */
-    for (int i = 0; i <= N - M; i++) {
-      int j;
-
-/* For current index i, check for
- pattern match */
-      for (j = 0; j < M; j++)
-        if (s2[i + j] != s1[j])
-          break;
-
-      if (j == M)
-        return true; // il piatto è stato creato dall'utente
-    }
-
-    return false; //il piatto non è stato creato dall'utente
-
-  }
 
 
   @override
@@ -197,13 +176,13 @@ class _SearchDishesListState extends State<SearchDishesList>{
 
                                   return FocusedMenuHolder(
                                     menuWidth: MediaQuery.of(context).size.width,
-                                    menuItemExtent: MediaQuery.of(context).size.height*0.5,
+                                    menuItemExtent: MediaQuery.of(context).size.height*0.45,
                                     blurSize: 4,
                                     animateMenuItems: false,
                                     blurBackgroundColor: Palette.bealthyColorScheme.background,
                                     onPressed: (){},
                                       menuItems: <FocusedMenuItem>[
-                                        FocusedMenuItem(title: dishLongPressed(foodStore.resultsList[index],foodStore.mapIngredientsStringDish[foodStore.resultsList[index]].stringIngredients),onPressed: (){}),
+                                  FocusedMenuItem(title: Observer(builder: (_) =>dishLongPressed(foodStore.resultsList[index],foodStore.mapIngredientsStringDish[foodStore.resultsList[index]].stringIngredients)),onPressed: (){}),
                                       ],
                                       child: ListTile(
                                     onTap: ()=> {

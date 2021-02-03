@@ -1,33 +1,33 @@
 \babel@toc {english}{}
-\contentsline {section}{\numberline {1}Introduction}{5}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Scope}{5}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Goals}{5}{subsection.1.2}%
-\contentsline {subsection}{\numberline {1.3}Functional Requirement}{6}{subsection.1.3}%
-\contentsline {section}{\numberline {2}Architectural Design}{11}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Overview}{11}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}High level components}{11}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Component view}{12}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}High Level Widget structure}{12}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}More detailed widget structure }{13}{subsubsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.4}Runtime view}{15}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Sequence Diagram 1}{15}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Sequence Diagram 2}{16}{subsubsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.5}Styles and patterns}{18}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Overall Architecture}{18}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Design decisions and patterns}{19}{subsubsection.2.5.2}%
-\contentsline {subsection}{\numberline {2.6}Software System Attributes}{21}{subsection.2.6}%
-\contentsline {subsubsection}{\numberline {2.6.1}Usability}{21}{subsubsection.2.6.1}%
-\contentsline {subsubsection}{\numberline {2.6.2}Reliability}{21}{subsubsection.2.6.2}%
-\contentsline {subsubsection}{\numberline {2.6.3}Availability}{21}{subsubsection.2.6.3}%
-\contentsline {subsubsection}{\numberline {2.6.4}Security}{21}{subsubsection.2.6.4}%
-\contentsline {subsubsection}{\numberline {2.6.5}Maintainability}{21}{subsubsection.2.6.5}%
-\contentsline {subsubsection}{\numberline {2.6.6}Portability}{22}{subsubsection.2.6.6}%
-\contentsline {section}{\numberline {3}Specific Requirement}{23}{section.3}%
-\contentsline {subsection}{\numberline {3.1}User characteristics}{23}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}User Interface Design - Mobile device}{23}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}User Interface Design - Tablet device}{32}{subsection.3.3}%
-\contentsline {section}{\numberline {4}Implementation,Integration and Test Plan:}{35}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Integration Testing Strategy}{35}{subsection.4.1}%
-\contentsline {subsubsection}{\numberline {4.1.1}Widget tests}{35}{subsubsection.4.1.1}%
-\contentsline {subsubsection}{\numberline {4.1.2}Functional tests}{37}{subsubsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.2}Used Tools}{39}{subsection.4.2}%
+\contentsline {section}{\numberline {1}Introduction}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Scope}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Goals}{4}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Functional Requirement}{5}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Architectural Design}{10}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Overview}{10}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}High level components}{10}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Component view}{11}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}High Level Widget structure}{11}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}More detailed widget structure }{12}{subsubsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.4}Runtime view}{14}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Sequence Diagram 1}{14}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Sequence Diagram 2}{15}{subsubsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.5}Styles and patterns}{17}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Overall Architecture}{17}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Design decisions and patterns}{18}{subsubsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.6}Software System Attributes}{20}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}Usability}{20}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Reliability}{20}{subsubsection.2.6.2}%
+\contentsline {subsubsection}{\numberline {2.6.3}Availability}{20}{subsubsection.2.6.3}%
+\contentsline {subsubsection}{\numberline {2.6.4}Security}{20}{subsubsection.2.6.4}%
+\contentsline {subsubsection}{\numberline {2.6.5}Maintainability}{20}{subsubsection.2.6.5}%
+\contentsline {subsubsection}{\numberline {2.6.6}Portability}{21}{subsubsection.2.6.6}%
+\contentsline {section}{\numberline {3}Specific Requirement}{22}{section.3}%
+\contentsline {subsection}{\numberline {3.1}User characteristics}{22}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}User Interface Design - Mobile device}{22}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}User Interface Design - Tablet device}{31}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Implementation,Integration and Test Plan:}{34}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Integration Testing Strategy}{34}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Widget tests}{34}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Functional tests}{36}{subsubsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.2}Used Tools}{38}{subsection.4.2}%

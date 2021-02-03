@@ -13,7 +13,7 @@ import 'package:mobx/mobx.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
+import 'package:focused_menu/focused_menu.dart';
 import 'Database/dish.dart';
 import 'Database/enumerators.dart';
 import 'Login/config/palette.dart';
@@ -22,6 +22,7 @@ import 'Models/foodStore.dart';
 import 'Models/ingredientStore.dart';
 import 'Models/mealTimeStore.dart';
 import 'createNewDish.dart';
+import 'package:focused_menu/modals.dart';
 
 class AddMeal extends StatefulWidget {
   final String title;
@@ -96,8 +97,8 @@ class _AddMealState extends State<AddMeal>{
                                 primary:  Palette.secondaryLight,
                               ),
                                     onPressed: () async => {
-                                       // scanBarCodeAndCheckPermission(),
-                                      barCodeScannerStore.scanBarcode = "8009030055204",
+                                       //scanBarCodeAndCheckPermission(),
+                                      barCodeScannerStore.scanBarcode = "8076809500302",
                                       if(barCodeScannerStore.scanBarcode != "-1") {
                                         await barCodeScannerStore.getScannedDishes(
                                             barCodeScannerStore.scanBarcode).then((dishDB) {
@@ -360,6 +361,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
     dish.qty = qty;
   }
 
+
   @override
   Widget build(BuildContext context) {
     final foodStore = Provider.of<FoodStore>(context);
@@ -399,7 +401,18 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                         },
                         itemCount: foodStore.yourFavouriteDishList.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
+                          return FocusedMenuHolder(
+                              menuWidth: MediaQuery.of(context).size.width,
+                          menuItemExtent: MediaQuery.of(context).size.height*0.45,
+                          blurSize: 4,
+                          animateMenuItems: false,
+                          blurBackgroundColor: Palette.bealthyColorScheme.background,
+                          onPressed: (){},
+                          menuItems: <FocusedMenuItem>[
+                          FocusedMenuItem(title: Observer(builder: (_) =>dishLongPressed(foodStore.yourFavouriteDishList[index],
+                              foodStore.mapIngredientsStringDish[foodStore.yourFavouriteDishList[index]].stringIngredients)),onPressed: (){}),
+                          ],
+                          child:ListTile(
                               onTap: ()=> {
                                 if(!mealTimeStore.checkIfDishIsPresent(foodStore.yourFavouriteDishList[index])){
                                   showDialog(
@@ -549,7 +562,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                                           , fit:BoxFit.cover
                                       )
                                   )),
-                            );
+                            ));
                         })));
                   case FutureStatus.pending:
                   default:
@@ -559,6 +572,149 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
             )])
     ));
   }
+
+  Widget dishLongPressed(Dish dish,String ingredients){
+    return Column(
+        children: [
+          Expanded(
+              flex:1,
+              child:Container(
+                  padding: EdgeInsets.all(4),
+                  child:
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width*0.9,
+                      child:
+                      Row(children: [
+                        Expanded(
+                            flex:1,
+                            child:widgetDishImage(dish)),
+                        SizedBox(width: 12,),
+                        Expanded(
+                            flex:2,
+                            child:Text(dish.name,style: TextStyle(fontSize: 20),)),
+                      ],))
+              )),
+          Expanded(
+              flex:2,
+              child: widgetIngredientList(ingredients)),
+        ]
+    );
+  }
+
+  Widget widgetDishImage(Dish dish){
+    return isSubstring("User", dish.id)?
+    FutureBuilder(
+        future: getImage(dish.id),
+        builder: (context, remoteString) {
+          if (remoteString.connectionState != ConnectionState.waiting) {
+            if (remoteString.hasError) {
+              return Container(
+                  width: 100,
+                  height: 100,
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                    border: new Border.all(
+                      color: Palette.bealthyColorScheme.primaryVariant,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: ClipOval(
+                      child: Image(
+                        fit: BoxFit.cover,
+                        image: AssetImage("images/defaultDish.png"),
+                      )));
+            }
+            else {
+              return Observer(builder: (_) =>Container
+                (width: 100,
+                  height: 100,
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                    border: new Border.all(
+                      color: Palette.bealthyColorScheme.primaryVariant,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: ClipOval(
+                      child: dish.imageFile==null? Image.network(remoteString.data, fit:BoxFit.cover)
+                          :Image.file(dish.imageFile, fit:BoxFit.cover)
+                  )));
+            }
+          }
+          else {
+            return CircularProgressIndicator();
+          }
+        }
+    )
+        :
+    Container
+      (width: 100,
+        height: 100,
+        decoration: new BoxDecoration(
+          borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+          border: new Border.all(
+            color: Palette.bealthyColorScheme.primaryVariant,
+            width: 1.0,
+          ),
+        ),
+        child:  ClipOval(
+            child: Image(
+                image: AssetImage("images/Dishes/" +dish.id+".png" ),
+                fit:BoxFit.cover
+            )
+        ));
+  }
+
+  Widget widgetIngredientList(String ingredients){
+    String ingr2 = ingredients.replaceAll(' ', '');
+    List<String> ingr = ingr2.split(',');
+    return   Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(padding: EdgeInsets.symmetric(vertical: 8),
+              child:Text("Ingredients",style: TextStyle(fontSize: 20))),
+          Expanded(child:
+          SizedBox(width: MediaQuery.of(context).size.width*0.9, child:  ListView.builder
+            (
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: ingr.length,
+              itemBuilder: (BuildContext context, int index) {
+                return
+                  ListTile(
+                    title: Text(ingr[index]),
+                    leading: Image(image:AssetImage("images/ingredients/" + ingredientStore.getIngredientFromName(ingr[index]).id + ".png"), height: 24,width:24,),
+                  );
+              }
+          )))
+        ]);
+
+  }
+
+  bool isSubstring(String s1, String s2) {
+    int M = s1.length;
+    int N = s2.length;
+
+/* A loop to slide pat[] one by one */
+    for (int i = 0; i <= N - M; i++) {
+      int j;
+
+/* For current index i, check for
+ pattern match */
+      for (j = 0; j < M; j++)
+        if (s2[i + j] != s1[j])
+          break;
+
+      if (j == M)
+        return true; // il piatto è stato creato dall'utente
+    }
+
+    return false; //il piatto non è stato creato dall'utente
+
+  }
+
 }
 
 
@@ -658,7 +814,18 @@ class _YourDishListState extends State<YourDishList> {
                           },
                           itemCount: foodStore.yourCreatedDishList.length,
                           itemBuilder: (context, index) {
-                           return ListTile(
+                           return FocusedMenuHolder(
+                               menuWidth: MediaQuery.of(context).size.width,
+                            menuItemExtent: MediaQuery.of(context).size.height*0.45,
+                            blurSize: 4,
+                            animateMenuItems: false,
+                            blurBackgroundColor: Palette.bealthyColorScheme.background,
+                            onPressed: (){},
+                            menuItems: <FocusedMenuItem>[
+                            FocusedMenuItem(title: Observer(builder: (_) =>dishLongPressed(foodStore.yourCreatedDishList[index],
+                               foodStore.mapIngredientsStringDish[foodStore.yourCreatedDishList[index]].stringIngredients)),onPressed: (){}),
+                            ],
+                            child:ListTile(
                                onTap: ()=> {
                                  if(!mealTimeStore.checkIfDishIsPresent(foodStore.yourCreatedDishList[index])){
                                    showDialog(
@@ -791,7 +958,7 @@ class _YourDishListState extends State<YourDishList> {
                                       }
                                     }
                                 )
-                              );
+                              ));
                           })));
                     case FutureStatus.pending:
                     default:
@@ -801,6 +968,149 @@ class _YourDishListState extends State<YourDishList> {
               ),
           ],),
     ));
+  }
+
+  Widget dishLongPressed(Dish dish,String ingredients){
+    return Column(
+        children: [
+          Expanded(
+              flex:1,
+              child:Container(
+                  padding: EdgeInsets.all(4),
+                  child:
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width*0.9,
+                      child:
+                      Row(children: [
+                        Expanded(
+                            flex:1,
+                            child:widgetDishImage(dish)),
+                        SizedBox(width: 12,),
+                        Expanded(
+                            flex:2,
+                            child:Text(dish.name,style: TextStyle(fontSize: 20),)),
+                      ],))
+              )),
+          Expanded(
+              flex:2,
+              child: widgetIngredientList(ingredients)),
+        ]
+    );
+  }
+
+  Widget widgetDishImage(Dish dish){
+    return isSubstring("User", dish.id)?
+    FutureBuilder(
+        future: getImage(dish.id),
+        builder: (context, remoteString) {
+          if (remoteString.connectionState != ConnectionState.waiting) {
+            if (remoteString.hasError) {
+              return Container(
+                  width: 100,
+                  height: 100,
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                    border: new Border.all(
+                      color: Palette.bealthyColorScheme.primaryVariant,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: ClipOval(
+                      child: Image(
+                        fit: BoxFit.cover,
+                        image: AssetImage("images/defaultDish.png"),
+                      )));
+            }
+            else {
+              return Observer(builder: (_) =>Container
+                (width: 100,
+                  height: 100,
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+                    border: new Border.all(
+                      color: Palette.bealthyColorScheme.primaryVariant,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: ClipOval(
+                      child: dish.imageFile==null? Image.network(remoteString.data, fit:BoxFit.cover)
+                          :Image.file(dish.imageFile, fit:BoxFit.cover)
+                  )));
+            }
+          }
+          else {
+            return CircularProgressIndicator();
+          }
+        }
+    )
+        :
+    Container
+      (width: 100,
+        height: 100,
+        decoration: new BoxDecoration(
+          borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
+          border: new Border.all(
+            color: Palette.bealthyColorScheme.primaryVariant,
+            width: 1.0,
+          ),
+        ),
+        child:  ClipOval(
+            child: Image(
+                image: AssetImage("images/Dishes/" +dish.id+".png" ),
+                fit:BoxFit.cover
+            )
+        ));
+  }
+
+  Widget widgetIngredientList(String ingredients){
+    String ingr2 = ingredients.replaceAll(' ', '');
+    List<String> ingr = ingr2.split(',');
+    return   Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(padding: EdgeInsets.symmetric(vertical: 8),
+              child:Text("Ingredients",style: TextStyle(fontSize: 20))),
+          Expanded(child:
+          SizedBox(width: MediaQuery.of(context).size.width*0.9, child:  ListView.builder
+            (
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: ingr.length,
+              itemBuilder: (BuildContext context, int index) {
+                return
+                  ListTile(
+                    title: Text(ingr[index]),
+                    leading: Image(image:AssetImage("images/ingredients/" + ingredientStore.getIngredientFromName(ingr[index]).id + ".png"), height: 24,width:24,),
+                  );
+              }
+          )))
+        ]);
+
+  }
+
+  bool isSubstring(String s1, String s2) {
+
+    int M = s1.length;
+    int N = s2.length;
+
+/* A loop to slide pat[] one by one */
+    for (int i = 0; i <= N - M; i++) {
+      int j;
+
+/* For current index i, check for
+ pattern match */
+      for (j = 0; j < M; j++)
+        if (s2[i + j] != s1[j])
+          break;
+
+      if (j == M)
+        return true; // il piatto è stato creato dall'utente
+    }
+
+    return false; //il piatto non è stato creato dall'utente
+
   }
 }
 
