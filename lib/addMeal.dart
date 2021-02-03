@@ -585,9 +585,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
                       width: MediaQuery.of(context).size.width*0.9,
                       child:
                       Row(children: [
-                        Expanded(
-                            flex:1,
-                            child:widgetDishImage(dish)),
+                       widgetDishImage(dish),
                         SizedBox(width: 12,),
                         Expanded(
                             flex:2,
@@ -609,8 +607,8 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
           if (remoteString.connectionState != ConnectionState.waiting) {
             if (remoteString.hasError) {
               return Container(
-                  width: 100,
-                  height: 100,
+                  width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+                  height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                     border: new Border.all(
@@ -626,8 +624,8 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
             }
             else {
               return Observer(builder: (_) =>Container
-                (width: 100,
-                  height: 100,
+                (width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+                  height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                     border: new Border.all(
@@ -648,8 +646,8 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
     )
         :
     Container
-      (width: 100,
-        height: 100,
+      (width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+        height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
           border: new Border.all(
@@ -678,6 +676,7 @@ class _FavouriteDishesState extends State<FavouriteDishes>{
           Expanded(child:
           SizedBox(width: MediaQuery.of(context).size.width*0.9, child:  ListView.builder
             (
+            padding: EdgeInsets.all(0),
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemCount: ingr.length,
@@ -982,9 +981,7 @@ class _YourDishListState extends State<YourDishList> {
                       width: MediaQuery.of(context).size.width*0.9,
                       child:
                       Row(children: [
-                        Expanded(
-                            flex:1,
-                            child:widgetDishImage(dish)),
+                        widgetDishImage(dish),
                         SizedBox(width: 12,),
                         Expanded(
                             flex:2,
@@ -1006,8 +1003,8 @@ class _YourDishListState extends State<YourDishList> {
           if (remoteString.connectionState != ConnectionState.waiting) {
             if (remoteString.hasError) {
               return Container(
-                  width: 100,
-                  height: 100,
+                  width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+                  height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                     border: new Border.all(
@@ -1023,8 +1020,8 @@ class _YourDishListState extends State<YourDishList> {
             }
             else {
               return Observer(builder: (_) =>Container
-                (width: 100,
-                  height: 100,
+                (width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+                  height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                     border: new Border.all(
@@ -1045,8 +1042,8 @@ class _YourDishListState extends State<YourDishList> {
     )
         :
     Container
-      (width: 100,
-        height: 100,
+      (width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+        height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
           border: new Border.all(
@@ -1075,6 +1072,7 @@ class _YourDishListState extends State<YourDishList> {
           Expanded(child:
           SizedBox(width: MediaQuery.of(context).size.width*0.9, child:  ListView.builder
             (
+              padding: EdgeInsets.all(0),
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               itemCount: ingr.length,

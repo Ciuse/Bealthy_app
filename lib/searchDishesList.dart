@@ -365,9 +365,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
                     width: MediaQuery.of(context).size.width*0.9,
                       child:
               Row(children: [
-                Expanded(
-                  flex:1,
-                    child:widgetDishImage(dish)),
+                widgetDishImage(dish),
                SizedBox(width: 12,),
                Expanded(
                  flex:2,
@@ -389,8 +387,8 @@ class _SearchDishesListState extends State<SearchDishesList>{
           if (remoteString.connectionState != ConnectionState.waiting) {
             if (remoteString.hasError) {
               return Container(
-                  width: 100,
-                  height: 100,
+                  width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+                  height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                     border: new Border.all(
@@ -406,8 +404,8 @@ class _SearchDishesListState extends State<SearchDishesList>{
             }
             else {
               return Observer(builder: (_) =>Container
-                (width: 100,
-                  height: 100,
+                (width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+                  height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
                     border: new Border.all(
@@ -428,8 +426,8 @@ class _SearchDishesListState extends State<SearchDishesList>{
     )
         :
     Container
-      (width: 100,
-        height: 100,
+      (width: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
+        height: MediaQuery.of(context).orientation == Orientation.portrait?100:150,
         decoration: new BoxDecoration(
           borderRadius: new BorderRadius.all(new Radius.circular(100.0)),
           border: new Border.all(
@@ -449,19 +447,20 @@ class _SearchDishesListState extends State<SearchDishesList>{
     String ingr2 = ingredients.replaceAll(' ', '');
     List<String> ingr = ingr2.split(',');
     return   Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(padding: EdgeInsets.symmetric(vertical: 8),
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(padding: EdgeInsets.symmetric(vertical: 8),
               child:Text("Ingredients",style: TextStyle(fontSize: 20))),
-              Expanded(child:
-                SizedBox(width: MediaQuery.of(context).size.width*0.9, child:  ListView.builder
-                (
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: ingr.length,
-                  itemBuilder: (BuildContext context, int index) {
+          Expanded(child:
+          SizedBox(width: MediaQuery.of(context).size.width*0.9, child:  ListView.builder
+            (
+              padding: EdgeInsets.all(0),
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: ingr.length,
+              itemBuilder: (BuildContext context, int index) {
                     return
                             ListTile(
                               title: Text(ingr[index]),
