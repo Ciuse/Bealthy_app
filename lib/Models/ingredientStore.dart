@@ -240,6 +240,10 @@ abstract class _IngredientStoreBase with Store {
       Color(0xffac0800),
       Color(0xffa30000),
       Color(0xfffbc02d),
+      Colors.pinkAccent,
+      Colors.deepOrangeAccent,
+      Colors.deepPurple,
+      Colors.yellowAccent
     ];
 
 
