@@ -171,7 +171,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
         ),
         child: Column(
             children:[
-              Text("Related Symptoms & Signs",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),),
+              Text("Medical signs",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),),
               SizedBox(height: 10,),
               Text(widget.symptom.symptoms,textAlign: TextAlign.justify, style: TextStyle(fontSize: MediaQuery.of(context).orientation == Orientation.portrait?null:19),),
             ]

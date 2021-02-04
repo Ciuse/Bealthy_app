@@ -342,7 +342,6 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
         if (mapIngredientsOverviewPeriod.containsKey(dateTime) && mapIngredientsOverviewPeriod[dateTime].isNotEmpty) {
           mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
             if (currentSymptom.mealTime.contains(ingredient.mealTime)) {
-              print(ingredient.mealTime);
               if (!totalOccurrenceIngredientBySymptom.keys.contains(
                   ingredient.id)) {
                 totalOccurrenceIngredientBySymptom.putIfAbsent(
