@@ -14,19 +14,21 @@
 \BOOKMARK [2][-]{subsection.2.5}{Styles and patterns}{section.2}% 14
 \BOOKMARK [3][-]{subsubsection.2.5.1}{Overall Architecture}{subsection.2.5}% 15
 \BOOKMARK [3][-]{subsubsection.2.5.2}{Design decisions and patterns}{subsection.2.5}% 16
-\BOOKMARK [2][-]{subsection.2.6}{Software System Attributes}{section.2}% 17
-\BOOKMARK [3][-]{subsubsection.2.6.1}{Usability}{subsection.2.6}% 18
-\BOOKMARK [3][-]{subsubsection.2.6.2}{Reliability}{subsection.2.6}% 19
-\BOOKMARK [3][-]{subsubsection.2.6.3}{Availability}{subsection.2.6}% 20
-\BOOKMARK [3][-]{subsubsection.2.6.4}{Security}{subsection.2.6}% 21
-\BOOKMARK [3][-]{subsubsection.2.6.5}{Maintainability}{subsection.2.6}% 22
-\BOOKMARK [3][-]{subsubsection.2.6.6}{Portability}{subsection.2.6}% 23
-\BOOKMARK [1][-]{section.3}{Specific Requirement}{}% 24
-\BOOKMARK [2][-]{subsection.3.1}{User characteristics}{section.3}% 25
-\BOOKMARK [2][-]{subsection.3.2}{User Interface Design - Mobile device}{section.3}% 26
-\BOOKMARK [2][-]{subsection.3.3}{User Interface Design - Tablet device}{section.3}% 27
-\BOOKMARK [1][-]{section.4}{Implementation,Integration and Test Plan:}{}% 28
-\BOOKMARK [2][-]{subsection.4.1}{Integration Testing Strategy}{section.4}% 29
-\BOOKMARK [3][-]{subsubsection.4.1.1}{Widget tests}{subsection.4.1}% 30
-\BOOKMARK [3][-]{subsubsection.4.1.2}{Functional tests}{subsection.4.1}% 31
-\BOOKMARK [2][-]{subsection.4.2}{Used Tools}{section.4}% 32
+\BOOKMARK [3][-]{subsubsection.2.5.3}{Database Design}{subsection.2.5}% 17
+\BOOKMARK [2][-]{subsection.2.6}{Software System Attributes}{section.2}% 18
+\BOOKMARK [3][-]{subsubsection.2.6.1}{Usability}{subsection.2.6}% 19
+\BOOKMARK [3][-]{subsubsection.2.6.2}{Reliability}{subsection.2.6}% 20
+\BOOKMARK [3][-]{subsubsection.2.6.3}{Availability}{subsection.2.6}% 21
+\BOOKMARK [3][-]{subsubsection.2.6.4}{Security}{subsection.2.6}% 22
+\BOOKMARK [3][-]{subsubsection.2.6.5}{Maintainability}{subsection.2.6}% 23
+\BOOKMARK [3][-]{subsubsection.2.6.6}{Portability}{subsection.2.6}% 24
+\BOOKMARK [1][-]{section.3}{Specific Requirement}{}% 25
+\BOOKMARK [2][-]{subsection.3.1}{User characteristics}{section.3}% 26
+\BOOKMARK [2][-]{subsection.3.2}{User Interface Design - Mobile device}{section.3}% 27
+\BOOKMARK [2][-]{subsection.3.3}{User Interface Design - Tablet device}{section.3}% 28
+\BOOKMARK [1][-]{section.4}{Implementation,Integration and Test Plan:}{}% 29
+\BOOKMARK [2][-]{subsection.4.1}{Integration Testing Strategy}{section.4}% 30
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Widget tests}{subsection.4.1}% 31
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Functional tests}{subsection.4.1}% 32
+\BOOKMARK [2][-]{subsection.4.2}{Future Works}{section.4}% 33
+\BOOKMARK [2][-]{subsection.4.3}{Used Tools}{section.4}% 34
