@@ -105,7 +105,6 @@ abstract class _IngredientStoreBase with Store {
           .collection("Dishes").doc(dish.id).collection("Ingredients").orderBy("name")
           .get().then((querySnapshot) {
         querySnapshot.docs.forEach((ingredient) {
-          print(ingredient.data());
           Ingredient i = new Ingredient(id:ingredient.id,name:ingredient.get("name"),qty:ingredient.get("qty") );
           ingredientListOfDish.add(i);
 

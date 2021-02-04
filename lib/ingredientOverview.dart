@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:Bealthy_app/overviewSingleIngredient.dart';
 import 'Login/config/palette.dart';
@@ -160,10 +161,19 @@ class PieChartIngredientState extends State<PieChartIngredient> {
       elevation: 0,
       margin: EdgeInsets.all(4),
       child: Column(children: [
-      ListTile(
-        leading: Icon(Icons.pie_chart),
-        title: const Text('Ingredients eaten (%)',style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
-    ),
+        ListTile(
+          leading: Icon(Icons.pie_chart),
+          title: const Text('Ingredients eaten %',style:TextStyle(fontWeight:FontWeight.bold,fontSize:19,)),
+          trailing:  IconButton(
+            onPressed: () =>
+            {
+              showToast(
+                  "Percentage of occurrence of each ingredient in the selected period of days",
+                  position: ToastPosition.bottom,
+                  duration: Duration(seconds: 5))
+            },
+            icon: Icon(Icons.info_outline),),
+        ),
         ConstrainedBox(
             constraints: MediaQuery.of(context).orientation==Orientation.portrait?BoxConstraints(
             ):BoxConstraints(

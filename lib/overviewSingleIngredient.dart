@@ -4,6 +4,7 @@ import 'package:Bealthy_app/Models/overviewStore.dart';
 import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'Models/dateStore.dart';
 
@@ -46,9 +47,22 @@ class _OverviewSingleIngredientState extends State<OverviewSingleIngredient>{
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return   OKToast(child: Scaffold(
             appBar: AppBar(
               title: Text(ingredient.name+" Statistics"),
+              actions: [
+                Builder(
+                builder: (ctx) => IconButton(
+                  onPressed: () =>
+                  {
+                    showToast(
+                        "Probability of the selected ingredient causing the symptoms listed below, with the relative level of correlation",
+                        position: ToastPosition.bottom,
+                        context: ctx,
+                        duration: Duration(seconds: 5))
+                  },
+                  icon: Icon(Icons.info_outline),)),
+              ],
 
             ),
             body: SingleChildScrollView(
@@ -157,7 +171,7 @@ class _OverviewSingleIngredientState extends State<OverviewSingleIngredient>{
 
                             )),
 
-                      ]))));
+                      ])))));
   }
 }
 

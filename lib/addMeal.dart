@@ -252,7 +252,7 @@ class _AddMealState extends State<AddMeal>{
         context: context,
         builder: (_) =>  new AlertDialog(
           title: new Text("Bealthy"),
-          content: new Text("Bealthy needs to access to your memory in order to upload new image"),
+          content: new Text("Bealthy needs camera permission for scanning barcode"),
           actions: <Widget>[
             FlatButton(
               child: Text('Settings'),

@@ -106,7 +106,7 @@ dates.forEach((day) {
     mapIngredientsOverviewPeriod[day].forEach((ingredient) {
       if(ingredient.id==ingredientId){
         if(symptom.mealTime.contains(ingredient.mealTime)){
-          toReturn.ingredientMapSymptomsValue[symptom.id] = toReturn.ingredientMapSymptomsValue[symptom.id]+1.3;
+          toReturn.ingredientMapSymptomsValue[symptom.id] = toReturn.ingredientMapSymptomsValue[symptom.id]+2;
         }
 
       }
@@ -342,7 +342,6 @@ void initIngredientMapSymptomsValue2 (List<DateTime> dates,Ingredient ingredient
         if (mapIngredientsOverviewPeriod.containsKey(dateTime) && mapIngredientsOverviewPeriod[dateTime].isNotEmpty) {
           mapIngredientsOverviewPeriod[dateTime].forEach((ingredient) {
             if (currentSymptom.mealTime.contains(ingredient.mealTime)) {
-              print(ingredient.mealTime);
               if (!totalOccurrenceIngredientBySymptom.keys.contains(
                   ingredient.id)) {
                 totalOccurrenceIngredientBySymptom.putIfAbsent(
