@@ -80,21 +80,17 @@ class _PersonalPageState extends State<PersonalPage>{
             color: Colors.transparent,
             child:  ImageIcon(
             AssetImage("images/Symptoms/" +userStore.personalPageSymptomsList[index].id+".png" ),
-            size: 32.0,
+            size: 34.0,
           ),
         ),
 
     ),
         Container(
-            width: 70,
             alignment: Alignment.center,
             color: Colors.transparent,
-            child: Text(userStore.personalPageSymptomsList[index].name),),
-        Container(
-          width: 70,
-          alignment: Alignment.center,
-          color: Colors.transparent,
-          child: Text(userStore.calculatePercentageSymptom(userStore.personalPageSymptomsList[index]).toStringAsFixed(2)+"%"),)
+            child: Text(userStore.personalPageSymptomsList[index].name
+              +": "+userStore.calculatePercentageSymptom(userStore.personalPageSymptomsList[index]).toStringAsFixed(2)+"%",style: TextStyle(fontSize: 17),),),
+
     ],
     );
   }
@@ -169,15 +165,13 @@ class _PersonalPageState extends State<PersonalPage>{
                     )),
                   ),
                   Divider(
-                    height: 2,
+                    height: 8,
                     thickness: 0.5,
                   ),
                   Container(
                     height: 50,
                     alignment: Alignment.centerLeft,
-                    child: Row(
-                      children: [
-                        Expanded(
+
                             child: Observer(
                               builder: (_) {
                                 switch (userStore.loadSickDayMonth.status) {
@@ -199,7 +193,7 @@ class _PersonalPageState extends State<PersonalPage>{
                                   case FutureStatus.fulfilled:
                                     return ListTile(
                                       title: Row(children: [
-                                        Text("Average sick days last month:  ",
+                                        Text("Sick days last month:  ",
                                             style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
                                         Text(userStore.sickDays.length.toString(),
                                             )],),
@@ -212,9 +206,9 @@ class _PersonalPageState extends State<PersonalPage>{
                                 }
                               },
                             )
-                        )])),
+                        ),
                   Divider(
-                    height: 2,
+                    height: 8,
                     thickness: 0.5,
                   ),
                   Container(
@@ -222,7 +216,7 @@ class _PersonalPageState extends State<PersonalPage>{
                     alignment: Alignment.centerLeft,
                       child:
                       ListTile(
-                        title: Text("Most relevant symptoms: ",style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
+                        title: Text("Most frequent symptoms: ",style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
                         // leading: Icon(Icons.sick,color: Colors.black,),
                   )),
                   Container(

@@ -6,6 +6,7 @@ import 'package:Bealthy_app/Models/symptomStore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'Database/symptom.dart';
 import 'Database/symptomOverviewGraphStore.dart';
@@ -39,9 +40,22 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
   Widget build(BuildContext context) {
     SymptomOverviewGraphStore graphStore = Provider.of<SymptomOverviewGraphStore>(context);
 
-    return Scaffold(
+    return OKToast(child:Scaffold(
         appBar: AppBar(
           title: Text(symptomStore.getSymptomFromList(widget.symptomId).name+" Statistics"),
+          actions: [
+            Builder(
+                builder: (ctx) => IconButton(
+                  onPressed: () =>
+                  {
+                    showToast(
+                        "Graph showing the severity trend of a symptom over the selected time period.\nYou can press on a day to view specific data",
+                        position: ToastPosition.bottom,
+                        context: ctx,
+                        duration: Duration(seconds: 10))
+                  },
+                  icon: Icon(Icons.info_outline),)),
+          ],
         ),
         body:MediaQuery.of(context).orientation==Orientation.portrait?SingleChildScrollView(
             child:Container(
@@ -67,9 +81,9 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                           ),
                           child: BarChartSymptom(symptomId: widget.symptomId,overviewStore: widget.overviewStore,)),
                       Observer(builder: (_) =>Container(
-                          height: 180,
+                          height: 190,
                           margin: EdgeInsets.only(top: 10,bottom: 10 ),
-                          padding: EdgeInsets.only(top:8,left: 8,right: 8 , bottom: 8 ),
+                          padding: EdgeInsets.only(top:5,left: 6,right: 6 , bottom: 5 ),
                           width:double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -89,8 +103,20 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
-                              SizedBox(height: 16),
+                              ListTile(
+                                title: Text("Ingredients related:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
+                                trailing:  Builder(
+                                    builder: (ctx) => IconButton(
+                                      onPressed: () =>
+                                      {
+                                        showToast(
+                                            "Ingredients taken when the symptom occurred and that are likely related",
+                                            position: ToastPosition.bottom,
+                                            context: ctx,
+                                            duration: Duration(seconds: 7))
+                                      },
+                                      icon: Icon(Icons.info_outline),)),
+                              ),
                               Flexible(
                                   fit: FlexFit.loose,
                                   child: buildIngredientRow()),
@@ -128,8 +154,20 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text("Ingredients related to the symptom:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
-                          SizedBox(height: 16),
+                          ListTile(
+                            title: Text("Ingredients related:",style: TextStyle(fontWeight:FontWeight.bold,fontSize:20,fontStyle: FontStyle.italic,),textAlign: TextAlign.left,),
+                            trailing:  Builder(
+                                builder: (ctx) => IconButton(
+                                  onPressed: () =>
+                                  {
+                                    showToast(
+                                        "Ingredients taken when the symptom occurred and that are likely related",
+                                        position: ToastPosition.bottom,
+                                        context: ctx,
+                                        duration: Duration(seconds: 7))
+                                  },
+                                  icon: Icon(Icons.info_outline),)),
+                          ),
                           Container(
                               height: 80,
                               child:buildIngredientRow()),
@@ -149,7 +187,7 @@ class _OverviewSingleSymptomWeekState extends State<OverviewSingleSymptomWeek>  
 
         ],)
 
-    );
+    ));
   }
 
   Widget buildIngredientRow(){

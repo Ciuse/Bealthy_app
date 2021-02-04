@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobx/mobx.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'Database/observableValues.dart';
 import 'Login/config/palette.dart';
@@ -44,7 +45,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return OKToast(child: Scaffold(
       appBar: AppBar(
         title: Text("Treatment Details"),
         actions: <Widget>[
@@ -115,7 +116,7 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                 //         ])): Container(),
 
               ]))),
-    );
+    ));
   }
 
 
@@ -153,6 +154,15 @@ class _DetailsOfSpecificTreatmentPageState extends State<DetailsOfSpecificTreatm
                       ListTile(
                         leading: Icon(Icons.show_chart),
                         title: Text("Statistics report",),
+                        trailing:     IconButton(
+                          onPressed: () =>
+                          {
+                            showToast(
+                                "Percent change in the severity of each symptom calculated in the period before treatment began versus when it was completed",
+                                position: ToastPosition.bottom,
+                                duration: Duration(seconds: 9))
+                          },
+                          icon: Icon(Icons.info_outline),),
                       ),
                       MediaQuery.of(context).orientation==Orientation.landscape?GridView.builder(
                         gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(

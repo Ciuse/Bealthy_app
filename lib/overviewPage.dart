@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'Database/enumerators.dart';
@@ -80,7 +81,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(length: 2, child: Scaffold(
+    return DefaultTabController(length: 2, child: OKToast(child:Scaffold(
         appBar: MediaQuery.of(context).orientation==Orientation.portrait?AppBar(
           title: Text("Statistics",),
           actions: <Widget>[
@@ -131,7 +132,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
             dateStore.timeSelected==TemporalTime.Picker? pickerOverviewBuild():Container()
             )
 
-        ))
+        )))
     );
   }
 
@@ -719,7 +720,7 @@ class _OverviewPageState extends State<OverviewPage> with TickerProviderStateMix
           lastDate: DateTime.now().add(Duration(days: 0)),
           builder: (BuildContext context, Widget child) {
             return Theme(
-              data: ThemeData(
+              data: ThemeData.from(colorScheme: Palette.bealthyColorScheme
               ),
               child: child,
             );
@@ -882,7 +883,16 @@ class PieChart2State extends State<PieChartSample2> {
             children: [
           ListTile(
             leading: Icon(Icons.pie_chart),
-            title: const Text('Symptom occurrences (%)',style:TextStyle(fontWeight:FontWeight.bold,fontSize:20,)),
+            title: const Text('Symptom occurrences %',style:TextStyle(fontWeight:FontWeight.bold,fontSize:19,)),
+            trailing:     IconButton(
+              onPressed: () =>
+              {
+                showToast(
+                    "Percentage of occurrence of each symptom in the selected period of days",
+                    position: ToastPosition.bottom,
+                    duration: Duration(seconds: 5))
+              },
+              icon: Icon(Icons.info_outline),),
           ),
       ConstrainedBox(
           constraints: MediaQuery.of(context).orientation==Orientation.portrait?BoxConstraints(
