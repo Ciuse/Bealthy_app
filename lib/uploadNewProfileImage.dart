@@ -162,9 +162,7 @@ class _UploadNewProfileImageState extends State<UploadNewProfileImage> {
                             children: [
                               SizedBox(height: 20.0),
                               _imageFile != null
-                                  ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  child:Image.file(_imageFile,width: 500,height: 500,)) : Image(image:AssetImage("images/placeholder-image.png"))
+                                  ? Image.file(_imageFile, height: MediaQuery.of(context).orientation==Orientation.landscape?500:null,) : Image(image:AssetImage("images/placeholder-image.png"))
                             ],)
                       ),),
                     uploadImageButton(context),

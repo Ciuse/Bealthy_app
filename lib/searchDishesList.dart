@@ -446,6 +446,7 @@ class _SearchDishesListState extends State<SearchDishesList>{
   Widget widgetIngredientList(String ingredients){
     String ingr2 = ingredients.replaceAll(' ', '');
     List<String> ingr = ingr2.split(',');
+    print(ingr);
     return   Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,

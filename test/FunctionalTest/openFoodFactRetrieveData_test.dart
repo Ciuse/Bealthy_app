@@ -62,11 +62,9 @@ bool isSubstring(String s1, String s2) {
 Future<OFF.Product> getProductFromOpenFoodDB(String barcode) async {
   OFF.ProductQueryConfiguration configuration = OFF.ProductQueryConfiguration(barcode,
       language: OFF.OpenFoodFactsLanguage.ENGLISH, fields: [OFF.ProductField.ALL]);
-  print(configuration);
   OFF.ProductResult result =
   await OFF.OpenFoodAPIClient.getProduct(configuration);
   status= result.status;
-  print(result.status);
   if (result.status == 1) {
     return result.product;
   } else {

@@ -48,7 +48,6 @@ abstract class _IngredientBase with Store {
     SplayTreeMap<String,double> sortedMap = SplayTreeMap<String,double>
         .from(ingredientMapSymptomsValueFiltered, (b, a) => ingredientMapSymptomsValueFiltered[a] > ingredientMapSymptomsValueFiltered[b] ? 1 : -1 );
     ingredientMapSymptomsValueFiltered = Map.from(sortedMap);
-    print(ingredientMapSymptomsValueFiltered);
   }
 
   @action

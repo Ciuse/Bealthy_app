@@ -309,6 +309,7 @@ class _MyHomePageState extends State<HomePage> {
                           _selectedIndex = index;
                         });
                       },
+
                       labelType: NavigationRailLabelType.selected,
                       destinations: [
                         NavigationRailDestination(
