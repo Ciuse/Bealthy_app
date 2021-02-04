@@ -207,9 +207,6 @@ The user can enter a picture (using the mobile camera or uploading it from own i
 \item In the page of treatment information, there is the "delete" button. The user has to click on it.
 \end{itemize}
 \end{description}
-
-\clearpage
-
 \begin{description}
 \item[(G16)]Allow the user to change the profile image 
 \begin{itemize}
@@ -359,13 +356,61 @@ To handle the authentication of external services (google, github and twitter) w
 \item We have also integrated  \textbf{Open Food Facts} which is a database of food products with ingredients, allergens, nutritional information and all the details of information that can be found on product labels.
 We used Flutter package for the Open Food Facts API. It can let us to Easily access to more than 1.5 million products from all around the world. Open Food Facts is powered by global contributors and is constantly growing thanks to them.
 The user of our application can scan the barcode of a food and thanks to the integration of our system with Open Food Facts database we can show him/her the ingredients.
+
 \begin{figure}[ht!]
 \centering
 \includegraphics[height=3cm, width=4cm]{openfoodfacts.png}
 \end{figure}
 
+
+
+
 \end{itemize}
 
+\subsubsection{Database Design}
+The main database that our application uses to store user's data, is the one provided by Firebase: a NoSQL database, in which the user data are stored in a sort of semi-structured way. 
+Firebase is used to store both the information of all public data that all authenticated users can access such as default symptoms, dishes and ingredients and the private data of each user. \\
+\begin{itemize} 
+\item \textbf{The public data} accessible to all users are: the 8 symptoms with their general information, some simple dishes and ingredients.
+\begin{itemize}[•]
+\item \textbf{Symptoms}
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=8cm, width=14cm]{symptomsFirebase.PNG}
+\end{figure}
+\item  \textbf{Dishes}
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=6cm, width=14cm]{dishesFirebase.PNG}
+\end{figure}
+\clearpage
+\item  \textbf{Ingredients}
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=8cm, width=14cm]{ingredientsFirebase.PNG}
+\end{figure}
+\end{itemize}
+\item \textbf{The private informations of each user} are instead saved by dividing them by day, as the application is based on a calendar.\\ 
+Each user is identifiable by an alpha-numeric code, which allows data to be saved anonymously without entering the user's personal data. 
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=8cm, width=14cm]{usersFirebase.PNG}
+\end{figure}
+\clearpage
+\begin{itemize}[•]
+\item  \textbf{Symptoms by day}
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=6cm, width=14cm]{daySymptomsFirebase.PNG}
+\end{figure}
+\item \textbf{Dishes by day}
+\begin{figure}[ht!]
+\centering
+\includegraphics[height=8cm, width=14cm]{dayDishesFirebase.PNG}
+\end{figure}
+\end{itemize}
+
+\end{itemize}
 \clearpage
 \subsection{Software System Attributes} 
 
@@ -701,6 +746,19 @@ In this test we want to check the existing in the OpenFoodFacts DB of the dish t
 
 \end{itemize}
 \clearpage
+
+\subsection{Future Works}
+In this section we introduce what are the future improvements to be made to Bealthy.
+\begin{itemize}[•]
+\item Improve the algorithm that associates the correlation between ingredients taken and symptoms manifested, adding that each symptom has different characteristics and some can be caused by foods taken even the day before.
+\item Perform machine learning on the data collected to improve the accuracy of the association algorithm.
+\item Include in the treatments which ingredients the diet "forbids" to eat so that when the user enters a dish that is not recommended they are warned.
+\item Integrate a notification system that alerts the user at what time and what medications they should take during a specific treatment.
+\item Insert a short tutorial to explain what are the main functions of the app and how to fully interpret the graphs of statistics.
+\item Add more ingredients, dishes, and symptoms.
+\item Improve the algorithm that finds foods scanned by the barcode by integrating more external databases and improving the languages in which an ingredient can be identified.
+\end{itemize}
+
 \subsection{Used Tools}
 \begin{itemize}
 \item Intellij 2020.2.4

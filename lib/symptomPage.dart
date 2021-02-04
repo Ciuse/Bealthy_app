@@ -190,6 +190,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             Text("Intensity",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
             Observer(builder: (_) =>
                 Slider(
+                  key: Key("intensitySlider"),
                   divisions: 5,
                   value: widget.symptom.intensityTemp.toDouble(),
                   label: Intensity.values[widget.symptom.intensityTemp].toString().split('.').last,
@@ -203,6 +204,7 @@ class _SymptomPageState extends State<SymptomPage> with TickerProviderStateMixin
             Text("Frequency",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
             Observer(builder: (_) =>
                 Slider(
+                  key: Key("frequencySlider"),
                   divisions: 5,
                   value: widget.symptom.frequencyTemp.toDouble(),
                   label: Frequency.values[widget.symptom.frequencyTemp].toString().split('.').last,

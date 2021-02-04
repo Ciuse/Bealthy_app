@@ -16,6 +16,8 @@ class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
   setupFirebaseAuthMocks();
+  final TestWidgetsFlutterBinding binding =
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() async {
     await Firebase.initializeApp();
   });
@@ -74,6 +76,65 @@ void main() {
     expect(symptom.isSymptomSelectDay,true);
   });
 
+  testWidgets('Symptom page, check symptom parameters test', (WidgetTester tester) async {
+    final _providerKey = GlobalKey();
+    binding.window.physicalSizeTestValue = Size(800, 1000);
+    binding.window.devicePixelRatioTestValue = 1.0;
+    //il sintomo ha questi valori
+    var symptom = new Symptom(id:"Symptom_1",name:"Growling",description:"lorem ipsum",symptoms:"lorem ipsum");
+    symptom.intensity = 3;
+    symptom.frequency = 2;
+    MealTime.values.forEach((element) {
+      MealTimeBool mealTimeBool = new MealTimeBool(isSelected: true);
+      symptom.mealTimeBoolList.add(mealTimeBool);
+      MealTimeBool mealTimeBoolTemp = new MealTimeBool(isSelected: true);
+      symptom.mealTimeBoolListTemp.add(mealTimeBoolTemp);
+    });
+    symptom.isSymptomSelectDay=true;
+    symptom.isModifyButtonActive = false;
+
+
+    //inizializzo i valori temporali del sintomo
+    symptom.intensityTemp = symptom.intensity;
+    symptom.frequencyTemp = symptom.frequency;
+    symptom.isModeRemove=false;
+
+
+    await tester.pumpWidget(MultiProvider(providers: [
+      Provider<DateStore>(
+        create: (_) => DateStore(),
+      ),
+      Provider<OverviewStore>(
+        create: (_) => OverviewStore(),
+      ),
+      Provider<SymptomStore>(
+
+        create: (_) => SymptomStore(),
+      ),
+    ], child:MaterialApp(  key: _providerKey,home: SymptomPage(symptom: symptom,),navigatorObservers: [mockObserver],),
+    ),);
+
+    var symptomStore = Provider.of<SymptomStore>(_providerKey.currentContext,listen: false);
+    symptomStore.symptomListOfSpecificDay.add(symptom);
+
+    //ciò che mi aspetto quando apro questa pagina
+    expect(find.text("SAVE"), findsNWidgets(1));
+    expect(find.text("REMOVE"), findsNWidgets(0));
+    expect(find.text("RESET VALUES"), findsNWidgets(1));
+
+    final descriptionTab = find.widgetWithText(Tab,"Description");
+    expect(descriptionTab, findsNWidgets(1));
+
+    final modifyTab = find.widgetWithText(Tab,"Modify");
+    expect(modifyTab, findsNWidgets(1));
+
+    expect(find.byKey(Key("intensitySlider")), findsNWidgets(1));
+    expect(find.byKey(Key("frequencySlider")), findsNWidgets(1));
+    expect(symptom.intensityTemp, equals(3));
+    expect(symptom.frequencyTemp, equals(2));
+
+  });
+
   testWidgets('Symptom page, removing symptom test', (WidgetTester tester) async {
     final _providerKey = GlobalKey();
 
@@ -115,10 +176,6 @@ void main() {
     symptomStore.symptomListOfSpecificDay.add(symptom);
     int length =symptomStore.symptomListOfSpecificDay.length;
 
-    //ciò che mi aspetto quando apro questa pagina
-    expect(find.text("SAVE"), findsNWidgets(1));
-    expect(find.text("REMOVE"), findsNWidgets(0));
-    expect(find.text("RESET VALUES"), findsNWidgets(1));
 
     //resetto tutti i valori del sintomo presente in un giorno X
     symptom.resetTempValue();
