@@ -317,7 +317,6 @@ void main() {
     ElevatedButton button = find.widgetWithText(ElevatedButton, 'CREATE').evaluate().first.widget;
     button.onPressed();
     await tester.pumpAndSettle();
-print(treatmentsCompletedList);
     expect(treatmentsCompletedList.length,length+1);
   });
 
