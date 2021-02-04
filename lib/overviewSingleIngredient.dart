@@ -61,6 +61,7 @@ class _OverviewSingleIngredientState extends State<OverviewSingleIngredient>{
                         Card(
                             elevation: 0,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                                 children:[
                                   ListTile(
                                     leading:MediaQuery.of(context).orientation==Orientation.landscape?Image(
@@ -71,9 +72,16 @@ class _OverviewSingleIngredientState extends State<OverviewSingleIngredient>{
                                         height: 40,
                                         width: 40,
                                         image:AssetImage("images/ingredients/" +ingredient.id+".png")):null,
-                                    title: Text("Symptoms correlated with "+ingredient.name,style: TextStyle(fontWeight:FontWeight.bold,fontSize:18)),
-                                    subtitle: Text("Period:"+dateStore.returnStringDate(widget.startingDate) +" "+dateStore.returnStringDate(widget.endingDate),style: TextStyle(fontSize:16)),
+                                    title: Text("Period: "+dateStore.returnStringDate(widget.startingDate) +"  "+dateStore.returnStringDate(widget.endingDate),style: TextStyle(fontWeight:FontWeight.w500,fontSize:19)),
                                   ),
+                                  Divider(
+                                    height: 24,
+                                    thickness: 0.5,
+                                    indent: 10,
+                                    endIndent: 10,
+                                    color: Colors.black38,
+                                  ),
+                                  Padding(padding: EdgeInsets.symmetric(vertical:8,horizontal: 16),child:Text("Symptoms correlated",style: TextStyle(fontWeight:FontWeight.w500,fontSize:19))),
 
                                   Observer(builder: (_) =>
                                   MediaQuery.of(context).orientation==Orientation.portrait?

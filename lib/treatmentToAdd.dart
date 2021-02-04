@@ -272,7 +272,7 @@ class _TreatmentToAddState extends State<TreatmentToAdd> {
                                       lastDate: DateTime(2030,12),
                                       builder: (BuildContext context, Widget picker){
                                         return Theme(
-                                          data: ThemeData.light(),
+                                          data: ThemeData.from(colorScheme: Palette.bealthyColorScheme),
                                           child: picker,);
                                       })
                                       .then((selectedDate) {
